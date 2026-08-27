@@ -1,0 +1,68 @@
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 83px;
+  background: var(--color-surface-warm);
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 9px 8px 15px;
+  z-index: 20;
+}
+.bottom-nav button {
+  position: relative;
+  border: 0;
+  background: none;
+  color: #8291a0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+}
+.bottom-nav button.selected {
+  color: var(--color-primary);
+}
+.bottom-nav button i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-notification);
+  right: 17px;
+}
+.prototype-note {
+  width: 450px;
+}
+.prototype-note > span {
+  letter-spacing: 2.4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+.prototype-note h2 {
+  font: 700 45px/1.08 Georgia;
+  margin: 16px 0 20px;
+}
+.prototype-note > p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #526c84;
+}
+.principle {
+  border-left: 3px solid var(--color-primary);
+  padding: 5px 0 5px 20px;
+  margin: 38px 0;
+}
+.principle p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #587069;
+}
+.prototype-note > small {
+  font-size: 11px;
+  color: #72869a;
+}

@@ -1,0 +1,78 @@
+.more-profile-card {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  padding: 18px;
+  border-radius: 20px;
+}
+.avatar {
+  width: 49px;
+  height: 49px;
+  background: #e8f0f7;
+  color: var(--color-primary);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+.more-profile-card h2 {
+  font: 700 18px Georgia;
+  margin: 0;
+}
+.more-profile-card p {
+  font-size: 10px;
+  opacity: 0.7;
+}
+.more-profile-card > div:nth-child(2) {
+  flex: 1;
+}
+.menu-list {
+  margin-top: 15px;
+  background: var(--color-surface);
+  border-radius: 19px;
+  padding: 3px 14px;
+}
+.menu-list button {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-faint);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 0;
+  text-align: left;
+}
+.menu-list button > span {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 10px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.menu-list p {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+}
+.menu-list b {
+  font-size: 12px;
+}
+.menu-list small {
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+.version {
+  text-align: center;
+  font-size: 9px;
+  color: #9ba9b6;
+}

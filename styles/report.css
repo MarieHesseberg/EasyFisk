@@ -15,12 +15,12 @@
 .input-row label em,
 .comment-label em {
   font-style: normal;
-  color: #8a6453;
+  color: var(--color-warning-muted);
   font-size: 8px;
 }
 .input-row input.invalid {
   border-color: var(--color-danger-strong);
-  background: #fff4f2;
+  background: var(--color-danger-surface-pale);
 }
 .field-error {
   font-size: 9px;
@@ -138,7 +138,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #dcefe2;
+  background: var(--color-success-surface);
   color: var(--color-primary);
   margin: 0 auto 13px;
 }
