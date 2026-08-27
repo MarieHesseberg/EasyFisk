@@ -8,6 +8,7 @@ import { zones } from "@/data/mock/fishing-data";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import type { DemoStatus, FlowMode, SessionRecord } from "@/domain/models";
 import { formatClock, formatLongDuration } from "@/lib/time";
+import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
 export function FishingFlow({
   mode,
@@ -33,9 +34,19 @@ export function FishingFlow({
   const scenario = findDemoStatus(demoStatus);
   const blocked = scenario.level === "blocked";
   const total = mode === "start" ? 4 : mode === "stop" ? 1 : 1;
+  const dialogRef = useDialogAccessibility(cancel);
   return (
     <div className="flow-overlay">
-      <div className="flow-sheet">
+      <div
+        ref={dialogRef}
+        className="flow-sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-label={
+          mode === "start" ? "Start fiske" : mode === "stop" ? "Avslutt økt" : "Økt fullført"
+        }
+        tabIndex={-1}
+      >
         <div className="flow-top">
           <button onClick={cancel} aria-label="Lukk">
             ×

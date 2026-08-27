@@ -52,3 +52,23 @@ test("ruten er liten og delegerer til applikasjonslaget", async () => {
   assert.ok(page.split("\n").length <= 15);
   assert.match(page, /<EasyFiskApp \/>/);
 });
+
+test("responsiv stil dekker sikre områder, dynamisk høyde og redusert bevegelse", async () => {
+  const responsive = await readFile(new URL("../styles/responsive.css", import.meta.url), "utf8");
+
+  assert.match(responsive, /100dvh/);
+  assert.match(responsive, /safe-area-inset-bottom/);
+  assert.match(responsive, /min-height: 44px/);
+  assert.match(responsive, /prefers-reduced-motion/);
+});
+
+test("dialoger har tilgjengelig fokusbehandling", async () => {
+  const hook = await readFile(
+    new URL("../hooks/use-dialog-accessibility.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(hook, /event\.key === "Escape"/);
+  assert.match(hook, /event\.key !== "Tab"/);
+  assert.match(hook, /document\.body\.style\.overflow = "hidden"/);
+});

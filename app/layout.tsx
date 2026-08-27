@@ -8,6 +8,7 @@ import "@/styles/report.css";
 import "@/styles/rule-center.css";
 import "@/styles/rules.css";
 import "@/styles/violation.css";
+import "@/styles/responsive.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

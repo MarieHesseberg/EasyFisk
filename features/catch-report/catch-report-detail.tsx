@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/models";
+import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { formatClock } from "@/lib/time";
 
 export function CatchReportDetail({
@@ -16,14 +17,23 @@ export function CatchReportDetail({
 }) {
   const [note, setNote] = useState(report.correction || ""),
     [editing, setEditing] = useState(false);
+  const dialogRef = useDialogAccessibility(onClose);
   return (
     <div className="modal-bg" onClick={onClose}>
-      <div className="catch-modal report-detail-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
+      <div
+        ref={dialogRef}
+        className="catch-modal report-detail-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="catch-report-title"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="modal-close" aria-label="Lukk fangstrapport" onClick={onClose}>
           ×
         </button>
         <small>INNSENDT FANGSTRAPPORT</small>
-        <h2>
+        <h2 id="catch-report-title">
           {report.species} · {report.result.toLowerCase()}
         </h2>
         <div className={"report-status-banner " + (report.late ? "late" : "ok")}>

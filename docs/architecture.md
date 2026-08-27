@@ -99,3 +99,13 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 ## Visuell stabilitet
 
 Alle strukturelle refaktoreringer sammenlignes med `visual-baseline`. Avvik skal være bevisste produktendringer, ikke bivirkninger av ny kode.
+
+## Responsivitet og tilgjengelighet
+
+- Mobilvisningen fyller tilgjengelig dynamisk høyde fra 360 piksler bredde.
+- Trygge områder brukes rundt topp, bunn og fast navigasjon på enheter med utskjæring.
+- Nettbrett viser appen sentrert i en romsligere ramme, mens skrivebord beholder demonstrasjonspanelet.
+- Dialoger låser bakgrunnen, flytter fokus inn, holder Tab-fokus inne og kan lukkes med Escape.
+- Dialoginnhold ruller innenfor dynamisk visningshøyde, også når skjermtastaturet reduserer plassen.
+- Interaktive kontroller har minst 44 piksler berøringshøyde og tydelig tastaturfokus.
+- Redusert bevegelse respekteres gjennom `prefers-reduced-motion`.

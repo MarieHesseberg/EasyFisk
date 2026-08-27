@@ -12,6 +12,7 @@ import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
 import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
 import { formatClock, formatLongDuration } from "@/lib/time";
+import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
 export function PastSessionForm({
   onClose,
@@ -41,6 +42,7 @@ export function PastSessionForm({
     [imageData, setImageData] = useState(""),
     [reports, setReports] = useState<CatchRecord[]>([]),
     [touched, setTouched] = useState(false);
+  const dialogRef = useDialogAccessibility(step === 4 ? onClose : undefined);
   const start = new Date(`${date}T${from}`).getTime(),
     end = new Date(`${date}T${to}`).getTime(),
     caughtAt = new Date(`${date}T${catchAt}`).getTime(),
@@ -102,8 +104,16 @@ export function PastSessionForm({
   const subzones = getSubzones(zone);
   return (
     <div className="modal-bg" onClick={step === 4 ? onClose : undefined}>
-      <div className="catch-modal past-session-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
+      <div
+        ref={dialogRef}
+        className="catch-modal past-session-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Registrer tidligere fisketur"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="modal-close" aria-label="Lukk registrering" onClick={onClose}>
           ×
         </button>
         <div className="steps four">

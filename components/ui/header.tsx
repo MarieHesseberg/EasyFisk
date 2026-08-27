@@ -24,7 +24,9 @@ export function Header({ title, eyebrow }: { title: string; eyebrow?: string }) 
       <h1>{title}</h1>
       {showAlerts && (
         <div className="header-alert-panel">
-          <button onClick={() => setShowAlerts(false)}>×</button>
+          <button aria-label="Lukk varsler" onClick={() => setShowAlerts(false)}>
+            ×
+          </button>
           <small>VARSLER</small>
           <h3>Ingen kritiske varsler</h3>
           <p>

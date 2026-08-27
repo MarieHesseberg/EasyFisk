@@ -1,15 +1,24 @@
 import { FeedbackForm } from "@/features/feedback/feedback-form";
 import { MoreDetailContent } from "@/features/profile/more-detail-content";
 import { RuleCenter } from "@/features/rules/rule-center";
+import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
 export function Detail({ title, close }: { title: string; close: () => void }) {
+  const dialogRef = useDialogAccessibility(close);
   return (
-    <div className="detail-page">
+    <div
+      ref={dialogRef}
+      className="detail-page"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="detail-title"
+      tabIndex={-1}
+    >
       <button className="back" onClick={close}>
         ‹ Tilbake
       </button>
       <small>PROTOTYPEVISNING</small>
-      <h2>{title}</h2>
+      <h2 id="detail-title">{title}</h2>
       {title.includes("Fiskeregler") ? (
         <RuleCenter />
       ) : title === "Tilbakemelding" ? (

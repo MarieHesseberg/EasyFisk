@@ -9,6 +9,7 @@ import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { PastSessionForm } from "@/features/history/past-session-form";
 import { History } from "@/features/statistics/history-card";
 import { formatClock, formatDuration, formatLongDuration } from "@/lib/time";
+import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
 export function Activity({
   active,
@@ -79,6 +80,7 @@ export function Activity({
     setShow(false);
     reset();
   };
+  const dialogRef = useDialogAccessibility(finishAfterCatch ? undefined : close, show);
   const submitCatch = () => {
     if (submitted) return;
     onCatch({
@@ -243,7 +245,15 @@ export function Activity({
       </section>
       {(show || finishAfterCatch) && (
         <div className="modal-bg" onClick={finishAfterCatch ? undefined : close}>
-          <div className="catch-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            ref={dialogRef}
+            className="catch-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Registrer fangst"
+            tabIndex={-1}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="sheet-handle" />
             <div className="steps four">
               <span className={step >= 1 ? "on" : ""}>1</span>
