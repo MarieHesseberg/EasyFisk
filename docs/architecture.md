@@ -62,6 +62,10 @@ Inneholder brukerrettede funksjoner. En funksjon kan ha komponenter, lokale type
 
 Inneholder forretningsregler og sentrale modeller. Koden skal være uavhengig av React, nettleser og database når det er mulig.
 
+Fangstvalidering, størrelsesregler, kvoter, rapporteringsfrister, økttid,
+soneregler og statuskontroller er rene funksjoner i dette laget. Grenseverdiene
+dekkes av direkte enhetstester i `tests/domain-rules.test.mjs`.
+
 ### `components/ui`
 
 Inneholder små gjenbrukbare visningskomponenter uten kunnskap om fiskeregler eller datalagring.

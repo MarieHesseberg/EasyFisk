@@ -6,6 +6,7 @@ import { Icon } from "@/components/ui/icon";
 import { demoStatuses } from "@/data/mock/fishing-data";
 import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
+import { getStatusResolution } from "@/domain/fishing-rules/status-checks";
 import type { CatchRecord, DemoStatus, FlowMode, Screen, SessionRecord } from "@/domain/models";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
@@ -141,15 +142,15 @@ export function EasyFiskApp() {
                 const submittedAt = Date.now();
                 setCatches((current) => [
                   ...current,
-                  ...catchRecords.map((catchRecord, index) => ({
-                    ...catchRecord,
-                    id:
+                  ...catchRecords.map((catchRecord, index) =>
+                    completeCatchRecord(
+                      catchRecord,
                       catchRecord.id === "pending"
                         ? `ME-${submittedAt}-${index + 1}`
                         : catchRecord.id,
-                    submittedAt,
-                    late: submittedAt - catchRecord.caughtAt > 2 * 60 * 60 * 1000,
-                  })),
+                      submittedAt,
+                    ),
+                  ),
                 ]);
               }
               showToast("Tidligere fisketur er registrert");
@@ -227,13 +228,7 @@ export function EasyFiskApp() {
             lastSession={lastSession}
             resolveBlock={() => {
               setFlow(null);
-              setGlobalDetail(
-                demoStatus === "noPermit" || demoStatus === "wrongZone"
-                  ? "Mine fiskekort"
-                  : demoStatus === "expiredDisinfection" || demoStatus === "otherRiver"
-                    ? "Desinfisering"
-                    : "Varsler og stengninger",
-              );
+              setGlobalDetail(getStatusResolution(demoStatus));
             }}
           />
         )}

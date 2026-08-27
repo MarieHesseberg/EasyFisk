@@ -4,7 +4,8 @@ import { useState } from "react";
 import { CheckRow } from "@/components/ui/check-row";
 import { FlowTitle } from "@/components/ui/flow-title";
 import { Icon } from "@/components/ui/icon";
-import { demoStatuses, zones } from "@/data/mock/fishing-data";
+import { zones } from "@/data/mock/fishing-data";
+import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import type { DemoStatus, FlowMode, SessionRecord } from "@/domain/models";
 import { formatClock, formatLongDuration } from "@/lib/time";
 
@@ -29,7 +30,7 @@ export function FishingFlow({
 }) {
   const [step, setStep] = useState(1);
   const [selectedZone, setSelectedZone] = useState(3);
-  const scenario = demoStatuses.find((s) => s.id === demoStatus)!;
+  const scenario = findDemoStatus(demoStatus);
   const blocked = scenario.level === "blocked";
   const total = mode === "start" ? 4 : mode === "stop" ? 1 : 1;
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { elapsedSeconds } from "@/domain/sessions/session-timing";
 
 export function useSessionTimer(active: boolean, startTime: number | null) {
   const [elapsed, setElapsed] = useState(0);
@@ -8,7 +9,7 @@ export function useSessionTimer(active: boolean, startTime: number | null) {
   useEffect(() => {
     if (!active || !startTime) return;
 
-    const update = () => setElapsed(Math.floor((Date.now() - startTime) / 1000));
+    const update = () => setElapsed(elapsedSeconds(startTime, Date.now()));
     update();
 
     const interval = setInterval(update, 1000);

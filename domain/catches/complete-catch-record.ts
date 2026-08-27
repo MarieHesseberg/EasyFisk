@@ -1,10 +1,11 @@
 import type { CatchRecord } from "@/domain/models";
+import { isReportLate } from "@/domain/catches/reporting-deadline";
 
 export function completeCatchRecord(record: CatchRecord, id: string, submittedAt: number) {
   return {
     ...record,
     id,
     submittedAt,
-    late: submittedAt - record.caughtAt > 2 * 60 * 60 * 1000,
+    late: isReportLate(record.caughtAt, submittedAt),
   };
 }

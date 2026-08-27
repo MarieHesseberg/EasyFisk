@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
+import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchRecord, SessionRecord } from "@/domain/models";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { PastSessionForm } from "@/features/history/past-session-form";
@@ -99,31 +100,15 @@ export function Activity({
     setSubmitted(true);
     setStep(4);
   };
-  const lengthNo = Number(length.replace(",", ".")),
-    weightNo = Number(weight.replace(",", "."));
-  const detailsValid = lengthNo > 0 && weightNo > 0;
-  const regulatedSpecies = species === "Laks" || species === "Sjøørret";
-  const tooSmall = result === "Avlivet" && regulatedSpecies && lengthNo < 35;
-  const largeSalmon = result === "Avlivet" && species === "Laks" && lengthNo > 65 && lengthNo <= 90;
-  const tooLarge = result === "Avlivet" && species === "Laks" && lengthNo > 90;
-  const blocked = tooSmall || tooLarge;
+  const lengthNo = parseMeasurement(length);
+  const weightNo = parseMeasurement(weight);
+  const { detailsValid, largeSalmon, blocked, ruleTitle, ruleText } = validateCatch(
+    species,
+    result,
+    lengthNo,
+    weightNo,
+  );
   const sentCatch = submitted ? catches[catches.length - 1] : null;
-  const ruleTitle = tooSmall
-    ? `${species} under 35 cm skulle vært gjenutsatt`
-    : tooLarge
-      ? "Laks over 90 cm kan ikke avlives"
-      : largeSalmon
-        ? "Bruker sesongens storlaks-unntak"
-        : "Valgene er innenfor størrelsesreglene";
-  const ruleText = tooSmall
-    ? `Minstemålet for laks og sjøørret er 35 cm. Denne ${species.toLowerCase()}en er ${lengthNo} cm og skulle vært gjenutsatt. Registrer likevel det som faktisk skjedde. Rapporten merkes som et mulig regelbrudd.`
-    : tooLarge
-      ? `Fra 1. august kan bare én laks på opptil 90 cm avlives. Denne laksen er ${lengthNo} cm. Registrer det som faktisk skjedde; rapporten merkes som et mulig regelbrudd.`
-      : largeSalmon
-        ? `Fra 1. august kan én av sesongens avlivede laks være opptil 90 cm. Unntaket er tilgjengelig og blir brukt ved innsending. De fire øvrige må være under 65 cm.`
-        : result === "Avlivet" && regulatedSpecies
-          ? `${species} på ${lengthNo} cm er innenfor gjeldende størrelsesregel. Døgn- og sesongkvoten oppdateres ved innsending.`
-          : `${species} på ${lengthNo} cm registreres som gjenutsatt og bruker ikke avlivingskvoten.`;
   return (
     <div className={embedded ? "activity-embedded" : "screen"}>
       {!embedded && <Header title="Min aktivitet" />}

@@ -4,7 +4,13 @@ import { useState } from "react";
 import { CheckRow } from "@/components/ui/check-row";
 import { Icon } from "@/components/ui/icon";
 import { zones } from "@/data/mock/fishing-data";
+import { isReportLate } from "@/domain/catches/reporting-deadline";
+import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchRecord, SessionRecord } from "@/domain/models";
+import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
+import { createSessionRecord } from "@/domain/sessions/create-session-record";
+import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
+import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
 import { formatClock, formatLongDuration } from "@/lib/time";
 
 export function PastSessionForm({
@@ -38,23 +44,19 @@ export function PastSessionForm({
   const start = new Date(`${date}T${from}`).getTime(),
     end = new Date(`${date}T${to}`).getTime(),
     caughtAt = new Date(`${date}T${catchAt}`).getTime(),
-    validTime = Boolean(date && from && to && end > start && end <= openedAt),
-    validCatchTime = caughtAt >= start && caughtAt <= end,
-    lengthNo = Number(length.replace(",", ".")),
-    weightNo = Number(weight.replace(",", ".")),
+    validTime = Boolean(date && from && to && isValidSessionTime(start, end, openedAt)),
+    validCatchTime = isCatchWithinSession(caughtAt, start, end),
+    lengthNo = parseMeasurement(length),
+    weightNo = parseMeasurement(weight),
     zoneBase = zones.find((z) => z.id === zone)?.name || `Sone ${zone}`,
     zoneName = subzone ? `${zoneBase} · ${subzone}` : zoneBase,
-    seasonEnd = zone === 4 ? "2026-09-15" : "2026-08-31",
-    withinSeason = date >= "2026-06-01" && date <= seasonEnd,
+    withinSeason = isDateWithinZoneSeason(date, zone),
     permitValid = withinSeason,
     closedHistorically = false,
-    killedBefore = existingCatches.filter(
-      (x) => x.species === "Laks" && x.result === "Avlivet",
-    ).length,
-    killedHere = reports.filter((x) => x.species === "Laks" && x.result === "Avlivet").length,
-    quotaAvailable = killedBefore + killedHere < 4,
-    dailyValid = reports.filter((x) => x.species === "Laks" && x.result === "Avlivet").length <= 1,
-    catchValid = lengthNo > 0 && weightNo > 0 && validCatchTime;
+    quota = getQuotaStatus(existingCatches, reports),
+    quotaAvailable = quota.seasonAvailable,
+    dailyValid = quota.dailyValid,
+    catchValid = validateCatch(species, outcome, lengthNo, weightNo).detailsValid && validCatchTime;
   const resetCatch = () => {
     setSpecies("Laks");
     setOutcome("Gjenutsatt");
@@ -68,9 +70,7 @@ export function PastSessionForm({
   const addCatch = (review: boolean) => {
     setTouched(true);
     if (!catchValid) return;
-    const violation =
-      (outcome === "Avlivet" && (species === "Laks" || species === "Sjøørret") && lengthNo < 35) ||
-      (outcome === "Avlivet" && species === "Laks" && lengthNo > 90);
+    const violation = validateCatch(species, outcome, lengthNo, weightNo).blocked;
     const record: CatchRecord = {
       id: `ME-ETTER-${openedAt}-${reports.length + 1}`,
       caughtAt,
@@ -82,7 +82,7 @@ export function PastSessionForm({
       weight: weightNo,
       zone: zoneName,
       violation,
-      late: true,
+      late: isReportLate(caughtAt, openedAt),
       imageName,
       imageData,
       comment,
@@ -96,18 +96,10 @@ export function PastSessionForm({
     const result = reports.length
       ? `${reports.length} fangst${reports.length === 1 ? "" : "er"} · etterregistrert`
       : "Nullfangst · etterregistrert";
-    onSave(
-      { start, end, duration: Math.floor((end - start) / 1000), zone: zoneName, result },
-      reports,
-    );
+    onSave(createSessionRecord(start, end, zoneName, result), reports);
     setStep(4);
   };
-  const subzones =
-    zone === 2
-      ? ["Fuskeland B", "Hauge", "Holmesland", "Nøding", "Bringsdal"]
-      : zone === 4
-        ? ["Bjåhylen", "Nodehylen", "Kosåna", "Manflå"]
-        : [];
+  const subzones = getSubzones(zone);
   return (
     <div className="modal-bg" onClick={step === 4 ? onClose : undefined}>
       <div className="catch-modal past-session-modal" onClick={(e) => e.stopPropagation()}>
@@ -347,7 +339,7 @@ export function PastSessionForm({
                 title="Sesongkvote"
                 sub={
                   quotaAvailable
-                    ? `${Math.max(0, 4 - killedBefore - killedHere)} av 5 avlivet gjenstår etter rapporten`
+                    ? `${quota.remaining} av 5 avlivet gjenstår etter rapporten`
                     : "Sesongkvoten kan være nådd"
                 }
                 state={quotaAvailable ? "ok" : "warning"}

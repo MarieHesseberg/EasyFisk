@@ -1,8 +1,9 @@
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
 import { Status } from "@/components/ui/status-row";
-import { demoStatuses } from "@/data/mock/fishing-data";
 import type { DemoStatus } from "@/domain/models";
+import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
+import { statusState } from "@/domain/fishing-rules/status-checks";
 import { formatClock, formatDuration } from "@/lib/time";
 
 export function Home({
@@ -30,9 +31,8 @@ export function Home({
   demoStatus: DemoStatus;
   salmonKilled: number;
 }) {
-  const scenario = demoStatuses.find((s) => s.id === demoStatus)!;
-  const stateFor = (ids: DemoStatus[]) =>
-    ids.includes(demoStatus) ? (scenario.level === "warning" ? "warning" : "error") : "ok";
+  const scenario = findDemoStatus(demoStatus);
+  const stateFor = (ids: DemoStatus[]) => statusState(demoStatus, ids, scenario.level);
   return (
     <div className="screen">
       <Header title="Din fiskeoversikt" />
