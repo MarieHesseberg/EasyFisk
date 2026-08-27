@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
-        run: npm run build:pages
+      - name: Verify and build static site
+        run: npm run check
 
       - name: Disable Jekyll processing
         run: touch out/.nojekyll
@@ -51,3 +51,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
