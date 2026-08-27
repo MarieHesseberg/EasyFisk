@@ -1,0 +1,33 @@
+.applied-rules {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+  padding: 12px;
+  margin: 0 0 12px;
+}
+.applied-rules > b {
+  font-size: 10px;
+}
+.applied-rules p {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--color-border-faint);
+  padding: 8px 0 0;
+  margin: 8px 0 0;
+  font-size: 9px;
+}
+.applied-rules p span {
+  color: var(--color-text-muted);
+}
+.applied-rules p strong {
+  text-align: right;
+  color: var(--color-primary);
+}
+.applied-rules > small {
+  display: block;
+  font-size: 8px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  margin-top: 9px;
+}

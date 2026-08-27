@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/styles/foundations.css";
+import "@/styles/map-and-activity.css";
+import "@/styles/forms-and-modals.css";
+import "@/styles/demo-status.css";
+import "@/styles/session-flow.css";
+import "@/styles/detail-pages.css";
+import "@/styles/feedback-form.css";
+import "@/styles/home-status.css";
+import "@/styles/statistics-and-rules.css";
+import "@/styles/history.css";
+import "@/styles/report.css";
+import "@/styles/rule-center.css";
+import "@/styles/rules.css";
+import "@/styles/violation.css";
+import "@/styles/mobile-shell.css";
+import "@/styles/responsive.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",
@@ -20,8 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="no">
-      <body className="antialiased">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
-

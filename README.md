@@ -38,7 +38,7 @@ npm run build
 - Next.js med App Router
 - React
 - TypeScript i streng modus
-- Vanlig CSS og Tailwind-grunnlag
+- Vanlig CSS med sentrale design- og fargetokens
 - Statisk eksport til GitHub Pages
 
 Prosjektet bruker foreløpig ingen database eller server-API. Fremtidige integrasjoner skal legges bak tydelige grensesnitt, slik at visningskomponenter ikke blir avhengige av en bestemt database eller leverandør.
@@ -47,13 +47,24 @@ Prosjektet bruker foreløpig ingen database eller server-API. Fremtidige integra
 
 ```text
 app/                Next.js-ruter og nåværende prototype
+components/         Felles layout- og UI-komponenter
+features/           Skjermbilder og brukerrettede arbeidsflyter
+domain/             Fagtyper og forretningsregler, delt etter fagområde
+data/contracts/     Grensesnitt mot datakilder
+data/local-storage/ Versjonert prototypelagring i nettleseren
+data/memory/        Midlertidig lagring av økter og fangster
+data/mock/          Demonstrasjonsdata og lokal adapter
+data/repositories/  Valg av aktiv dataadapter
+hooks/              Gjenbrukbar React-logikk
+lib/                Små, generelle hjelpefunksjoner
+styles/             Globale stilark
 public/             Statiske filer
 tests/              Automatiske tester
 visual-baseline/    Skjermbilder og krav som bevarer dagens utseende
 docs/               Arkitektur og utviklingsregler
 ```
 
-Den nåværende prototypen blir delt opp funksjon for funksjon i senere refaktoreringer. Målstrukturen er dokumentert i [docs/architecture.md](docs/architecture.md).
+Den detaljerte ansvarsdelingen og reglene for videre utvidelser er dokumentert i [docs/architecture.md](docs/architecture.md).
 
 ## Språk og navn
 
@@ -77,4 +88,3 @@ I GitHub skal **Settings → Pages → Source** være satt til **GitHub Actions*
 Publisert app:
 
 <https://mariehesseberg.github.io/EasyFisk/>
-
