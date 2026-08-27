@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { NotificationPreference } from "@/domain/preferences/preferences";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 
@@ -18,7 +19,11 @@ export function MoreDetailContent({ title }: { title: string }) {
   } = usePreferencesController();
   const notifications: Array<[NotificationPreference, string, string]> = [
     ["emergencyClosure", "Akutt stengning", "Varsle dersom hele elva eller min sone stenges"],
-    ["highTemperature", "Høy vanntemperatur", "Varsle når temperaturen nærmer seg 21 °C"],
+    [
+      "highTemperature",
+      "Høy vanntemperatur",
+      `Varsle når temperaturen nærmer seg ${activeFishingRules.temperature.closureThresholdCelsius} °C`,
+    ],
     ["ruleChanges", "Regelendringer", "Varsle når kvoter eller fisketider endres"],
     [
       "reportingDeadline",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Detail } from "@/features/profile/detail";
 
 export function More() {
@@ -45,7 +46,10 @@ export function More() {
         <p>Velg kategori, legg ved bilde og valgfri posisjon, og følg status på meldingen.</p>
         <button onClick={() => setDetail("Tilbakemelding")}>Opprett melding</button>
       </section>
-      <p className="version">EasyFisk prototype · innhold kontrollert 19.08.2026</p>
+      <p className="version">
+        EasyFisk prototype · innhold kontrollert{" "}
+        {activeFishingRules.metadata.numericSourcesCheckedLabel}
+      </p>
       {detail && <Detail title={detail} close={() => setDetail("")} />}
     </div>
   );

@@ -4,8 +4,10 @@ import { CheckRow } from "@/components/ui/check-row";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { ZoneId } from "@/domain/zones/zone";
+import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import { usePastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock, formatLongDuration } from "@/lib/time";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
@@ -23,6 +25,7 @@ export function PastSessionForm({
   onSave: (record: SessionRecord, catches?: CatchRecord[]) => void;
   existingCatches: CatchRecord[];
 }) {
+  const { quota: ruleQuota } = activeFishingRules;
   const controller = usePastSessionController({ existingCatches, onSave });
   const {
     catchAt,
@@ -344,7 +347,7 @@ export function PastSessionForm({
                 sub={
                   withinSeason
                     ? `Datoen er innenfor sesongen i ${zoneBase}`
-                    : `Valgt dato er utenfor sesongen 1. juni–${zone === 4 ? "15. september" : "31. august"}`
+                    : `Valgt dato er utenfor sesongen ${getZoneSeasonLabel(zone)}`
                 }
                 state={withinSeason ? "ok" : "error"}
               />
@@ -361,7 +364,7 @@ export function PastSessionForm({
                 title="Sesongkvote"
                 sub={
                   quotaAvailable
-                    ? `${quota.remaining} av 5 avlivet gjenstår etter rapporten`
+                    ? `${quota.remaining} av ${ruleQuota.killedSalmonPerSeason} avlivet gjenstår etter rapporten`
                     : "Sesongkvoten kan være nådd"
                 }
                 state={quotaAvailable ? "ok" : "warning"}

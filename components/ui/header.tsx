@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 
 export function Header({ title, eyebrow }: { title: string; eyebrow?: string }) {
   const [showAlerts, setShowAlerts] = useState(false);
@@ -36,7 +37,8 @@ export function Header({ title, eyebrow }: { title: string; eyebrow?: string }) 
             <Icon name="clock" size={15} /> Fiskekortet utløper i dag kl. 17:59.
           </p>
           <p>
-            <Icon name="bell" size={15} /> Reglene ble oppdatert 1. august.
+            <Icon name="bell" size={15} /> Reglene ble oppdatert{" "}
+            {activeFishingRules.metadata.shortVersionLabel}.
           </p>
         </div>
       )}

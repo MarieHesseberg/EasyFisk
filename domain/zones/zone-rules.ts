@@ -1,11 +1,17 @@
-const seasonStart = "2026-06-01";
+import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 
 export function getZoneSeasonEnd(zoneId: number) {
-  return zoneId === 4 ? "2026-09-15" : "2026-08-31";
+  const { season } = activeFishingRules;
+  return zoneId === season.extendedZoneId ? season.extendedEndDate : season.standardEndDate;
 }
 
 export function isDateWithinZoneSeason(date: string, zoneId: number) {
-  return date >= seasonStart && date <= getZoneSeasonEnd(zoneId);
+  return date >= activeFishingRules.season.startDate && date <= getZoneSeasonEnd(zoneId);
+}
+
+export function getZoneSeasonLabel(zoneId: number) {
+  const { season } = activeFishingRules;
+  return zoneId === season.extendedZoneId ? season.extendedZoneLabel : season.standardZoneLabel;
 }
 
 export function getSubzones(zoneId: number) {

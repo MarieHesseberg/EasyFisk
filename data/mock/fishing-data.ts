@@ -1,5 +1,8 @@
 import type { DemoScenario, RuleSection } from "@/domain/fishing-rules/rule";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { FishingZone } from "@/domain/zones/zone";
+
+const { catchSize, metadata, nature, quota, reporting, season, temperature } = activeFishingRules;
 
 export const demoStatuses: DemoScenario[] = [
   {
@@ -76,9 +79,9 @@ export const demoStatuses: DemoScenario[] = [
   },
   {
     id: "hotWater",
-    label: "Vanntemperaturen er over 21 °C",
+    label: `Vanntemperaturen er over ${temperature.closureThresholdCelsius} °C`,
     title: "Fisket er stanset",
-    detail: "Registrert vanntemperatur er 21,4 °C. Alt fiske er midlertidig stanset.",
+    detail: `Registrert vanntemperatur er ${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C. Alt fiske er midlertidig stanset.`,
     level: "blocked",
     action: "Se temperatur og varsel",
   },
@@ -107,7 +110,7 @@ export const zones: FishingZone[] = [
     status: "Åpen",
     note: "5 km · munningen–Vik",
     color: "#8bb5d9",
-    season: "1. juni–31. august",
+    season: season.standardZoneLabel,
     desc: "Tre landfiskeområder og felles båtfiske. Båtkort gjelder hele sone 1 og to stenger per båt.",
   },
   {
@@ -116,7 +119,7 @@ export const zones: FishingZone[] = [
     status: "Åpen",
     note: "14 km · 32 delsoner",
     color: "#5f91bd",
-    season: "1. juni–31. august",
+    season: season.standardZoneLabel,
     desc: "Personlige kort i delsoner som Hauge, Holmesland, Nøding, Fuskeland og Bringsdal. Fysisk skilting langs elva gjelder.",
   },
   {
@@ -125,7 +128,7 @@ export const zones: FishingZone[] = [
     status: "Din sone",
     note: "13 km · ett kort",
     color: "#2563a6",
-    season: "1. juni–31. august",
+    season: season.standardZoneLabel,
     desc: "Ett fiskekort dekker hele sonen. Variert fiske med store flueområder og dype kulper.",
   },
   {
@@ -134,7 +137,7 @@ export const zones: FishingZone[] = [
     status: "Åpen",
     note: "18 km · Kosåna inkludert",
     color: "#a8c7e0",
-    season: "1. juni–15. september",
+    season: season.extendedZoneLabel,
     desc: "Hovedsone fra Manflå til Kavfossen og Kosåna, samt seks navngitte delsoner.",
   },
 ];
@@ -156,11 +159,11 @@ export const ruleSections: RuleSection[] = [
     id: "season",
     icon: "clock",
     title: "Fisketider",
-    summary: "Sesong og utvidelser i 2026",
+    summary: `Sesong og utvidelser i ${metadata.seasonYear}`,
     rules: [
-      "Sone 1, 2 og 3: 1. juni–31. august.",
-      "Sone 4 er utvidet til 15. september 2026 etter midtsesongevalueringen.",
-      "Delsonene Bjåhylen og Nodehylen i sone 4 stenger 31. august.",
+      `Sone 1, 2 og 3: ${season.standardZoneLabel}.`,
+      `Sone 4 er utvidet til ${season.extendedEndLabel} ${metadata.seasonYear} etter midtsesongevalueringen.`,
+      `Delsonene Bjåhylen og Nodehylen i sone 4 stenger ${season.standardEndLabel}.`,
       "Kosåna følger fisketidene for sone 4. Fisketidene kan endres dersom bestandssituasjonen krever det.",
     ],
   },
@@ -182,9 +185,9 @@ export const ruleSections: RuleSection[] = [
     title: "Døgnkvoter",
     summary: "Kvoter per fiskerdøgn",
     rules: [
-      "Døgnkvote: 1 avlivet laks og 1 avlivet sjøaure per fisker.",
+      `Døgnkvote: ${quota.killedSalmonPerDay} avlivet laks og 1 avlivet sjøaure per fisker.`,
       "Når én laks er avlivet, skal alt fiske stoppe til neste fiskerdøgn, også fiske etter sjøørret.",
-      "Døgnkvote for gjenutsatt laks er 2.",
+      `Døgnkvote for gjenutsatt laks er ${quota.releasedSalmonPerDay}.`,
       "Kvotedøgnet følger fiskekortdøgnet. I begrensede delsoner er dette normalt kl. 18.00–17.59.",
     ],
   },
@@ -192,12 +195,12 @@ export const ruleSections: RuleSection[] = [
     id: "seasonquota",
     icon: "stats",
     title: "Sesongkvoter",
-    summary: "Regler oppdatert 1. august",
+    summary: `Regler oppdatert ${metadata.shortVersionLabel}`,
     rules: [
-      "Sesongkvote fra 1. august: 5 avlivede laks.",
-      "Én av de fem kan være opptil 90 cm. De fire øvrige skal være under 65 cm.",
-      "Sesongkvote for gjenutsatt laks er 20.",
-      "Når fem laks er avlivet, skal alt fiske stoppe resten av sesongen, også etter sjøørret og med fang og slipp.",
+      `Sesongkvote fra ${metadata.shortVersionLabel}: ${quota.killedSalmonPerSeason} avlivede laks.`,
+      `Én av dem kan være opptil ${catchSize.largeSalmonMaximumCm} cm. De øvrige skal være under ${catchSize.regularSalmonMaximumCm} cm.`,
+      `Sesongkvote for gjenutsatt laks er ${quota.releasedSalmonPerSeason}.`,
+      `Når ${quota.killedSalmonPerSeason} laks er avlivet, skal alt fiske stoppe resten av sesongen, også etter sjøørret og med fang og slipp.`,
     ],
   },
   {
@@ -206,7 +209,7 @@ export const ruleSections: RuleSection[] = [
     title: "Gjenutsetting",
     summary: "Størrelse, utstyr og behandling",
     rules: [
-      "Minstemålet for laks og sjøørret er 35 cm. Fisk under minstemålet skal gjenutsettes.",
+      `Minstemålet for laks og sjøørret er ${catchSize.minimumCm} cm. Fisk under minstemålet skal gjenutsettes.`,
       "Ha målebånd, krokløsertang og helst knuteløs håv tilgjengelig.",
       "Laksen skal ikke løftes ut av vannet. Eventuelle bilder tas mens fisken ligger i vannfilmen.",
       "All vinterstøing skal gjenutsettes. Fisk med soppsmitte, regnbueørret og pukkellaks skal ikke gjenutsettes, men leveres til oppsynet.",
@@ -216,9 +219,9 @@ export const ruleSections: RuleSection[] = [
     id: "closure",
     icon: "bell",
     title: "Temperatur og stengning",
-    summary: "21 °C og ekstraordinære forhold",
+    summary: `${temperature.closureThresholdCelsius} °C og ekstraordinære forhold`,
     rules: [
-      "Alt fiske stopper når vanntemperaturen overstiger 21 °C, målt på Kjølemo.",
+      `Alt fiske stopper når vanntemperaturen overstiger ${temperature.closureThresholdCelsius} °C, målt på Kjølemo.`,
       "Elveeigarlaget kan stenge hele eller deler av elva ved forhold som kan påvirke bestanden.",
       "Endringer publiseres på Mandalselvas nettsider. Fysisk skilting og siste publiserte varsel gjelder.",
     ],
@@ -229,7 +232,7 @@ export const ruleSections: RuleSection[] = [
     title: "Fangstrapportering",
     summary: "Fangst, gjenutsetting og innsats",
     rules: [
-      "Fangst skal rapporteres løpende, så raskt som mulig og innen 2 timer.",
+      `Fangst skal rapporteres løpende, så raskt som mulig og innen ${reporting.deadlineHours} timer.`,
       "Rapporten skal inneholde fangst, dato og vekt. Gjenutsatt fisk rapporteres med dato og omtrentlig vekt.",
       "Fiskeinnsats skal rapporteres. Nullfangst rapporteres for fiskedøgn uten fangst.",
       "Sesongkortfiskere må hente et rapporteringskort for hvert døgn de ønsker å fiske.",
@@ -256,7 +259,7 @@ export const ruleSections: RuleSection[] = [
       "Bevegelig fiske praktiseres: flytt noen meter nedstrøms etter hvert kast.",
       "Start ovenfor andre fiskere og vent til det er plass før du går ut.",
       "Ikke gå over dyrket mark eller gjennom gårdstun. Respekter private brygger og båtplasser.",
-      "Ta med alt avfall. Ikke fell trær eller bryt kvist. Bålbrenning er ikke tillatt 15. april–15. september.",
+      `Ta med alt avfall. Ikke fell trær eller bryt kvist. Bålbrenning er ikke tillatt ${nature.fireBanPeriodLabel}.`,
     ],
   },
 ];

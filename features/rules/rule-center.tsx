@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 
 const ruleSections = fishingContentRepository.getRuleSections();
 
 export function RuleCenter() {
   const [open, setOpen] = useState("seasonquota");
+  const { metadata, season } = activeFishingRules;
   return (
     <div className="rule-center">
       <div className="rule-version">
@@ -16,8 +18,10 @@ export function RuleCenter() {
         </span>
         <div>
           <small>AKTIV REGELVERSJON</small>
-          <b>Mandalselva 2026 · oppdatert 1. august</b>
-          <p>Kilder kontrollert 19. august 2026</p>
+          <b>
+            {metadata.river} {metadata.seasonYear} · oppdatert {metadata.shortVersionLabel}
+          </b>
+          <p>Kilder kontrollert {metadata.sourcesCheckedLabel}</p>
         </div>
       </div>
       <div className="season-alert">
@@ -25,8 +29,8 @@ export function RuleCenter() {
         <div>
           <b>Midtsesongevalueringen er innarbeidet</b>
           <p>
-            Sone 4 er forlenget til 15. september, med unntak for Bjåhylen og Nodehylen som stenger
-            31. august.
+            Sone {season.extendedZoneId} er forlenget til {season.extendedEndLabel}, med unntak for
+            Bjåhylen og Nodehylen som stenger {season.standardEndLabel}.
           </p>
         </div>
       </div>

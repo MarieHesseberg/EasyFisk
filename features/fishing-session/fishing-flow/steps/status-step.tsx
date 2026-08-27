@@ -1,4 +1,5 @@
 import { CheckRow } from "@/components/ui/check-row";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 
@@ -15,6 +16,7 @@ export function StatusStep({
   resolveBlock: () => void;
   scenario: DemoScenario;
 }) {
+  const { season, temperature } = activeFishingRules;
   const blocked = scenario.level === "blocked";
 
   return (
@@ -86,14 +88,14 @@ export function StatusStep({
           title="Temperatur og stengning"
           sub={
             demoStatus === "hotWater"
-              ? "21,4 °C · fisket er stanset"
+              ? `${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C · fisket er stanset`
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel"
                 : "11 °C · elva er åpen"
           }
           state={["hotWater", "closed"].includes(demoStatus) ? "error" : "ok"}
         />
-        <CheckRow title="Fiskesesong" sub="Sone 3 · 1. juni–31. august" />
+        <CheckRow title="Fiskesesong" sub={`Sone 3 · ${season.standardZoneLabel}`} />
       </div>
       {blocked ? (
         <>

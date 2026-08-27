@@ -4,6 +4,7 @@ import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-con
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
@@ -191,8 +192,8 @@ export function EasyFiskApp() {
           ))}
         </ul>
         <small>
-          Prototypen bruker realistiske 2026-regler. Kart, persondata, forhold og statistikk er
-          demonstrasjonsdata.
+          Prototypen bruker realistiske {activeFishingRules.metadata.seasonYear}-regler. Kart,
+          persondata, forhold og statistikk er demonstrasjonsdata.
         </small>
       </aside>
     </main>

@@ -50,6 +50,27 @@ test("kodebasen følger den avtalte mappestrukturen", async () => {
   );
 });
 
+test("regelverdier hentes fra ett versjonert regelgrunnlag", async () => {
+  const consumers = [
+    "domain/zones/zone-rules.ts",
+    "domain/catches/validate-catch.ts",
+    "domain/catches/reporting-deadline.ts",
+    "domain/quotas/get-quota-status.ts",
+    "data/mock/fishing-data.ts",
+    "features/home/home-screen.tsx",
+    "features/rules/rules-screen.tsx",
+    "features/rules/rule-center.tsx",
+    "features/catch-report/steps/catch-review-step.tsx",
+  ];
+
+  const contents = await Promise.all(
+    consumers.map((file) => readFile(new URL(`../${file}`, import.meta.url), "utf8")),
+  );
+
+  contents.forEach((content) => assert.match(content, /activeFishingRules/));
+  contents.forEach((content) => assert.doesNotMatch(content, /"2026-(?:06-01|08-01|08-31|09-15)"/));
+});
+
 test("pull requests kjører full kvalitetssjekk", async () => {
   const workflow = await readFile(
     new URL("../.github/workflows/pull-request-check.yml", import.meta.url),
