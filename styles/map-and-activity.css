@@ -61,11 +61,14 @@
   border: 0;
   background: none;
   z-index: 4;
+  width: 44px;
+  height: 44px;
+  padding: 3px;
 }
 .zone-pin span {
   display: grid;
   place-items: center;
-  background: #fff;
+  background: var(--color-surface);
   color: var(--blue);
   border: 3px solid var(--blue);
   border-radius: 50%;
@@ -104,7 +107,7 @@
   height: 44px;
   border: 0;
   border-radius: 13px;
-  background: #fff;
+  background: var(--color-surface);
   color: var(--blue);
   display: grid;
   place-items: center;
@@ -149,7 +152,7 @@
 .zone-title > span {
   width: 44px;
   height: 44px;
-  color: #fff;
+  color: var(--color-surface);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -157,7 +160,7 @@
 }
 .zone-title small {
   font-size: 9px;
-  color: #347ab8;
+  color: var(--color-primary-accent);
   font-weight: bold;
   letter-spacing: 1.4px;
 }
@@ -264,7 +267,7 @@
   border: 0;
   border-radius: 12px;
   padding: 13px 7px;
-  background: #fff;
+  background: var(--color-surface);
   color: var(--blue);
   display: flex;
   align-items: center;

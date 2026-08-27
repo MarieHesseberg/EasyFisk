@@ -6,8 +6,8 @@
   box-shadow: 0 10px 28px #8a671c35;
 }
 .status-card.blocked {
-  background: #8a3428;
-  box-shadow: 0 10px 28px #8a342835;
+  background: var(--color-danger);
+  box-shadow: 0 10px 28px var(--color-danger) 35;
 }
 .home-status > i {
   width: 24px;
@@ -15,8 +15,8 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #b94535;
-  color: #fff;
+  background: var(--color-danger-strong);
+  color: var(--color-surface);
   font: 700 12px Arial;
   font-style: normal;
 }
@@ -24,21 +24,21 @@
   background: #d39b25;
 }
 .check-grid .home-status.error > span {
-  background: #fee9e5;
-  color: #a33d30;
+  background: var(--color-danger-surface);
+  color: var(--color-danger-text);
 }
 .check-grid .home-status.warning > span {
-  background: #fff3d8;
-  color: #8a681a;
+  background: var(--color-warning-surface);
+  color: var(--color-warning-text);
 }
 .notice.error {
-  background: #fee9e5;
-  color: #813329;
+  background: var(--color-danger-surface);
+  color: var(--color-danger-dark);
 }
 .notice.error .notice-icon {
-  color: #a33d30;
+  color: var(--color-danger-text);
 }
 .notice.error p,
 .notice.error small {
-  color: #813329;
+  color: var(--color-danger-dark);
 }

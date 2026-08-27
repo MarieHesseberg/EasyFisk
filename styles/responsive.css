@@ -34,7 +34,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid #f3b83f;
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 

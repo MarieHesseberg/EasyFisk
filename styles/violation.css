@@ -11,7 +11,7 @@
 }
 .violation-confirm input {
   margin-top: 2px;
-  accent-color: #a33d30;
+  accent-color: var(--color-danger-text);
 }
 .violation-confirm span {
   display: flex;
@@ -26,7 +26,7 @@
   line-height: 1.4;
 }
 .danger-submit {
-  background: #8a3428;
+  background: var(--color-danger);
 }
 .danger-submit:disabled {
   background: #c9b2ad;
@@ -34,9 +34,9 @@
   cursor: not-allowed;
 }
 .violation-sent {
-  background: #fff0ed;
+  background: var(--color-danger-surface-soft);
   border: 1px solid #e1aaa0;
-  color: #813329;
+  color: var(--color-danger-dark);
   border-radius: 12px;
   padding: 12px;
   margin: 13px 0;

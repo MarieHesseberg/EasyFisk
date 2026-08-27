@@ -1,6 +1,6 @@
 .applied-rules {
-  background: #fff;
-  border: 1px solid #d8e3ee;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 13px;
   padding: 12px;
   margin: 0 0 12px;
@@ -12,22 +12,22 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--color-border-faint);
   padding: 8px 0 0;
   margin: 8px 0 0;
   font-size: 9px;
 }
 .applied-rules p span {
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .applied-rules p strong {
   text-align: right;
-  color: #2563a6;
+  color: var(--color-primary);
 }
 .applied-rules > small {
   display: block;
   font-size: 8px;
   line-height: 1.4;
-  color: #65758a;
+  color: var(--color-text-muted);
   margin-top: 9px;
 }

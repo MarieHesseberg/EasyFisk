@@ -1,11 +1,38 @@
-@import "tailwindcss";
 :root {
-  --ink: #172a3a;
-  --blue: #2563a6;
-  --pale: #edf4fb;
-  --cream: #f7f5ef;
-  --line: #d8e3ee;
-  --muted: #65758a;
+  --color-text: #172a3a;
+  --color-text-muted: #65758a;
+  --color-primary: #2563a6;
+  --color-primary-accent: #347ab8;
+  --color-primary-dark: #1d4f7a;
+  --color-primary-soft: #edf4fb;
+  --color-primary-surface: #e7f0f8;
+  --color-primary-surface-strong: #e7f1fa;
+  --color-surface: #ffffff;
+  --color-background: #f7f5ef;
+  --color-border: #d8e3ee;
+  --color-border-subtle: #e7edf3;
+  --color-border-faint: #edf1f5;
+  --color-success: #2d7db7;
+  --color-warning: #8a671c;
+  --color-warning-text: #8a681a;
+  --color-warning-surface: #fff3d8;
+  --color-warning-border: #e4c46a;
+  --color-danger: #8a3428;
+  --color-danger-strong: #b94535;
+  --color-danger-text: #a33d30;
+  --color-danger-dark: #813329;
+  --color-danger-surface: #fee9e5;
+  --color-danger-surface-soft: #fff0ed;
+  --color-notification: #e98767;
+  --color-focus: #f3b83f;
+
+  /* Korte alias beholdes mens eldre stilregler flyttes til semantiske navn. */
+  --ink: var(--color-text);
+  --muted: var(--color-text-muted);
+  --blue: var(--color-primary);
+  --pale: var(--color-primary-soft);
+  --cream: var(--color-background);
+  --line: var(--color-border);
 }
 * {
   box-sizing: border-box;
@@ -15,7 +42,7 @@ button {
 }
 body {
   margin: 0;
-  background: #dfeaf4;
+  background: var(--color-primary-soft);
   color: var(--ink);
   font-family: Arial, sans-serif;
 }
@@ -146,7 +173,7 @@ body {
   width: 100%;
   border: 0;
   border-radius: 14px;
-  background: #fff;
+  background: var(--color-surface);
   color: var(--blue);
   font-weight: 800;
   letter-spacing: 0.8px;

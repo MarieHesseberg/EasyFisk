@@ -16,7 +16,7 @@
   align-items: flex-start;
   gap: 10px;
   background: #ffffff73;
-  border: 1px solid #fff;
+  border: 1px solid var(--color-surface);
   border-radius: 11px;
   padding: 10px 12px;
   color: #3e5870;
@@ -88,7 +88,7 @@
 .detail-status {
   display: flex;
   gap: 12px;
-  background: #e7f1fa;
+  background: var(--color-primary-surface-strong);
   border-radius: 15px;
   padding: 15px;
 }

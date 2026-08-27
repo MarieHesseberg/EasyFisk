@@ -20,8 +20,8 @@
   font-weight: bold;
 }
 .feedback-steps span.on {
-  background: #2563a6;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 .feedback-steps i {
   width: 48px;
@@ -31,7 +31,7 @@
 .form-intro {
   display: flex;
   gap: 10px;
-  background: #fff3d8;
+  background: var(--color-warning-surface);
   color: #6d5215;
   border: 1px solid #e6cc82;
   border-radius: 13px;
@@ -69,7 +69,7 @@
   min-height: 46px;
   border: 1px solid #d8e3ed;
   border-radius: 11px;
-  background: #fff;
+  background: var(--color-surface);
   color: #324b43;
   text-align: left;
   padding: 9px;
@@ -77,9 +77,9 @@
   line-height: 1.3;
 }
 .feedback-categories button.selected {
-  border-color: #347ab8;
+  border-color: var(--color-primary-accent);
   background: #e8f2fb;
-  color: #2563a6;
+  color: var(--color-primary);
   font-weight: bold;
 }
 .feedback-categories svg {
@@ -90,10 +90,10 @@
   min-height: 90px;
   border: 1px solid #d8e3ed;
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 11px;
   margin-top: 6px;
-  color: #172a3a;
+  color: var(--color-text);
   font: 10px Arial;
   line-height: 1.5;
   resize: vertical;
@@ -111,9 +111,9 @@
   gap: 10px;
   border: 1px dashed #a7bacb;
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 12px;
-  color: #2563a6;
+  color: var(--color-primary);
   cursor: pointer;
 }
 .feedback-upload > span {
@@ -123,11 +123,11 @@
 }
 .feedback-upload b {
   font-size: 10px;
-  color: #172a3a;
+  color: var(--color-text);
 }
 .feedback-upload small {
   font-size: 8px;
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .feedback-upload input {
   position: absolute;
@@ -136,8 +136,8 @@
   cursor: pointer;
 }
 .position-card {
-  background: #fff;
-  border: 1px solid #d8e3ee;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 13px;
   padding: 11px;
 }
@@ -157,14 +157,14 @@
 }
 .position-card small {
   font-size: 8px;
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .position-card > div button,
 .position-card > button {
-  border: 1px solid #347ab8;
+  border: 1px solid var(--color-primary-accent);
   border-radius: 8px;
-  background: #fff;
-  color: #2563a6;
+  background: var(--color-surface);
+  color: var(--color-primary);
   padding: 7px 9px;
   font-size: 8px;
   font-weight: bold;
@@ -174,8 +174,8 @@
   margin-top: -32px;
 }
 .position-card > button.active {
-  background: #2563a6;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 .position-card > p {
   clear: both;
@@ -183,14 +183,14 @@
   align-items: center;
   gap: 5px;
   background: #e8f2fb;
-  color: #2563a6;
+  color: var(--color-primary);
   border-radius: 8px;
   padding: 8px;
   margin: 10px 0 0;
   font-size: 8px;
 }
 .feedback-review {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 14px;
   padding: 3px 13px;
 }
@@ -207,7 +207,7 @@
 }
 .feedback-review small {
   font-size: 7px;
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .feedback-review b {
   font-size: 9px;
@@ -217,14 +217,14 @@
   display: flex !important;
   align-items: flex-start;
   gap: 7px;
-  background: #edf4fb;
+  background: var(--color-primary-soft);
   border-radius: 11px;
   padding: 10px !important;
   font-size: 8px !important;
   line-height: 1.4;
 }
 .privacy-confirm input {
-  accent-color: #2563a6;
+  accent-color: var(--color-primary);
 }
 .feedback-confirmation {
   text-align: center;
@@ -236,12 +236,12 @@
   display: grid;
   place-items: center;
   background: #dcefe2;
-  color: #2563a6;
+  color: var(--color-primary);
   margin: 8px auto 13px;
 }
 .feedback-confirmation > small {
   font-size: 8px;
-  color: #347ab8;
+  color: var(--color-primary-accent);
   letter-spacing: 1.2px;
   font-weight: bold;
 }
@@ -252,10 +252,10 @@
 .feedback-confirmation > p {
   font-size: 9px;
   line-height: 1.5;
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .feedback-confirmation > div {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: 11px;
   margin: 15px 0;
@@ -263,7 +263,7 @@
 .feedback-confirmation > div small {
   display: block;
   font-size: 7px;
-  color: #65758a;
+  color: var(--color-text-muted);
   margin-bottom: 3px;
 }
 .feedback-confirmation > div b {

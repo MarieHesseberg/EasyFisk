@@ -5,8 +5,8 @@
 .rule-version {
   display: flex;
   gap: 11px;
-  background: #1d4f7a;
-  color: #fff;
+  background: var(--color-primary-dark);
+  color: var(--color-surface);
   border-radius: 16px;
   padding: 14px;
 }
@@ -58,14 +58,14 @@
   margin: 3px 0 0;
 }
 .rule-center article {
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid #e0e8ef;
   border-radius: 13px;
   overflow: hidden;
 }
 .rule-center article.open {
   border-color: #a6c6e0;
-  box-shadow: 0 4px 14px #172a3a0b;
+  box-shadow: 0 4px 14px var(--color-text) 0b;
 }
 .rule-center article > button {
   width: 100%;
@@ -73,17 +73,17 @@
   align-items: center;
   gap: 10px;
   border: 0;
-  background: #fff;
+  background: var(--color-surface);
   padding: 12px;
   text-align: left;
-  color: #172a3a;
+  color: var(--color-text);
 }
 .rule-center article > button > span {
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #edf4fb;
-  color: #2563a6;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
   display: grid;
   place-items: center;
   flex: none;
@@ -99,14 +99,14 @@
 }
 .rule-center article > button small {
   font-size: 8px;
-  color: #65758a;
+  color: var(--color-text-muted);
 }
 .rule-center article > button i {
   font: normal 18px Arial;
   color: #517890;
 }
 .rule-body {
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--color-border-faint);
   padding: 5px 12px 9px 56px;
 }
 .rule-body p {
@@ -119,11 +119,11 @@
 }
 .rule-body svg {
   flex: none;
-  color: #347ab8;
+  color: var(--color-primary-accent);
   margin-top: 1px;
 }
 .rule-sources {
-  background: #edf4fb;
+  background: var(--color-primary-soft);
   border-radius: 13px;
   padding: 12px;
   margin-top: 4px;
@@ -144,9 +144,9 @@
 .large-salmon-used {
   display: flex;
   justify-content: space-between;
-  background: #fff3d8;
+  background: var(--color-warning-surface);
   color: #755716;
-  border: 1px solid #e4c46a;
+  border: 1px solid var(--color-warning-border);
   border-radius: 11px;
   padding: 11px;
   margin: -5px 0 12px;
