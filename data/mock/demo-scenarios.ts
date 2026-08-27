@@ -1,0 +1,103 @@
+import type { DemoScenario } from "@/domain/fishing-rules/rule";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
+
+const { temperature } = activeFishingRules;
+
+export const demoStatuses: DemoScenario[] = [
+  {
+    id: "ok",
+    label: "Alt er i orden",
+    title: "Du er klar til å fiske",
+    detail: "Alle krav er kontrollert. Du kan fortsette til sonevalg.",
+    level: "ok",
+  },
+  {
+    id: "noPermit",
+    label: "Fiskekort mangler",
+    title: "Du mangler fiskekort",
+    detail: "Det finnes ikke et gyldig fiskekort på profilen din.",
+    level: "blocked",
+    action: "Registrer fiskekort",
+  },
+  {
+    id: "wrongZone",
+    label: "Kortet gjelder feil sone",
+    title: "Kortet gjelder ikke Sone 3",
+    detail: "Kortet ditt gjelder Sone 2. Velg riktig sone eller registrer et annet kort.",
+    level: "blocked",
+    action: "Velg sone fra fiskekortet",
+  },
+  {
+    id: "expiredDisinfection",
+    label: "Desinfiseringen er utløpt",
+    title: "Desinfisering må fornyes",
+    detail: "Beviset er utløpt. Utstyret må desinfiseres før fiske kan starte.",
+    level: "blocked",
+    action: "Finn desinfiseringsstasjon",
+  },
+  {
+    id: "otherRiver",
+    label: "Besøkt et annet vassdrag",
+    title: "Ny desinfisering kreves",
+    detail: "Utstyret er brukt i et annet vassdrag etter siste desinfisering.",
+    level: "blocked",
+    action: "Finn desinfiseringsstasjon",
+  },
+  {
+    id: "noFee",
+    label: "Fiskeravgift mangler",
+    title: "Fiskeravgiften mangler",
+    detail: "Betaling av statlig fiskeravgift må dokumenteres før laksefiske.",
+    level: "blocked",
+    action: "Registrer dokumentasjon",
+  },
+  {
+    id: "dailyQuota",
+    label: "Døgnkvoten er nådd",
+    title: "Døgnkvoten er nådd",
+    detail:
+      "Én avlivet laks er registrert dette fiskerdøgnet. Fisket kan ikke fortsette før neste fiskerdøgn.",
+    level: "blocked",
+    action: "Se kvoteregnskap",
+  },
+  {
+    id: "seasonQuota",
+    label: "Sesongkvoten er nådd",
+    title: "Sesongkvoten er nådd",
+    detail: "Fem avlivede laks er registrert denne sesongen. Videre avliving er ikke tillatt.",
+    level: "warning",
+    action: "Se regler for gjenutsetting",
+  },
+  {
+    id: "lateReport",
+    label: "Fangstrapport er forsinket",
+    title: "En fangstrapport mangler",
+    detail: "En tidligere fangst må ferdigstilles før en ny økt kan startes.",
+    level: "blocked",
+    action: "Fullfør fangstrapport",
+  },
+  {
+    id: "hotWater",
+    label: `Vanntemperaturen er over ${temperature.closureThresholdCelsius} °C`,
+    title: "Fisket er stanset",
+    detail: `Registrert vanntemperatur er ${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C. Alt fiske er midlertidig stanset.`,
+    level: "blocked",
+    action: "Se temperatur og varsel",
+  },
+  {
+    id: "closed",
+    label: "Sonen eller elva er stengt",
+    title: "Sone 3 er midlertidig stengt",
+    detail: "Det er publisert et aktivt stengningsvarsel for valgt sone.",
+    level: "blocked",
+    action: "Se åpne soner",
+  },
+  {
+    id: "zoneBorder",
+    label: "GPS ved en sonegrense",
+    title: "Posisjonen er nær en sonegrense",
+    detail: "GPS-treffet er usikkert. Kontroller fysisk skilting og velg sone manuelt.",
+    level: "warning",
+    action: "Velg sone manuelt",
+  },
+];

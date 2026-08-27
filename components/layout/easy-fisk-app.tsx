@@ -62,8 +62,8 @@ export function EasyFiskApp() {
           <Home
             onStart={actions.openSessionFlow}
             onRules={() => actions.navigate("rules")}
-            onFeedback={() => actions.openDetail("Tilbakemelding")}
-            onControlCard={() => actions.openDetail("Kontrollkort")}
+            onFeedback={() => actions.openDetail("feedback")}
+            onControlCard={() => actions.openDetail("control-card")}
             onCatchShortcut={actions.openCatchHistory}
             onMapShortcut={() => actions.navigate("map")}
             active={active}
@@ -79,7 +79,7 @@ export function EasyFiskApp() {
         {screen === "rules" && (
           <RulesScreen
             demoStatus={demoStatus}
-            onRegisterPermit={() => actions.openDetail("Mine fiskekort")}
+            onRegisterPermit={() => actions.openDetail("permits")}
           />
         )}{" "}
         {screen === "stats" && (
@@ -137,7 +137,7 @@ export function EasyFiskApp() {
             resolveBlock={actions.resolveBlockedStatus}
           />
         )}
-        {globalDetail && <Detail title={globalDetail} close={actions.closeDetail} />}
+        {globalDetail && <Detail destination={globalDetail} close={actions.closeDetail} />}
       </div>
       <aside className="prototype-note feature-panel">
         <span>DEMONSTRASJONSMODUS</span>

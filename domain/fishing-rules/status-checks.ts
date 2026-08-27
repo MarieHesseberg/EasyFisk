@@ -7,7 +7,7 @@ export function statusState(current: DemoStatus, affected: DemoStatus[], level: 
 }
 
 export function getStatusResolution(status: DemoStatus): DetailDestination {
-  if (status === "noPermit" || status === "wrongZone") return "Mine fiskekort";
-  if (status === "expiredDisinfection" || status === "otherRiver") return "Desinfisering";
-  return "Varsler og stengninger";
+  if (status === "noPermit" || status === "wrongZone") return "permits";
+  if (status === "expiredDisinfection" || status === "otherRiver") return "disinfection";
+  return "notifications";
 }

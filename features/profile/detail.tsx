@@ -1,11 +1,18 @@
 import { FeedbackForm } from "@/features/feedback/feedback-form";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
-import { MoreDetailContent } from "@/features/profile/more-detail-content";
-import { RuleCenter } from "@/features/rules/rule-center";
+import type { DetailDestination } from "@/domain/navigation/navigation";
+import { detailTitles } from "@/features/profile/detail-pages/detail-page-types";
+import { ProfileDetailContent } from "@/features/profile/detail-pages/profile-detail-content";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
-export function Detail({ title, close }: { title: string; close: () => void }) {
+export function Detail({
+  destination,
+  close,
+}: {
+  destination: DetailDestination;
+  close: () => void;
+}) {
   const dialogRef = useDialogAccessibility(close);
+  const title = detailTitles[destination];
   return (
     <div
       ref={dialogRef}
@@ -20,19 +27,10 @@ export function Detail({ title, close }: { title: string; close: () => void }) {
       </button>
       <small>PROTOTYPEVISNING</small>
       <h2 id="detail-title">{title}</h2>
-      {title.includes("Fiskeregler") ? (
-        <RuleCenter />
-      ) : title === "Tilbakemelding" ? (
+      {destination === "feedback" ? (
         <FeedbackForm />
       ) : (
-        <MoreDetailContent title={title} />
-      )}
-      {title.includes("Fiskeregler") && (
-        <p className="source-note">
-          Regler og sonedata er basert på Mandalselva Elveeigarlags publiserte informasjon for{" "}
-          {activeFishingRules.metadata.seasonYear}. Fysisk skilting og siste publiserte regelendring
-          gjelder.
-        </p>
+        <ProfileDetailContent destination={destination} />
       )}
     </div>
   );
