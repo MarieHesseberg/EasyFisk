@@ -1,0 +1,68 @@
+.header-alert-panel {
+  position: absolute !important;
+  z-index: 35;
+  top: 25px;
+  left: 0;
+  right: 0;
+  display: block !important;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 17px;
+  padding: 17px;
+  box-shadow: 0 12px 30px var(--color-shadow);
+}
+.header-alert-panel > button {
+  float: right;
+  border: 0;
+  background: var(--color-info-surface-muted);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: var(--color-primary);
+}
+.header-alert-panel h3 {
+  font: 700 17px Georgia;
+  margin: 5px 0 12px;
+}
+.header-alert-panel p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  border-top: 1px solid #e9eff5;
+  padding: 9px 0;
+  margin: 0;
+  color: #4f687f;
+}
+.map-location-status {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 54px;
+  background: var(--color-primary-dark);
+  color: var(--color-surface);
+  border-radius: 11px;
+  padding: 10px;
+  text-align: center;
+  font-size: 9px;
+  box-shadow: 0 5px 15px var(--color-shadow);
+}
+.control-code {
+  text-align: center;
+  background: var(--color-surface);
+  border: 2px dashed #9fb5c8;
+  border-radius: 16px;
+  padding: 18px;
+  font: 800 21px Arial;
+  color: var(--color-primary);
+}
+.control-code b {
+  font-size: 30px;
+}
+.control-code small {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 1.2px;
+  color: var(--color-text-muted);
+  margin-top: 7px;
+}

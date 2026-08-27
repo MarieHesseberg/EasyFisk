@@ -19,7 +19,7 @@
 }
 .stats-tabs button.selected {
   background: var(--color-surface);
-  color: var(--blue);
+  color: var(--color-primary);
   box-shadow: 0 2px 8px #183b5918;
 }
 .activity-embedded {
@@ -42,7 +42,7 @@
   border: 1px solid #cfddeb;
 }
 .personal-rules.missing {
-  background: #fff1db;
+  background: var(--color-warning-surface-light);
   border: 1px solid #ead4aa;
 }
 .personal-rules-title {
@@ -57,7 +57,7 @@
   place-items: center;
   border-radius: 13px;
   background: var(--color-surface);
-  color: var(--blue);
+  color: var(--color-primary);
 }
 .personal-rules-title small,
 .general-rules-heading small {
@@ -80,7 +80,7 @@
   width: 100%;
   border: 0;
   border-radius: 12px;
-  background: var(--blue);
+  background: var(--color-primary);
   color: var(--color-surface);
   padding: 13px;
   font-weight: 800;
@@ -96,14 +96,14 @@
 }
 .permit-zone svg {
   grid-row: 1/3;
-  color: var(--blue);
+  color: var(--color-primary);
 }
 .permit-zone b {
   font-size: 12px;
 }
 .permit-zone span {
   font-size: 10px;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 .personal-rule-list {
   background: var(--color-surface);
@@ -138,6 +138,6 @@
 .general-rules-heading p {
   font-size: 12px;
   line-height: 1.5;
-  color: var(--muted);
+  color: var(--color-text-muted);
   margin: 7px 0 0;
 }

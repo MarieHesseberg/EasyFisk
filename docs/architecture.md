@@ -136,6 +136,16 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 
 Alle strukturelle refaktoreringer sammenlignes med `visual-baseline`. Avvik skal være bevisste produktendringer, ikke bivirkninger av ny kode.
 
+## Stilark og designtokens
+
+Stilfilene under `styles/` følger komponent- og funksjonsgrensene i appen. En stilfil skal normalt
+være under 250 linjer, og en delt selektor skal ha én tydelig eier. `foundations.css` inneholder
+globale og semantiske designtokens. Delte farger skal bruke disse tokenene; direkte fargeverdier er
+forbeholdt enkeltstående kart-, illustrasjons- og statustoner.
+
+Nye stiler legges i filen som eier komponenten. Responsive overstyringer samles fortsatt i
+`responsive.css`, slik at grunnregler ikke dupliseres mellom skjermstørrelser.
+
 ## Responsivitet og tilgjengelighet
 
 - Mobilvisningen fyller tilgjengelig dynamisk høyde fra 360 piksler bredde.
