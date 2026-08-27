@@ -47,13 +47,20 @@ Prosjektet bruker foreløpig ingen database eller server-API. Fremtidige integra
 
 ```text
 app/                Next.js-ruter og nåværende prototype
+components/         Felles layout- og UI-komponenter
+features/           Skjermbilder og brukerrettede arbeidsflyter
+domain/             Modeller og forretningsregler uten React-avhengighet
+data/mock/          Demonstrasjonsdata
+hooks/              Gjenbrukbar React-logikk
+lib/                Små, generelle hjelpefunksjoner
+styles/             Globale stilark
 public/             Statiske filer
 tests/              Automatiske tester
 visual-baseline/    Skjermbilder og krav som bevarer dagens utseende
 docs/               Arkitektur og utviklingsregler
 ```
 
-Den nåværende prototypen blir delt opp funksjon for funksjon i senere refaktoreringer. Målstrukturen er dokumentert i [docs/architecture.md](docs/architecture.md).
+Den detaljerte ansvarsdelingen og reglene for videre utvidelser er dokumentert i [docs/architecture.md](docs/architecture.md).
 
 ## Språk og navn
 
@@ -77,4 +84,3 @@ I GitHub skal **Settings → Pages → Source** være satt til **GitHub Actions*
 Publisert app:
 
 <https://mariehesseberg.github.io/EasyFisk/>
-

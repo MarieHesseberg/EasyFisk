@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/styles/detail-pages.css";
+import "@/styles/feedback-form.css";
+import "@/styles/globals.css";
+import "@/styles/home-status.css";
+import "@/styles/navigation-pages.css";
+import "@/styles/report.css";
+import "@/styles/rule-center.css";
+import "@/styles/rules.css";
+import "@/styles/violation.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",
@@ -24,4 +32,3 @@ export default function RootLayout({
     </html>
   );
 }
-

@@ -6,9 +6,7 @@ EasyFisk skal være enkelt å forstå, enkelt å utvide og uavhengig av framtidi
 
 ## Retning
 
-Den eksisterende prototypen ligger foreløpig i `app/page.tsx`. Den skal deles opp gradvis uten å endre utseende eller oppførsel.
-
-Målstruktur:
+Prototypen er delt etter ansvar uten å endre utseende eller oppførsel. Den aktive strukturen er:
 
 ```text
 app/
@@ -32,6 +30,7 @@ features/
 
 domain/
   catches/
+  fishing-rules/
   quotas/
   sessions/
   zones/
@@ -45,7 +44,9 @@ styles/
 tests/
 ```
 
-Mappene opprettes først når de får reelt innhold.
+Alle mappene har reelt innhold. Nye filer skal normalt holdes mellom 150 og 250 linjer eller
+kortere. En fil kan være lengre når én sammenhengende arbeidsflyt blir vanskeligere å forstå av
+å deles, men dette skal være et bevisst unntak.
 
 ## Ansvarsdeling
 
@@ -64,6 +65,15 @@ Inneholder forretningsregler og sentrale modeller. Koden skal være uavhengig av
 ### `components/ui`
 
 Inneholder små gjenbrukbare visningskomponenter uten kunnskap om fiskeregler eller datalagring.
+
+### `components/layout`
+
+Kobler sammen navigasjon, skjermbilder og overordnet applikasjonstilstand. Rutefilene kjenner
+bare dette laget.
+
+### `hooks`
+
+Inneholder gjenbrukbar React-logikk, som tidsmåling og kortvarige meldinger.
 
 ### `data`
 
@@ -85,4 +95,3 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 ## Visuell stabilitet
 
 Alle strukturelle refaktoreringer sammenlignes med `visual-baseline`. Avvik skal være bevisste produktendringer, ikke bivirkninger av ny kode.
-
