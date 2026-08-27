@@ -47,4 +47,3 @@ Ny domenelogikk skal ha enhetstester. Feilrettinger bør få en test som viser f
 - Ikonknapper skal ha tilgjengelig navn.
 - Mobilbredder fra 360 piksler skal fungere uten vannrett rulling.
 - Ta hensyn til trygge områder, skjermtastatur og minst 44 × 44 piksler for viktige berøringsflater.
-

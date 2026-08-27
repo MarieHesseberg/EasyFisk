@@ -31,12 +31,17 @@ features/
 domain/
   catches/
   fishing-rules/
+  navigation/
   quotas/
   sessions/
   zones/
 
 data/
+  contracts/
+  local-storage/
+  memory/
   mock/
+  repositories/
 
 hooks/
 lib/
@@ -91,9 +96,21 @@ Store arbeidsflyter deles i en navngitt kontroller under `hooks/` og små steg u
 
 Inneholder implementasjoner som leser eller lagrer data. React-komponenter skal bruke tydelige grensesnitt i stedet for å kjenne databasen direkte.
 
+- `contracts/` beskriver hva appen trenger fra en datakilde.
+- `local-storage/` gir prototypen versjonert lagring som overlever oppdatering av siden.
+- `memory/` lagrer brukerdata midlertidig mens appen kjører.
+- `mock/` inneholder lokale eksempeldata og adapteren som leser dem.
+- `repositories/` velger aktiv adapter. En framtidig API- eller databaseadapter kobles inn her.
+
+Bare filer under `data/` kan importere fra `data/mock`. Komponenter og domenelogikk bruker den
+konfigurerte repository-eksporten. Denne grensen håndheves av en automatisk test.
+
 ## Framtidige datakilder
 
-Database og API legges til bak små grensesnitt. Et fangstlager kan for eksempel tilby `save` og `list`, mens en midlertidig minneimplementasjon og en framtidig databaseimplementasjon følger samme kontrakt.
+Database og API legges til bak små grensesnitt. `FishingContentRepository` leverer soner, regler og
+demonstrasjonsscenarioer. `FishingLogRepository` lagrer økter og fangster. Den aktive
+minneimplementasjonen brukes i tester, mens nettleserprototypen bruker `localStorage`. Begge kan
+senere erstattes med en databaseadapter uten å endre skjermene eller domenereglene.
 
 Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at leverandør kan byttes uten å skrive om skjermene.
 
@@ -117,3 +134,10 @@ Alle strukturelle refaktoreringer sammenlignes med `visual-baseline`. Avvik skal
 - Dialoginnhold ruller innenfor dynamisk visningshøyde, også når skjermtastaturet reduserer plassen.
 - Interaktive kontroller har minst 44 piksler berøringshøyde og tydelig tastaturfokus.
 - Redusert bevegelse respekteres gjennom `prefers-reduced-motion`.
+
+## Stilark og designtokens
+
+Appen bruker vanlig CSS uten Tailwind. Felles farger og tilstander defineres som semantiske tokens
+i `styles/foundations.css`. Feature-stilark skal bruke disse tokenene for delte flater, tekst,
+rammer og statusfarger. Lokale fargeverdier er bare tillatt for særskilt illustrasjon, kart eller
+visualisering som ikke representerer en gjenbrukbar UI-tilstand.
