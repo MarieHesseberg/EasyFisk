@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
-const isGitHubPages = process.env.GITHUB_PAGES === "true";
+const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   ...(isGitHubPages
     ? {
         output: "export",
@@ -10,9 +11,9 @@ const nextConfig: NextConfig = {
         assetPrefix: "/EasyFisk/",
         trailingSlash: true,
         images: { unoptimized: true },
-        typescript: { ignoreBuildErrors: true },
       }
     : {}),
 };
 
 export default nextConfig;
+

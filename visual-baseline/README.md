@@ -16,14 +16,14 @@ Ombyggingen kan endre filstruktur, komponentgrenser, tilstandshåndtering, datak
 
 ## Referansestørrelser
 
-| Profil | Visningsflate | Bruk |
-| --- | ---: | --- |
-| Kompakt mobil | 360 × 800 | Minste støttede mobilbredde |
-| iPhone-referanse | 390 × 844 | Primær visuell referanse |
-| Android-referanse | 412 × 915 | Vanlig Android-størrelse |
-| Stor mobil | 430 × 932 | Store iPhone- og Android-modeller |
-| Nettbrett | 768 × 1024 | App sentrert eller tilpasset tilgjengelig bredde |
-| Skrivebord | 1440 × 900 | Telefonprototype og demonstrasjonspanel ved siden av hverandre |
+| Profil            | Visningsflate | Bruk                                                           |
+| ----------------- | ------------: | -------------------------------------------------------------- |
+| Kompakt mobil     |     360 × 800 | Minste støttede mobilbredde                                    |
+| iPhone-referanse  |     390 × 844 | Primær visuell referanse                                       |
+| Android-referanse |     412 × 915 | Vanlig Android-størrelse                                       |
+| Stor mobil        |     430 × 932 | Store iPhone- og Android-modeller                              |
+| Nettbrett         |    768 × 1024 | App sentrert eller tilpasset tilgjengelig bredde               |
+| Skrivebord        |    1440 × 900 | Telefonprototype og demonstrasjonspanel ved siden av hverandre |
 
 Appen skal ikke kreve en bestemt telefonmodell. Bredder fra 360 til 430 piksler skal fungere uten vannrett rulling, avkuttet tekst eller knapper utenfor skjermen.
 
@@ -31,28 +31,28 @@ Appen skal ikke kreve en bestemt telefonmodell. Bredder fra 360 til 430 piksler 
 
 ### Hovedskjermer
 
-| Skjerm | iPhone | Android |
-| --- | --- | --- |
-| Hjem | [390 × 844](screenshots/iphone-390x844-home.png) | [412 × 915](screenshots/android-412x915-home.png) |
-| Kart | [390 × 844](screenshots/iphone-390x844-map.png) | [412 × 915](screenshots/android-412x915-map.png) |
-| Regler | [390 × 844](screenshots/iphone-390x844-rules.png) | — |
-| Statistikk | [390 × 844](screenshots/iphone-390x844-statistics.png) | — |
-| Mer | [390 × 844](screenshots/iphone-390x844-more.png) | — |
+| Skjerm     | iPhone                                                 | Android                                           |
+| ---------- | ------------------------------------------------------ | ------------------------------------------------- |
+| Hjem       | [390 × 844](screenshots/iphone-390x844-home.png)       | [412 × 915](screenshots/android-412x915-home.png) |
+| Kart       | [390 × 844](screenshots/iphone-390x844-map.png)        | [412 × 915](screenshots/android-412x915-map.png)  |
+| Regler     | [390 × 844](screenshots/iphone-390x844-rules.png)      | —                                                 |
+| Statistikk | [390 × 844](screenshots/iphone-390x844-statistics.png) | —                                                 |
+| Mer        | [390 × 844](screenshots/iphone-390x844-more.png)       | —                                                 |
 
 ### Detaljer og arbeidsflyter
 
-| Tilstand | Referanse |
-| --- | --- |
-| Fiskekortdetaljer | [Mine fiskekort](screenshots/iphone-390x844-detail-permits.png) |
-| Tilbakemelding, steg 1 | [Opprett melding](screenshots/iphone-390x844-feedback-step-1.png) |
-| Oppstart, statuskontroll | [Steg 1](screenshots/iphone-390x844-start-flow-status.png) |
-| Oppstart, posisjon | [Steg 2](screenshots/iphone-390x844-start-flow-position.png) |
-| Oppstart, sonevalg | [Steg 3](screenshots/iphone-390x844-start-flow-zone.png) |
-| Oppstart, regelbekreftelse | [Steg 4](screenshots/iphone-390x844-start-flow-confirm.png) |
-| Aktiv fiskeøkt | [Aktiv økt](screenshots/iphone-390x844-active-session.png) |
-| Fangstrapport, art og resultat | [Steg 1](screenshots/iphone-390x844-catch-report-step-1.png) |
-| Fangstrapport, detaljer | [Steg 2](screenshots/iphone-390x844-catch-report-step-2.png) |
-| Fangstrapport, regelkontroll | [Steg 3](screenshots/iphone-390x844-catch-report-step-3.png) |
+| Tilstand                       | Referanse                                                         |
+| ------------------------------ | ----------------------------------------------------------------- |
+| Fiskekortdetaljer              | [Mine fiskekort](screenshots/iphone-390x844-detail-permits.png)   |
+| Tilbakemelding, steg 1         | [Opprett melding](screenshots/iphone-390x844-feedback-step-1.png) |
+| Oppstart, statuskontroll       | [Steg 1](screenshots/iphone-390x844-start-flow-status.png)        |
+| Oppstart, posisjon             | [Steg 2](screenshots/iphone-390x844-start-flow-position.png)      |
+| Oppstart, sonevalg             | [Steg 3](screenshots/iphone-390x844-start-flow-zone.png)          |
+| Oppstart, regelbekreftelse     | [Steg 4](screenshots/iphone-390x844-start-flow-confirm.png)       |
+| Aktiv fiskeøkt                 | [Aktiv økt](screenshots/iphone-390x844-active-session.png)        |
+| Fangstrapport, art og resultat | [Steg 1](screenshots/iphone-390x844-catch-report-step-1.png)      |
+| Fangstrapport, detaljer        | [Steg 2](screenshots/iphone-390x844-catch-report-step-2.png)      |
+| Fangstrapport, regelkontroll   | [Steg 3](screenshots/iphone-390x844-catch-report-step-3.png)      |
 
 ### Skrivebord
 

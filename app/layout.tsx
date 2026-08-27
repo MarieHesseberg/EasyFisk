@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "EasyFisk app-prototype",
+  title: "EasyFisk",
   description: "En interaktiv prototype for EasyFisk i Mandalselva.",
   other: {
     "codex-preview": "development",
@@ -24,3 +24,4 @@ export default function RootLayout({
     </html>
   );
 }
+
