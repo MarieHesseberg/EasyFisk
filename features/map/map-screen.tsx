@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Header } from "@/components/ui/header";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { ZoneId } from "@/domain/zones/zone";
@@ -76,7 +77,7 @@ export function MapScreen({
         <p className="zone-desc">{z.desc}</p>
         <div className="zone-facts">
           <div>
-            <small>SESONG 2026</small>
+            <small>SESONG {activeFishingRules.metadata.seasonYear}</small>
             <b>{z.season}</b>
           </div>
           <div>

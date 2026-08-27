@@ -63,7 +63,7 @@
   color: var(--color-primary);
 }
 .demo-result.warning {
-  background: #fff8e7;
+  background: var(--color-warning-background-soft);
   border-color: #e7c870;
   color: #725711;
 }
@@ -107,7 +107,7 @@
   color: var(--color-primary);
 }
 .scenario-banner.warning {
-  background: #fff7df;
+  background: var(--color-warning-background);
   border-color: var(--color-warning-border);
   color: #72550b;
 }
@@ -121,7 +121,7 @@
   color: var(--color-surface);
 }
 .flow-checks .check-row.warning span {
-  background: #d39b25;
+  background: var(--color-warning-accent);
   color: var(--color-surface);
 }
 .flow-checks .check-row.error p small {

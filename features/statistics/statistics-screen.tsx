@@ -5,6 +5,7 @@ import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { CatchRecord } from "@/domain/catches/catch";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { Activity } from "@/features/fishing-session/activity-screen";
 
@@ -74,8 +75,9 @@ export function StatsContent() {
         ))}
       </section>
       <p className="privacy-note">
-        Tallene demonstrerer ønsket funksjon. De er ikke offisielle 2026-tall. Statistikk skal
-        aggregeres uten å vise enkeltfiskeres posisjon.
+        Tallene demonstrerer ønsket funksjon. De er ikke offisielle{" "}
+        {activeFishingRules.metadata.seasonYear}-tall. Statistikk skal aggregeres uten å vise
+        enkeltfiskeres posisjon.
       </p>
     </>
   );

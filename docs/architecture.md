@@ -105,6 +105,17 @@ Inneholder implementasjoner som leser eller lagrer data. React-komponenter skal 
 Bare filer under `data/` kan importere fra `data/mock`. Komponenter og domenelogikk bruker den
 konfigurerte repository-eksporten. Denne grensen håndheves av en automatisk test.
 
+## Versjonerte fiskeregler
+
+`domain/fishing-rules/mandalselva-2026.ts` er eneste kilde for aktiv regelversjon, sesongdatoer,
+størrelsesgrenser, kvoter, rapporteringsfrist og temperaturgrense. Domenefunksjoner og
+brukergrensesnitt skal lese disse verdiene gjennom `activeFishingRules`; de skal ikke gjenta
+årstall, datoer eller tallgrenser lokalt.
+
+Ved en ny sesong opprettes en ny versjonert fil. Eksporten `activeFishingRules` flyttes først etter
+at innhold og tester for den nye sesongen er kontrollert. Dermed kan eldre regler beholdes for
+historiske rapporter og framtidig datamigrering.
+
 ## Framtidige datakilder
 
 Database og API legges til bak små grensesnitt. `FishingContentRepository` leverer soner, regler og
@@ -124,6 +135,16 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 ## Visuell stabilitet
 
 Alle strukturelle refaktoreringer sammenlignes med `visual-baseline`. Avvik skal være bevisste produktendringer, ikke bivirkninger av ny kode.
+
+## Stilark og designtokens
+
+Stilfilene under `styles/` følger komponent- og funksjonsgrensene i appen. En stilfil skal normalt
+være under 250 linjer, og en delt selektor skal ha én tydelig eier. `foundations.css` inneholder
+globale og semantiske designtokens. Delte farger skal bruke disse tokenene; direkte fargeverdier er
+forbeholdt enkeltstående kart-, illustrasjons- og statustoner.
+
+Nye stiler legges i filen som eier komponenten. Responsive overstyringer samles fortsatt i
+`responsive.css`, slik at grunnregler ikke dupliseres mellom skjermstørrelser.
 
 ## Responsivitet og tilgjengelighet
 

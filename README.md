@@ -50,6 +50,7 @@ app/                Next.js-ruter og nåværende prototype
 components/         Felles layout- og UI-komponenter
 features/           Skjermbilder og brukerrettede arbeidsflyter
 domain/             Fagtyper og forretningsregler, delt etter fagområde
+domain/fishing-rules/ Versjonert regelgrunnlag og kontrollfunksjoner
 data/contracts/     Grensesnitt mot datakilder
 data/local-storage/ Versjonert prototypelagring i nettleseren
 data/memory/        Midlertidig lagring av økter og fangster

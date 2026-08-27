@@ -1,5 +1,6 @@
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { formatLongDuration } from "@/lib/time";
 
@@ -14,6 +15,7 @@ export function CatchConfirmationStep({
   finishAfterCatch: boolean;
   onDone: () => void;
 }) {
+  const { catchSize, quota, reporting } = activeFishingRules;
   const { result, sentCatch, validation } = controller.state;
 
   return (
@@ -26,7 +28,7 @@ export function CatchConfirmationStep({
       <p className="sent-lead">
         {sentCatch?.late
           ? `Rapporten ble sendt ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))} etter fangsten og er merket som forsinket.`
-          : `Rapporten ble sendt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på 2 timer.`}
+          : `Rapporten ble sendt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på ${reporting.deadlineHours} timer.`}
       </p>
       {sentCatch?.late && (
         <div className="violation-sent late">
@@ -57,18 +59,19 @@ export function CatchConfirmationStep({
           <b>
             {Math.max(
               0,
-              4 -
+              quota.killedSalmonPerSeason -
+                1 -
                 catches.filter((item) => item.species === "Laks" && item.result === "Avlivet")
                   .length,
             )}{" "}
-            av 5 gjenstår
+            av {quota.killedSalmonPerSeason} gjenstår
           </b>
         </div>
       </div>
       {validation.largeSalmon && (
         <div className="large-salmon-used">
           <b>Storlaks-unntaket er brukt</b>
-          <span>0 av 1 gjenstår</span>
+          <span>0 av {catchSize.largeSalmonAllowance} gjenstår</span>
         </div>
       )}
       <div className="report-id">

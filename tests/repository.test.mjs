@@ -50,6 +50,27 @@ test("kodebasen følger den avtalte mappestrukturen", async () => {
   );
 });
 
+test("regelverdier hentes fra ett versjonert regelgrunnlag", async () => {
+  const consumers = [
+    "domain/zones/zone-rules.ts",
+    "domain/catches/validate-catch.ts",
+    "domain/catches/reporting-deadline.ts",
+    "domain/quotas/get-quota-status.ts",
+    "data/mock/fishing-data.ts",
+    "features/home/home-screen.tsx",
+    "features/rules/rules-screen.tsx",
+    "features/rules/rule-center.tsx",
+    "features/catch-report/steps/catch-review-step.tsx",
+  ];
+
+  const contents = await Promise.all(
+    consumers.map((file) => readFile(new URL(`../${file}`, import.meta.url), "utf8")),
+  );
+
+  contents.forEach((content) => assert.match(content, /activeFishingRules/));
+  contents.forEach((content) => assert.doesNotMatch(content, /"2026-(?:06-01|08-01|08-31|09-15)"/));
+});
+
 test("pull requests kjører full kvalitetssjekk", async () => {
   const workflow = await readFile(
     new URL("../.github/workflows/pull-request-check.yml", import.meta.url),
@@ -128,7 +149,7 @@ test("interaktive valg har tilgjengelig valgt tilstand", async () => {
 });
 
 test("kartknapper har minst 44 piksler berøringsflate", async () => {
-  const styles = await readFile(new URL("../styles/map-and-activity.css", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../styles/map.css", import.meta.url), "utf8");
 
   assert.match(styles, /\.zone-pin\s*\{[^}]*width:\s*44px/s);
   assert.match(styles, /\.zone-pin\s*\{[^}]*height:\s*44px/s);
@@ -144,6 +165,57 @@ test("stilsystemet bruker egne tokens uten ubrukt Tailwind", async () => {
   assert.match(foundations, /--color-focus:/);
   assert.doesNotMatch(foundations, /tailwindcss/);
   assert.doesNotMatch(packageFile, /tailwindcss/);
+});
+
+test("stilfiler er små og har tydelig eierskap", async () => {
+  const entries = await readdir(new URL("../styles/", import.meta.url), { withFileTypes: true });
+  const styleFiles = entries.filter((entry) => entry.isFile() && entry.name.endsWith(".css"));
+  const styles = await Promise.all(
+    styleFiles.map(async (entry) => ({
+      name: entry.name,
+      content: await readFile(new URL(`../styles/${entry.name}`, import.meta.url), "utf8"),
+    })),
+  );
+
+  const oversized = styles
+    .filter(({ content }) => content.split("\n").length > 250)
+    .map(({ name }) => name);
+  assert.deepEqual(oversized, []);
+
+  const allStyles = styles.map(({ content }) => content).join("\n");
+  assert.doesNotMatch(allStyles, /var\(--(?:ink|muted|blue|pale|cream|line)\)/);
+
+  for (const selector of [".more-profile-card", ".more-feedback-card", ".late-report-note"]) {
+    const owners = styles.filter(({ content }) => content.includes(`${selector} {`));
+    assert.equal(owners.length, 1, `${selector} skal eies av én stilfil`);
+  }
+});
+
+test("delte farger bruker semantiske designtokens", async () => {
+  const entries = await readdir(new URL("../styles/", import.meta.url), { withFileTypes: true });
+  const featureStyles = await Promise.all(
+    entries
+      .filter(
+        (entry) =>
+          entry.isFile() && entry.name.endsWith(".css") && entry.name !== "foundations.css",
+      )
+      .map((entry) => readFile(new URL(`../styles/${entry.name}`, import.meta.url), "utf8")),
+  );
+  const combined = featureStyles.join("\n").toLowerCase();
+
+  for (const sharedColor of [
+    "#183b5930",
+    "#d8e3ed",
+    "#d7e0e8",
+    "#e8f2fb",
+    "#e8eff6",
+    "#dcefe2",
+    "#d39b25",
+    "#745719",
+    "#9b4436",
+  ]) {
+    assert.doesNotMatch(combined, new RegExp(sharedColor));
+  }
 });
 
 test("dialoger har tilgjengelig fokusbehandling", async () => {

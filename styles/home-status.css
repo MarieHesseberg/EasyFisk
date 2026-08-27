@@ -1,9 +1,9 @@
 .status-card.ok {
-  background: var(--blue);
+  background: var(--color-primary);
 }
 .status-card.warning {
-  background: #8a671c;
-  box-shadow: 0 10px 28px #8a671c35;
+  background: var(--color-warning);
+  box-shadow: 0 10px 28px var(--color-warning-shadow);
 }
 .status-card.blocked {
   background: var(--color-danger);
@@ -21,7 +21,7 @@
   font-style: normal;
 }
 .home-status.warning > i {
-  background: #d39b25;
+  background: var(--color-warning-accent);
 }
 .check-grid .home-status.error > span {
   background: var(--color-danger-surface);

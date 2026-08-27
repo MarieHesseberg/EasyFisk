@@ -14,7 +14,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #ffffff1b;
+  background: var(--color-overlay-surface-faint);
   display: grid;
   place-items: center;
   flex: none;
@@ -40,7 +40,7 @@
 .season-alert {
   display: flex;
   gap: 10px;
-  background: #fff4d9;
+  background: var(--color-warning-surface-pale);
   color: #6b5316;
   border: 1px solid #e6ce8a;
   border-radius: 13px;

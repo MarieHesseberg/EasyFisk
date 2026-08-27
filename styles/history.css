@@ -5,7 +5,7 @@
   gap: 11px;
   border: 1px solid #d5e1eb;
   background: var(--color-surface);
-  color: var(--blue);
+  color: var(--color-primary);
   border-radius: 17px;
   padding: 14px;
   margin: 16px 0 4px;
@@ -22,7 +22,7 @@
 }
 .past-session-button small {
   font-size: 10px;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 .past-session-modal {
   max-height: 88%;
@@ -44,17 +44,17 @@
 .past-session-modal input,
 .past-session-modal select {
   width: 100%;
-  border: 1px solid #d4e0ea;
+  border: 1px solid var(--color-border-strong);
   border-radius: 11px;
   background: var(--color-surface);
   padding: 12px;
-  color: var(--ink);
+  color: var(--color-text);
   font: inherit;
 }
 .past-intro {
   font-size: 12px;
   line-height: 1.5;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 .past-review {
   background: #f1f5fa;
@@ -76,7 +76,7 @@
 .past-review small {
   font-size: 8px;
   letter-spacing: 1px;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 .past-review b {
   font-size: 12px;
@@ -85,7 +85,7 @@
   display: flex;
   gap: 10px;
   background: var(--color-warning-surface);
-  color: #745719;
+  color: var(--color-warning-copy);
   border-radius: 14px;
   padding: 12px;
   margin: 13px 0;
@@ -110,7 +110,7 @@
   gap: 10px;
   background: var(--color-surface);
   border: 0;
-  color: var(--ink);
+  color: var(--color-text);
   text-align: left;
   border-radius: 15px;
   padding: 12px 13px;
@@ -159,11 +159,11 @@
 .past-session-modal textarea {
   width: 100%;
   min-height: 76px;
-  border: 1px solid #d4e0ea;
+  border: 1px solid var(--color-border-strong);
   border-radius: 11px;
   background: var(--color-surface);
   padding: 11px;
-  color: var(--ink);
+  color: var(--color-text);
   font: 10px Arial;
   line-height: 1.45;
   resize: vertical;
@@ -196,7 +196,7 @@
   border: 0;
   border-bottom: 1px solid #e4ebf2;
   background: transparent;
-  color: var(--ink);
+  color: var(--color-text);
   padding: 10px 0;
 }
 .added-catches.review button:last-child {
@@ -204,88 +204,6 @@
 }
 .added-catches.review em {
   font-size: 8px;
-  color: #9b4436;
+  color: var(--color-danger-deep);
   font-style: normal;
-}
-.report-detail-modal {
-  max-height: 88%;
-  overflow-y: auto;
-  position: relative;
-}
-.modal-close {
-  position: absolute;
-  right: 14px;
-  top: 12px;
-  border: 0;
-  background: #e8eff6;
-  color: var(--color-primary);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  font-size: 18px;
-}
-.report-status-banner {
-  display: flex;
-  gap: 10px;
-  border-radius: 13px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-.report-status-banner.ok {
-  background: #e5f0fa;
-  color: var(--color-primary);
-}
-.report-status-banner.late {
-  background: #fff0d3;
-  color: #765616;
-}
-.report-status-banner div {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.report-status-banner b {
-  font-size: 10px;
-}
-.report-status-banner span {
-  font-size: 8px;
-}
-.catch-report-image {
-  width: 100%;
-  max-height: 210px;
-  object-fit: cover;
-  border-radius: 14px;
-  margin-bottom: 10px;
-}
-.correction-sent {
-  background: #e8eef7;
-  color: #314f72;
-  border-radius: 13px;
-  padding: 12px;
-}
-.correction-sent b {
-  font-size: 10px;
-}
-.correction-sent p {
-  font-size: 9px;
-  line-height: 1.45;
-  margin: 4px 0 0;
-}
-.correction-field {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 10px;
-  font-weight: 800;
-}
-.correction-field textarea {
-  min-height: 85px;
-  border: 1px solid #d6e2ec;
-  border-radius: 11px;
-  padding: 10px;
-  font: 10px Arial;
-}
-.violation-sent.late {
-  background: #fff0d3;
-  color: #765616;
 }

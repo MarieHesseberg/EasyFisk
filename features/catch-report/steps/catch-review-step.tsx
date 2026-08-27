@@ -1,5 +1,6 @@
 import { Icon } from "@/components/ui/icon";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { formatClock } from "@/lib/time";
 
 export function CatchReviewStep({
@@ -23,6 +24,7 @@ export function CatchReviewStep({
   } = controller.state;
   const { setStep, setViolationConfirmed, submit } = controller.actions;
   const { blocked, largeSalmon, ruleText, ruleTitle } = validation;
+  const { catchSize, metadata } = activeFishingRules;
 
   return (
     <>
@@ -41,17 +43,20 @@ export function CatchReviewStep({
         <b>Størrelsesregler som er kontrollert</b>
         <p>
           <span>Minstemål</span>
-          <strong>Laks og sjøørret: 35 cm</strong>
+          <strong>Laks og sjøørret: {catchSize.minimumCm} cm</strong>
         </p>
         <p>
-          <span>Fra 1. august</span>
-          <strong>Én laks opptil 90 cm</strong>
+          <span>Fra {metadata.shortVersionLabel}</span>
+          <strong>Én laks opptil {catchSize.largeSalmonMaximumCm} cm</strong>
         </p>
         <p>
           <span>Øvrige avlivede laks</span>
-          <strong>Under 65 cm</strong>
+          <strong>Under {catchSize.regularSalmonMaximumCm} cm</strong>
         </p>
-        <small>Minstemålet er 35 cm. Regelversjon 01.08.2026 er brukt.</small>
+        <small>
+          Minstemålet er {catchSize.minimumCm} cm. Regelversjon {metadata.numericVersionLabel} er
+          brukt.
+        </small>
       </div>
       <div className="report-summary">
         <p>

@@ -4,6 +4,7 @@ import test from "node:test";
 import { isReportLate, reportingDeadlineMs } from "../domain/catches/reporting-deadline.ts";
 import { parseMeasurement, validateCatch } from "../domain/catches/validate-catch.ts";
 import { getStatusResolution, statusState } from "../domain/fishing-rules/status-checks.ts";
+import { activeFishingRules } from "../domain/fishing-rules/mandalselva-2026.ts";
 import { getQuotaStatus } from "../domain/quotas/get-quota-status.ts";
 import {
   elapsedSeconds,
@@ -73,6 +74,16 @@ test("soneregler definerer sesong og delsoner", () => {
   assert.equal(isDateWithinZoneSeason("2026-06-01", 3), true);
   assert.equal(isDateWithinZoneSeason("2026-09-01", 3), false);
   assert.deepEqual(getSubzones(2), ["Fuskeland B", "Hauge", "Holmesland", "Nøding", "Bringsdal"]);
+});
+
+test("aktivt regelgrunnlag samler versjon, sesong, størrelser og kvoter", () => {
+  assert.equal(activeFishingRules.metadata.versionDate, "2026-08-01");
+  assert.equal(activeFishingRules.season.standardEndDate, "2026-08-31");
+  assert.equal(activeFishingRules.season.extendedEndDate, "2026-09-15");
+  assert.equal(activeFishingRules.catchSize.minimumCm, 35);
+  assert.equal(activeFishingRules.catchSize.largeSalmonMaximumCm, 90);
+  assert.equal(activeFishingRules.quota.killedSalmonPerSeason, 5);
+  assert.equal(activeFishingRules.reporting.deadlineHours, 2);
 });
 
 test("statuskontroll gir visningstilstand og riktig løsning", () => {

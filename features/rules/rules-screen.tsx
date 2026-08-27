@@ -1,6 +1,7 @@
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { RuleCenter } from "@/features/rules/rule-center";
 
 export function RulesScreen({
@@ -11,11 +12,15 @@ export function RulesScreen({
   onRegisterPermit: () => void;
 }) {
   const missing = demoStatus === "noPermit";
+  const { metadata, quota, reporting, season } = activeFishingRules;
   const personalZone =
     demoStatus === "wrongZone" ? "Sone 2 · Fuskeland–Hesså" : "Sone 3 · Øyslebø–Laudal";
   return (
     <div className="screen rules-screen">
-      <Header title="Fiskeregler" eyebrow="MANDALSELVA · REGELVERSJON 1. AUGUST 2026" />
+      <Header
+        title="Fiskeregler"
+        eyebrow={`${metadata.river.toUpperCase()} · REGELVERSJON ${metadata.versionLabel.toUpperCase()}`}
+      />
       <section className={"personal-rules " + (missing ? "missing" : "ready")}>
         <div className="personal-rules-title">
           <span>
@@ -44,15 +49,15 @@ export function RulesScreen({
             <div className="personal-rule-list">
               <p>
                 <b>Sesong</b>
-                <span>1. juni til 31. august</span>
+                <span>{season.standardZoneLabel.replace("–", " til ")}</span>
               </p>
               <p>
                 <b>Kvote</b>
-                <span>1 avlivet laks per fiskerdøgn</span>
+                <span>{quota.killedSalmonPerDay} avlivet laks per fiskerdøgn</span>
               </p>
               <p>
                 <b>Rapportering</b>
-                <span>Så raskt som mulig og innen 2 timer</span>
+                <span>Så raskt som mulig og innen {reporting.deadlineHours} timer</span>
               </p>
               <p>
                 <b>Redskap</b>
