@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { ZoneId } from "@/domain/zones/zone";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 
 export function RulesStep({
   back,
@@ -15,6 +16,7 @@ export function RulesStep({
   selectedZone: ZoneId;
 }) {
   const [confirmed, setConfirmed] = useState(false);
+  const { quota, reporting } = activeFishingRules;
 
   return (
     <>
@@ -31,11 +33,14 @@ export function RulesStep({
         </p>
         <p>
           <b>Kvote</b>
-          <span>1 avlivet laks per fiskerdøgn. Maks 2 gjenutsatte laks.</span>
+          <span>
+            {quota.killedSalmonPerDay} avlivet laks per fiskerdøgn. Maks{" "}
+            {quota.releasedSalmonPerDay} gjenutsatte laks.
+          </span>
         </p>
         <p>
           <b>Fangst</b>
-          <span>Rapporteres så raskt som mulig og innen 2 timer.</span>
+          <span>Rapporteres så raskt som mulig og innen {reporting.deadlineHours} timer.</span>
         </p>
         <p>
           <b>Bevegelig fiske</b>

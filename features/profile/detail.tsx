@@ -1,4 +1,5 @@
 import { FeedbackForm } from "@/features/feedback/feedback-form";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { MoreDetailContent } from "@/features/profile/more-detail-content";
 import { RuleCenter } from "@/features/rules/rule-center";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
@@ -28,8 +29,9 @@ export function Detail({ title, close }: { title: string; close: () => void }) {
       )}
       {title.includes("Fiskeregler") && (
         <p className="source-note">
-          Regler og sonedata er basert på Mandalselva Elveeigarlags publiserte informasjon for 2026.
-          Fysisk skilting og siste publiserte regelendring gjelder.
+          Regler og sonedata er basert på Mandalselva Elveeigarlags publiserte informasjon for{" "}
+          {activeFishingRules.metadata.seasonYear}. Fysisk skilting og siste publiserte regelendring
+          gjelder.
         </p>
       )}
     </div>

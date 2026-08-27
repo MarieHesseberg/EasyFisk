@@ -1,3 +1,5 @@
+import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
+
 type QuotaCatch = {
   species: string;
   result: string;
@@ -17,7 +19,7 @@ export function countKilledSalmonForDay(catches: QuotaCatch[], day: string) {
 export function getQuotaStatus(
   existingCatches: QuotaCatch[],
   sessionCatches: QuotaCatch[],
-  seasonLimit = 5,
+  seasonLimit = activeFishingRules.quota.killedSalmonPerSeason,
 ) {
   const killedBefore = countKilled(existingCatches);
   const killedInSession = countKilled(sessionCatches);
@@ -27,7 +29,7 @@ export function getQuotaStatus(
     killedInSession,
     remaining: Math.max(0, seasonLimit - killedBefore - killedInSession),
     seasonAvailable: killedBefore + killedInSession < seasonLimit,
-    dailyValid: killedInSession <= 1,
+    dailyValid: killedInSession <= activeFishingRules.quota.killedSalmonPerDay,
   };
 }
 

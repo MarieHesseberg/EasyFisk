@@ -5,6 +5,7 @@ import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { statusState } from "@/domain/fishing-rules/status-checks";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { formatClock, formatDuration } from "@/lib/time";
 
 export function Home({
@@ -33,6 +34,7 @@ export function Home({
   salmonKilled: number;
 }) {
   const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
+  const { catchSize, metadata, quota, temperature } = activeFishingRules;
   const stateFor = (ids: DemoStatus[]) => statusState(demoStatus, ids, scenario.level);
   return (
     <div className="screen">
@@ -137,7 +139,7 @@ export function Home({
                   ? "Døgnkvoten er nådd"
                   : demoStatus === "seasonQuota"
                     ? "Sesongkvoten er nådd"
-                    : `${Math.max(0, 4 - salmonKilled)} av 5 avlivet gjenstår`
+                    : `${Math.max(0, quota.killedSalmonPerSeason - 1 - salmonKilled)} av ${quota.killedSalmonPerSeason} avlivet gjenstår`
             }
             quota
             state={stateFor(["dailyQuota", "seasonQuota", "lateReport"])}
@@ -163,7 +165,7 @@ export function Home({
           <small>EKSEMPELDATA · KJØLEMO</small>
           <h3>
             {demoStatus === "hotWater"
-              ? "Vanntemperatur 21,4 °C"
+              ? `Vanntemperatur ${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C`
               : demoStatus === "closed"
                 ? "Sone 3 er stengt"
                 : "Vannføring 18 m³/s"}
@@ -173,7 +175,7 @@ export function Home({
               ? "Alt fiske er midlertidig stanset"
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel · se åpne soner"
-                : "Vanntemperatur 11 °C · stans ved over 21 °C"}
+                : `Vanntemperatur 11 °C · stans ved over ${temperature.closureThresholdCelsius} °C`}
           </p>
         </div>
         <span className="trend">→</span>
@@ -198,12 +200,13 @@ export function Home({
         </div>
       </section>
       <section className="info-card">
-        <small>REGLER OPPDATERT 1. AUGUST 2026</small>
-        <h3>Én laks per fiskerdøgn</h3>
+        <small>REGLER OPPDATERT {metadata.versionLabel.toUpperCase()}</small>
+        <h3>{quota.killedSalmonPerDay} laks per fiskerdøgn</h3>
         <p>
-          Når én laks er avlivet, skal alt fiske stoppe til neste fiskerdøgn. Minstemålet er 35 cm.
-          Én av sesongens fem avlivede laks kan være opptil 90 cm. De fire øvrige må være under 65
-          cm.
+          Når én laks er avlivet, skal alt fiske stoppe til neste fiskerdøgn. Minstemålet er{" "}
+          {catchSize.minimumCm} cm. Én av sesongens {quota.killedSalmonPerSeason} avlivede laks kan
+          være opptil {catchSize.largeSalmonMaximumCm} cm. De øvrige må være under{" "}
+          {catchSize.regularSalmonMaximumCm} cm.
         </p>
         <button onClick={onRules}>
           Se komplett regelkontroll <Icon name="chevron" size={16} />
