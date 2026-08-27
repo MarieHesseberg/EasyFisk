@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import type { CatchRecord } from "@/domain/models";
+import type { CatchRecord } from "@/domain/catches/catch";
 import { useCatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { CatchConfirmationStep } from "@/features/catch-report/steps/catch-confirmation-step";
 import { CatchDetailsStep } from "@/features/catch-report/steps/catch-details-step";

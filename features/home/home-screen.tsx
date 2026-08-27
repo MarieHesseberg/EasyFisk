@@ -1,7 +1,8 @@
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
 import { Status } from "@/components/ui/status-row";
-import type { DemoStatus } from "@/domain/models";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { statusState } from "@/domain/fishing-rules/status-checks";
 import { formatClock, formatDuration } from "@/lib/time";
@@ -31,7 +32,7 @@ export function Home({
   demoStatus: DemoStatus;
   salmonKilled: number;
 }) {
-  const scenario = findDemoStatus(demoStatus);
+  const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
   const stateFor = (ids: DemoStatus[]) => statusState(demoStatus, ids, scenario.level);
   return (
     <div className="screen">

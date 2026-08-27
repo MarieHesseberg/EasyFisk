@@ -1,12 +1,21 @@
+"use client";
+
+import { useState } from "react";
+
 import { FlowTitle } from "@/components/ui/flow-title";
+import type { ZoneId } from "@/domain/zones/zone";
 
 export function RulesStep({
+  back,
   finish,
   selectedZone,
 }: {
-  finish: (selectedZone: number) => void;
-  selectedZone: number;
+  back: () => void;
+  finish: (selectedZone: ZoneId) => void;
+  selectedZone: ZoneId;
 }) {
+  const [confirmed, setConfirmed] = useState(false);
+
   return (
     <>
       <FlowTitle
@@ -34,10 +43,22 @@ export function RulesStep({
         </p>
       </div>
       <label className="confirm-line">
-        <input type="checkbox" defaultChecked /> Jeg har lest og forstått reglene
+        <input
+          type="checkbox"
+          checked={confirmed}
+          onChange={(event) => setConfirmed(event.target.checked)}
+        />{" "}
+        Jeg har lest og forstått reglene
       </label>
-      <button className="primary start-final" onClick={() => finish(selectedZone)}>
+      <button
+        className="primary start-final"
+        disabled={!confirmed}
+        onClick={() => finish(selectedZone)}
+      >
         Start fiske i Sone {selectedZone}
+      </button>
+      <button className="text-button" onClick={back}>
+        Tilbake
       </button>
     </>
   );

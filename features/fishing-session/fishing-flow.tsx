@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import type { DemoStatus, FlowMode, SessionRecord } from "@/domain/models";
+import type { DemoStatus } from "@/domain/fishing-rules/rule";
+import type { FlowMode, SessionRecord } from "@/domain/sessions/session";
+import type { ZoneId } from "@/domain/zones/zone";
 import { PositionStep } from "@/features/fishing-session/fishing-flow/steps/position-step";
 import { RulesStep } from "@/features/fishing-session/fishing-flow/steps/rules-step";
 import { StatusStep } from "@/features/fishing-session/fishing-flow/steps/status-step";
@@ -23,7 +26,7 @@ export function FishingFlow({
   resolveBlock,
 }: {
   mode: FlowMode;
-  finish: (caught?: boolean, selectedZone?: number) => void;
+  finish: (caught?: boolean, selectedZone?: ZoneId) => void;
   cancel: () => void;
   demoStatus: DemoStatus;
   startTime: number | null;
@@ -32,8 +35,8 @@ export function FishingFlow({
   resolveBlock: () => void;
 }) {
   const [step, setStep] = useState(1);
-  const [selectedZone, setSelectedZone] = useState(3);
-  const scenario = findDemoStatus(demoStatus);
+  const [selectedZone, setSelectedZone] = useState<ZoneId>(3);
+  const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
   const total = mode === "start" ? 4 : 1;
   const dialogRef = useDialogAccessibility(cancel);
 
@@ -70,9 +73,10 @@ export function FishingFlow({
                 scenario={scenario}
               />
             )}
-            {step === 2 && <PositionStep next={() => setStep(3)} />}
+            {step === 2 && <PositionStep back={() => setStep(1)} next={() => setStep(3)} />}
             {step === 3 && (
               <ZoneStep
+                back={() => setStep(2)}
                 demoStatus={demoStatus}
                 next={() => setStep(4)}
                 selectedZone={selectedZone}
@@ -80,7 +84,11 @@ export function FishingFlow({
               />
             )}
             {step === 4 && (
-              <RulesStep selectedZone={selectedZone} finish={(zone) => finish(undefined, zone)} />
+              <RulesStep
+                back={() => setStep(3)}
+                selectedZone={selectedZone}
+                finish={(zone) => finish(undefined, zone)}
+              />
             )}
           </div>
         )}

@@ -1,5 +1,5 @@
 import { Icon } from "@/components/ui/icon";
-import type { CatchRecord } from "@/domain/models";
+import type { CatchRecord } from "@/domain/catches/catch";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { formatLongDuration } from "@/lib/time";
 

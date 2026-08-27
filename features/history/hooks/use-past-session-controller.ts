@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 
-import { zones } from "@/data/mock/fishing-data";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { isReportLate } from "@/domain/catches/reporting-deadline";
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
-import type { CatchRecord, SessionRecord } from "@/domain/models";
+import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
+import type { SessionRecord } from "@/domain/sessions/session";
+import type { ZoneId } from "@/domain/zones/zone";
 import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
@@ -18,18 +20,19 @@ export function usePastSessionController({
   existingCatches: CatchRecord[];
   onSave: (record: SessionRecord, catches?: CatchRecord[]) => void;
 }) {
+  const zones = fishingContentRepository.getZones();
   const [openedAt] = useState(() => Date.now());
   const today = new Date(openedAt).toISOString().slice(0, 10);
   const [step, setStep] = useState(1);
   const [date, setDate] = useState(today);
   const [from, setFrom] = useState("17:00");
   const [to, setTo] = useState("19:00");
-  const [zone, setZone] = useState(3);
+  const [zone, setZone] = useState<ZoneId>(3);
   const [subzone, setSubzone] = useState("");
   const [caught, setCaught] = useState(false);
   const [catchAt, setCatchAt] = useState("18:00");
-  const [species, setSpecies] = useState("Laks");
-  const [outcome, setOutcome] = useState("Gjenutsatt");
+  const [species, setSpecies] = useState<FishSpecies>("Laks");
+  const [outcome, setOutcome] = useState<CatchOutcome>("Gjenutsatt");
   const [length, setLength] = useState("");
   const [weight, setWeight] = useState("");
   const [comment, setComment] = useState("");

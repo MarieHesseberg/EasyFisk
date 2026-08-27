@@ -1,5 +1,9 @@
 import { Icon } from "@/components/ui/icon";
+import type { CatchOutcome, FishSpecies } from "@/domain/catches/catch";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
+
+const speciesOptions: readonly FishSpecies[] = ["Laks", "Sjøørret", "Annen art"];
+const outcomeOptions: readonly CatchOutcome[] = ["Gjenutsatt", "Avlivet"];
 
 export function CatchSelectionStep({ controller }: { controller: CatchReportController }) {
   const { result, species } = controller.state;
@@ -11,7 +15,7 @@ export function CatchSelectionStep({ controller }: { controller: CatchReportCont
       <h2>Hva fikk du?</h2>
       <label>Art</label>
       <div className="choice">
-        {["Laks", "Sjøørret", "Annen art"].map((option) => (
+        {speciesOptions.map((option) => (
           <button
             key={option}
             aria-pressed={species === option}
@@ -24,7 +28,7 @@ export function CatchSelectionStep({ controller }: { controller: CatchReportCont
       </div>
       <label>Resultat</label>
       <div className="choice two">
-        {["Gjenutsatt", "Avlivet"].map((option) => (
+        {outcomeOptions.map((option) => (
           <button
             key={option}
             aria-pressed={result === option}

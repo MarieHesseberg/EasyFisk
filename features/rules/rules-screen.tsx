@@ -1,6 +1,6 @@
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
-import type { DemoStatus } from "@/domain/models";
+import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { RuleCenter } from "@/features/rules/rule-center";
 
 export function RulesScreen({

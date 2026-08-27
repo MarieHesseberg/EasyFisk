@@ -2,11 +2,17 @@
 
 import { CheckRow } from "@/components/ui/check-row";
 import { Icon } from "@/components/ui/icon";
-import { zones } from "@/data/mock/fishing-data";
-import type { CatchRecord, SessionRecord } from "@/domain/models";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
+import type { SessionRecord } from "@/domain/sessions/session";
+import type { ZoneId } from "@/domain/zones/zone";
 import { usePastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock, formatLongDuration } from "@/lib/time";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
+
+const zones = fishingContentRepository.getZones();
+const speciesOptions: readonly FishSpecies[] = ["Laks", "Sjøørret", "Annen art"];
+const outcomeOptions: readonly CatchOutcome[] = ["Gjenutsatt", "Avlivet"];
 
 export function PastSessionForm({
   onClose,
@@ -29,6 +35,7 @@ export function PastSessionForm({
     from,
     imageName,
     length,
+    lengthNumber,
     openedAt,
     outcome,
     quota,
@@ -41,8 +48,10 @@ export function PastSessionForm({
     to,
     today,
     touched,
+    validCatchTime,
     validTime,
     weight,
+    weightNumber,
     withinSeason,
     zone,
     zoneBase,
@@ -105,6 +114,8 @@ export function PastSessionForm({
             <label>
               Dato <em>påkrevd</em>
               <input
+                aria-describedby={touched && !validTime ? "past-session-error" : undefined}
+                aria-invalid={touched && !validTime}
                 type="date"
                 max={today}
                 value={date}
@@ -114,11 +125,19 @@ export function PastSessionForm({
             <div className="input-row">
               <label>
                 Starttid <em>påkrevd</em>
-                <input type="time" value={from} onChange={(e) => setFrom(e.target.value)} />
+                <input
+                  aria-describedby={touched && !validTime ? "past-session-error" : undefined}
+                  aria-invalid={touched && !validTime}
+                  type="time"
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                />
               </label>
               <label>
                 Sluttid <em>påkrevd</em>
                 <input
+                  aria-describedby={touched && !validTime ? "past-session-error" : undefined}
+                  aria-invalid={touched && !validTime}
                   type="time"
                   value={to}
                   onChange={(e) => {
@@ -133,7 +152,7 @@ export function PastSessionForm({
               <select
                 value={zone}
                 onChange={(e) => {
-                  setZone(Number(e.target.value));
+                  setZone(Number(e.target.value) as ZoneId);
                   setSubzone("");
                 }}
               >
@@ -147,7 +166,12 @@ export function PastSessionForm({
             {subzones.length > 0 && (
               <label>
                 Delsone <em>påkrevd</em>
-                <select value={subzone} onChange={(e) => setSubzone(e.target.value)}>
+                <select
+                  aria-describedby={touched && !subzone ? "past-session-error" : undefined}
+                  aria-invalid={touched && !subzone}
+                  value={subzone}
+                  onChange={(e) => setSubzone(e.target.value)}
+                >
                   <option value="">Velg delsone</option>
                   {subzones.map((x) => (
                     <option key={x}>{x}</option>
@@ -157,15 +181,25 @@ export function PastSessionForm({
             )}
             <label>Fikk du fangst?</label>
             <div className="choice two">
-              <button className={!caught ? "selected" : ""} onClick={() => setCaught(false)}>
+              <button
+                className={!caught ? "selected" : ""}
+                aria-pressed={!caught}
+                onClick={() => setCaught(false)}
+              >
                 Nei · nullfangst
               </button>
-              <button className={caught ? "selected" : ""} onClick={() => setCaught(true)}>
+              <button
+                className={caught ? "selected" : ""}
+                aria-pressed={caught}
+                onClick={() => setCaught(true)}
+              >
                 Ja · legg til fangst
               </button>
             </div>
             {touched && (!validTime || (subzones.length > 0 && !subzone)) && (
-              <p className="field-error">Kontroller dato, tider og eventuell delsone.</p>
+              <p className="field-error" id="past-session-error" role="alert">
+                Kontroller dato, tider og eventuell delsone.
+              </p>
             )}
             <button
               className="primary"
@@ -196,14 +230,21 @@ export function PastSessionForm({
             )}
             <label>
               Faktisk fangsttid <em>påkrevd</em>
-              <input type="time" value={catchAt} onChange={(e) => setCatchAt(e.target.value)} />
+              <input
+                aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
+                aria-invalid={touched && !validCatchTime}
+                type="time"
+                value={catchAt}
+                onChange={(e) => setCatchAt(e.target.value)}
+              />
             </label>
             <label>Art</label>
             <div className="choice">
-              {["Laks", "Sjøørret", "Annen art"].map((x) => (
+              {speciesOptions.map((x) => (
                 <button
                   key={x}
                   className={species === x ? "selected" : ""}
+                  aria-pressed={species === x}
                   onClick={() => setSpecies(x)}
                 >
                   {x}
@@ -212,10 +253,11 @@ export function PastSessionForm({
             </div>
             <label>Resultat</label>
             <div className="choice two">
-              {["Gjenutsatt", "Avlivet"].map((x) => (
+              {outcomeOptions.map((x) => (
                 <button
                   key={x}
                   className={outcome === x ? "selected" : ""}
+                  aria-pressed={outcome === x}
                   onClick={() => setOutcome(x)}
                 >
                   {x}
@@ -226,6 +268,8 @@ export function PastSessionForm({
               <label>
                 Lengde <em>påkrevd</em>
                 <input
+                  aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
+                  aria-invalid={touched && !lengthNumber}
                   inputMode="decimal"
                   value={length}
                   onChange={(e) => setLength(e.target.value)}
@@ -235,6 +279,8 @@ export function PastSessionForm({
               <label>
                 Vekt <em>påkrevd</em>
                 <input
+                  aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
+                  aria-invalid={touched && !weightNumber}
                   inputMode="decimal"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
@@ -264,7 +310,7 @@ export function PastSessionForm({
               />
             </label>
             {touched && !catchValid && (
-              <p className="field-error">
+              <p className="field-error" id="past-catch-error" role="alert">
                 Fangsttid må være innenfor turen. Lengde og vekt må fylles ut.
               </p>
             )}
@@ -273,6 +319,9 @@ export function PastSessionForm({
             </button>
             <button className="secondary" onClick={() => addCatch(false)}>
               Lagre og legg til en fangst til
+            </button>
+            <button className="text-button" onClick={() => setStep(1)}>
+              Tilbake
             </button>
           </>
         )}

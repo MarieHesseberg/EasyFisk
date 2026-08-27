@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
-import type { CatchRecord, SessionRecord } from "@/domain/models";
+import type { CatchRecord } from "@/domain/catches/catch";
+import type { SessionRecord } from "@/domain/sessions/session";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { PastSessionForm } from "@/features/history/past-session-form";

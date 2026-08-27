@@ -14,6 +14,10 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
         <label>
           Lengde <em>påkrevd</em>
           <input
+            aria-describedby={
+              touched && !validation.detailsValid ? "catch-details-error" : undefined
+            }
+            aria-invalid={touched && !lengthNumber}
             inputMode="decimal"
             value={length}
             onChange={(event) => setLength(event.target.value)}
@@ -24,6 +28,10 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
         <label>
           Vekt <em>påkrevd</em>
           <input
+            aria-describedby={
+              touched && !validation.detailsValid ? "catch-details-error" : undefined
+            }
+            aria-invalid={touched && !weightNumber}
             inputMode="decimal"
             value={weight}
             onChange={(event) => setWeight(event.target.value)}
@@ -33,7 +41,9 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
         </label>
       </div>
       {touched && !validation.detailsValid && (
-        <p className="field-error">Fyll inn både lengde og vekt med tall større enn 0.</p>
+        <p className="field-error" id="catch-details-error" role="alert">
+          Fyll inn både lengde og vekt med tall større enn 0.
+        </p>
       )}
       <label className="upload-box">
         <Icon name="fish" />
@@ -59,6 +69,9 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
       </label>
       <button className="primary" onClick={continueToReview}>
         Neste · regelkontroll
+      </button>
+      <button className="secondary" onClick={() => controller.actions.setStep(1)}>
+        Tilbake
       </button>
     </>
   );

@@ -2,11 +2,30 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import type { NotificationPreference } from "@/domain/preferences/preferences";
+import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 
 export function MoreDetailContent({ title }: { title: string }) {
   const [saved, setSaved] = useState(false);
   const [showStations, setShowStations] = useState(false);
-  const [favorites, setFavorites] = useState(["Sone 3 · Øyslebø–Laudal", "Sone 2 · Fuskeland B"]);
+  const {
+    preferences,
+    addFavorite,
+    removeFavorite,
+    setNotification,
+    setPositionSuggestions,
+    setShareAnonymousData,
+  } = usePreferencesController();
+  const notifications: Array<[NotificationPreference, string, string]> = [
+    ["emergencyClosure", "Akutt stengning", "Varsle dersom hele elva eller min sone stenges"],
+    ["highTemperature", "Høy vanntemperatur", "Varsle når temperaturen nærmer seg 21 °C"],
+    ["ruleChanges", "Regelendringer", "Varsle når kvoter eller fisketider endres"],
+    [
+      "reportingDeadline",
+      "Rapporteringsfrist",
+      "Påminnelse hvis en fangst ikke er ferdig rapportert",
+    ],
+  ];
   if (title === "Kontrollkort")
     return (
       <div className="specific-detail">
@@ -35,11 +54,11 @@ export function MoreDetailContent({ title }: { title: string }) {
           </p>
           <p>
             <span>Fiskeravgift</span>
-            <b className="green">Dokumentert</b>
+            <b className="status-positive">Dokumentert</b>
           </p>
           <p>
             <span>Desinfisering</span>
-            <b className="green">Gyldig</b>
+            <b className="status-positive">Gyldig</b>
           </p>
           <p>
             <span>Kvote</span>
@@ -77,7 +96,7 @@ export function MoreDetailContent({ title }: { title: string }) {
           </p>
           <p>
             <span>Status</span>
-            <b className="green">Gyldig</b>
+            <b className="status-positive">Gyldig</b>
           </p>
         </div>
         <button className="primary" onClick={() => setSaved(true)}>
@@ -165,18 +184,17 @@ export function MoreDetailContent({ title }: { title: string }) {
         </div>
         <h3 className="detail-subtitle">Mine varsler</h3>
         <div className="toggle-list">
-          {[
-            ["Akutt stengning", "Varsle dersom hele elva eller min sone stenges"],
-            ["Høy vanntemperatur", "Varsle når temperaturen nærmer seg 21 °C"],
-            ["Regelendringer", "Varsle når kvoter eller fisketider endres"],
-            ["Rapporteringsfrist", "Påminnelse hvis en fangst ikke er ferdig rapportert"],
-          ].map(([a, b]) => (
-            <label key={a}>
+          {notifications.map(([id, label, description]) => (
+            <label key={id}>
               <span>
-                <b>{a}</b>
-                <small>{b}</small>
+                <b>{label}</b>
+                <small>{description}</small>
               </span>
-              <input type="checkbox" defaultChecked />
+              <input
+                type="checkbox"
+                checked={preferences.notifications[id]}
+                onChange={(event) => setNotification(id, event.target.checked)}
+              />
             </label>
           ))}
         </div>
@@ -192,7 +210,7 @@ export function MoreDetailContent({ title }: { title: string }) {
           Favoritter gir rask tilgang til kart, regler, temperatur og tilgjengelige fiskekort.
         </p>
         <div className="favorite-list">
-          {favorites.map((name, i) => (
+          {preferences.favoriteZones.map((name, i) => (
             <div key={name}>
               <span className="favorite-number">{i + 2}</span>
               <p>
@@ -203,18 +221,16 @@ export function MoreDetailContent({ title }: { title: string }) {
                     : "Åpen · delsone med eget fiskekort"}
                 </small>
               </p>
-              <button onClick={() => setFavorites(favorites.filter((x) => x !== name))}>
-                Fjern
-              </button>
+              <button onClick={() => removeFavorite(name)}>Fjern</button>
             </div>
           ))}
         </div>
         <button
           className="primary"
-          onClick={() => setFavorites([...favorites, "Sone 4 · Laudal–Bjelland"])}
-          disabled={favorites.includes("Sone 4 · Laudal–Bjelland")}
+          onClick={() => addFavorite("Sone 4 · Laudal–Bjelland")}
+          disabled={preferences.favoriteZones.includes("Sone 4 · Laudal–Bjelland")}
         >
-          {favorites.includes("Sone 4 · Laudal–Bjelland")
+          {preferences.favoriteZones.includes("Sone 4 · Laudal–Bjelland")
             ? "Sone 4 er lagt til"
             : "Legg til Sone 4"}
         </button>
@@ -250,14 +266,22 @@ export function MoreDetailContent({ title }: { title: string }) {
             <b>Posisjon ved soneforslag</b>
             <small>Brukes bare når du ber om å finne riktig sone</small>
           </span>
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            checked={preferences.positionSuggestions}
+            onChange={(event) => setPositionSuggestions(event.target.checked)}
+          />
         </label>
         <label>
           <span>
             <b>Del anonymisert innsatsdata</b>
             <small>Bidrar til statistikk uten å vise identiteten din</small>
           </span>
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            checked={preferences.shareAnonymousData}
+            onChange={(event) => setShareAnonymousData(event.target.checked)}
+          />
         </label>
       </div>
       <button className="primary" onClick={() => setSaved(true)}>

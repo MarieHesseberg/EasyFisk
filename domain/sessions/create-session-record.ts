@@ -1,4 +1,4 @@
-import type { SessionRecord } from "@/domain/models";
+import type { SessionRecord } from "./session";
 
 export function createSessionRecord(
   start: number,

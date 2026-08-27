@@ -2,7 +2,7 @@
 
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { Icon } from "@/components/ui/icon";
-import { demoStatuses } from "@/data/mock/fishing-data";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
 import { findZoneName } from "@/domain/zones/find-zone-name";
@@ -51,7 +51,9 @@ export function EasyFiskApp() {
     "Eksempel på aggregert fangst- og innsatsstatistikk",
     "Kontrollkort for oppsyn, favorittsoner og tilbakemeldinger",
   ];
-  const selectedDemo = findDemoStatus(demoStatus);
+  const demoStatuses = fishingContentRepository.getDemoScenarios();
+  const zones = fishingContentRepository.getZones();
+  const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
   return (
     <main className="prototype-shell">
       <div className="phone-app">
@@ -92,7 +94,7 @@ export function EasyFiskApp() {
             onCatchFlowComplete={actions.completeCatchFlow}
             finishAfterCatch={finishAfterCatch}
             catches={catches}
-            activeZone={findZoneName(sessionZone)}
+            activeZone={findZoneName(sessionZone, zones)}
             requestedCatchTime={requestedCatchTime}
             elapsed={elapsed}
             startTime={startTime}
@@ -100,7 +102,7 @@ export function EasyFiskApp() {
           />
         )}{" "}
         {screen === "more" && <More />}
-        <nav className="bottom-nav">
+        <nav className="bottom-nav" aria-label="Hovednavigasjon">
           {nav.map(([id, label, icon]) => (
             <button
               key={id}
@@ -108,6 +110,7 @@ export function EasyFiskApp() {
                 actions.navigate(id);
               }}
               className={screen === id ? "selected" : ""}
+              aria-current={screen === id ? "page" : undefined}
             >
               <Icon name={icon} />
               <span>{label}</span>

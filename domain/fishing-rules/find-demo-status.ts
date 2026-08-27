@@ -1,6 +1,5 @@
-import { demoStatuses } from "@/data/mock/fishing-data";
-import type { DemoStatus } from "@/domain/models";
+import type { DemoScenario, DemoStatus } from "./rule";
 
-export function findDemoStatus(status: DemoStatus) {
-  return demoStatuses.find((item) => item.id === status) ?? demoStatuses[0];
+export function findDemoStatus(status: DemoStatus, scenarios: readonly DemoScenario[]) {
+  return scenarios.find((item) => item.id === status) ?? scenarios[0];
 }

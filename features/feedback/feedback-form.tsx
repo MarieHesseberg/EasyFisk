@@ -81,6 +81,7 @@ export function FeedbackForm() {
               <button
                 key={x}
                 className={category === x ? "selected" : ""}
+                aria-pressed={category === x}
                 onClick={() => setCategory(x)}
               >
                 {category === x && <Icon name="check" size={14} />}
@@ -91,6 +92,8 @@ export function FeedbackForm() {
           <label>
             Beskrivelse <em>påkrevd</em>
             <textarea
+              aria-describedby={touched && !valid ? "feedback-error" : undefined}
+              aria-invalid={touched && !valid}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={1000}
@@ -99,7 +102,9 @@ export function FeedbackForm() {
           </label>
           <div className="character-count">{description.length}/1000</div>
           {touched && !valid && (
-            <p className="field-error">Velg kategori og skriv en beskrivelse på minst 10 tegn.</p>
+            <p className="field-error" id="feedback-error" role="alert">
+              Velg kategori og skriv en beskrivelse på minst 10 tegn.
+            </p>
           )}
           <label className="feedback-upload">
             <Icon name="fish" />
@@ -121,7 +126,11 @@ export function FeedbackForm() {
                 <small>Valgfritt · brukes bare til denne meldingen</small>
               </span>
             </div>
-            <button className={position ? "active" : ""} onClick={() => setPosition(!position)}>
+            <button
+              className={position ? "active" : ""}
+              aria-pressed={position}
+              onClick={() => setPosition(!position)}
+            >
               {position ? "Lagt til" : "Legg til"}
             </button>
             {position && (

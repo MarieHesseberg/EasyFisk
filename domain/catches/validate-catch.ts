@@ -14,8 +14,8 @@ export function parseMeasurement(value: string) {
 }
 
 export function validateCatch(
-  species: string,
-  result: string,
+  species: FishSpecies,
+  result: CatchOutcome,
   length: number,
   weight: number,
 ): CatchValidation {
@@ -56,3 +56,4 @@ export function validateCatch(
     ruleText,
   };
 }
+import type { CatchOutcome, FishSpecies } from "./catch";

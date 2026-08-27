@@ -1,4 +1,5 @@
-import type { DemoScenario, FishingZone, RuleSection } from "@/domain/models";
+import type { DemoScenario, RuleSection } from "@/domain/fishing-rules/rule";
+import type { FishingZone } from "@/domain/zones/zone";
 
 export const demoStatuses: DemoScenario[] = [
   {

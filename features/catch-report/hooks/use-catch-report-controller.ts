@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
-import type { CatchRecord } from "@/domain/models";
+import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
 
 export function useCatchReportController({
   activeZone,
@@ -19,8 +19,8 @@ export function useCatchReportController({
   sessionStart: number;
 }) {
   const [step, setStep] = useState(1);
-  const [species, setSpecies] = useState("Laks");
-  const [result, setResult] = useState("Gjenutsatt");
+  const [species, setSpecies] = useState<FishSpecies>("Laks");
+  const [result, setResult] = useState<CatchOutcome>("Gjenutsatt");
   const [length, setLength] = useState("");
   const [weight, setWeight] = useState("");
   const [comment, setComment] = useState("");

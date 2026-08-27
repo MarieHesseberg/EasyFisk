@@ -1,6 +1,6 @@
 import { CheckRow } from "@/components/ui/check-row";
 import { FlowTitle } from "@/components/ui/flow-title";
-import type { DemoScenario, DemoStatus } from "@/domain/models";
+import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 
 export function StatusStep({
   cancel,

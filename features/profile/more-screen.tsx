@@ -17,7 +17,7 @@ export function More() {
   return (
     <div className="screen">
       <Header title="Mer" />
-      <button className="profile-card" onClick={() => setDetail("Profil og personvern")}>
+      <button className="more-profile-card" onClick={() => setDetail("Profil og personvern")}>
         <div className="avatar">MF</div>
         <div>
           <h2>Fiskerprofil</h2>
@@ -39,7 +39,7 @@ export function More() {
           </button>
         ))}
       </div>
-      <section className="feedback">
+      <section className="more-feedback-card">
         <small>TILBAKEMELDING OG OBSERVASJON</small>
         <h3>Meld fra til elveeigarlaget</h3>
         <p>Velg kategori, legg ved bilde og valgfri posisjon, og følg status på meldingen.</p>

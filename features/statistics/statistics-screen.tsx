@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
-import { zones } from "@/data/mock/fishing-data";
-import type { CatchRecord, SessionRecord } from "@/domain/models";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import type { CatchRecord } from "@/domain/catches/catch";
+import type { SessionRecord } from "@/domain/sessions/session";
 import { Activity } from "@/features/fishing-session/activity-screen";
+
+const zones = fishingContentRepository.getZones();
 
 export function StatsContent() {
   const [area, setArea] = useState("Hele elva"),
@@ -117,10 +120,18 @@ export function Stats({
     <div className="screen">
       <Header title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
       <div className="stats-tabs">
-        <button className={view === "general" ? "selected" : ""} onClick={() => setView("general")}>
+        <button
+          className={view === "general" ? "selected" : ""}
+          aria-pressed={view === "general"}
+          onClick={() => setView("general")}
+        >
           Generell statistikk
         </button>
-        <button className={view === "mine" ? "selected" : ""} onClick={() => setView("mine")}>
+        <button
+          className={view === "mine" ? "selected" : ""}
+          aria-pressed={view === "mine"}
+          onClick={() => setView("mine")}
+        >
           Min fangst og fiskehistorikk
         </button>
       </div>

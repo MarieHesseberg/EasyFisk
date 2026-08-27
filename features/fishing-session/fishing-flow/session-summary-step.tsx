@@ -1,5 +1,5 @@
 import { FlowTitle } from "@/components/ui/flow-title";
-import type { SessionRecord } from "@/domain/models";
+import type { SessionRecord } from "@/domain/sessions/session";
 import { formatClock, formatLongDuration } from "@/lib/time";
 
 export function SessionSummaryStep({
@@ -38,7 +38,7 @@ export function SessionSummaryStep({
         </div>
         <div>
           <small>RAPPORTSTATUS</small>
-          <b className="green">Fullført og registrert</b>
+          <b className="status-positive">Fullført og registrert</b>
         </div>
       </div>
       <button className="primary" onClick={finish}>

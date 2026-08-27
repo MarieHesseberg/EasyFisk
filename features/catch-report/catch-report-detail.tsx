@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import type { CatchRecord } from "@/domain/models";
+import type { CatchRecord } from "@/domain/catches/catch";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { formatClock } from "@/lib/time";
 

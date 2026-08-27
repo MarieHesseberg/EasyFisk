@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { Header } from "@/components/ui/header";
 import { Icon } from "@/components/ui/icon";
-import { zones } from "@/data/mock/fishing-data";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import type { ZoneId } from "@/domain/zones/zone";
+
+const zones = fishingContentRepository.getZones();
 
 export function MapScreen({
   selected,
   setSelected,
   onUseZone,
 }: {
-  selected: number;
-  setSelected: (n: number) => void;
-  onUseZone: (n: number) => void;
+  selected: ZoneId;
+  setSelected: (zone: ZoneId) => void;
+  onUseZone: (zone: ZoneId) => void;
 }) {
   const z = zones[selected - 1];
   const [locationStatus, setLocationStatus] = useState("");
@@ -45,6 +48,7 @@ export function MapScreen({
         {zones.map((x, i) => (
           <button
             aria-label={"Vis " + x.name}
+            aria-pressed={selected === x.id}
             key={x.id}
             onClick={() => setSelected(x.id)}
             className={"zone-pin z" + (i + 1) + (selected === x.id ? " selected" : "")}

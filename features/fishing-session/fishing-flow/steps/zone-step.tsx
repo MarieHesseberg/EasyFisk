@@ -1,18 +1,23 @@
 import { FlowTitle } from "@/components/ui/flow-title";
 import { Icon } from "@/components/ui/icon";
-import { zones } from "@/data/mock/fishing-data";
-import type { DemoStatus } from "@/domain/models";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import type { DemoStatus } from "@/domain/fishing-rules/rule";
+import type { ZoneId } from "@/domain/zones/zone";
+
+const zones = fishingContentRepository.getZones();
 
 export function ZoneStep({
+  back,
   demoStatus,
   next,
   selectedZone,
   selectZone,
 }: {
+  back: () => void;
   demoStatus: DemoStatus;
   next: () => void;
-  selectedZone: number;
-  selectZone: (zone: number) => void;
+  selectedZone: ZoneId;
+  selectZone: (zone: ZoneId) => void;
 }) {
   const nearBorder = demoStatus === "zoneBorder";
 
@@ -43,7 +48,7 @@ export function ZoneStep({
         <select
           id="session-zone"
           value={selectedZone}
-          onChange={(event) => selectZone(Number(event.target.value))}
+          onChange={(event) => selectZone(Number(event.target.value) as ZoneId)}
         >
           {zones.map((zone) => (
             <option key={zone.id} value={zone.id}>
@@ -68,6 +73,9 @@ export function ZoneStep({
       </p>
       <button className="primary" onClick={next}>
         Bekreft sone og se regler
+      </button>
+      <button className="text-button" onClick={back}>
+        Tilbake
       </button>
     </>
   );

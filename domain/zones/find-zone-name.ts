@@ -1,7 +1,7 @@
-import { zones } from "@/data/mock/fishing-data";
+import type { FishingZone, ZoneId } from "./zone";
 
 const fallbackZone = "Sone 3 · Øyslebø–Laudal";
 
-export function findZoneName(zoneId: number) {
+export function findZoneName(zoneId: ZoneId, zones: readonly FishingZone[]) {
   return zones.find((item) => item.id === zoneId)?.name ?? fallbackZone;
 }

@@ -1,7 +1,7 @@
 import { FlowTitle } from "@/components/ui/flow-title";
 import { Icon } from "@/components/ui/icon";
 
-export function PositionStep({ next }: { next: () => void }) {
+export function PositionStep({ back, next }: { back: () => void; next: () => void }) {
   return (
     <>
       <FlowTitle
@@ -20,6 +20,9 @@ export function PositionStep({ next }: { next: () => void }) {
       </button>
       <button className="secondary" onClick={next}>
         Velg sone manuelt
+      </button>
+      <button className="text-button" onClick={back}>
+        Tilbake
       </button>
     </>
   );

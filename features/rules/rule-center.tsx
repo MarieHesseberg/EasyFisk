@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import { ruleSections } from "@/data/mock/fishing-data";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+
+const ruleSections = fishingContentRepository.getRuleSections();
 
 export function RuleCenter() {
   const [open, setOpen] = useState("seasonquota");
