@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { CheckRow } from "@/components/ui/check-row";
 import { Icon } from "@/components/ui/icon";
 import { zones } from "@/data/mock/fishing-data";
-import { isReportLate } from "@/domain/catches/reporting-deadline";
-import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchRecord, SessionRecord } from "@/domain/models";
-import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
-import { createSessionRecord } from "@/domain/sessions/create-session-record";
-import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
-import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
+import { usePastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock, formatLongDuration } from "@/lib/time";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
@@ -23,85 +17,61 @@ export function PastSessionForm({
   onSave: (record: SessionRecord, catches?: CatchRecord[]) => void;
   existingCatches: CatchRecord[];
 }) {
-  const [openedAt] = useState(() => Date.now()),
-    today = new Date(openedAt).toISOString().slice(0, 10);
-  const [step, setStep] = useState(1),
-    [date, setDate] = useState(today),
-    [from, setFrom] = useState("17:00"),
-    [to, setTo] = useState("19:00"),
-    [zone, setZone] = useState(3),
-    [subzone, setSubzone] = useState(""),
-    [caught, setCaught] = useState(false),
-    [catchAt, setCatchAt] = useState("18:00"),
-    [species, setSpecies] = useState("Laks"),
-    [outcome, setOutcome] = useState("Gjenutsatt"),
-    [length, setLength] = useState(""),
-    [weight, setWeight] = useState(""),
-    [comment, setComment] = useState(""),
-    [imageName, setImageName] = useState(""),
-    [imageData, setImageData] = useState(""),
-    [reports, setReports] = useState<CatchRecord[]>([]),
-    [touched, setTouched] = useState(false);
+  const controller = usePastSessionController({ existingCatches, onSave });
+  const {
+    catchAt,
+    catchValid,
+    caught,
+    comment,
+    dailyValid,
+    date,
+    end,
+    from,
+    imageName,
+    length,
+    openedAt,
+    outcome,
+    quota,
+    reports,
+    species,
+    start,
+    step,
+    subzone,
+    subzones,
+    to,
+    today,
+    touched,
+    validTime,
+    weight,
+    withinSeason,
+    zone,
+    zoneBase,
+    zoneName,
+  } = controller.state;
+  const {
+    addCatch,
+    removeCatch,
+    selectImage,
+    setCatchAt,
+    setCaught,
+    setComment,
+    setDate,
+    setFrom,
+    setLength,
+    setOutcome,
+    setSpecies,
+    setStep,
+    setSubzone,
+    setTo,
+    setTouched,
+    setWeight,
+    setZone,
+    submit,
+  } = controller.actions;
   const dialogRef = useDialogAccessibility(step === 4 ? onClose : undefined);
-  const start = new Date(`${date}T${from}`).getTime(),
-    end = new Date(`${date}T${to}`).getTime(),
-    caughtAt = new Date(`${date}T${catchAt}`).getTime(),
-    validTime = Boolean(date && from && to && isValidSessionTime(start, end, openedAt)),
-    validCatchTime = isCatchWithinSession(caughtAt, start, end),
-    lengthNo = parseMeasurement(length),
-    weightNo = parseMeasurement(weight),
-    zoneBase = zones.find((z) => z.id === zone)?.name || `Sone ${zone}`,
-    zoneName = subzone ? `${zoneBase} · ${subzone}` : zoneBase,
-    withinSeason = isDateWithinZoneSeason(date, zone),
-    permitValid = withinSeason,
-    closedHistorically = false,
-    quota = getQuotaStatus(existingCatches, reports),
-    quotaAvailable = quota.seasonAvailable,
-    dailyValid = quota.dailyValid,
-    catchValid = validateCatch(species, outcome, lengthNo, weightNo).detailsValid && validCatchTime;
-  const resetCatch = () => {
-    setSpecies("Laks");
-    setOutcome("Gjenutsatt");
-    setLength("");
-    setWeight("");
-    setComment("");
-    setImageName("");
-    setImageData("");
-    setCatchAt(to);
-  };
-  const addCatch = (review: boolean) => {
-    setTouched(true);
-    if (!catchValid) return;
-    const violation = validateCatch(species, outcome, lengthNo, weightNo).blocked;
-    const record: CatchRecord = {
-      id: `ME-ETTER-${openedAt}-${reports.length + 1}`,
-      caughtAt,
-      submittedAt: openedAt,
-      sessionStart: start,
-      species,
-      result: outcome,
-      length: lengthNo,
-      weight: weightNo,
-      zone: zoneName,
-      violation,
-      late: isReportLate(caughtAt, openedAt),
-      imageName,
-      imageData,
-      comment,
-    };
-    setReports((current) => [...current, record]);
-    resetCatch();
-    setTouched(false);
-    setStep(review ? 3 : 2);
-  };
-  const submit = () => {
-    const result = reports.length
-      ? `${reports.length} fangst${reports.length === 1 ? "" : "er"} · etterregistrert`
-      : "Nullfangst · etterregistrert";
-    onSave(createSessionRecord(start, end, zoneName, result), reports);
-    setStep(4);
-  };
-  const subzones = getSubzones(zone);
+  const permitValid = withinSeason;
+  const closedHistorically = false;
+  const quotaAvailable = quota.seasonAvailable;
   return (
     <div className="modal-bg" onClick={step === 4 ? onClose : undefined}>
       <div
@@ -281,14 +251,7 @@ export function PastSessionForm({
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  setImageName(file?.name || "");
-                  if (!file) return setImageData("");
-                  const reader = new FileReader();
-                  reader.onload = () => setImageData(String(reader.result || ""));
-                  reader.readAsDataURL(file);
-                }}
+                onChange={(event) => selectImage(event.target.files?.[0])}
               />
             </label>
             <label>
@@ -372,13 +335,7 @@ export function PastSessionForm({
             {reports.length > 0 ? (
               <div className="added-catches review">
                 {reports.map((x, i) => (
-                  <button
-                    key={x.id}
-                    onClick={() => {
-                      setReports(reports.filter((r) => r.id !== x.id));
-                      setStep(2);
-                    }}
-                  >
+                  <button key={x.id} onClick={() => removeCatch(x.id)}>
                     <b>
                       Fangst {i + 1}: {x.species} · {x.result.toLowerCase()}
                     </b>

@@ -75,9 +75,17 @@ Inneholder små gjenbrukbare visningskomponenter uten kunnskap om fiskeregler el
 Kobler sammen navigasjon, skjermbilder og overordnet applikasjonstilstand. Rutefilene kjenner
 bare dette laget.
 
+### `application`
+
+Inneholder enkle kontrollere som eier applikasjonstilstand og brukerhandlinger. Skjermkomponenter
+skal vise data og sende handlinger videre, ikke koordinere hele arbeidsflyter selv.
+
 ### `hooks`
 
 Inneholder gjenbrukbar React-logikk, som tidsmåling og kortvarige meldinger.
+
+Store arbeidsflyter deles i en navngitt kontroller under `hooks/` og små steg under
+`steps/`. Fangstrapporten og oppstart av fiske følger denne strukturen.
 
 ### `data`
 

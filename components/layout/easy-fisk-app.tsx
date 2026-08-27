@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
-
+import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { Icon } from "@/components/ui/icon";
 import { demoStatuses } from "@/data/mock/fishing-data";
-import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import { getStatusResolution } from "@/domain/fishing-rules/status-checks";
-import type { CatchRecord, DemoStatus, FlowMode, Screen, SessionRecord } from "@/domain/models";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
-import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
 import { Home } from "@/features/home/home-screen";
@@ -18,25 +13,26 @@ import { Detail } from "@/features/profile/detail";
 import { More } from "@/features/profile/more-screen";
 import { RulesScreen } from "@/features/rules/rules-screen";
 import { Stats } from "@/features/statistics/statistics-screen";
-import { useSessionTimer } from "@/hooks/use-session-timer";
-import { useTimedToast } from "@/hooks/use-timed-toast";
 
 export function EasyFiskApp() {
-  const [screen, setScreen] = useState<Screen>("home"),
-    [active, setActive] = useState(false),
-    [zone, setZone] = useState(3),
-    [flow, setFlow] = useState<FlowMode | null>(null),
-    [demoStatus, setDemoStatus] = useState<DemoStatus>("ok"),
-    [startTime, setStartTime] = useState<number | null>(null),
-    [lastSession, setLastSession] = useState<SessionRecord | null>(null),
-    [globalDetail, setGlobalDetail] = useState(""),
-    [catches, setCatches] = useState<CatchRecord[]>([]),
-    [finishAfterCatch, setFinishAfterCatch] = useState(false),
-    [sessionZone, setSessionZone] = useState(3),
-    [requestedCatchTime, setRequestedCatchTime] = useState(0),
-    [statsMineRequested, setStatsMineRequested] = useState(false);
-  const { elapsed, setElapsed } = useSessionTimer(active, startTime);
-  const { message: toast, showToast } = useTimedToast();
+  const { state, actions } = useEasyFiskController();
+  const {
+    active,
+    catches,
+    demoStatus,
+    elapsed,
+    finishAfterCatch,
+    flow,
+    globalDetail,
+    lastSession,
+    requestedCatchTime,
+    screen,
+    sessionZone,
+    startTime,
+    statsMineRequested,
+    toast,
+    zone,
+  } = state;
   const nav = [
     ["home", "Hjem", "home"],
     ["map", "Kart", "map"],
@@ -44,42 +40,6 @@ export function EasyFiskApp() {
     ["stats", "Statistikk", "stats"],
     ["more", "Mer", "more"],
   ] as const;
-  const openFlow = () => setFlow(active ? "stop" : "start");
-  const finish = (caught?: boolean, selectedZone?: number) => {
-    if (flow === "start") {
-      const now = Date.now();
-      setSessionZone(selectedZone ?? zone);
-      setStartTime(now);
-      setElapsed(0);
-      setActive(true);
-      setFlow(null);
-      showToast(`Fiskeøkten er startet i Sone ${selectedZone ?? zone}`);
-      setScreen("stats");
-    } else if (flow === "stop") {
-      if (caught) {
-        setFlow(null);
-        setScreen("stats");
-        setFinishAfterCatch(true);
-        setRequestedCatchTime(Date.now());
-      } else {
-        const end = Date.now();
-        const start = startTime ?? end;
-        const session = createSessionRecord(
-          start,
-          end,
-          findZoneName(sessionZone),
-          "Nullfangst registrert",
-        );
-        setElapsed(session.duration);
-        setLastSession(session);
-        setActive(false);
-        setFlow("summary");
-      }
-    } else {
-      setFlow(null);
-      setScreen("home");
-    }
-  };
   const features = [
     "Samlet kontroll av fiskekort, avgift, desinfisering og kvote",
     "Start/stopp av fiskeøkt med GPS-forslag til sone",
@@ -97,15 +57,12 @@ export function EasyFiskApp() {
       <div className="phone-app">
         {screen === "home" && (
           <Home
-            onStart={openFlow}
-            onRules={() => setScreen("rules")}
-            onFeedback={() => setGlobalDetail("Tilbakemelding")}
-            onControlCard={() => setGlobalDetail("Kontrollkort")}
-            onCatchShortcut={() => {
-              setStatsMineRequested(true);
-              setScreen("stats");
-            }}
-            onMapShortcut={() => setScreen("map")}
+            onStart={actions.openSessionFlow}
+            onRules={() => actions.navigate("rules")}
+            onFeedback={() => actions.openDetail("Tilbakemelding")}
+            onControlCard={() => actions.openDetail("Kontrollkort")}
+            onCatchShortcut={actions.openCatchHistory}
+            onMapShortcut={() => actions.navigate("map")}
             active={active}
             elapsed={elapsed}
             startTime={startTime}
@@ -114,77 +71,25 @@ export function EasyFiskApp() {
           />
         )}{" "}
         {screen === "map" && (
-          <MapScreen
-            selected={zone}
-            setSelected={setZone}
-            onUseZone={(selected) => {
-              setZone(selected);
-              setSessionZone(selected);
-              setScreen("home");
-              setFlow("start");
-            }}
-          />
+          <MapScreen selected={zone} setSelected={actions.setZone} onUseZone={actions.useZone} />
         )}{" "}
         {screen === "rules" && (
           <RulesScreen
             demoStatus={demoStatus}
-            onRegisterPermit={() => setGlobalDetail("Mine fiskekort")}
+            onRegisterPermit={() => actions.openDetail("Mine fiskekort")}
           />
         )}{" "}
         {screen === "stats" && (
           <Stats
             active={active}
-            onStart={() => setFlow("start")}
-            onStop={() => setFlow("stop")}
-            onAddPast={(record, catchRecords) => {
-              setLastSession(record);
-              if (catchRecords?.length) {
-                const submittedAt = Date.now();
-                setCatches((current) => [
-                  ...current,
-                  ...catchRecords.map((catchRecord, index) =>
-                    completeCatchRecord(
-                      catchRecord,
-                      catchRecord.id === "pending"
-                        ? `ME-${submittedAt}-${index + 1}`
-                        : catchRecord.id,
-                      submittedAt,
-                    ),
-                  ),
-                ]);
-              }
-              showToast("Tidligere fisketur er registrert");
-            }}
-            onCatch={(record) => {
-              const now = Date.now();
-              const savedRecord = completeCatchRecord(record, `ME-${now}`, now);
-              setCatches((current) => [...current, savedRecord]);
-              showToast("Fangsten er lagret og kvoten er oppdatert");
-              if (finishAfterCatch) {
-                const end = Date.now();
-                const start = startTime ?? end;
-                setLastSession(
-                  createSessionRecord(
-                    start,
-                    end,
-                    record.zone,
-                    `1 ${record.species.toLowerCase()} · ${record.result.toLowerCase()}`,
-                  ),
-                );
-                setActive(false);
-              }
-            }}
-            onCorrectCatch={(id, note) =>
-              setCatches((current) =>
-                current.map((item) => (item.id === id ? { ...item, correction: note } : item)),
-              )
-            }
-            onShowRules={() => setScreen("rules")}
+            onStart={() => actions.setFlow("start")}
+            onStop={() => actions.setFlow("stop")}
+            onAddPast={actions.addPastSession}
+            onCatch={actions.addCatch}
+            onCorrectCatch={actions.correctCatch}
+            onShowRules={() => actions.navigate("rules")}
             openMine={statsMineRequested}
-            onCatchFlowComplete={() => {
-              setFinishAfterCatch(false);
-              setFlow("summary");
-            }}
+            onCatchFlowComplete={actions.completeCatchFlow}
             finishAfterCatch={finishAfterCatch}
             catches={catches}
             activeZone={findZoneName(sessionZone)}
@@ -200,8 +105,7 @@ export function EasyFiskApp() {
             <button
               key={id}
               onClick={() => {
-                if (id === "stats") setStatsMineRequested(false);
-                setScreen(id);
+                actions.navigate(id);
               }}
               className={screen === id ? "selected" : ""}
             >
@@ -220,19 +124,16 @@ export function EasyFiskApp() {
         {flow && (
           <FishingFlow
             mode={flow}
-            finish={finish}
-            cancel={() => setFlow(null)}
+            finish={actions.finishSessionFlow}
+            cancel={actions.closeFlow}
             demoStatus={demoStatus}
             startTime={startTime}
             elapsed={elapsed}
             lastSession={lastSession}
-            resolveBlock={() => {
-              setFlow(null);
-              setGlobalDetail(getStatusResolution(demoStatus));
-            }}
+            resolveBlock={actions.resolveBlockedStatus}
           />
         )}
-        {globalDetail && <Detail title={globalDetail} close={() => setGlobalDetail("")} />}
+        {globalDetail && <Detail title={globalDetail} close={actions.closeDetail} />}
       </div>
       <aside className="prototype-note feature-panel">
         <span>DEMONSTRASJONSMODUS</span>
@@ -248,9 +149,7 @@ export function EasyFiskApp() {
           className="demo-select"
           value={demoStatus}
           onChange={(e) => {
-            setDemoStatus(e.target.value as DemoStatus);
-            setActive(false);
-            setFlow(null);
+            actions.selectDemoStatus(e.target.value as typeof demoStatus);
           }}
         >
           {demoStatuses.map((s) => (
@@ -272,8 +171,8 @@ export function EasyFiskApp() {
         <button
           className="demo-start"
           onClick={() => {
-            setScreen("home");
-            setFlow("start");
+            actions.navigate("home");
+            actions.setFlow("start");
           }}
         >
           Test valgt situasjon
