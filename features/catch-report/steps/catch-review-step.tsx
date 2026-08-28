@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { formatClock } from "@/lib/time";
@@ -114,11 +115,7 @@ export function CatchReviewStep({
           {isSubmitting ? "Sender …" : "Send fangstrapport"}
         </button>
       )}
-      {submissionError && (
-        <p className="field-error" role="alert">
-          {submissionError}
-        </p>
-      )}
+      <FormError message={submissionError} />
       <button className="secondary" onClick={() => setStep(2)}>
         Tilbake og endre
       </button>

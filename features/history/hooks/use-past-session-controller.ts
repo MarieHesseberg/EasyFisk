@@ -12,7 +12,7 @@ import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
 import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
-import { validateImage } from "@/domain/images/validate-image";
+import { useImageSelection } from "@/hooks/use-image-selection";
 
 export function usePastSessionController({
   existingCatches,
@@ -37,9 +37,7 @@ export function usePastSessionController({
   const [length, setLength] = useState("");
   const [weight, setWeight] = useState("");
   const [comment, setComment] = useState("");
-  const [imageName, setImageName] = useState("");
-  const [imageData, setImageData] = useState("");
-  const [imageError, setImageError] = useState("");
+  const image = useImageSelection({ includeData: true });
   const [reports, setReports] = useState<CatchRecord[]>([]);
   const [touched, setTouched] = useState(false);
 
@@ -64,9 +62,7 @@ export function usePastSessionController({
     setLength("");
     setWeight("");
     setComment("");
-    setImageName("");
-    setImageData("");
-    setImageError("");
+    image.reset();
     setCatchAt(to);
   }
 
@@ -86,8 +82,8 @@ export function usePastSessionController({
       zone: zoneName,
       violation,
       late: isReportLate(caughtAt, openedAt),
-      imageName,
-      imageData,
+      imageName: image.name,
+      imageData: image.data,
       comment,
     };
     setReports((current) => [...current, record]);
@@ -109,23 +105,6 @@ export function usePastSessionController({
     setStep(2);
   }
 
-  function selectImage(file?: File) {
-    setImageError("");
-    setImageName(file?.name ?? "");
-    if (!file) return setImageData("");
-    const validation = validateImage(file);
-    if (!validation.ok) {
-      setImageName("");
-      setImageData("");
-      setImageError(validation.error);
-      return;
-    }
-    const reader = new FileReader();
-    reader.onerror = () => setImageError("Kunne ikke lese bildet.");
-    reader.onload = () => setImageData(String(reader.result ?? ""));
-    reader.readAsDataURL(file);
-  }
-
   return {
     state: {
       catchAt,
@@ -136,8 +115,8 @@ export function usePastSessionController({
       date,
       end,
       from,
-      imageName,
-      imageError,
+      imageName: image.name,
+      imageError: image.error,
       length,
       lengthNumber,
       openedAt,
@@ -164,7 +143,7 @@ export function usePastSessionController({
     actions: {
       addCatch,
       removeCatch,
-      selectImage,
+      selectImage: image.select,
       setCatchAt,
       setCaught,
       setComment,

@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
-import { validateImage } from "@/domain/images/validate-image";
+import { useFormSubmission } from "@/hooks/use-form-submission";
+import { useImageSelection } from "@/hooks/use-image-selection";
 
 export function useCatchReportController({
   activeZone,
@@ -25,14 +26,11 @@ export function useCatchReportController({
   const [length, setLength] = useState("");
   const [weight, setWeight] = useState("");
   const [comment, setComment] = useState("");
-  const [imageName, setImageName] = useState("");
-  const [imageData, setImageData] = useState("");
   const [touched, setTouched] = useState(false);
   const [violationConfirmed, setViolationConfirmed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState("");
-  const [imageError, setImageError] = useState("");
+  const image = useImageSelection({ includeData: true });
+  const submission = useFormSubmission("Kunne ikke lagre fangsten. Prøv igjen.");
 
   const lengthNumber = parseMeasurement(length);
   const weightNumber = parseMeasurement(weight);
@@ -40,11 +38,9 @@ export function useCatchReportController({
   const sentCatch = submitted ? catches[catches.length - 1] : null;
 
   async function submit() {
-    if (submitted || isSubmitting) return;
-    setIsSubmitting(true);
-    setSubmissionError("");
-    try {
-      await onCatch({
+    if (submitted) return;
+    const succeeded = await submission.run(() =>
+      onCatch({
         id: "pending",
         caughtAt,
         submittedAt: 0,
@@ -56,16 +52,14 @@ export function useCatchReportController({
         zone: activeZone,
         violation: validation.blocked,
         late: false,
-        imageName,
-        imageData,
+        imageName: image.name,
+        imageData: image.data,
         comment,
-      });
+      }),
+    );
+    if (succeeded) {
       setSubmitted(true);
       setStep(4);
-    } catch {
-      setSubmissionError("Kunne ikke lagre fangsten. Prøv igjen.");
-    } finally {
-      setIsSubmitting(false);
     }
   }
 
@@ -74,34 +68,13 @@ export function useCatchReportController({
     if (validation.detailsValid) setStep(3);
   }
 
-  function selectImage(file?: File) {
-    setImageError("");
-    setImageName(file?.name ?? "");
-    if (!file) {
-      setImageData("");
-      return;
-    }
-
-    const validation = validateImage(file);
-    if (!validation.ok) {
-      setImageName("");
-      setImageData("");
-      setImageError(validation.error);
-      return;
-    }
-    const reader = new FileReader();
-    reader.onerror = () => setImageError("Kunne ikke lese bildet.");
-    reader.onload = () => setImageData(String(reader.result ?? ""));
-    reader.readAsDataURL(file);
-  }
-
   return {
     state: {
       comment,
-      imageData,
-      imageName,
-      imageError,
-      isSubmitting,
+      imageData: image.data,
+      imageName: image.name,
+      imageError: image.error,
+      isSubmitting: submission.isSubmitting,
       length,
       lengthNumber,
       result,
@@ -109,7 +82,7 @@ export function useCatchReportController({
       species,
       step,
       submitted,
-      submissionError,
+      submissionError: submission.error,
       touched,
       validation,
       violationConfirmed,
@@ -118,7 +91,7 @@ export function useCatchReportController({
     },
     actions: {
       continueToReview,
-      selectImage,
+      selectImage: image.select,
       setComment,
       setLength,
       setResult,

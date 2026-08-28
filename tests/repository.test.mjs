@@ -127,23 +127,26 @@ test("responsiv stil dekker sikre områder, dynamisk høyde og redusert bevegels
 });
 
 test("interaktive valg har tilgjengelig valgt tilstand", async () => {
-  const [navigation, map, statistics, rules, sessionStep, catchStep] = await Promise.all([
-    readFile(new URL("../components/layout/bottom-navigation.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../features/map/map-screen.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../features/statistics/statistics-screen.tsx", import.meta.url), "utf8"),
-    readFile(
-      new URL("../features/fishing-session/fishing-flow/steps/rules-step.tsx", import.meta.url),
-      "utf8",
-    ),
-    readFile(
-      new URL("../features/history/past-session/session-details-step.tsx", import.meta.url),
-      "utf8",
-    ),
-    readFile(
-      new URL("../features/history/past-session/catch-details-step.tsx", import.meta.url),
-      "utf8",
-    ),
-  ]);
+  const [navigation, map, statistics, rules, sessionStep, catchStep, formError] = await Promise.all(
+    [
+      readFile(new URL("../components/layout/bottom-navigation.tsx", import.meta.url), "utf8"),
+      readFile(new URL("../features/map/map-screen.tsx", import.meta.url), "utf8"),
+      readFile(new URL("../features/statistics/statistics-screen.tsx", import.meta.url), "utf8"),
+      readFile(
+        new URL("../features/fishing-session/fishing-flow/steps/rules-step.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL("../features/history/past-session/session-details-step.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL("../features/history/past-session/catch-details-step.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../components/ui/form-error.tsx", import.meta.url), "utf8"),
+    ],
+  );
 
   assert.match(navigation, /aria-current=/);
   assert.match(map, /aria-pressed=/);
@@ -151,8 +154,9 @@ test("interaktive valg har tilgjengelig valgt tilstand", async () => {
   assert.match(rules, /disabled=\{!confirmed\}/);
   assert.doesNotMatch(rules, /defaultChecked/);
   assert.match(sessionStep, /aria-describedby=/);
-  assert.match(sessionStep, /id="past-session-error" role="alert"/);
-  assert.match(catchStep, /id="past-catch-error" role="alert"/);
+  assert.match(sessionStep, /<FormError[\s\S]*id="past-session-error"/);
+  assert.match(catchStep, /<FormError[\s\S]*id="past-catch-error"/);
+  assert.match(formError, /role="alert"/);
 });
 
 test("kartknapper har minst 44 piksler berøringsflate", async () => {

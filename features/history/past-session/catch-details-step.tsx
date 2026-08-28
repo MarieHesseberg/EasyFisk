@@ -1,4 +1,5 @@
-import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
+import { ImageUploadField } from "@/components/ui/image-upload-field";
 import type { CatchOutcome, FishSpecies } from "@/domain/catches/catch";
 import type { PastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock } from "@/lib/time";
@@ -60,11 +61,6 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           onChange={(e) => setCatchAt(e.target.value)}
         />
       </label>
-      {imageError && (
-        <p className="field-error" role="alert">
-          {imageError}
-        </p>
-      )}
       <label>Art</label>
       <div className="choice">
         {speciesOptions.map((x) => (
@@ -115,18 +111,13 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           />
         </label>
       </div>
-      <label className="feedback-upload">
-        <Icon name="fish" />
-        <span>
-          <b>{imageName || "Legg til bilde"}</b>
-          <small>Valgfritt · lagres med fangstrapporten</small>
-        </span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => selectImage(event.target.files?.[0])}
-        />
-      </label>
+      <ImageUploadField
+        className="feedback-upload"
+        description="Valgfritt · lagres med fangstrapporten"
+        error={imageError}
+        imageName={imageName}
+        selectImage={selectImage}
+      />
       <label>
         Kommentar <em>valgfritt</em>
         <textarea
@@ -136,11 +127,14 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           placeholder="Observasjoner om fisken eller fangststedet"
         />
       </label>
-      {touched && !catchValid && (
-        <p className="field-error" id="past-catch-error" role="alert">
-          Fangsttid må være innenfor turen. Lengde og vekt må fylles ut.
-        </p>
-      )}
+      <FormError
+        id="past-catch-error"
+        message={
+          touched && !catchValid
+            ? "Fangsttid må være innenfor turen. Lengde og vekt må fylles ut."
+            : undefined
+        }
+      />
       <button className="primary" onClick={() => addCatch(true)}>
         Legg til og kontroller turen
       </button>

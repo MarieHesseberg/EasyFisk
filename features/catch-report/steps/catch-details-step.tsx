@@ -1,4 +1,5 @@
-import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
+import { ImageUploadField } from "@/components/ui/image-upload-field";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 
 export function CatchDetailsStep({ controller }: { controller: CatchReportController }) {
@@ -49,28 +50,21 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
           />
         </label>
       </div>
-      {touched && !validation.detailsValid && (
-        <p className="field-error" id="catch-details-error" role="alert">
-          Fyll inn både lengde og vekt med tall større enn 0.
-        </p>
-      )}
-      <label className="upload-box">
-        <Icon name="fish" />
-        <span>
-          <b>{imageName || "Legg til bilde"}</b>
-          <small>Valgfritt · bilde av fangsten</small>
-        </span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => selectImage(event.target.files?.[0])}
-        />
-      </label>
-      {imageError && (
-        <p className="field-error" role="alert">
-          {imageError}
-        </p>
-      )}
+      <FormError
+        id="catch-details-error"
+        message={
+          touched && !validation.detailsValid
+            ? "Fyll inn både lengde og vekt med tall større enn 0."
+            : undefined
+        }
+      />
+      <ImageUploadField
+        className="upload-box"
+        description="Valgfritt · bilde av fangsten"
+        error={imageError}
+        imageName={imageName}
+        selectImage={selectImage}
+      />
       <label className="comment-label">
         Kommentar <em>valgfritt</em>
         <textarea

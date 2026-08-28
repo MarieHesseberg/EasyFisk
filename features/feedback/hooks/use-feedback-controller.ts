@@ -1,61 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { validateImage } from "@/domain/images/validate-image";
+import { useFormSubmission } from "@/hooks/use-form-submission";
+import { useImageSelection } from "@/hooks/use-image-selection";
 
 export function useFeedbackController() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [imageName, setImageName] = useState("");
-  const [imageError, setImageError] = useState("");
   const [hasPosition, setHasPosition] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState("");
+  const image = useImageSelection();
+  const submission = useFormSubmission("Kunne ikke sende meldingen. Prøv igjen.");
   const isValid = category !== "" && description.trim().length >= 10;
 
   function reset() {
     setStep(1);
     setCategory("");
     setDescription("");
-    setImageName("");
-    setImageError("");
+    image.reset();
     setHasPosition(false);
     setIsTouched(false);
     setIsConfirmed(false);
-    setIsSubmitting(false);
-    setSubmissionError("");
+    submission.reset();
   }
 
   async function submit() {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    setSubmissionError("");
-    try {
-      await Promise.resolve();
-      setStep(3);
-    } catch {
-      setSubmissionError("Kunne ikke sende meldingen. Prøv igjen.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  function selectImage(file?: File) {
-    setImageError("");
-    if (!file) {
-      setImageName("");
-      return;
-    }
-    const result = validateImage(file);
-    if (!result.ok) {
-      setImageName("");
-      setImageError(result.error);
-      return;
-    }
-    setImageName(file.name);
+    const succeeded = await submission.run(() => Promise.resolve());
+    if (succeeded) setStep(3);
   }
 
   return {
@@ -63,18 +36,18 @@ export function useFeedbackController() {
       category,
       description,
       hasPosition,
-      imageError,
-      imageName,
+      imageError: image.error,
+      imageName: image.name,
       isConfirmed,
-      isSubmitting,
+      isSubmitting: submission.isSubmitting,
       isTouched,
       isValid,
       step,
-      submissionError,
+      submissionError: submission.error,
     },
     actions: {
       reset,
-      selectImage,
+      selectImage: image.select,
       submit,
       setCategory,
       setDescription,

@@ -1,4 +1,5 @@
 import { appContentRepository } from "@/data/repositories/app-content";
+import { FormError } from "@/components/ui/form-error";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
 const { feedback } = appContentRepository.getContent();
 export function FeedbackReviewStep({ controller }: { controller: FeedbackController }) {
@@ -50,11 +51,7 @@ export function FeedbackReviewStep({ controller }: { controller: FeedbackControl
       <button className="primary" disabled={!isConfirmed || isSubmitting} onClick={submit}>
         {isSubmitting ? "Sender …" : "Send melding"}
       </button>
-      {submissionError && (
-        <p className="field-error" role="alert">
-          {submissionError}
-        </p>
-      )}
+      <FormError message={submissionError} />
       <button className="secondary" onClick={() => setStep(1)}>
         Tilbake og endre
       </button>

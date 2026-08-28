@@ -1,3 +1,4 @@
+import { FormError } from "@/components/ui/form-error";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { ZoneId } from "@/domain/zones/zone";
 import type { PastSessionController } from "@/features/history/hooks/use-past-session-controller";
@@ -110,11 +111,14 @@ export function SessionDetailsStep({ controller }: { controller: PastSessionCont
           Ja · legg til fangst
         </button>
       </div>
-      {touched && (!validTime || (subzones.length > 0 && !subzone)) && (
-        <p className="field-error" id="past-session-error" role="alert">
-          Kontroller dato, tider og eventuell delsone.
-        </p>
-      )}
+      <FormError
+        id="past-session-error"
+        message={
+          touched && (!validTime || (subzones.length > 0 && !subzone))
+            ? "Kontroller dato, tider og eventuell delsone."
+            : undefined
+        }
+      />
       <button
         className="primary"
         onClick={() => {

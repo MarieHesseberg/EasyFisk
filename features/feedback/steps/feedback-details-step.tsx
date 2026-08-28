@@ -1,4 +1,6 @@
 import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
+import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { appContentRepository } from "@/data/repositories/app-content";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
 const { feedback } = appContentRepository.getContent();
@@ -47,28 +49,21 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         />
       </label>
       <div className="character-count">{description.length}/1000</div>
-      {isTouched && !isValid && (
-        <p className="field-error" id="feedback-error" role="alert">
-          Velg kategori og skriv en beskrivelse på minst 10 tegn.
-        </p>
-      )}
-      <label className="feedback-upload">
-        <Icon name="fish" />
-        <span>
-          <b>{imageName || "Legg til bilde"}</b>
-          <small>Valgfritt · JPG, PNG eller bilde fra kamera</small>
-        </span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => selectImage(event.target.files?.[0])}
-        />
-      </label>
-      {imageError && (
-        <p className="field-error" role="alert">
-          {imageError}
-        </p>
-      )}
+      <FormError
+        id="feedback-error"
+        message={
+          isTouched && !isValid
+            ? "Velg kategori og skriv en beskrivelse på minst 10 tegn."
+            : undefined
+        }
+      />
+      <ImageUploadField
+        className="feedback-upload"
+        description="Valgfritt · JPG, PNG eller bilde fra kamera"
+        error={imageError}
+        imageName={imageName}
+        selectImage={selectImage}
+      />
       <div className="position-card">
         <div>
           <Icon name="pin" />
