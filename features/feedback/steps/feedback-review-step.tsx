@@ -2,8 +2,16 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
 const { feedback } = appContentRepository.getContent();
 export function FeedbackReviewStep({ controller }: { controller: FeedbackController }) {
-  const { category, description, hasPosition, imageName, isConfirmed } = controller.state;
-  const { setIsConfirmed, setStep } = controller.actions;
+  const {
+    category,
+    description,
+    hasPosition,
+    imageName,
+    isConfirmed,
+    isSubmitting,
+    submissionError,
+  } = controller.state;
+  const { setIsConfirmed, setStep, submit } = controller.actions;
   return (
     <>
       <small>KONTROLLER FØR INNSENDING</small>
@@ -39,9 +47,14 @@ export function FeedbackReviewStep({ controller }: { controller: FeedbackControl
           {feedback.organizationName}.
         </span>
       </label>
-      <button className="primary" disabled={!isConfirmed} onClick={() => setStep(3)}>
-        Send melding
+      <button className="primary" disabled={!isConfirmed || isSubmitting} onClick={submit}>
+        {isSubmitting ? "Sender …" : "Send melding"}
       </button>
+      {submissionError && (
+        <p className="field-error" role="alert">
+          {submissionError}
+        </p>
+      )}
       <button className="secondary" onClick={() => setStep(1)}>
         Tilbake og endre
       </button>

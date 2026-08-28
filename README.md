@@ -38,6 +38,7 @@ npm run build
 - Next.js med App Router
 - React
 - TypeScript i streng modus
+- Node-tester for domenelogikk og Vitest/Testing Library for React-flyter
 - Vanlig CSS med sentrale design- og fargetokens
 - Statisk eksport til GitHub Pages
 

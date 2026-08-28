@@ -3,8 +3,9 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
 const { feedback } = appContentRepository.getContent();
 export function FeedbackDetailsStep({ controller }: { controller: FeedbackController }) {
-  const { category, description, hasPosition, imageName, isTouched, isValid } = controller.state;
-  const { setCategory, setDescription, setHasPosition, setImageName, setIsTouched, setStep } =
+  const { category, description, hasPosition, imageError, imageName, isTouched, isValid } =
+    controller.state;
+  const { setCategory, setDescription, setHasPosition, selectImage, setIsTouched, setStep } =
     controller.actions;
   return (
     <>
@@ -60,9 +61,14 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         <input
           type="file"
           accept="image/*"
-          onChange={(event) => setImageName(event.target.files?.[0]?.name || "")}
+          onChange={(event) => selectImage(event.target.files?.[0])}
         />
       </label>
+      {imageError && (
+        <p className="field-error" role="alert">
+          {imageError}
+        </p>
+      )}
       <div className="position-card">
         <div>
           <Icon name="pin" />

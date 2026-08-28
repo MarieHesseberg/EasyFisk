@@ -15,9 +15,11 @@ export function CatchReviewStep({
   const {
     comment,
     imageName,
+    isSubmitting,
     lengthNumber,
     result,
     species,
+    submissionError,
     validation,
     violationConfirmed,
     weightNumber,
@@ -99,14 +101,23 @@ export function CatchReviewStep({
               </small>
             </span>
           </label>
-          <button className="primary danger-submit" disabled={!violationConfirmed} onClick={submit}>
-            Send inn faktisk fangst
+          <button
+            className="primary danger-submit"
+            disabled={!violationConfirmed || isSubmitting}
+            onClick={submit}
+          >
+            {isSubmitting ? "Sender …" : "Send inn faktisk fangst"}
           </button>
         </>
       ) : (
-        <button className="primary" onClick={submit}>
-          Send fangstrapport
+        <button className="primary" disabled={isSubmitting} onClick={submit}>
+          {isSubmitting ? "Sender …" : "Send fangstrapport"}
         </button>
+      )}
+      {submissionError && (
+        <p className="field-error" role="alert">
+          {submissionError}
+        </p>
       )}
       <button className="secondary" onClick={() => setStep(2)}>
         Tilbake og endre

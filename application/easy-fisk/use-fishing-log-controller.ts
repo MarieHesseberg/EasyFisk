@@ -5,6 +5,8 @@ import type { FishingLogRepository } from "@/data/contracts/fishing-log-reposito
 import type { CatchRecord } from "@/domain/catches/catch";
 import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
 import type { SessionRecord } from "@/domain/sessions/session";
+import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
+import { logger } from "@/lib/logger";
 
 export function useFishingLogController(repository: FishingLogRepository) {
   const [catches, setCatches] = useState<CatchRecord[]>([]);
@@ -23,20 +25,30 @@ export function useFishingLogController(repository: FishingLogRepository) {
   }, [repository]);
 
   function saveSession(session: SessionRecord) {
-    repository.saveSession(session);
+    const result = repository.saveSession(session);
+    if (!result.ok) {
+      logger.error(result.error, { cause: result.cause });
+      return result;
+    }
     setLastSession(session);
+    return result;
   }
 
   function saveCatch(record: CatchRecord) {
     const submittedAt = Date.now();
     const completed = completeCatchRecord(record, `ME-${submittedAt}`, submittedAt);
-    repository.saveCatch(completed);
+    const result = repository.saveCatch(completed);
+    if (!result.ok) {
+      logger.error(result.error, { cause: result.cause });
+      return operationFailed(result.error, result.cause);
+    }
     setCatches((current) => [...current, completed]);
-    return completed;
+    return operationSucceeded(completed);
   }
 
   function savePastSession(session: SessionRecord, records: CatchRecord[] = []) {
-    saveSession(session);
+    const sessionResult = saveSession(session);
+    if (!sessionResult.ok) return sessionResult;
     const submittedAt = Date.now();
     const completed = records.map((record, index) =>
       completeCatchRecord(
@@ -45,15 +57,27 @@ export function useFishingLogController(repository: FishingLogRepository) {
         submittedAt,
       ),
     );
-    completed.forEach(repository.saveCatch);
+    for (const record of completed) {
+      const result = repository.saveCatch(record);
+      if (!result.ok) {
+        logger.error(result.error, { cause: result.cause });
+        return result;
+      }
+    }
     if (completed.length) setCatches((current) => [...current, ...completed]);
+    return operationSucceeded(undefined);
   }
 
   function correctCatch(id: string, note: string) {
-    repository.updateCatchCorrection(id, note);
+    const result = repository.updateCatchCorrection(id, note);
+    if (!result.ok) {
+      logger.error(result.error, { cause: result.cause });
+      return result;
+    }
     setCatches((current) =>
       current.map((record) => (record.id === id ? { ...record, correction: note } : record)),
     );
+    return result;
   }
 
   return {

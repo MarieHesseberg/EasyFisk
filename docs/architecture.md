@@ -133,6 +133,15 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 - Sammenhengende arbeidsflyter bør bruke en reducer eller en egen hook.
 - Delt serverdata skal senere hentes gjennom et datalag.
 - Avledede verdier skal beregnes, ikke lagres som duplisert tilstand.
+- Aktiv fiskeøkt lagres gjennom `FishingLogRepository`, slik at starttid og sone overlever refresh.
+
+## Feil og asynkrone handlinger
+
+Repository-skriving returnerer `OperationResult` med enten verdi eller en forståelig feil. UI-et
+skal deaktivere innsending mens en handling pågår og vise feil uten å miste brukerens input.
+GPS skiller mellom manglende støtte, avvist tillatelse, utilgjengelig posisjon og timeout. Bilder
+valideres for type og størrelse før de leses eller lagres. Teknisk logging går gjennom den delte
+loggeren og skal alltid ha et definert formål.
 
 ## Visuell stabilitet
 

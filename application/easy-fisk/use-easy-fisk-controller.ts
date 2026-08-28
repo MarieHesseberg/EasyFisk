@@ -16,7 +16,7 @@ import { useFishingLogController } from "./use-fishing-log-controller";
 
 export function useEasyFiskController(repository: FishingLogRepository = fishingLogRepository) {
   const navigation = useAppNavigationController();
-  const session = useActiveSessionController();
+  const session = useActiveSessionController(repository);
   const log = useFishingLogController(repository);
   const { message: toast, showToast } = useTimedToast();
   const { demoStatus, flow, zone } = navigation.state;
@@ -25,7 +25,11 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId) {
     if (flow === "start") {
       const selected = selectedZone ?? zone;
-      session.actions.start(selected);
+      const result = session.actions.start(selected);
+      if (!result.ok) {
+        showToast(result.error);
+        return;
+      }
       navigation.actions.closeFlow();
       navigation.actions.navigate("stats");
       showToast(`Fiskeøkten er startet i Sone ${selected}`);
@@ -48,7 +52,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       );
       log.actions.saveSession(completed);
       session.actions.setElapsed(completed.duration);
-      session.actions.setActive(false);
+      session.actions.stop();
       navigation.actions.setFlow("summary");
       return;
     }
@@ -57,7 +61,12 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
 
   function addCatch(record: CatchRecord) {
-    const saved = log.actions.saveCatch(record);
+    const savedResult = log.actions.saveCatch(record);
+    if (!savedResult.ok) {
+      showToast(savedResult.error);
+      return;
+    }
+    const saved = savedResult.value;
     showToast("Fangsten er lagret og kvoten er oppdatert");
     if (!finishAfterCatch) return;
     const end = Date.now();
@@ -69,17 +78,17 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         `1 ${saved.species.toLowerCase()} · ${saved.result.toLowerCase()}`,
       ),
     );
-    session.actions.setActive(false);
+    session.actions.stop();
   }
 
   function addPastSession(record: SessionRecord, records?: CatchRecord[]) {
-    log.actions.savePastSession(record, records);
-    showToast("Tidligere fisketur er registrert");
+    const result = log.actions.savePastSession(record, records);
+    showToast(result.ok ? "Tidligere fisketur er registrert" : result.error);
   }
 
   function selectDemoStatus(status: typeof demoStatus) {
     navigation.actions.setDemoStatus(status);
-    session.actions.setActive(false);
+    session.actions.stop();
     navigation.actions.closeFlow();
   }
 

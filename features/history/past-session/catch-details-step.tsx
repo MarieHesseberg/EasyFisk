@@ -11,6 +11,7 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
     catchAt,
     catchValid,
     comment,
+    imageError,
     imageName,
     length,
     lengthNumber,
@@ -59,6 +60,11 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           onChange={(e) => setCatchAt(e.target.value)}
         />
       </label>
+      {imageError && (
+        <p className="field-error" role="alert">
+          {imageError}
+        </p>
+      )}
       <label>Art</label>
       <div className="choice">
         {speciesOptions.map((x) => (

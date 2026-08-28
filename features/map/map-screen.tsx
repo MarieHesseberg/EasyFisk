@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { ZoneId } from "@/domain/zones/zone";
+import { useUserLocation } from "@/features/map/hooks/use-user-location";
 
 const zones = fishingContentRepository.getZones();
 
@@ -19,19 +19,7 @@ export function MapScreen({
   onUseZone: (zone: ZoneId) => void;
 }) {
   const z = zones[selected - 1];
-  const [locationStatus, setLocationStatus] = useState("");
-  const locate = () => {
-    if (!navigator.geolocation)
-      return setLocationStatus("Posisjon er ikke tilgjengelig i denne nettleseren.");
-    setLocationStatus("Henter posisjon …");
-    navigator.geolocation.getCurrentPosition(
-      () => {
-        setSelected(3);
-        setLocationStatus("Posisjon funnet · foreslått Sone 3");
-      },
-      () => setLocationStatus("Kunne ikke hente posisjon. Velg sone manuelt."),
-    );
-  };
+  const location = useUserLocation(() => setSelected(3));
   return (
     <div className="screen map-screen">
       <ScreenHeader title="Fiskesoner" eyebrow="MANDALSELVA · VEILEDENDE KART" />
@@ -57,13 +45,22 @@ export function MapScreen({
             <span>{x.id}</span>
           </button>
         ))}
-        <button className="locate" aria-label="Finn min posisjon" onClick={locate}>
+        <button
+          className="locate"
+          aria-label="Finn min posisjon"
+          onClick={location.locate}
+          disabled={location.isLoading}
+        >
           <Icon name="pin" />
         </button>
         <div className="map-legend">
           <span /> Hovedsone <i /> Din posisjon
         </div>
-        {locationStatus && <div className="map-location-status">{locationStatus}</div>}
+        {location.message && (
+          <div className="map-location-status" role="status">
+            {location.message}
+          </div>
+        )}
       </div>
       <article className="zone-sheet">
         <div className="sheet-handle" />
