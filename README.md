@@ -54,7 +54,7 @@ domain/fishing-rules/ Versjonert regelgrunnlag og kontrollfunksjoner
 data/contracts/     Grensesnitt mot datakilder
 data/local-storage/ Versjonert prototypelagring i nettleseren
 data/memory/        Midlertidig lagring av økter og fangster
-data/mock/          Demonstrasjonsdata og lokal adapter
+data/mock/          Typet demonstrasjonsinnhold og lokale adaptere
 data/repositories/  Valg av aktiv dataadapter
 hooks/              Gjenbrukbar React-logikk
 lib/                Små, generelle hjelpefunksjoner

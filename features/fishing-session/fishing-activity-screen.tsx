@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
+import { appContentRepository } from "@/data/repositories/app-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
@@ -47,6 +48,7 @@ export function FishingActivityScreen({
   lastSession: SessionRecord | null;
   embedded?: boolean;
 }) {
+  const { activityHistory } = appContentRepository.getContent();
   const [showCatchReport, setShowCatchReport] = useState(false);
   const [showPastSession, setShowPastSession] = useState(false);
   const [selectedCatch, setSelectedCatch] = useState<CatchRecord | null>(null);
@@ -153,34 +155,11 @@ export function FishingActivityScreen({
             result={lastSession.result}
           />
         )}
-        <FishingHistoryCard
-          day="16"
-          title="Sone 2 · Fuskeland B"
-          time="18:10–21:42 · 3 t 32 min"
-          result="1 laks · gjenutsatt"
-        />
-        {showAllHistory && (
-          <>
-            <FishingHistoryCard
-              day="08"
-              title="Sone 1 · Mandal–Krossen"
-              time="19:20–20:55 · 1 t 35 min"
-              result="1 sjøørret · gjenutsatt"
-            />
-            <FishingHistoryCard
-              day="03"
-              title="Sone 4 · Laudal–Kavfossen"
-              time="06:40–09:05 · 2 t 25 min"
-              result="Nullfangst rapportert"
-            />
-          </>
+        {activityHistory.map((entry, index) =>
+          showAllHistory || index === 0 || index === activityHistory.length - 1 ? (
+            <FishingHistoryCard key={`${entry.day}-${entry.title}`} {...entry} />
+          ) : null,
         )}
-        <FishingHistoryCard
-          day="12"
-          title="Sone 3 · Øyslebø–Laudal"
-          time="07:15–10:03 · 2 t 48 min"
-          result="Nullfangst rapportert"
-        />
       </section>
 
       {(showCatchReport || finishAfterCatch) && (

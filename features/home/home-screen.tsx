@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { RequirementStatusRow } from "@/components/ui/requirement-status-row";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { appContentRepository } from "@/data/repositories/app-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { statusState } from "@/domain/fishing-rules/status-checks";
@@ -33,6 +34,7 @@ export function HomeScreen({
   demoStatus: DemoStatus;
   salmonKilled: number;
 }) {
+  const { riverStatus } = appContentRepository.getContent();
   const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
   const { catchSize, metadata, quota, temperature } = activeFishingRules;
   const stateFor = (ids: DemoStatus[]) => statusState(demoStatus, ids, scenario.level);
@@ -57,13 +59,19 @@ export function HomeScreen({
                     ? "MÅ KONTROLLERES"
                     : "STATUS NÅ"}
             </small>
-            <h2>{active ? "Du fisker i sone 3" : scenario.title}</h2>
+            <h2>
+              {active
+                ? `Du fisker i ${riverStatus.currentZoneShortName.toLowerCase()}`
+                : scenario.title}
+            </h2>
           </div>
         </div>
         {active ? (
           <>
             <div className="timer">{formatDuration(elapsed)}</div>
-            <p>Startet {formatClock(startTime)} · Sone 3</p>
+            <p>
+              Startet {formatClock(startTime)} · {riverStatus.currentZoneShortName}
+            </p>
           </>
         ) : (
           <p>{scenario.detail}</p>
@@ -92,14 +100,14 @@ export function HomeScreen({
                 ? "Fiskekort mangler"
                 : demoStatus === "wrongZone"
                   ? "Fiskekort · feil sone"
-                  : "Fiskekort · Sone 3"
+                  : `Fiskekort · ${riverStatus.currentZoneShortName}`
             }
             sub={
               demoStatus === "noPermit"
                 ? "Ikke registrert"
                 : demoStatus === "wrongZone"
-                  ? "Kortet gjelder Sone 2"
-                  : "Døgnkort · gyldig til 17:59"
+                  ? `Kortet gjelder ${riverStatus.alternatePermitZoneShortName}`
+                  : `Døgnkort · gyldig til ${riverStatus.permitExpiry}`
             }
             state={stateFor(["noPermit", "wrongZone"])}
           />
@@ -111,7 +119,7 @@ export function HomeScreen({
                 ? "Utløpt"
                 : demoStatus === "otherRiver"
                   ? "Nytt vassdrag registrert"
-                  : "Gyldig 20 dager · ingen andre vassdrag"
+                  : riverStatus.disinfectionSummary
             }
             state={stateFor(["expiredDisinfection", "otherRiver"])}
           />
@@ -167,15 +175,15 @@ export function HomeScreen({
             {demoStatus === "hotWater"
               ? `Vanntemperatur ${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C`
               : demoStatus === "closed"
-                ? "Sone 3 er stengt"
-                : "Vannføring 18 m³/s"}
+                ? `${riverStatus.currentZoneShortName} er stengt`
+                : `Vannføring ${riverStatus.flowCubicMetersPerSecond} m³/s`}
           </h3>
           <p>
             {demoStatus === "hotWater"
               ? "Alt fiske er midlertidig stanset"
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel · se åpne soner"
-                : `Vanntemperatur 11 °C · stans ved over ${temperature.closureThresholdCelsius} °C`}
+                : `Vanntemperatur ${riverStatus.temperatureCelsius} °C · stans ved over ${temperature.closureThresholdCelsius} °C`}
           </p>
         </div>
         <span className="trend">→</span>

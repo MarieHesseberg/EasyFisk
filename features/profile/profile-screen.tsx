@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
+import { appContentRepository } from "@/data/repositories/app-content";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
@@ -49,14 +50,15 @@ const items: MenuItem[] = [
 
 export function ProfileScreen() {
   const [detail, setDetail] = useState<DetailDestination | null>(null);
+  const { profile } = appContentRepository.getContent();
   return (
     <div className="screen">
       <ScreenHeader title="Mer" />
       <button className="more-profile-card" onClick={() => setDetail("profile-privacy")}>
-        <div className="avatar">MF</div>
+        <div className="avatar">{profile.initials}</div>
         <div>
           <h2>Fiskerprofil</h2>
-          <p>Fisker-ID · 10482</p>
+          <p>Fisker-ID · {profile.fisherId}</p>
         </div>
         <Icon name="chevron" />
       </button>

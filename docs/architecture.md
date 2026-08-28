@@ -119,7 +119,9 @@ historiske rapporter og framtidig datamigrering.
 ## Framtidige datakilder
 
 Database og API legges til bak små grensesnitt. `FishingContentRepository` leverer soner, regler og
-demonstrasjonsscenarioer. `FishingLogRepository` lagrer økter og fangster. Den aktive
+demonstrasjonsscenarioer. `AppContentRepository` leverer typet profil-, status-, statistikk- og
+demonstrasjonsinnhold uten at visningskomponentene kjenner mockadapteren. `FishingLogRepository`
+lagrer økter og fangster. Den aktive
 minneimplementasjonen brukes i tester, mens nettleserprototypen bruker `localStorage`. Begge kan
 senere erstattes med en databaseadapter uten å endre skjermene eller domenereglene.
 

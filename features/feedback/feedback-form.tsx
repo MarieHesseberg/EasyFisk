@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { appContentRepository } from "@/data/repositories/app-content";
+
+const { feedback } = appContentRepository.getContent();
 
 export function FeedbackForm() {
   const [step, setStep] = useState(1),
@@ -11,14 +14,6 @@ export function FeedbackForm() {
     [position, setPosition] = useState(false),
     [touched, setTouched] = useState(false),
     [confirmed, setConfirmed] = useState(false);
-  const categories = [
-    "Ulovlig eller mistenkelig fiske",
-    "Syk, skadet eller død fisk",
-    "Forsøpling eller miljøproblem",
-    "Hindring eller skade i elva",
-    "Feil i kart, sone eller informasjon",
-    "Annet",
-  ];
   const valid = category !== "" && description.trim().length >= 10;
   if (step === 3)
     return (
@@ -29,12 +24,12 @@ export function FeedbackForm() {
         <small>MELDINGEN ER SENDT</small>
         <h3>Takk for at du meldte fra</h3>
         <p>
-          Mandalselva Elveeigarlag har mottatt meldingen. Du kan bruke referansen dersom du
+          {feedback.organizationName} har mottatt meldingen. Du kan bruke referansen dersom du
           kontakter laget senere.
         </p>
         <div>
           <small>REFERANSE</small>
-          <b>ME-TIPS-2026-0819-047</b>
+          <b>{feedback.reference}</b>
         </div>
         <button
           className="primary"
@@ -77,7 +72,7 @@ export function FeedbackForm() {
             Kategori <em>påkrevd</em>
           </label>
           <div className="feedback-categories">
-            {categories.map((x) => (
+            {feedback.categories.map((x) => (
               <button
                 key={x}
                 className={category === x ? "selected" : ""}
@@ -135,7 +130,8 @@ export function FeedbackForm() {
             </button>
             {position && (
               <p>
-                <Icon name="check" size={14} /> Sone 3 · posisjon hentet med samtykke
+                <Icon name="check" size={14} /> {feedback.positionLabel} · posisjon hentet med
+                samtykke
               </p>
             )}
           </div>
@@ -169,7 +165,9 @@ export function FeedbackForm() {
             </p>
             <p>
               <small>POSISJON</small>
-              <b>{position ? "Sone 3 · lagt ved med samtykke" : "Ikke lagt ved"}</b>
+              <b>
+                {position ? `${feedback.positionLabel} · lagt ved med samtykke` : "Ikke lagt ved"}
+              </b>
             </p>
           </div>
           <label className="privacy-confirm">
@@ -179,8 +177,8 @@ export function FeedbackForm() {
               onChange={(e) => setConfirmed(e.target.checked)}
             />
             <span>
-              Jeg bekrefter at opplysningene er riktige. Meldingen kan behandles av Mandalselva
-              Elveeigarlag.
+              Jeg bekrefter at opplysningene er riktige. Meldingen kan behandles av{" "}
+              {feedback.organizationName}.
             </span>
           </label>
           <button className="primary" disabled={!confirmed} onClick={() => setStep(3)}>

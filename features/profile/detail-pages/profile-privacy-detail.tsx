@@ -2,31 +2,33 @@
 
 import { useState } from "react";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
+import { appContentRepository } from "@/data/repositories/app-content";
 
 export function ProfilePrivacyDetail() {
   const [saved, setSaved] = useState(false);
   const { preferences, setPositionSuggestions, setShareAnonymousData } = usePreferencesController();
+  const { profile } = appContentRepository.getContent();
   return (
     <div className="specific-detail">
       <div className="profile-detail">
-        <div className="avatar">MF</div>
+        <div className="avatar">{profile.initials}</div>
         <div>
           <h3>Fiskerprofil</h3>
-          <p>Fisker-ID 10482</p>
+          <p>Fisker-ID {profile.fisherId}</p>
         </div>
       </div>
       <div className="detail-data">
         <p>
           <span>Navn</span>
-          <b>Prototypebruker</b>
+          <b>{profile.name}</b>
         </p>
         <p>
           <span>Telefon</span>
-          <b>•• •• •• 82</b>
+          <b>{profile.maskedPhone}</b>
         </p>
         <p>
           <span>Språk</span>
-          <b>Norsk bokmål</b>
+          <b>{profile.language}</b>
         </p>
       </div>
       <h3 className="detail-subtitle">Personvern og samtykker</h3>

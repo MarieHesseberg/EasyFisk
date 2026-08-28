@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { appContentRepository } from "@/data/repositories/app-content";
 
 export function DisinfectionDetail() {
   const [saved, setSaved] = useState(false);
   const [showStations, setShowStations] = useState(false);
+  const { disinfection, disinfectionStations } = appContentRepository.getContent().profile;
   return (
     <div className="specific-detail">
       <div className="detail-hero valid">
@@ -13,21 +15,21 @@ export function DisinfectionDetail() {
         <div>
           <small>STATUS</small>
           <h3>Desinfisering er gyldig</h3>
-          <p>Registrert ved Marnar Laksesenter</p>
+          <p>Registrert ved {disinfection.station}</p>
         </div>
       </div>
       <div className="detail-data">
         <p>
           <span>Registrert</span>
-          <b>30. juli 2026 · 14:22</b>
+          <b>{disinfection.registeredAt}</b>
         </p>
         <p>
           <span>Gyldig til</span>
-          <b>19. august 2026 · 14:22</b>
+          <b>{disinfection.validUntil}</b>
         </p>
         <p>
           <span>Andre vassdrag</span>
-          <b>Ingen registrert etterpå</b>
+          <b>{disinfection.otherRivers}</b>
         </p>
       </div>
       <div className="detail-warning">
@@ -45,18 +47,12 @@ export function DisinfectionDetail() {
       </button>
       {showStations && (
         <div className="detail-list">
-          <p>
-            <b>Marnar Laksesenter</b>
-            <span>Øyslebø · 2,4 km</span>
-          </p>
-          <p>
-            <b>Laudal kortutsalg</b>
-            <span>Laudal · 13 km</span>
-          </p>
-          <p>
-            <b>Mandal servicesenter</b>
-            <span>Mandal · 21 km</span>
-          </p>
+          {disinfectionStations.map((station) => (
+            <p key={station.title}>
+              <b>{station.title}</b>
+              <span>{station.description}</span>
+            </p>
+          ))}
         </div>
       )}
     </div>

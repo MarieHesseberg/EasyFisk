@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
+import { appContentRepository } from "@/data/repositories/app-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { RuleCenter } from "@/features/rules/rule-center";
@@ -13,8 +14,9 @@ export function RulesScreen({
 }) {
   const missing = demoStatus === "noPermit";
   const { metadata, quota, reporting, season } = activeFishingRules;
+  const { riverStatus } = appContentRepository.getContent();
   const personalZone =
-    demoStatus === "wrongZone" ? "Sone 2 · Fuskeland–Hesså" : "Sone 3 · Øyslebø–Laudal";
+    demoStatus === "wrongZone" ? riverStatus.alternatePermitZoneName : riverStatus.currentZoneName;
   return (
     <div className="screen rules-screen">
       <ScreenHeader
@@ -44,7 +46,7 @@ export function RulesScreen({
             <p className="permit-zone">
               <Icon name="pin" size={17} />
               <b>{personalZone}</b>
-              <span>Døgnkort · gyldig til 17:59</span>
+              <span>Døgnkort · gyldig til {riverStatus.permitExpiry}</span>
             </p>
             <div className="personal-rule-list">
               <p>

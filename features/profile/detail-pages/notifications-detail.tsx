@@ -2,28 +2,13 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
-import type { NotificationPreference } from "@/domain/preferences/preferences";
+import { appContentRepository } from "@/data/repositories/app-content";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
-
-const notifications: Array<[NotificationPreference, string, string]> = [
-  ["emergencyClosure", "Akutt stengning", "Varsle dersom hele elva eller min sone stenges"],
-  [
-    "highTemperature",
-    "Høy vanntemperatur",
-    `Varsle når temperaturen nærmer seg ${activeFishingRules.temperature.closureThresholdCelsius} °C`,
-  ],
-  ["ruleChanges", "Regelendringer", "Varsle når kvoter eller fisketider endres"],
-  [
-    "reportingDeadline",
-    "Rapporteringsfrist",
-    "Påminnelse hvis en fangst ikke er ferdig rapportert",
-  ],
-];
 
 export function NotificationsDetail() {
   const [saved, setSaved] = useState(false);
   const { preferences, setNotification } = usePreferencesController();
+  const { notificationOptions, notificationStatus } = appContentRepository.getContent().profile;
   return (
     <div className="specific-detail">
       <div className="detail-alert">
@@ -31,12 +16,12 @@ export function NotificationsDetail() {
         <div>
           <small>STATUS NÅ</small>
           <h3>Elva er åpen</h3>
-          <p>11 °C ved Kjølemo · ingen aktive stengninger</p>
+          <p>{notificationStatus}</p>
         </div>
       </div>
       <h3 className="detail-subtitle">Mine varsler</h3>
       <div className="toggle-list">
-        {notifications.map(([id, label, description]) => (
+        {notificationOptions.map(({ id, label, description }) => (
           <label key={id}>
             <span>
               <b>{label}</b>
