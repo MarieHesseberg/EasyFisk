@@ -1,6 +1,6 @@
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import { Status } from "@/components/ui/status-row";
+import { RequirementStatusRow } from "@/components/ui/requirement-status-row";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
@@ -8,7 +8,7 @@ import { statusState } from "@/domain/fishing-rules/status-checks";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { formatClock, formatDuration } from "@/lib/time";
 
-export function Home({
+export function HomeScreen({
   onStart,
   onRules,
   onFeedback,
@@ -38,7 +38,7 @@ export function Home({
   const stateFor = (ids: DemoStatus[]) => statusState(demoStatus, ids, scenario.level);
   return (
     <div className="screen">
-      <Header title="Din fiskeoversikt" />
+      <ScreenHeader title="Din fiskeoversikt" />
       <section className={"status-card " + (active ? "active" : scenario.level)}>
         <div className="status-top">
           <span className="status-icon">
@@ -85,7 +85,7 @@ export function Home({
           <button onClick={onControlCard}>Vis kontrollkort</button>
         </div>
         <div className="check-grid">
-          <Status
+          <RequirementStatusRow
             icon="ticket"
             title={
               demoStatus === "noPermit"
@@ -103,7 +103,7 @@ export function Home({
             }
             state={stateFor(["noPermit", "wrongZone"])}
           />
-          <Status
+          <RequirementStatusRow
             icon="shield"
             title="Desinfisering"
             sub={
@@ -115,13 +115,13 @@ export function Home({
             }
             state={stateFor(["expiredDisinfection", "otherRiver"])}
           />
-          <Status
+          <RequirementStatusRow
             icon="book"
             title="Statlig fiskeravgift"
             sub={demoStatus === "noFee" ? "Ikke dokumentert" : "Betalt og dokumentert"}
             state={stateFor(["noFee"])}
           />
-          <Status
+          <RequirementStatusRow
             icon="fish"
             title={
               demoStatus === "lateReport"

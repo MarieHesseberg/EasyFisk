@@ -1,6 +1,6 @@
 import { Icon } from "@/components/ui/icon";
 
-export function Status({
+export function RequirementStatusRow({
   icon,
   title,
   sub,

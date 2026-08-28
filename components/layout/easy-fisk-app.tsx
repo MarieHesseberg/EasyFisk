@@ -8,12 +8,12 @@ import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
-import { Home } from "@/features/home/home-screen";
+import { HomeScreen } from "@/features/home/home-screen";
 import { MapScreen } from "@/features/map/map-screen";
-import { Detail } from "@/features/profile/detail";
-import { More } from "@/features/profile/more-screen";
+import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
+import { ProfileScreen } from "@/features/profile/profile-screen";
 import { RulesScreen } from "@/features/rules/rules-screen";
-import { Stats } from "@/features/statistics/statistics-screen";
+import { StatisticsScreen } from "@/features/statistics/statistics-screen";
 
 export function EasyFiskApp() {
   const { state, actions } = useEasyFiskController();
@@ -59,7 +59,7 @@ export function EasyFiskApp() {
     <main className="prototype-shell">
       <div className="phone-app">
         {screen === "home" && (
-          <Home
+          <HomeScreen
             onStart={actions.openSessionFlow}
             onRules={() => actions.navigate("rules")}
             onFeedback={() => actions.openDetail("feedback")}
@@ -83,7 +83,7 @@ export function EasyFiskApp() {
           />
         )}{" "}
         {screen === "stats" && (
-          <Stats
+          <StatisticsScreen
             active={active}
             onStart={() => actions.setFlow("start")}
             onStop={() => actions.setFlow("stop")}
@@ -102,7 +102,7 @@ export function EasyFiskApp() {
             lastSession={lastSession}
           />
         )}{" "}
-        {screen === "more" && <More />}
+        {screen === "more" && <ProfileScreen />}
         <nav className="bottom-nav" aria-label="Hovednavigasjon">
           {nav.map(([id, label, icon]) => (
             <button
@@ -137,7 +137,9 @@ export function EasyFiskApp() {
             resolveBlock={actions.resolveBlockedStatus}
           />
         )}
-        {globalDetail && <Detail destination={globalDetail} close={actions.closeDetail} />}
+        {globalDetail && (
+          <ProfileDetailDialog destination={globalDetail} close={actions.closeDetail} />
+        )}
       </div>
       <aside className="prototype-note feature-panel">
         <span>DEMONSTRASJONSMODUS</span>

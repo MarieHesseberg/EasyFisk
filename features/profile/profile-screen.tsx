@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
-import { Detail } from "@/features/profile/detail";
+import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 
 type MenuItem = {
   destination: Exclude<DetailDestination, "feedback" | "control-card">;
@@ -47,11 +47,11 @@ const items: MenuItem[] = [
   },
 ];
 
-export function More() {
+export function ProfileScreen() {
   const [detail, setDetail] = useState<DetailDestination | null>(null);
   return (
     <div className="screen">
-      <Header title="Mer" />
+      <ScreenHeader title="Mer" />
       <button className="more-profile-card" onClick={() => setDetail("profile-privacy")}>
         <div className="avatar">MF</div>
         <div>
@@ -84,7 +84,7 @@ export function More() {
         EasyFisk prototype · innhold kontrollert{" "}
         {activeFishingRules.metadata.numericSourcesCheckedLabel}
       </p>
-      {detail && <Detail destination={detail} close={() => setDetail(null)} />}
+      {detail && <ProfileDetailDialog destination={detail} close={() => setDetail(null)} />}
     </div>
   );
 }

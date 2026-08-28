@@ -4,7 +4,7 @@ import { detailTitles } from "@/features/profile/detail-pages/detail-page-types"
 import { ProfileDetailContent } from "@/features/profile/detail-pages/profile-detail-content";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 
-export function Detail({
+export function ProfileDetailDialog({
   destination,
   close,
 }: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
@@ -34,7 +34,7 @@ export function MapScreen({
   };
   return (
     <div className="screen map-screen">
-      <Header title="Fiskesoner" eyebrow="MANDALSELVA · VEILEDENDE KART" />
+      <ScreenHeader title="Fiskesoner" eyebrow="MANDALSELVA · VEILEDENDE KART" />
       <div className="map-canvas">
         <div className="map-label a">Mandal / Vik</div>
         <div className="map-label b">Øyslebø</div>

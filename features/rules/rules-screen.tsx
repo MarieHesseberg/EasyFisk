@@ -1,4 +1,4 @@
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
@@ -17,7 +17,7 @@ export function RulesScreen({
     demoStatus === "wrongZone" ? "Sone 2 · Fuskeland–Hesså" : "Sone 3 · Øyslebø–Laudal";
   return (
     <div className="screen rules-screen">
-      <Header
+      <ScreenHeader
         title="Fiskeregler"
         eyebrow={`${metadata.river.toUpperCase()} · REGELVERSJON ${metadata.versionLabel.toUpperCase()}`}
       />

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 
-export function Header({ title, eyebrow }: { title: string; eyebrow?: string }) {
+export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: string }) {
   const [showAlerts, setShowAlerts] = useState(false);
   return (
     <header className="app-header">

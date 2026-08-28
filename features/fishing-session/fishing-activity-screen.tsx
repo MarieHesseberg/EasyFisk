@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { PastSessionForm } from "@/features/history/past-session-form";
-import { History } from "@/features/statistics/history-card";
+import { FishingHistoryCard } from "@/features/statistics/fishing-history-card";
 import { formatClock, formatDuration, formatLongDuration } from "@/lib/time";
 
-export function Activity({
+export function FishingActivityScreen({
   active,
   onStart,
   onStop,
@@ -54,7 +54,7 @@ export function Activity({
 
   return (
     <div className={embedded ? "activity-embedded" : "screen"}>
-      {!embedded && <Header title="Min aktivitet" />}
+      {!embedded && <ScreenHeader title="Min aktivitet" />}
       {active ? (
         <section className="active-session">
           <span className="pulse" />
@@ -146,14 +146,14 @@ export function Activity({
           </button>
         </div>
         {lastSession && (
-          <History
+          <FishingHistoryCard
             day={String(new Date(lastSession.end).getDate()).padStart(2, "0")}
             title={lastSession.zone}
             time={`${formatClock(lastSession.start)}–${formatClock(lastSession.end)} · ${formatLongDuration(lastSession.duration)}`}
             result={lastSession.result}
           />
         )}
-        <History
+        <FishingHistoryCard
           day="16"
           title="Sone 2 · Fuskeland B"
           time="18:10–21:42 · 3 t 32 min"
@@ -161,13 +161,13 @@ export function Activity({
         />
         {showAllHistory && (
           <>
-            <History
+            <FishingHistoryCard
               day="08"
               title="Sone 1 · Mandal–Krossen"
               time="19:20–20:55 · 1 t 35 min"
               result="1 sjøørret · gjenutsatt"
             />
-            <History
+            <FishingHistoryCard
               day="03"
               title="Sone 4 · Laudal–Kavfossen"
               time="06:40–09:05 · 2 t 25 min"
@@ -175,7 +175,7 @@ export function Activity({
             />
           </>
         )}
-        <History
+        <FishingHistoryCard
           day="12"
           title="Sone 3 · Øyslebø–Laudal"
           time="07:15–10:03 · 2 t 48 min"

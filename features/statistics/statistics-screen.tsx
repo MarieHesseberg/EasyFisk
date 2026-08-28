@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
-import { Activity } from "@/features/fishing-session/activity-screen";
+import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
 
 const zones = fishingContentRepository.getZones();
 
-export function StatsContent() {
+export function StatisticsOverview() {
   const [area, setArea] = useState("Hele elva"),
     [period, setPeriod] = useState("Sesongen");
   return (
@@ -82,7 +82,7 @@ export function StatsContent() {
     </>
   );
 }
-export function Stats({
+export function StatisticsScreen({
   active,
   onStart,
   onStop,
@@ -120,7 +120,7 @@ export function Stats({
   const [view, setView] = useState<"general" | "mine">(active || openMine ? "mine" : "general");
   return (
     <div className="screen">
-      <Header title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
+      <ScreenHeader title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
       <div className="stats-tabs">
         <button
           className={view === "general" ? "selected" : ""}
@@ -138,9 +138,9 @@ export function Stats({
         </button>
       </div>
       {view === "general" ? (
-        <StatsContent />
+        <StatisticsOverview />
       ) : (
-        <Activity
+        <FishingActivityScreen
           embedded
           active={active}
           onStart={onStart}
