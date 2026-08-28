@@ -2,13 +2,11 @@ import type { KeyValueStorage } from "../contracts/key-value-storage";
 import type { PreferencesRepository } from "../contracts/preferences-repository";
 import {
   defaultUserPreferences,
-  type UserPreferences,
 } from "../../domain/preferences/preferences.ts";
 import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
+import { parseStoredPreferences, type StoredPreferences } from "./parse-persisted-data.ts";
 
 const defaultStorageKey = "easyfisk:preferences:v1";
-
-type StoredPreferences = { version: 1; preferences: UserPreferences };
 
 export function createLocalStoragePreferencesRepository(
   storage: KeyValueStorage,
@@ -19,11 +17,8 @@ export function createLocalStoragePreferencesRepository(
       try {
         const value = storage.getItem(key);
         if (!value) return structuredClone(defaultUserPreferences);
-        const parsed = JSON.parse(value) as Partial<StoredPreferences>;
-        if (parsed.version !== 1 || !parsed.preferences) {
-          return structuredClone(defaultUserPreferences);
-        }
-        return { ...structuredClone(defaultUserPreferences), ...parsed.preferences };
+        const parsed = parseStoredPreferences(JSON.parse(value));
+        return parsed?.preferences ?? structuredClone(defaultUserPreferences);
       } catch {
         return structuredClone(defaultUserPreferences);
       }

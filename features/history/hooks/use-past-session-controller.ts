@@ -13,6 +13,7 @@ import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
 import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
 import { useImageSelection } from "@/hooks/use-image-selection";
+import { useFormFields } from "@/hooks/use-form-fields";
 
 export function usePastSessionController({
   existingCatches,
@@ -25,21 +26,41 @@ export function usePastSessionController({
   const [openedAt] = useState(() => Date.now());
   const today = new Date(openedAt).toISOString().slice(0, 10);
   const [step, setStep] = useState(1);
-  const [date, setDate] = useState(today);
-  const [from, setFrom] = useState("17:00");
-  const [to, setTo] = useState("19:00");
-  const [zone, setZone] = useState<ZoneId>(3);
-  const [subzone, setSubzone] = useState("");
-  const [caught, setCaught] = useState(false);
-  const [catchAt, setCatchAt] = useState("18:00");
-  const [species, setSpecies] = useState<FishSpecies>("Laks");
-  const [outcome, setOutcome] = useState<CatchOutcome>("Gjenutsatt");
-  const [length, setLength] = useState("");
-  const [weight, setWeight] = useState("");
-  const [comment, setComment] = useState("");
+  const sessionForm = useFormFields<{
+    caught: boolean;
+    date: string;
+    from: string;
+    subzone: string;
+    to: string;
+    zone: ZoneId;
+  }>({
+    caught: false,
+    date: today,
+    from: "17:00",
+    subzone: "",
+    to: "19:00",
+    zone: fishingContentRepository.getSuggestedZoneId(),
+  });
+  const catchForm = useFormFields<{
+    catchAt: string;
+    comment: string;
+    length: string;
+    outcome: CatchOutcome;
+    species: FishSpecies;
+    weight: string;
+  }>({
+    catchAt: "18:00",
+    comment: "",
+    length: "",
+    outcome: "Gjenutsatt",
+    species: "Laks",
+    weight: "",
+  });
   const image = useImageSelection({ includeData: true });
   const [reports, setReports] = useState<CatchRecord[]>([]);
   const [touched, setTouched] = useState(false);
+  const { caught, date, from, subzone, to, zone } = sessionForm.fields;
+  const { catchAt, comment, length, outcome, species, weight } = catchForm.fields;
 
   const start = new Date(`${date}T${from}`).getTime();
   const end = new Date(`${date}T${to}`).getTime();
@@ -57,13 +78,8 @@ export function usePastSessionController({
   const subzones = getSubzones(zone);
 
   function resetCatch() {
-    setSpecies("Laks");
-    setOutcome("Gjenutsatt");
-    setLength("");
-    setWeight("");
-    setComment("");
+    catchForm.reset({ catchAt: to });
     image.reset();
-    setCatchAt(to);
   }
 
   function addCatch(review: boolean) {
@@ -144,20 +160,20 @@ export function usePastSessionController({
       addCatch,
       removeCatch,
       selectImage: image.select,
-      setCatchAt,
-      setCaught,
-      setComment,
-      setDate,
-      setFrom,
-      setLength,
-      setOutcome,
-      setSpecies,
+      setCatchAt: (value: string) => catchForm.setField("catchAt", value),
+      setCaught: (value: boolean) => sessionForm.setField("caught", value),
+      setComment: (value: string) => catchForm.setField("comment", value),
+      setDate: (value: string) => sessionForm.setField("date", value),
+      setFrom: (value: string) => sessionForm.setField("from", value),
+      setLength: (value: string) => catchForm.setField("length", value),
+      setOutcome: (value: CatchOutcome) => catchForm.setField("outcome", value),
+      setSpecies: (value: FishSpecies) => catchForm.setField("species", value),
       setStep,
-      setSubzone,
-      setTo,
+      setSubzone: (value: string) => sessionForm.setField("subzone", value),
+      setTo: (value: string) => sessionForm.setField("to", value),
       setTouched,
-      setWeight,
-      setZone,
+      setWeight: (value: string) => catchForm.setField("weight", value),
+      setZone: (value: ZoneId) => sessionForm.setField("zone", value),
       submit,
     },
   };

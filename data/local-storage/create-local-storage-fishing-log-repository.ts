@@ -1,32 +1,22 @@
 import type { KeyValueStorage } from "../contracts/key-value-storage";
 import type { FishingLogRepository } from "../contracts/fishing-log-repository";
-import type { CatchRecord } from "../../domain/catches/catch";
-import type { ActiveSessionSnapshot, SessionRecord } from "../../domain/sessions/session";
 import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
+import { parseStoredFishingLog, type StoredFishingLog } from "./parse-persisted-data.ts";
 
 const defaultStorageKey = "easyfisk:fishing-log:v1";
 
-type StoredFishingLog = {
-  version: 1;
-  catches: CatchRecord[];
-  latestSession: SessionRecord | null;
-  activeSession?: ActiveSessionSnapshot | null;
+const emptyLog: StoredFishingLog = {
+  version: 1,
+  catches: [],
+  latestSession: null,
+  activeSession: null,
 };
-
-const emptyLog: StoredFishingLog = { version: 1, catches: [], latestSession: null };
 
 function readLog(storage: KeyValueStorage, key: string): StoredFishingLog {
   try {
     const value = storage.getItem(key);
     if (!value) return emptyLog;
-    const parsed = JSON.parse(value) as Partial<StoredFishingLog>;
-    if (parsed.version !== 1 || !Array.isArray(parsed.catches)) return emptyLog;
-    return {
-      version: 1,
-      catches: parsed.catches,
-      latestSession: parsed.latestSession ?? null,
-      activeSession: parsed.activeSession ?? null,
-    };
+    return parseStoredFishingLog(JSON.parse(value)) ?? emptyLog;
   } catch {
     return emptyLog;
   }

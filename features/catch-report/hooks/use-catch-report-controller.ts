@@ -5,6 +5,7 @@ import { useState } from "react";
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
 import { useFormSubmission } from "@/hooks/use-form-submission";
+import { useFormFields } from "@/hooks/use-form-fields";
 import { useImageSelection } from "@/hooks/use-image-selection";
 
 export function useCatchReportController({
@@ -21,16 +22,27 @@ export function useCatchReportController({
   sessionStart: number;
 }) {
   const [step, setStep] = useState(1);
-  const [species, setSpecies] = useState<FishSpecies>("Laks");
-  const [result, setResult] = useState<CatchOutcome>("Gjenutsatt");
-  const [length, setLength] = useState("");
-  const [weight, setWeight] = useState("");
-  const [comment, setComment] = useState("");
-  const [touched, setTouched] = useState(false);
-  const [violationConfirmed, setViolationConfirmed] = useState(false);
+  const form = useFormFields<{
+    comment: string;
+    length: string;
+    result: CatchOutcome;
+    species: FishSpecies;
+    touched: boolean;
+    violationConfirmed: boolean;
+    weight: string;
+  }>({
+    comment: "",
+    length: "",
+    result: "Gjenutsatt",
+    species: "Laks",
+    touched: false,
+    violationConfirmed: false,
+    weight: "",
+  });
   const [submitted, setSubmitted] = useState(false);
   const image = useImageSelection({ includeData: true });
   const submission = useFormSubmission("Kunne ikke lagre fangsten. Prøv igjen.");
+  const { comment, length, result, species, touched, violationConfirmed, weight } = form.fields;
 
   const lengthNumber = parseMeasurement(length);
   const weightNumber = parseMeasurement(weight);
@@ -64,7 +76,7 @@ export function useCatchReportController({
   }
 
   function continueToReview() {
-    setTouched(true);
+    form.setField("touched", true);
     if (validation.detailsValid) setStep(3);
   }
 
@@ -92,13 +104,13 @@ export function useCatchReportController({
     actions: {
       continueToReview,
       selectImage: image.select,
-      setComment,
-      setLength,
-      setResult,
-      setSpecies,
+      setComment: (value: string) => form.setField("comment", value),
+      setLength: (value: string) => form.setField("length", value),
+      setResult: (value: CatchOutcome) => form.setField("result", value),
+      setSpecies: (value: FishSpecies) => form.setField("species", value),
       setStep,
-      setViolationConfirmed,
-      setWeight,
+      setViolationConfirmed: (value: boolean) => form.setField("violationConfirmed", value),
+      setWeight: (value: string) => form.setField("weight", value),
       submit,
     },
   };

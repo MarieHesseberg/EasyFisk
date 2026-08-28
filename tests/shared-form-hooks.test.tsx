@@ -3,6 +3,20 @@ import { expect, test } from "vitest";
 
 import { useFormSubmission } from "../hooks/use-form-submission";
 import { useImageSelection } from "../hooks/use-image-selection";
+import { useFormFields } from "../hooks/use-form-fields";
+
+test("gruppert skjemastate oppdaterer ett felt og nullstilles samlet", () => {
+  const { result } = renderHook(() => useFormFields({ name: "", accepted: false }));
+
+  act(() => {
+    result.current.setField("name", "Marie");
+    result.current.setField("accepted", true);
+  });
+  expect(result.current.fields).toEqual({ name: "Marie", accepted: true });
+
+  act(() => result.current.reset());
+  expect(result.current.fields).toEqual({ name: "", accepted: false });
+});
 
 test("bildevalg avviser ugyldig fil og kan nullstilles", () => {
   const { result } = renderHook(() => useImageSelection());

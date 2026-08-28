@@ -79,6 +79,43 @@ test("ødelagt localStorage-data gir trygge standardverdier", () => {
   assert.deepEqual(createLocalStorageFishingLogRepository(storage).listCatches(), []);
 });
 
+test("syntaktisk gyldig JSON med ugyldige domenedata avvises", () => {
+  const storage = createStorage();
+  storage.setItem(
+    "easyfisk:fishing-log:v1",
+    JSON.stringify({
+      version: 1,
+      catches: [{ ...catchRecord, species: "Ukjent art", caughtAt: "i går" }],
+      latestSession: null,
+    }),
+  );
+
+  const repository = createLocalStorageFishingLogRepository(storage);
+  assert.deepEqual(repository.listCatches(), []);
+  assert.equal(repository.getLatestSession(), null);
+});
+
+test("ugyldige innstillingstyper erstattes med sikre standardverdier", () => {
+  const storage = createStorage();
+  storage.setItem(
+    "easyfisk:preferences:v1",
+    JSON.stringify({
+      version: 1,
+      preferences: {
+        favoriteZones: [3],
+        notifications: { highTemperature: "ja" },
+        positionSuggestions: "ja",
+        shareAnonymousData: null,
+      },
+    }),
+  );
+
+  const preferences = createLocalStoragePreferencesRepository(storage).getPreferences();
+  assert.equal(preferences.positionSuggestions, true);
+  assert.equal(preferences.notifications.highTemperature, true);
+  assert.equal(typeof preferences.favoriteZones[0], "string");
+});
+
 test("profilinnstillinger beholdes etter ny repository-instans", () => {
   const storage = createStorage();
   const repository = createLocalStoragePreferencesRepository(storage);
