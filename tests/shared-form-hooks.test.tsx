@@ -4,6 +4,7 @@ import { expect, test } from "vitest";
 import { useFormSubmission } from "../hooks/use-form-submission";
 import { useImageSelection } from "../hooks/use-image-selection";
 import { useFormFields } from "../hooks/use-form-fields";
+import { operationFailed } from "../domain/shared/operation-result";
 
 test("gruppert skjemastate oppdaterer ett felt og nullstilles samlet", () => {
   const { result } = renderHook(() => useFormFields({ name: "", accepted: false }));
@@ -76,4 +77,16 @@ test("innsendingshook gjør teknisk feil om til forståelig skjemafeil", async (
     ).toBe(false);
   });
   expect(result.current.error).toBe("Kunne ikke sende.");
+});
+
+test("innsendingshook beholder feilmeldingen fra et mislykket lagringsresultat", async () => {
+  const { result } = renderHook(() => useFormSubmission("Generell feil."));
+
+  await act(async () => {
+    expect(
+      await result.current.run(() => operationFailed("Kunne ikke lagre fiskedata på enheten.")),
+    ).toBe(false);
+  });
+
+  expect(result.current.error).toBe("Kunne ikke lagre fiskedata på enheten.");
 });

@@ -92,7 +92,7 @@ export function EasyFiskApp() {
           navigate={actions.navigate}
         />
         {toast && (
-          <div className="toast">
+          <div className="toast" role="status" aria-live="polite" aria-atomic="true">
             <Icon name="check" size={18} />
             {toast}
           </div>

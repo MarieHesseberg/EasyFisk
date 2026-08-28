@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/icon";
 import { appContentRepository } from "@/data/repositories/app-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
+import type { OperationResult } from "@/domain/shared/operation-result";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { ActiveSessionCard } from "@/features/fishing-session/components/active-session-card";
@@ -35,8 +36,8 @@ export function FishingActivityScreen({
   active: boolean;
   onStart: () => void;
   onStop: () => void;
-  onAddPast: (record: SessionRecord, catchRecords?: CatchRecord[]) => void;
-  onCatch: (record: CatchRecord) => void;
+  onAddPast: (record: SessionRecord, catchRecords?: CatchRecord[]) => OperationResult<unknown>;
+  onCatch: (record: CatchRecord) => OperationResult<unknown>;
   onCatchFlowComplete: () => void;
   finishAfterCatch: boolean;
   catches: CatchRecord[];

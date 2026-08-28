@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 import { appContentRepository } from "@/data/repositories/app-content";
+import { FormError } from "@/components/ui/form-error";
 
 export function ProfilePrivacyDetail() {
   const [saved, setSaved] = useState(false);
-  const { preferences, setPositionSuggestions, setShareAnonymousData } = usePreferencesController();
+  const { error, preferences, setPositionSuggestions, setShareAnonymousData } =
+    usePreferencesController();
   const { profile } = appContentRepository.getContent();
   return (
     <div className="specific-detail">
@@ -56,7 +58,8 @@ export function ProfilePrivacyDetail() {
           />
         </label>
       </div>
-      <button className="primary" onClick={() => setSaved(true)}>
+      <FormError message={error} />
+      <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
         {saved ? "Innstillingene er lagret" : "Lagre innstillinger"}
       </button>
     </div>

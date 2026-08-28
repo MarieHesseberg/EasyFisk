@@ -2,6 +2,7 @@ import { afterEach, expect, test } from "vitest";
 import { act, cleanup, render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BottomNavigation } from "../components/layout/bottom-navigation";
+import { CheckRow } from "../components/ui/check-row";
 import { FeedbackForm } from "../features/feedback/feedback-form";
 import { MapScreen } from "../features/map/map-screen";
 import { ProfileDetailDialog } from "../features/profile/profile-detail-dialog";
@@ -9,6 +10,8 @@ import { useEasyFiskController } from "../application/easy-fisk/use-easy-fisk-co
 import { createMemoryFishingLogRepository } from "../data/memory/create-memory-fishing-log-repository";
 import { StopSessionStep } from "../features/fishing-session/fishing-flow/stop-session-step";
 import { operationFailed } from "../domain/shared/operation-result";
+import { CatchHistoryList } from "../features/fishing-session/components/catch-history-list";
+import { usePreferencesController } from "../features/profile/hooks/use-preferences-controller";
 
 afterEach(cleanup);
 
@@ -23,6 +26,21 @@ test("avslutningsdialogen viser sonen fra den aktive økten", () => {
     />,
   );
   expect(screen.getByText("Sone 4 · Laudal–Kavfossen")).toBeTruthy();
+});
+
+test("utilgjengelige historiske kontroller vises uten falsk godkjenning", () => {
+  render(
+    <CheckRow
+      title="Fiskekort på valgt dato"
+      sub="Fiskekortarkivet er ikke koblet til. Kontroller manuelt."
+      state="unavailable"
+    />,
+  );
+
+  const row = screen.getByText("Fiskekort på valgt dato").closest(".check-row");
+  expect(row?.classList.contains("unavailable")).toBe(true);
+  expect(row?.classList.contains("ok")).toBe(false);
+  expect(screen.getByText("Fiskekortarkivet er ikke koblet til. Kontroller manuelt.")).toBeTruthy();
 });
 
 test("hovednavigasjonen markerer valgt side og sender navigasjonshandling", async () => {
@@ -70,6 +88,36 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
   render(<MapScreen selected={3} setSelected={() => undefined} onUseZone={() => undefined} />);
   await userEvent.setup().click(screen.getByRole("button", { name: "Finn min posisjon" }));
   expect((await screen.findByRole("status")).textContent).toContain("Posisjonstilgang ble avslått");
+});
+
+test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {
+  render(<CatchHistoryList catches={[]} selectCatch={() => undefined} />);
+
+  expect(screen.getByText("Ingen fangster registrert")).toBeTruthy();
+});
+
+test("feil ved lagring av innstillinger blir tilgjengelig for brukergrensesnittet", () => {
+  const repository = {
+    getPreferences: () => ({
+      favoriteZones: [],
+      notifications: {
+        emergencyClosure: true,
+        highTemperature: true,
+        riverClosure: true,
+        ruleChanges: true,
+        reportingDeadline: true,
+      },
+      positionSuggestions: true,
+      shareAnonymousData: false,
+    }),
+    savePreferences: () => operationFailed("Kunne ikke lagre innstillingene på enheten."),
+  };
+  const { result } = renderHook(() => usePreferencesController(repository));
+
+  act(() => result.current.setPositionSuggestions(false));
+
+  expect(result.current.error).toBe("Kunne ikke lagre innstillingene på enheten.");
+  expect(result.current.preferences.positionSuggestions).toBe(true);
 });
 
 test("profildialog kan lukkes med Escape", async () => {
@@ -177,4 +225,56 @@ test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", () => 
   expect(result.current.state.lastSession).toBe(null);
   expect(result.current.state.flow).toBe("stop");
   expect(result.current.state.toast).toBe("Kunne ikke lagre fiskedata på enheten.");
+});
+
+test("mislykket fangstlagring returneres til fangstskjemaet", () => {
+  const memoryRepository = createMemoryFishingLogRepository();
+  const repository = {
+    ...memoryRepository,
+    saveCatch: () => operationFailed("Kunne ikke lagre fangsten."),
+  };
+  const { result } = renderHook(() => useEasyFiskController(repository));
+
+  let saveResult: ReturnType<typeof result.current.actions.addCatch> | undefined;
+  act(() => {
+    saveResult = result.current.actions.addCatch({
+      id: "pending",
+      caughtAt: Date.now(),
+      submittedAt: 0,
+      sessionStart: Date.now(),
+      species: "Laks",
+      result: "Gjenutsatt",
+      length: 65,
+      weight: 3,
+      zone: "Sone 3",
+      violation: false,
+      late: false,
+    });
+  });
+
+  expect(saveResult).toEqual({ ok: false, error: "Kunne ikke lagre fangsten." });
+  expect(result.current.state.catches).toHaveLength(0);
+});
+
+test("mislykket etterregistrering returneres til skjemaet", () => {
+  const memoryRepository = createMemoryFishingLogRepository();
+  const repository = {
+    ...memoryRepository,
+    saveCompletedSession: () => operationFailed("Kunne ikke lagre fisketuren."),
+  };
+  const { result } = renderHook(() => useEasyFiskController(repository));
+
+  let saveResult: ReturnType<typeof result.current.actions.addPastSession> | undefined;
+  act(() => {
+    saveResult = result.current.actions.addPastSession({
+      start: 1_000,
+      end: 4_000,
+      duration: 3,
+      zone: "Sone 3",
+      result: "Nullfangst · etterregistrert",
+    });
+  });
+
+  expect(saveResult).toEqual({ ok: false, error: "Kunne ikke lagre fisketuren." });
+  expect(result.current.state.lastSession).toBe(null);
 });

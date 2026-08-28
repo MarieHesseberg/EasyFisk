@@ -15,6 +15,7 @@ export function usePreferencesController(
   repository: PreferencesRepository = preferencesRepository,
 ) {
   const [preferences, setPreferences] = useState<UserPreferences>(defaultUserPreferences);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -27,18 +28,19 @@ export function usePreferencesController(
   }, [repository]);
 
   function update(change: (current: UserPreferences) => UserPreferences) {
-    setPreferences((current) => {
-      const next = change(current);
-      const result = repository.savePreferences(next);
-      if (!result.ok) {
-        logger.error(result.error, { cause: result.cause });
-        return current;
-      }
-      return next;
-    });
+    setError("");
+    const next = change(preferences);
+    const result = repository.savePreferences(next);
+    if (!result.ok) {
+      logger.error(result.error, { cause: result.cause });
+      setError(result.error);
+      return;
+    }
+    setPreferences(next);
   }
 
   return {
+    error,
     preferences,
     addFavorite: (zone: string) =>
       update((current) => ({

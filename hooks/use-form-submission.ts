@@ -1,17 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import type { OperationResult } from "@/domain/shared/operation-result";
 
 export function useFormSubmission(errorMessage: string) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  async function run(action: () => void | Promise<void>) {
+  async function run(
+    action: () => void | OperationResult<unknown> | Promise<void | OperationResult<unknown>>,
+  ) {
     if (isSubmitting) return false;
     setIsSubmitting(true);
     setError("");
     try {
-      await action();
+      const result = await action();
+      if (result && !result.ok) {
+        setError(result.error);
+        return false;
+      }
       return true;
     } catch {
       setError(errorMessage);

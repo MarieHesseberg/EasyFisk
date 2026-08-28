@@ -1,8 +1,6 @@
 import type { KeyValueStorage } from "../contracts/key-value-storage";
 import type { PreferencesRepository } from "../contracts/preferences-repository";
-import {
-  defaultUserPreferences,
-} from "../../domain/preferences/preferences.ts";
+import { defaultUserPreferences } from "../../domain/preferences/preferences.ts";
 import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
 import { parseStoredPreferences, type StoredPreferences } from "./parse-persisted-data.ts";
 

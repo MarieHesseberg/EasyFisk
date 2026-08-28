@@ -2,6 +2,7 @@
 
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
+import type { OperationResult } from "@/domain/shared/operation-result";
 import { usePastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { CatchDetailsStep } from "@/features/history/past-session/catch-details-step";
 import { ConfirmationStep } from "@/features/history/past-session/confirmation-step";
@@ -15,12 +16,12 @@ export function PastSessionForm({
   existingCatches,
 }: {
   onClose: () => void;
-  onSave: (record: SessionRecord, catches?: CatchRecord[]) => void;
+  onSave: (record: SessionRecord, catches?: CatchRecord[]) => OperationResult<unknown>;
   existingCatches: CatchRecord[];
 }) {
   const controller = usePastSessionController({ existingCatches, onSave });
   const { step } = controller.state;
-  const dialogRef = useDialogAccessibility(step === 4 ? onClose : undefined);
+  const dialogRef = useDialogAccessibility(onClose);
   return (
     <div className="modal-bg" onClick={step === 4 ? onClose : undefined}>
       <div

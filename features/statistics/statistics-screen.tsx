@@ -8,6 +8,7 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
+import type { OperationResult } from "@/domain/shared/operation-result";
 import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
 
 const zones = fishingContentRepository.getZones();
@@ -90,8 +91,8 @@ export function StatisticsScreen({
   active: boolean;
   onStart: () => void;
   onStop: () => void;
-  onAddPast: (record: SessionRecord, catchRecords?: CatchRecord[]) => void;
-  onCatch: (record: CatchRecord) => void;
+  onAddPast: (record: SessionRecord, catchRecords?: CatchRecord[]) => OperationResult<unknown>;
+  onCatch: (record: CatchRecord) => OperationResult<unknown>;
   onCatchFlowComplete: () => void;
   finishAfterCatch: boolean;
   catches: CatchRecord[];

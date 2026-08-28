@@ -6,13 +6,24 @@ type QuotaCatch = {
   caughtAt?: number;
 };
 
+const norwegianDateFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Europe/Oslo",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+export function getNorwegianCalendarDate(timestamp: number) {
+  return norwegianDateFormatter.format(new Date(timestamp));
+}
+
 export function countKilledSalmonForDay(catches: QuotaCatch[], day: string) {
   return catches.filter(
     (item) =>
       item.species === "Laks" &&
       item.result === "Avlivet" &&
       item.caughtAt !== undefined &&
-      new Date(item.caughtAt).toISOString().slice(0, 10) === day,
+      getNorwegianCalendarDate(item.caughtAt) === day,
   ).length;
 }
 
@@ -21,8 +32,8 @@ export function getQuotaStatus(
   sessionCatches: QuotaCatch[],
   seasonLimit = activeFishingRules.quota.killedSalmonPerSeason,
 ) {
-  const killedBefore = countKilled(existingCatches);
-  const killedInSession = countKilled(sessionCatches);
+  const killedBefore = countKilled(existingCatches.filter(isInActiveSeason));
+  const killedInSession = countKilled(sessionCatches.filter(isInActiveSeason));
 
   return {
     killedBefore,
@@ -31,6 +42,16 @@ export function getQuotaStatus(
     seasonAvailable: killedBefore + killedInSession < seasonLimit,
     dailyValid: killedInSession <= activeFishingRules.quota.killedSalmonPerDay,
   };
+}
+
+function isInActiveSeason(item: QuotaCatch) {
+  if (item.caughtAt === undefined) return false;
+
+  const caughtDate = getNorwegianCalendarDate(item.caughtAt);
+  return (
+    caughtDate >= activeFishingRules.season.startDate &&
+    caughtDate <= activeFishingRules.season.extendedEndDate
+  );
 }
 
 function countKilled(catches: QuotaCatch[]) {

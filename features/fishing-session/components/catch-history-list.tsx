@@ -8,7 +8,22 @@ export function CatchHistoryList({
   catches: CatchRecord[];
   selectCatch: (record: CatchRecord) => void;
 }) {
-  if (!catches.length) return null;
+  if (!catches.length) {
+    return (
+      <section className="catch-history-empty" aria-labelledby="catch-history-title">
+        <div className="section-head">
+          <h3 id="catch-history-title">Siste fangster</h3>
+        </div>
+        <div className="empty-list-message">
+          <Icon name="fish" />
+          <p>
+            <b>Ingen fangster registrert</b>
+            <span>Fangster du rapporterer, vises her.</span>
+          </p>
+        </div>
+      </section>
+    );
+  }
   return (
     <section>
       <div className="section-head">

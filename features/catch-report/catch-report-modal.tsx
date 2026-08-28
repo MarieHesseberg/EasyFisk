@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import type { CatchRecord } from "@/domain/catches/catch";
+import type { OperationResult } from "@/domain/shared/operation-result";
 import { useCatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { CatchConfirmationStep } from "@/features/catch-report/steps/catch-confirmation-step";
 import { CatchDetailsStep } from "@/features/catch-report/steps/catch-details-step";
@@ -23,7 +24,7 @@ export function CatchReportModal({
   activeZone: string;
   catches: CatchRecord[];
   finishAfterCatch: boolean;
-  onCatch: (record: CatchRecord) => void;
+  onCatch: (record: CatchRecord) => OperationResult<unknown>;
   onCatchFlowComplete: () => void;
   onClose: () => void;
   requestedCatchTime: number;
