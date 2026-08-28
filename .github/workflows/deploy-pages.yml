@@ -32,6 +32,8 @@ jobs:
 
       - name: Verify and build static site
         run: npm run check
+        env:
+          EASYFISK_GITHUB_PAGES: "true"
 
       - name: Disable Jekyll processing
         run: touch out/.nojekyll
