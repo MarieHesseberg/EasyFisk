@@ -147,3 +147,10 @@ En ombygd skjerm er visuelt godkjent når:
 7. statusene godkjent, advarsel og blokkert fortsatt er lette å skille
 
 Denne referansen skal oppdateres med en bevisst forklaring dersom produktdesignet senere endres. Den skal ikke endres bare for å få en kodeendring til å passe.
+
+## Automatisk kontroll
+
+Hjemskjermen sammenlignes automatisk på iPhone-, Android- og skrivebordsstørrelse med
+Playwright. Kjør `npm run test:visual` for å kontrollere referansebildene lokalt. Oppdater
+bildene bare ved en bevisst og godkjent designendring med
+`npm run test:visual -- --update-snapshots`.
