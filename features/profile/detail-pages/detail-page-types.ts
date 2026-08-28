@@ -1,0 +1,11 @@
+import type { DetailDestination } from "@/domain/navigation/navigation";
+
+export const detailTitles: Record<DetailDestination, string> = {
+  permits: "Mine fiskekort",
+  disinfection: "Desinfisering",
+  notifications: "Varsler og stengninger",
+  feedback: "Tilbakemelding",
+  "control-card": "Kontrollkort",
+  "favorite-zones": "Favorittsoner",
+  "profile-privacy": "Profil og personvern",
+};

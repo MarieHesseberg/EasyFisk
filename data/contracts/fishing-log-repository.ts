@@ -1,11 +1,14 @@
 import type { CatchRecord } from "../../domain/catches/catch";
-import type { SessionRecord } from "../../domain/sessions/session";
+import type { ActiveSessionSnapshot, SessionRecord } from "../../domain/sessions/session";
+import type { OperationResult } from "../../domain/shared/operation-result";
 
 /** Lagring av brukerens fiskeøkter og fangster. */
 export interface FishingLogRepository {
   getLatestSession(): SessionRecord | null;
   listCatches(): CatchRecord[];
-  saveCatch(record: CatchRecord): void;
-  saveSession(record: SessionRecord): void;
-  updateCatchCorrection(id: string, note: string): void;
+  getActiveSession(): ActiveSessionSnapshot | null;
+  saveCatch(record: CatchRecord): OperationResult<void>;
+  saveSession(record: SessionRecord): OperationResult<void>;
+  saveActiveSession(session: ActiveSessionSnapshot | null): OperationResult<void>;
+  updateCatchCorrection(id: string, note: string): OperationResult<void>;
 }

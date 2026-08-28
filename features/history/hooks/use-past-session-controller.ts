@@ -12,6 +12,7 @@ import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
 import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
+import { validateImage } from "@/domain/images/validate-image";
 
 export function usePastSessionController({
   existingCatches,
@@ -38,6 +39,7 @@ export function usePastSessionController({
   const [comment, setComment] = useState("");
   const [imageName, setImageName] = useState("");
   const [imageData, setImageData] = useState("");
+  const [imageError, setImageError] = useState("");
   const [reports, setReports] = useState<CatchRecord[]>([]);
   const [touched, setTouched] = useState(false);
 
@@ -64,6 +66,7 @@ export function usePastSessionController({
     setComment("");
     setImageName("");
     setImageData("");
+    setImageError("");
     setCatchAt(to);
   }
 
@@ -107,9 +110,18 @@ export function usePastSessionController({
   }
 
   function selectImage(file?: File) {
+    setImageError("");
     setImageName(file?.name ?? "");
     if (!file) return setImageData("");
+    const validation = validateImage(file);
+    if (!validation.ok) {
+      setImageName("");
+      setImageData("");
+      setImageError(validation.error);
+      return;
+    }
     const reader = new FileReader();
+    reader.onerror = () => setImageError("Kunne ikke lese bildet.");
     reader.onload = () => setImageData(String(reader.result ?? ""));
     reader.readAsDataURL(file);
   }
@@ -125,6 +137,7 @@ export function usePastSessionController({
       end,
       from,
       imageName,
+      imageError,
       length,
       lengthNumber,
       openedAt,

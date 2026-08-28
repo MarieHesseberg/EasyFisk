@@ -9,6 +9,7 @@ import {
   type NotificationPreference,
   type UserPreferences,
 } from "@/domain/preferences/preferences";
+import { logger } from "@/lib/logger";
 
 export function usePreferencesController(
   repository: PreferencesRepository = preferencesRepository,
@@ -28,7 +29,11 @@ export function usePreferencesController(
   function update(change: (current: UserPreferences) => UserPreferences) {
     setPreferences((current) => {
       const next = change(current);
-      repository.savePreferences(next);
+      const result = repository.savePreferences(next);
+      if (!result.ok) {
+        logger.error(result.error, { cause: result.cause });
+        return current;
+      }
       return next;
     });
   }

@@ -1,6 +1,6 @@
 import { Icon } from "@/components/ui/icon";
 
-export function History({
+export function FishingHistoryCard({
   day,
   title,
   time,

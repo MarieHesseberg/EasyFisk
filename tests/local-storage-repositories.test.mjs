@@ -47,6 +47,31 @@ test("localStorage-adapter beholder siste fiskeøkt", () => {
   assert.deepEqual(createLocalStorageFishingLogRepository(storage).getLatestSession(), session);
 });
 
+test("aktiv fiskeøkt overlever refresh og kan avsluttes", () => {
+  const storage = createStorage();
+  const repository = createLocalStorageFishingLogRepository(storage);
+  const activeSession = { startTime: 1_000, zone: 3 };
+  assert.equal(repository.saveActiveSession(activeSession).ok, true);
+  assert.deepEqual(
+    createLocalStorageFishingLogRepository(storage).getActiveSession(),
+    activeSession,
+  );
+  repository.saveActiveSession(null);
+  assert.equal(createLocalStorageFishingLogRepository(storage).getActiveSession(), null);
+});
+
+test("localStorage quota-feil returneres som et forståelig resultat", () => {
+  const storage = {
+    getItem: () => null,
+    setItem: () => {
+      throw new DOMException("full", "QuotaExceededError");
+    },
+  };
+  const result = createLocalStorageFishingLogRepository(storage).saveCatch(catchRecord);
+  assert.equal(result.ok, false);
+  assert.match(result.error, /Kunne ikke lagre/);
+});
+
 test("ødelagt localStorage-data gir trygge standardverdier", () => {
   const storage = createStorage();
   storage.setItem("easyfisk:fishing-log:v1", "ikke gyldig JSON");

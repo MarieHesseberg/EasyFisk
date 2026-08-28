@@ -56,6 +56,34 @@
   --color-warning-deep: #765616;
   --color-warning-copy: #745719;
   --color-danger-deep: #9b4436;
+  --radius-small: 8px;
+  --radius-control: 10px;
+  --radius-medium: 12px;
+  --radius-card: 15px;
+  --radius-large: 18px;
+  --radius-panel: 22px;
+  --radius-round: 50%;
+  --space-1: 3px;
+  --space-2: 5px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 15px;
+  --space-7: 18px;
+  --space-8: 20px;
+  --space-9: 24px;
+  --shadow-small: 0 2px 8px #183b5918;
+  --shadow-card: 0 8px 22px #183b5926;
+  --shadow-panel: 0 12px 30px var(--color-shadow);
+  --shadow-phone: 0 24px 60px #183b593b;
+  --layer-content: 1;
+  --layer-map-marker: 4;
+  --layer-map-controls: 5;
+  --layer-navigation: 20;
+  --layer-dialog: 30;
+  --layer-dialog-content: 35;
+  --layer-notification: 40;
+  --layer-session-flow: 50;
 }
 * {
   box-sizing: border-box;
@@ -89,7 +117,7 @@ body {
   border-radius: 42px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 24px 60px #183b593b;
+  box-shadow: var(--shadow-phone);
 }
 .screen {
   height: 100%;
@@ -112,7 +140,7 @@ body {
 .brand-mark {
   width: 30px;
   height: 30px;
-  border-radius: 9px;
+  border-radius: var(--radius-control);
   background: var(--color-primary);
   color: white;
   display: grid;
@@ -139,7 +167,7 @@ body {
   top: 30px;
   border: 0;
   background: white;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   width: 40px;
   height: 40px;
   display: grid;
@@ -152,5 +180,5 @@ body {
   background: var(--color-notification);
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 }

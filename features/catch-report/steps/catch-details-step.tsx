@@ -2,8 +2,17 @@ import { Icon } from "@/components/ui/icon";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 
 export function CatchDetailsStep({ controller }: { controller: CatchReportController }) {
-  const { comment, imageName, length, lengthNumber, touched, validation, weight, weightNumber } =
-    controller.state;
+  const {
+    comment,
+    imageError,
+    imageName,
+    length,
+    lengthNumber,
+    touched,
+    validation,
+    weight,
+    weightNumber,
+  } = controller.state;
   const { continueToReview, selectImage, setComment, setLength, setWeight } = controller.actions;
 
   return (
@@ -57,6 +66,11 @@ export function CatchDetailsStep({ controller }: { controller: CatchReportContro
           onChange={(event) => selectImage(event.target.files?.[0])}
         />
       </label>
+      {imageError && (
+        <p className="field-error" role="alert">
+          {imageError}
+        </p>
+      )}
       <label className="comment-label">
         Kommentar <em>valgfritt</em>
         <textarea

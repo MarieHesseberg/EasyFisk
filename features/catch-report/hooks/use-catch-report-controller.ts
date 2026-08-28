@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
+import { validateImage } from "@/domain/images/validate-image";
 
 export function useCatchReportController({
   activeZone,
@@ -29,32 +30,43 @@ export function useCatchReportController({
   const [touched, setTouched] = useState(false);
   const [violationConfirmed, setViolationConfirmed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
+  const [imageError, setImageError] = useState("");
 
   const lengthNumber = parseMeasurement(length);
   const weightNumber = parseMeasurement(weight);
   const validation = validateCatch(species, result, lengthNumber, weightNumber);
   const sentCatch = submitted ? catches[catches.length - 1] : null;
 
-  function submit() {
-    if (submitted) return;
-    onCatch({
-      id: "pending",
-      caughtAt,
-      submittedAt: 0,
-      sessionStart,
-      species,
-      result,
-      length: lengthNumber,
-      weight: weightNumber,
-      zone: activeZone,
-      violation: validation.blocked,
-      late: false,
-      imageName,
-      imageData,
-      comment,
-    });
-    setSubmitted(true);
-    setStep(4);
+  async function submit() {
+    if (submitted || isSubmitting) return;
+    setIsSubmitting(true);
+    setSubmissionError("");
+    try {
+      await onCatch({
+        id: "pending",
+        caughtAt,
+        submittedAt: 0,
+        sessionStart,
+        species,
+        result,
+        length: lengthNumber,
+        weight: weightNumber,
+        zone: activeZone,
+        violation: validation.blocked,
+        late: false,
+        imageName,
+        imageData,
+        comment,
+      });
+      setSubmitted(true);
+      setStep(4);
+    } catch {
+      setSubmissionError("Kunne ikke lagre fangsten. Prøv igjen.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function continueToReview() {
@@ -63,13 +75,22 @@ export function useCatchReportController({
   }
 
   function selectImage(file?: File) {
+    setImageError("");
     setImageName(file?.name ?? "");
     if (!file) {
       setImageData("");
       return;
     }
 
+    const validation = validateImage(file);
+    if (!validation.ok) {
+      setImageName("");
+      setImageData("");
+      setImageError(validation.error);
+      return;
+    }
     const reader = new FileReader();
+    reader.onerror = () => setImageError("Kunne ikke lese bildet.");
     reader.onload = () => setImageData(String(reader.result ?? ""));
     reader.readAsDataURL(file);
   }
@@ -79,6 +100,8 @@ export function useCatchReportController({
       comment,
       imageData,
       imageName,
+      imageError,
+      isSubmitting,
       length,
       lengthNumber,
       result,
@@ -86,6 +109,7 @@ export function useCatchReportController({
       species,
       step,
       submitted,
+      submissionError,
       touched,
       validation,
       violationConfirmed,

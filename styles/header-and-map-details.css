@@ -1,6 +1,6 @@
 .header-alert-panel {
   position: absolute !important;
-  z-index: 35;
+  z-index: var(--layer-dialog-content);
   top: 25px;
   left: 0;
   right: 0;
@@ -9,13 +9,13 @@
   border: 1px solid var(--color-border);
   border-radius: 17px;
   padding: 17px;
-  box-shadow: 0 12px 30px var(--color-shadow);
+  box-shadow: var(--shadow-panel);
 }
 .header-alert-panel > button {
   float: right;
   border: 0;
   background: var(--color-info-surface-muted);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   width: 28px;
   height: 28px;
   color: var(--color-primary);

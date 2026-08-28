@@ -20,7 +20,7 @@
 .stats-tabs button.selected {
   background: var(--color-surface);
   color: var(--color-primary);
-  box-shadow: 0 2px 8px #183b5918;
+  box-shadow: var(--shadow-small);
 }
 .activity-embedded {
   padding-bottom: 12px;
@@ -33,7 +33,7 @@
   padding-bottom: 15px;
 }
 .personal-rules {
-  border-radius: 22px;
+  border-radius: var(--radius-panel);
   padding: 19px;
   margin-bottom: 25px;
 }

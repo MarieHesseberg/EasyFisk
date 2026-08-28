@@ -4,6 +4,7 @@ import {
   defaultUserPreferences,
   type UserPreferences,
 } from "../../domain/preferences/preferences.ts";
+import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
 
 const defaultStorageKey = "easyfisk:preferences:v1";
 
@@ -28,7 +29,15 @@ export function createLocalStoragePreferencesRepository(
       }
     },
     savePreferences: (preferences) => {
-      storage.setItem(key, JSON.stringify({ version: 1, preferences } satisfies StoredPreferences));
+      try {
+        storage.setItem(
+          key,
+          JSON.stringify({ version: 1, preferences } satisfies StoredPreferences),
+        );
+        return operationSucceeded(undefined);
+      } catch (cause) {
+        return operationFailed("Kunne ikke lagre innstillingene på enheten.", cause);
+      }
     },
   };
 }

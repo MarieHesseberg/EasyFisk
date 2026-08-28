@@ -1,60 +1,47 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/ui/header";
+import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { appContentRepository } from "@/data/repositories/app-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
-import { Activity } from "@/features/fishing-session/activity-screen";
+import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
 
 const zones = fishingContentRepository.getZones();
+const { statistics } = appContentRepository.getContent();
 
-export function StatsContent() {
-  const [area, setArea] = useState("Hele elva"),
-    [period, setPeriod] = useState("Sesongen");
+function nextOption(current: string, options: readonly string[]) {
+  return options[(options.indexOf(current) + 1) % options.length];
+}
+
+export function StatisticsOverview() {
+  const [area, setArea] = useState(statistics.areas[0]),
+    [period, setPeriod] = useState(statistics.periods[0]);
   return (
     <>
       <div className="filter-row">
-        <button
-          onClick={() =>
-            setArea(area === "Hele elva" ? "Sone 3" : area === "Sone 3" ? "Sone 4" : "Hele elva")
-          }
-        >
-          {area}⌄
-        </button>
-        <button
-          onClick={() =>
-            setPeriod(
-              period === "Sesongen"
-                ? "Siste 30 dager"
-                : period === "Siste 30 dager"
-                  ? "Denne uken"
-                  : "Sesongen",
-            )
-          }
-        >
-          {period}⌄
-        </button>
+        <button onClick={() => setArea(nextOption(area, statistics.areas))}>{area}⌄</button>
+        <button onClick={() => setPeriod(nextOption(period, statistics.periods))}>{period}⌄</button>
       </div>
       <section className="hero-stat">
         <small>REGISTRERTE FANGSTER · EKSEMPEL</small>
-        <strong>286</strong>
+        <strong>{statistics.totalCatches}</strong>
         <div>
           <span>Fangst + innsats</span> gir bedre forvaltningsdata
         </div>
       </section>
       <div className="stat-grid">
-        <Stat icon="clock" label="FISKETIMER" value="4 820" />
-        <Stat icon="stats" label="FANGST / 10 T" value="0,59" />
-        <Stat icon="fish" label="GJENUTSATT" value="64 %" />
-        <Stat icon="user" label="FISKEØKTER" value="418" />
+        {statistics.metrics.map((metric) => (
+          <Stat key={metric.label} {...metric} />
+        ))}
       </div>
       <section className="chart-card">
         <h3>Fangst gjennom sesongen</h3>
         <div className="bar-chart">
-          {[18, 32, 46, 66, 87, 74, 54, 41, 25].map((h, i) => (
+          {statistics.weeklyCatchPercentages.map((h, i) => (
             <div key={i}>
               <span style={{ height: h + "%" }} />
               <small>{i % 2 === 0 ? "U" + (23 + i) : ""}</small>
@@ -68,9 +55,9 @@ export function StatsContent() {
           <div className="zone-bar" key={z.id}>
             <span>Sone {z.id}</span>
             <div>
-              <i style={{ width: [72, 91, 84, 58][i] + "%" }} />
+              <i style={{ width: statistics.zoneCatchPercentages[i] + "%" }} />
             </div>
-            <b>{[58, 79, 73, 46][i]}</b>
+            <b>{statistics.zoneCatchTotals[i]}</b>
           </div>
         ))}
       </section>
@@ -82,7 +69,7 @@ export function StatsContent() {
     </>
   );
 }
-export function Stats({
+export function StatisticsScreen({
   active,
   onStart,
   onStop,
@@ -120,7 +107,7 @@ export function Stats({
   const [view, setView] = useState<"general" | "mine">(active || openMine ? "mine" : "general");
   return (
     <div className="screen">
-      <Header title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
+      <ScreenHeader title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
       <div className="stats-tabs">
         <button
           className={view === "general" ? "selected" : ""}
@@ -138,9 +125,9 @@ export function Stats({
         </button>
       </div>
       {view === "general" ? (
-        <StatsContent />
+        <StatisticsOverview />
       ) : (
-        <Activity
+        <FishingActivityScreen
           embedded
           active={active}
           onStart={onStart}

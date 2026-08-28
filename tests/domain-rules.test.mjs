@@ -90,7 +90,7 @@ test("statuskontroll gir visningstilstand og riktig løsning", () => {
   assert.equal(statusState("noPermit", ["noPermit"], "blocked"), "error");
   assert.equal(statusState("zoneBorder", ["zoneBorder"], "warning"), "warning");
   assert.equal(statusState("ok", ["noPermit"], "ok"), "ok");
-  assert.equal(getStatusResolution("wrongZone"), "Mine fiskekort");
-  assert.equal(getStatusResolution("otherRiver"), "Desinfisering");
-  assert.equal(getStatusResolution("closed"), "Varsler og stengninger");
+  assert.equal(getStatusResolution("wrongZone"), "permits");
+  assert.equal(getStatusResolution("otherRiver"), "disinfection");
+  assert.equal(getStatusResolution("closed"), "notifications");
 });
