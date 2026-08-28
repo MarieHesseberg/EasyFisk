@@ -7,24 +7,26 @@ import { isReportLate } from "@/domain/catches/reporting-deadline";
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
+import type { OperationResult } from "@/domain/shared/operation-result";
 import type { ZoneId } from "@/domain/zones/zone";
-import { getQuotaStatus } from "@/domain/quotas/get-quota-status";
+import { getNorwegianCalendarDate, getQuotaStatus } from "@/domain/quotas/get-quota-status";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
 import { isCatchWithinSession, isValidSessionTime } from "@/domain/sessions/session-timing";
 import { getSubzones, isDateWithinZoneSeason } from "@/domain/zones/zone-rules";
 import { useImageSelection } from "@/hooks/use-image-selection";
 import { useFormFields } from "@/hooks/use-form-fields";
+import { useFormSubmission } from "@/hooks/use-form-submission";
 
 export function usePastSessionController({
   existingCatches,
   onSave,
 }: {
   existingCatches: CatchRecord[];
-  onSave: (record: SessionRecord, catches?: CatchRecord[]) => void;
+  onSave: (record: SessionRecord, catches?: CatchRecord[]) => OperationResult<unknown>;
 }) {
   const zones = fishingContentRepository.getZones();
   const [openedAt] = useState(() => Date.now());
-  const today = new Date(openedAt).toISOString().slice(0, 10);
+  const today = getNorwegianCalendarDate(openedAt);
   const [step, setStep] = useState(1);
   const sessionForm = useFormFields<{
     caught: boolean;
@@ -57,6 +59,7 @@ export function usePastSessionController({
     weight: "",
   });
   const image = useImageSelection({ includeData: true });
+  const submission = useFormSubmission("Kunne ikke lagre fisketuren. Prøv igjen.");
   const [reports, setReports] = useState<CatchRecord[]>([]);
   const [touched, setTouched] = useState(false);
   const { caught, date, from, subzone, to, zone } = sessionForm.fields;
@@ -108,12 +111,14 @@ export function usePastSessionController({
     setStep(review ? 3 : 2);
   }
 
-  function submit() {
+  async function submit() {
     const result = reports.length
       ? `${reports.length} fangst${reports.length === 1 ? "" : "er"} · etterregistrert`
       : "Nullfangst · etterregistrert";
-    onSave(createSessionRecord(start, end, zoneName, result), reports);
-    setStep(4);
+    const succeeded = await submission.run(() =>
+      onSave(createSessionRecord(start, end, zoneName, result), reports),
+    );
+    if (succeeded) setStep(4);
   }
 
   function removeCatch(id: string) {
@@ -133,6 +138,7 @@ export function usePastSessionController({
       from,
       imageName: image.name,
       imageError: image.error,
+      isSubmitting: submission.isSubmitting,
       length,
       lengthNumber,
       openedAt,
@@ -142,6 +148,7 @@ export function usePastSessionController({
       species,
       start,
       step,
+      submissionError: submission.error,
       subzone,
       subzones,
       to,

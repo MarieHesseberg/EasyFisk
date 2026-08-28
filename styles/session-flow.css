@@ -83,7 +83,7 @@
 }
 .flow-checks {
   background: var(--color-surface);
-  border-radius: 16px;
+  border-radius: var(--radius-card-large);
   padding: 3px 14px;
   margin-bottom: 16px;
 }

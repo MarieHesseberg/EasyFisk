@@ -1,6 +1,11 @@
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
+import {
+  countKilledSalmonForDay,
+  getNorwegianCalendarDate,
+  getQuotaStatus,
+} from "@/domain/quotas/get-quota-status";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { formatLongDuration } from "@/lib/time";
 
@@ -16,7 +21,15 @@ export function CatchConfirmationStep({
   onDone: () => void;
 }) {
   const { catchSize, quota, reporting } = activeFishingRules;
-  const { result, sentCatch, validation } = controller.state;
+  const { sentCatch, validation } = controller.state;
+  const quotaStatus = getQuotaStatus(catches, []);
+  const catchDay = sentCatch
+    ? getNorwegianCalendarDate(sentCatch.caughtAt)
+    : getNorwegianCalendarDate(Date.now());
+  const dailyRemaining = Math.max(
+    0,
+    quota.killedSalmonPerDay - countKilledSalmonForDay(catches, catchDay),
+  );
 
   return (
     <>
@@ -52,19 +65,14 @@ export function CatchConfirmationStep({
         <h3>Oppdatert kvotestatus</h3>
         <div>
           <span>Døgnkvote</span>
-          <b>{result === "Avlivet" ? "0 av 1 gjenstår" : "1 av 1 gjenstår"}</b>
+          <b>
+            {dailyRemaining} av {quota.killedSalmonPerDay} gjenstår
+          </b>
         </div>
         <div>
           <span>Sesongkvote laks</span>
           <b>
-            {Math.max(
-              0,
-              quota.killedSalmonPerSeason -
-                1 -
-                catches.filter((item) => item.species === "Laks" && item.result === "Avlivet")
-                  .length,
-            )}{" "}
-            av {quota.killedSalmonPerSeason} gjenstår
+            {quotaStatus.remaining} av {quota.killedSalmonPerSeason} gjenstår
           </b>
         </div>
       </div>

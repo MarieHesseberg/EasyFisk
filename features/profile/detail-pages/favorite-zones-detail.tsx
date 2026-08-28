@@ -2,9 +2,10 @@
 
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 import { appContentRepository } from "@/data/repositories/app-content";
+import { FormError } from "@/components/ui/form-error";
 
 export function FavoriteZonesDetail() {
-  const { preferences, addFavorite, removeFavorite } = usePreferencesController();
+  const { error, preferences, addFavorite, removeFavorite } = usePreferencesController();
   const { favoriteSuggestion, favoriteZoneDescriptions } =
     appContentRepository.getContent().profile;
   const newFavorite = favoriteSuggestion;
@@ -27,6 +28,7 @@ export function FavoriteZonesDetail() {
           </div>
         ))}
       </div>
+      <FormError message={error} />
       <button className="primary" onClick={() => addFavorite(newFavorite)} disabled={alreadyAdded}>
         {alreadyAdded
           ? `${favoriteZoneShortName} er lagt til`

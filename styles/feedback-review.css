@@ -1,6 +1,6 @@
 .feedback-review {
   background: var(--color-surface);
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   padding: 3px 13px;
 }
 .feedback-review p {
@@ -27,7 +27,7 @@
   align-items: flex-start;
   gap: 7px;
   background: var(--color-primary-soft);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   padding: 10px !important;
   font-size: 8px !important;
   line-height: 1.4;
@@ -41,7 +41,7 @@
 .feedback-confirmation > span {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   display: grid;
   place-items: center;
   background: var(--color-success-surface);
@@ -65,7 +65,7 @@
 }
 .feedback-confirmation > div {
   background: var(--color-surface);
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 11px;
   margin: 15px 0;
 }

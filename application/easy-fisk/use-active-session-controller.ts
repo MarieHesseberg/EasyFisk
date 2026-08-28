@@ -1,18 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
 import type { ZoneId } from "@/domain/zones/zone";
 import { useSessionTimer } from "@/hooks/use-session-timer";
 
 export function useActiveSessionController(repository: FishingLogRepository) {
-  const [restoredSession] = useState(() => repository.getActiveSession());
-  const [active, setActive] = useState(Boolean(restoredSession));
-  const [startTime, setStartTime] = useState<number | null>(restoredSession?.startTime ?? null);
-  const [sessionZone, setSessionZone] = useState<ZoneId>(restoredSession?.zone ?? 3);
+  const [active, setActive] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [sessionZone, setSessionZone] = useState<ZoneId>(3);
   const [finishAfterCatch, setFinishAfterCatch] = useState(false);
   const [requestedCatchTime, setRequestedCatchTime] = useState(0);
   const { elapsed, setElapsed } = useSessionTimer(active, startTime);
+
+  useEffect(() => {
+    let isMounted = true;
+    queueMicrotask(() => {
+      if (!isMounted) return;
+      const restoredSession = repository.getActiveSession();
+      if (!restoredSession) return;
+      setStartTime(restoredSession.startTime);
+      setSessionZone(restoredSession.zone);
+      setActive(true);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [repository]);
 
   function start(selectedZone: ZoneId) {
     const now = Date.now();

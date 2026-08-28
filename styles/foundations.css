@@ -18,6 +18,7 @@
   --color-warning-surface: #fff3d8;
   --color-warning-border: #e4c46a;
   --color-danger: #8a3428;
+  --color-danger-shadow: #8a342835;
   --color-danger-strong: #b94535;
   --color-danger-text: #a33d30;
   --color-danger-dark: #813329;
@@ -42,6 +43,7 @@
   --color-danger-surface-pale: #fff4f2;
   --color-danger-surface-light: #fff4f1;
   --color-shadow: #183b5930;
+  --color-text-shadow-subtle: #172a3a0b;
   --color-border-control: #d8e3ed;
   --color-border-input: #d7e0e8;
   --color-border-field: #d9e3ec;
@@ -55,11 +57,17 @@
   --color-warning-muted: #8a6453;
   --color-warning-deep: #765616;
   --color-warning-copy: #745719;
+  --color-warning-label: #755716;
   --color-danger-deep: #9b4436;
   --radius-small: 8px;
+  --radius-compact: 11px;
   --radius-control: 10px;
   --radius-medium: 12px;
+  --radius-content: 13px;
+  --radius-card-soft: 14px;
   --radius-card: 15px;
+  --radius-card-large: 16px;
+  --radius-feature: 17px;
   --radius-large: 18px;
   --radius-panel: 22px;
   --radius-round: 50%;
@@ -72,6 +80,8 @@
   --space-7: 18px;
   --space-8: 20px;
   --space-9: 24px;
+  --space-page-inline: 20px;
+  --space-navigation-bottom: 112px;
   --shadow-small: 0 2px 8px #183b5918;
   --shadow-card: 0 8px 22px #183b5926;
   --shadow-panel: 0 12px 30px var(--color-shadow);
@@ -122,7 +132,7 @@ body {
 .screen {
   height: 100%;
   overflow-y: auto;
-  padding: 0 20px 112px;
+  padding: 0 var(--space-page-inline) var(--space-navigation-bottom);
   scrollbar-width: none;
 }
 .screen::-webkit-scrollbar {

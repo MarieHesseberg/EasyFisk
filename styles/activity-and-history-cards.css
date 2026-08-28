@@ -1,7 +1,7 @@
 .primary {
   width: 100%;
   border: 0;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   background: var(--color-primary);
   color: var(--color-surface);
   padding: 14px;
@@ -9,7 +9,7 @@
 }
 .segmented {
   background: #e5ebf1;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 3px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -31,7 +31,7 @@
   margin-top: 15px;
   background: var(--color-primary);
   color: var(--color-surface);
-  border-radius: 22px;
+  border-radius: var(--radius-panel);
   padding: 22px;
   text-align: center;
 }
@@ -40,7 +40,7 @@
   width: 8px;
   height: 8px;
   background: #9cc8ee;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   margin-right: 7px;
 }
 .active-session small {
@@ -62,12 +62,12 @@
 .session-actions {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 8px;
+  gap: var(--space-3);
   margin-top: 22px;
 }
 .session-actions button {
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 13px 7px;
   background: var(--color-surface);
   color: var(--color-primary);
@@ -83,7 +83,7 @@
   background: transparent;
   color: var(--color-surface);
   width: 100%;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 12px;
   margin-top: 9px;
   font-weight: bold;
@@ -98,7 +98,7 @@
   margin: auto;
   width: 70px;
   height: 70px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-primary-soft);
   color: var(--color-primary);
 }
@@ -111,7 +111,7 @@
 }
 .history-card {
   background: var(--color-surface);
-  border-radius: 15px;
+  border-radius: var(--radius-card);
   margin-bottom: 9px;
   padding: 12px;
   display: flex;
@@ -139,7 +139,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .history-card b {
   font-size: 11px;

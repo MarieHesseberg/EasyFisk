@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 
 export function NotificationsDetail() {
   const [saved, setSaved] = useState(false);
-  const { preferences, setNotification } = usePreferencesController();
+  const { error, preferences, setNotification } = usePreferencesController();
   const { notificationOptions, notificationStatus } = appContentRepository.getContent().profile;
   return (
     <div className="specific-detail">
@@ -35,7 +36,8 @@ export function NotificationsDetail() {
           </label>
         ))}
       </div>
-      <button className="primary" onClick={() => setSaved(true)}>
+      <FormError message={error} />
+      <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
         {saved ? "Varselinnstillinger lagret" : "Lagre varselinnstillinger"}
       </button>
     </div>

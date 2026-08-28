@@ -29,3 +29,9 @@ jobs:
 
       - name: Run complete quality check
         run: npm run check
+
+      - name: Install browser for visual regression tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Run visual regression tests
+        run: npm run test:visual

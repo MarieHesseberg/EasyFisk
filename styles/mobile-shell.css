@@ -33,7 +33,7 @@
 .demo-select {
   width: 100%;
   border: 1px solid #c8d4df;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-primary-dark);
   font: 600 14px Arial;
@@ -46,7 +46,7 @@
   gap: 4px;
   margin: 12px 0;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   border: 1px solid;
 }
 .demo-result b {
@@ -76,7 +76,7 @@
   width: 100%;
   padding: 12px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--color-primary);
   color: var(--color-surface);
   font-weight: 800;
@@ -89,9 +89,9 @@
 .scenario-banner {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   margin: 0 0 14px;
   border: 1px solid;
 }
@@ -124,11 +124,18 @@
   background: var(--color-warning-accent);
   color: var(--color-surface);
 }
+.flow-checks .check-row.unavailable span {
+  background: var(--color-info-surface-muted);
+  color: var(--color-text-muted);
+}
 .flow-checks .check-row.error p small {
   color: var(--color-danger-text);
 }
 .flow-checks .check-row.warning p small {
   color: var(--color-warning-text);
+}
+.flow-checks .check-row.unavailable p small {
+  color: var(--color-text-muted);
 }
 .blocked-action {
   background: var(--color-danger);

@@ -4,7 +4,7 @@
   gap: 9px;
   background: var(--color-danger-surface-light);
   border: 1px solid #dfaaa0;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 12px !important;
   margin: 12px 0;
   color: #7f3026;
@@ -16,7 +16,7 @@
 .violation-confirm span {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .violation-confirm b {
   font-size: 10px;
@@ -37,7 +37,7 @@
   background: var(--color-danger-surface-soft);
   border: 1px solid #e1aaa0;
   color: var(--color-danger-dark);
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   padding: 12px;
   margin: 13px 0;
 }

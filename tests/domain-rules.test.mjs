@@ -5,7 +5,11 @@ import { isReportLate, reportingDeadlineMs } from "../domain/catches/reporting-d
 import { parseMeasurement, validateCatch } from "../domain/catches/validate-catch.ts";
 import { getStatusResolution, statusState } from "../domain/fishing-rules/status-checks.ts";
 import { activeFishingRules } from "../domain/fishing-rules/mandalselva-2026.ts";
-import { getQuotaStatus } from "../domain/quotas/get-quota-status.ts";
+import {
+  countKilledSalmonForDay,
+  getNorwegianCalendarDate,
+  getQuotaStatus,
+} from "../domain/quotas/get-quota-status.ts";
 import {
   elapsedSeconds,
   isCatchWithinSession,
@@ -38,12 +42,12 @@ test("rapporteringsfristen er to timer med korrekt grense", () => {
 
 test("kvotestatus teller bare avlivet laks", () => {
   const existing = [
-    { species: "Laks", result: "Avlivet" },
-    { species: "Sjøørret", result: "Avlivet" },
+    { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2026-07-01T12:00:00Z") },
+    { species: "Sjøørret", result: "Avlivet", caughtAt: Date.parse("2026-07-01T12:00:00Z") },
   ];
   const session = [
-    { species: "Laks", result: "Avlivet" },
-    { species: "Laks", result: "Gjenutsatt" },
+    { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2026-07-01T12:00:00Z") },
+    { species: "Laks", result: "Gjenutsatt", caughtAt: Date.parse("2026-07-01T12:00:00Z") },
   ];
 
   assert.deepEqual(getQuotaStatus(existing, session, 4), {
@@ -54,9 +58,51 @@ test("kvotestatus teller bare avlivet laks", () => {
     dailyValid: true,
   });
   assert.equal(
-    getQuotaStatus(existing, [...session, { species: "Laks", result: "Avlivet" }], 4).dailyValid,
+    getQuotaStatus(
+      existing,
+      [
+        ...session,
+        { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2026-07-01T13:00:00Z") },
+      ],
+      4,
+    ).dailyValid,
     false,
   );
+});
+
+test("sesongkvoten ignorerer fangster utenfor aktiv sesong", () => {
+  const catches = [
+    { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2025-07-01T12:00:00Z") },
+    { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2026-07-01T12:00:00Z") },
+    { species: "Laks", result: "Avlivet", caughtAt: Date.parse("2026-09-16T12:00:00Z") },
+  ];
+
+  assert.equal(getQuotaStatus(catches, [], 5).killedBefore, 1);
+});
+
+test("fangstdato bruker norsk tid rundt midnatt", () => {
+  const afterNorwegianMidnight = Date.parse("2026-06-10T22:30:00Z");
+
+  assert.equal(getNorwegianCalendarDate(afterNorwegianMidnight), "2026-06-11");
+  assert.equal(
+    countKilledSalmonForDay(
+      [{ species: "Laks", result: "Avlivet", caughtAt: afterNorwegianMidnight }],
+      "2026-06-11",
+    ),
+    1,
+  );
+});
+
+test("døgnkvote teller bare avlivet laks på valgt fangstdato", () => {
+  const firstDay = Date.parse("2026-06-10T12:00:00Z");
+  const secondDay = Date.parse("2026-06-11T12:00:00Z");
+  const catches = [
+    { species: "Laks", result: "Avlivet", caughtAt: firstDay },
+    { species: "Laks", result: "Gjenutsatt", caughtAt: firstDay },
+    { species: "Laks", result: "Avlivet", caughtAt: secondDay },
+  ];
+
+  assert.equal(countKilledSalmonForDay(catches, "2026-06-10"), 1);
 });
 
 test("økttid håndterer varighet og grenseverdier", () => {

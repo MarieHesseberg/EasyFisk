@@ -7,11 +7,13 @@ export function CheckRow({
 }: {
   title: string;
   sub: string;
-  state?: "ok" | "warning" | "error";
+  state?: "ok" | "warning" | "error" | "unavailable";
 }) {
   return (
     <div className={"check-row " + state}>
-      <span>{state === "ok" ? <Icon name="check" size={16} /> : "!"}</span>
+      <span aria-hidden="true">
+        {state === "ok" ? <Icon name="check" size={16} /> : state === "unavailable" ? "?" : "!"}
+      </span>
       <p>
         <b>{title}</b>
         <small>{sub}</small>

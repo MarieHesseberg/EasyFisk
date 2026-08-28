@@ -1,5 +1,6 @@
 import { CheckRow } from "@/components/ui/check-row";
 import { Icon } from "@/components/ui/icon";
+import { FormError } from "@/components/ui/form-error";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { PastSessionController } from "@/features/history/hooks/use-past-session-controller";
@@ -11,8 +12,10 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
     dailyValid,
     end,
     openedAt,
+    isSubmitting,
     quota,
     reports,
+    submissionError,
     withinSeason,
     zone,
     zoneBase,
@@ -20,8 +23,6 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
   } = controller.state;
   const { removeCatch, setStep, submit } = controller.actions;
   const { quota: ruleQuota } = activeFishingRules;
-  const permitValid = withinSeason;
-  const closedHistorically = false;
   const quotaAvailable = quota.seasonAvailable;
   return (
     <>
@@ -30,12 +31,8 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
       <div className="flow-checks">
         <CheckRow
           title="Fiskekort på valgt dato"
-          sub={
-            permitValid
-              ? `Døgnkort funnet for ${zoneName}`
-              : "Finner ikke gyldig fiskekort i kortarkivet"
-          }
-          state={permitValid ? "ok" : "error"}
+          sub={`Fiskekortarkivet er ikke koblet til. Kontroller fiskekortet for ${zoneName} manuelt.`}
+          state="unavailable"
         />
         <CheckRow
           title="Fiskesesong"
@@ -48,12 +45,8 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
         />
         <CheckRow
           title="Historisk stengning"
-          sub={
-            closedHistorically
-              ? "Sonen var registrert som stengt"
-              : "Ingen stengning registrert på valgt tidspunkt"
-          }
-          state={closedHistorically ? "error" : "ok"}
+          sub="Historiske stengningsdata er ikke tilgjengelige. Kontroller reglene for valgt dato manuelt."
+          state="unavailable"
         />
         <CheckRow
           title="Sesongkvote"
@@ -106,8 +99,10 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
           <span>Faktisk tur- og fangsttid beholdes. Innsendingstid registreres separat.</span>
         </p>
       </div>
-      <button className="primary" onClick={submit}>
-        Send inn tur og {reports.length} fangst{reports.length === 1 ? "" : "er"}
+      <FormError message={submissionError} />
+      <button className="primary" disabled={isSubmitting} onClick={submit}>
+        {isSubmitting ? "Lagrer …" : "Send inn tur"} og {reports.length} fangst
+        {reports.length === 1 ? "" : "er"}
       </button>
       {caught && (
         <button className="secondary" onClick={() => setStep(2)}>

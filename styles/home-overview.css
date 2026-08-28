@@ -16,7 +16,7 @@
 .status-icon {
   width: 45px;
   height: 45px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-overlay-surface-soft);
   display: grid;
   place-items: center;
@@ -39,7 +39,7 @@
 .stop-button {
   width: 100%;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   background: var(--color-surface);
   color: var(--color-primary);
   font-weight: 800;
@@ -48,7 +48,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   margin-top: 18px;
 }
 .stop-button {
@@ -94,7 +94,7 @@
 .check-grid > div > span {
   color: var(--color-primary);
   background: var(--color-primary-soft);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   width: 38px;
   height: 38px;
   display: grid;
@@ -103,7 +103,7 @@
 .check-grid p {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   margin: 0;
   flex: 1;
 }
@@ -116,7 +116,7 @@
 }
 .check-grid strong {
   border: 2px solid var(--color-primary-accent);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   width: 29px;
   height: 29px;
   display: grid;
@@ -125,18 +125,18 @@
 }
 .notice {
   margin-top: 18px;
-  border-radius: 18px;
+  border-radius: var(--radius-large);
   padding: 16px;
   background: #e6eff8;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
 }
 .notice-icon {
   width: 42px;
   height: 42px;
   background: var(--color-surface);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   display: grid;
   place-items: center;
   color: var(--color-primary);
@@ -170,14 +170,14 @@
 .quick-grid button {
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  border-radius: 16px;
+  border-radius: var(--radius-card-large);
   padding: 15px 7px;
   min-height: 92px;
   color: var(--color-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-4);
 }
 .quick-grid span {
   font-size: 11px;
