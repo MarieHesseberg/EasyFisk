@@ -7,13 +7,13 @@
   gap: 11px;
   background: var(--color-primary-dark);
   color: var(--color-surface);
-  border-radius: 16px;
+  border-radius: var(--radius-card-large);
   padding: 14px;
 }
 .rule-version > span {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-overlay-surface-faint);
   display: grid;
   place-items: center;
@@ -22,7 +22,7 @@
 .rule-version div {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .rule-version small {
   font-size: 7px;
@@ -39,11 +39,11 @@
 }
 .season-alert {
   display: flex;
-  gap: 10px;
+  gap: var(--space-4);
   background: var(--color-warning-surface-pale);
   color: #6b5316;
   border: 1px solid #e6ce8a;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 12px;
 }
 .season-alert svg {
@@ -60,18 +60,18 @@
 .rule-center article {
   background: var(--color-surface);
   border: 1px solid #e0e8ef;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   overflow: hidden;
 }
 .rule-center article.open {
   border-color: #a6c6e0;
-  box-shadow: 0 4px 14px var(--color-text) 0b;
+  box-shadow: 0 4px 14px var(--color-text-shadow-subtle);
 }
 .rule-center article > button {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-4);
   border: 0;
   background: var(--color-surface);
   padding: 12px;
@@ -81,7 +81,7 @@
 .rule-center article > button > span {
   width: 34px;
   height: 34px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--color-primary-soft);
   color: var(--color-primary);
   display: grid;
@@ -91,7 +91,7 @@
 .rule-center article > button > div {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   flex: 1;
 }
 .rule-center article > button b {
@@ -124,7 +124,7 @@
 }
 .rule-sources {
   background: var(--color-primary-soft);
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 12px;
   margin-top: 4px;
 }
@@ -145,9 +145,9 @@
   display: flex;
   justify-content: space-between;
   background: var(--color-warning-surface);
-  color: #755716;
+  color: var(--color-warning-label);
   border: 1px solid var(--color-warning-border);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   padding: 11px;
   margin: -5px 0 12px;
   font-size: 9px;

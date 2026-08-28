@@ -55,14 +55,14 @@
 }
 .report-summary {
   background: var(--color-surface);
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 4px 13px;
   margin-bottom: 10px;
 }
 .report-summary p {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   border-bottom: 1px solid var(--color-border);
   padding: 10px 0;
   margin: 0;

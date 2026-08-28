@@ -11,7 +11,7 @@
 .feedback-steps span {
   width: 23px;
   height: 23px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   display: grid;
   place-items: center;
   background: var(--color-border-field);
@@ -30,11 +30,11 @@
 }
 .form-intro {
   display: flex;
-  gap: 10px;
+  gap: var(--space-4);
   background: var(--color-warning-surface);
   color: #6d5215;
   border: 1px solid #e6cc82;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 12px;
 }
 .form-intro svg {
@@ -65,10 +65,10 @@
 .feedback-categories button {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2);
   min-height: 46px;
   border: 1px solid var(--color-border-control);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   background: var(--color-surface);
   color: #324b43;
   text-align: left;
@@ -89,7 +89,7 @@
   width: 100%;
   min-height: 90px;
   border: 1px solid var(--color-border-control);
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   background: var(--color-surface);
   padding: 11px;
   margin-top: 6px;
@@ -108,9 +108,9 @@
   position: relative;
   display: flex !important;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-4);
   border: 1px dashed #a7bacb;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   background: var(--color-surface);
   padding: 12px;
   color: var(--color-primary);
@@ -119,7 +119,7 @@
 .feedback-upload > span {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .feedback-upload b {
   font-size: 10px;
@@ -138,13 +138,13 @@
 .position-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 11px;
 }
 .position-card > div {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 .position-card > div span {
   display: flex;
@@ -162,7 +162,7 @@
 .position-card > div button,
 .position-card > button {
   border: 1px solid var(--color-primary-accent);
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   background: var(--color-surface);
   color: var(--color-primary);
   padding: 7px 9px;
@@ -181,10 +181,10 @@
   clear: both;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2);
   background: var(--color-info-surface);
   color: var(--color-primary);
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   padding: 8px;
   margin: 10px 0 0;
   font-size: 8px;

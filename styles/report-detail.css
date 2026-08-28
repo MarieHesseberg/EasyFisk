@@ -12,13 +12,13 @@
   color: var(--color-primary);
   width: 30px;
   height: 30px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   font-size: 18px;
 }
 .report-status-banner {
   display: flex;
-  gap: 10px;
-  border-radius: 13px;
+  gap: var(--space-4);
+  border-radius: var(--radius-content);
   padding: 12px;
   margin-bottom: 12px;
 }
@@ -33,7 +33,7 @@
 .report-status-banner div {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .report-status-banner b {
   font-size: 10px;
@@ -45,13 +45,13 @@
   width: 100%;
   max-height: 210px;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   margin-bottom: 10px;
 }
 .correction-sent {
   background: #e8eef7;
   color: #314f72;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 12px;
 }
 .correction-sent b {
@@ -72,7 +72,7 @@
 .correction-field textarea {
   min-height: 85px;
   border: 1px solid #d6e2ec;
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   padding: 10px;
   font: 10px Arial;
 }

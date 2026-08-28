@@ -1,9 +1,9 @@
 .stats-tabs {
   display: grid;
   grid-template-columns: 1fr 1.35fr;
-  gap: 5px;
+  gap: var(--space-2);
   background: var(--color-border-subtle);
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   padding: 4px;
   margin: 0 0 18px;
 }
@@ -11,7 +11,7 @@
   border: 0;
   background: transparent;
   color: #64788b;
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   padding: 10px 7px;
   font-size: 10px;
   line-height: 1.2;
@@ -48,14 +48,14 @@
 .personal-rules-title {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
 }
 .personal-rules-title > span {
   width: 43px;
   height: 43px;
   display: grid;
   place-items: center;
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   background: var(--color-surface);
   color: var(--color-primary);
 }
@@ -79,7 +79,7 @@
 .personal-rules > button {
   width: 100%;
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   background: var(--color-primary);
   color: var(--color-surface);
   padding: 13px;
@@ -91,7 +91,7 @@
   align-items: center;
   gap: 3px 7px;
   background: var(--color-surface);
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 12px !important;
 }
 .permit-zone svg {
@@ -107,13 +107,13 @@
 }
 .personal-rule-list {
   background: var(--color-surface);
-  border-radius: 15px;
+  border-radius: var(--radius-card);
   padding: 3px 13px;
 }
 .personal-rule-list p {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-5);
   padding: 10px 0;
   margin: 0;
   border-bottom: 1px solid #e8eff5;

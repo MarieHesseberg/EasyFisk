@@ -6,7 +6,7 @@
   border: 1px solid #d5e1eb;
   background: var(--color-surface);
   color: var(--color-primary);
-  border-radius: 17px;
+  border-radius: var(--radius-feature);
   padding: 14px;
   margin: 16px 0 4px;
   text-align: left;
@@ -15,7 +15,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .past-session-button b {
   font-size: 12px;
@@ -45,7 +45,7 @@
 .past-session-modal select {
   width: 100%;
   border: 1px solid var(--color-border-strong);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   background: var(--color-surface);
   padding: 12px;
   color: var(--color-text);
@@ -58,14 +58,14 @@
 }
 .past-review {
   background: #f1f5fa;
-  border-radius: 15px;
+  border-radius: var(--radius-card);
   padding: 3px 13px;
   margin: 14px 0;
 }
 .past-review p {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   padding: 10px 0;
   margin: 0;
   border-bottom: 1px solid #dce8f2;
@@ -83,10 +83,10 @@
 }
 .late-report-note {
   display: flex;
-  gap: 10px;
+  gap: var(--space-4);
   background: var(--color-warning-surface);
   color: var(--color-warning-copy);
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   padding: 12px;
   margin: 13px 0;
 }
@@ -107,19 +107,42 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-4);
   background: var(--color-surface);
   border: 0;
   color: var(--color-text);
   text-align: left;
-  border-radius: 15px;
+  border-radius: var(--radius-card);
   padding: 12px 13px;
   margin-bottom: 8px;
+}
+.empty-list-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+.empty-list-message > svg {
+  flex: 0 0 auto;
+}
+.empty-list-message p,
+.empty-list-message b,
+.empty-list-message span {
+  display: block;
+  margin: 0;
+}
+.empty-list-message span {
+  margin-top: var(--space-1);
+  font-size: 12px;
 }
 .catch-history-card > span {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--color-primary-surface);
   color: var(--color-primary);
   display: grid;
@@ -129,7 +152,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   margin: 0;
 }
 .catch-history-card b {
@@ -147,7 +170,7 @@
 .catch-violation {
   width: 23px;
   height: 23px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-danger-text);
   color: var(--color-surface);
   display: grid;
@@ -160,7 +183,7 @@
   width: 100%;
   min-height: 76px;
   border: 1px solid var(--color-border-strong);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   background: var(--color-surface);
   padding: 11px;
   color: var(--color-text);
@@ -174,7 +197,7 @@
   gap: 4px;
   background: var(--color-primary-surface-strong);
   color: var(--color-primary);
-  border-radius: 13px;
+  border-radius: var(--radius-content);
   padding: 11px;
   margin: 10px 0;
 }
@@ -191,7 +214,7 @@
 .added-catches.review button {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   text-align: left;
   border: 0;
   border-bottom: 1px solid #e4ebf2;

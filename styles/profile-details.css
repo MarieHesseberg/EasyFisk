@@ -6,8 +6,8 @@
 .detail-alert {
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 17px;
+  gap: var(--space-5);
+  border-radius: var(--radius-feature);
   padding: 15px;
 }
 .detail-hero.valid {
@@ -40,14 +40,14 @@
 .toggle-list,
 .favorite-list {
   background: var(--color-surface);
-  border-radius: 16px;
+  border-radius: var(--radius-card-large);
   padding: 3px 13px;
 }
 .detail-data p,
 .detail-list p {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-4);
   padding: 11px 0;
   margin: 0;
   border-bottom: 1px solid var(--color-border-subtle);
@@ -73,10 +73,10 @@
 }
 .detail-warning {
   display: flex;
-  gap: 10px;
+  gap: var(--space-4);
   background: var(--color-warning-surface);
   color: var(--color-warning-copy);
-  border-radius: 14px;
+  border-radius: var(--radius-card-soft);
   padding: 12px;
 }
 .detail-warning p {
@@ -105,7 +105,7 @@
 .toggle-list label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-4);
   padding: 12px 0;
   border-bottom: 1px solid var(--color-border-subtle);
 }
@@ -116,7 +116,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
 }
 .toggle-list b {
   font-size: 10px;
@@ -155,7 +155,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   margin: 0;
 }
 .favorite-list b {
@@ -178,7 +178,7 @@
   gap: 11px;
   background: var(--color-primary);
   color: var(--color-surface);
-  border-radius: 17px;
+  border-radius: var(--radius-feature);
   padding: 16px;
 }
 .profile-detail h3 {

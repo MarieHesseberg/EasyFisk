@@ -4,7 +4,7 @@
   text-align: left;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
   background: var(--color-primary);
   color: var(--color-surface);
   padding: 18px;
@@ -15,7 +15,7 @@
   height: 49px;
   background: #e8f0f7;
   color: var(--color-primary);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   display: grid;
   place-items: center;
   font-weight: bold;
@@ -53,7 +53,7 @@
   place-items: center;
   width: 37px;
   height: 37px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--color-primary-soft);
   color: var(--color-primary);
 }
@@ -61,7 +61,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-1);
   margin: 0;
 }
 .menu-list b {

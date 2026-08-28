@@ -7,7 +7,7 @@
   display: block !important;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 17px;
+  border-radius: var(--radius-feature);
   padding: 17px;
   box-shadow: var(--shadow-panel);
 }
@@ -27,7 +27,7 @@
 .header-alert-panel p {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   font-size: 9px;
   border-top: 1px solid #e9eff5;
   padding: 9px 0;
@@ -41,7 +41,7 @@
   bottom: 54px;
   background: var(--color-primary-dark);
   color: var(--color-surface);
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   padding: 10px;
   text-align: center;
   font-size: 9px;
@@ -51,7 +51,7 @@
   text-align: center;
   background: var(--color-surface);
   border: 2px dashed #9fb5c8;
-  border-radius: 16px;
+  border-radius: var(--radius-card-large);
   padding: 18px;
   font: 800 21px Arial;
   color: var(--color-primary);

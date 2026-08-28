@@ -81,7 +81,7 @@
   border: 0;
   color: var(--color-primary);
   padding: 12px 15px;
-  border-radius: 11px;
+  border-radius: var(--radius-compact);
   font-size: 10px;
   font-weight: bold;
 }
