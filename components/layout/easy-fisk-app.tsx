@@ -1,10 +1,11 @@
 "use client";
 
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
+import { BottomNavigation } from "@/components/layout/bottom-navigation";
+import { DemoControlPanel } from "@/components/layout/demo-control-panel";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
@@ -34,24 +35,6 @@ export function EasyFiskApp() {
     toast,
     zone,
   } = state;
-  const nav = [
-    ["home", "Hjem", "home"],
-    ["map", "Kart", "map"],
-    ["rules", "Regler", "book"],
-    ["stats", "Statistikk", "stats"],
-    ["more", "Mer", "more"],
-  ] as const;
-  const features = [
-    "Samlet kontroll av fiskekort, avgift, desinfisering og kvote",
-    "Start/stopp av fiskeøkt med GPS-forslag til sone",
-    "Fangstrapport i tre steg med automatisk tid og sone",
-    "Nullfangst, fiskehistorikk og personlig kvoteregnskap",
-    "Veiledende kart over de fire faktiske hovedsonene",
-    "Regler tilpasset sesong, sone og fangst",
-    "Varsler om temperatur, stengninger og rapporteringsfrist",
-    "Eksempel på aggregert fangst- og innsatsstatistikk",
-    "Kontrollkort for oppsyn, favorittsoner og tilbakemeldinger",
-  ];
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
@@ -103,22 +86,11 @@ export function EasyFiskApp() {
           />
         )}{" "}
         {screen === "more" && <ProfileScreen />}
-        <nav className="bottom-nav" aria-label="Hovednavigasjon">
-          {nav.map(([id, label, icon]) => (
-            <button
-              key={id}
-              onClick={() => {
-                actions.navigate(id);
-              }}
-              className={screen === id ? "selected" : ""}
-              aria-current={screen === id ? "page" : undefined}
-            >
-              <Icon name={icon} />
-              <span>{label}</span>
-              {id === "stats" && active && <i />}
-            </button>
-          ))}
-        </nav>
+        <BottomNavigation
+          activeScreen={screen}
+          hasActiveSession={active}
+          navigate={actions.navigate}
+        />
         {toast && (
           <div className="toast">
             <Icon name="check" size={18} />
@@ -141,63 +113,15 @@ export function EasyFiskApp() {
           <ProfileDetailDialog destination={globalDetail} close={actions.closeDetail} />
         )}
       </div>
-      <aside className="prototype-note feature-panel">
-        <span>DEMONSTRASJONSMODUS</span>
-        <h2>Prøv statusmotoren</h2>
-        <p className="demo-intro">
-          Velg en situasjon. Valget påvirker statuskontrollen og hva brukeren kan gjøre videre.
-        </p>
-        <label className="demo-select-label" htmlFor="demo-status">
-          Situasjon
-        </label>
-        <select
-          id="demo-status"
-          className="demo-select"
-          value={demoStatus}
-          onChange={(e) => {
-            actions.selectDemoStatus(e.target.value as typeof demoStatus);
-          }}
-        >
-          {demoStatuses.map((s) => (
-            <option value={s.id} key={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </select>
-        <div className={"demo-result " + selectedDemo.level}>
-          <b>
-            {selectedDemo.level === "blocked"
-              ? "Blokkerer oppstart"
-              : selectedDemo.level === "warning"
-                ? "Krever vurdering"
-                : "Oppstart tillatt"}
-          </b>
-          <span>{selectedDemo.detail}</span>
-        </div>
-        <button
-          className="demo-start"
-          onClick={() => {
-            actions.navigate("home");
-            actions.setFlow("start");
-          }}
-        >
-          Test valgt situasjon
-        </button>
-        <div className="feature-divider" />
-        <span>FUNKSJONER I PROTOTYPEN</span>
-        <ul>
-          {features.map((f) => (
-            <li key={f}>
-              <Icon name="check" size={16} />
-              <span>{f}</span>
-            </li>
-          ))}
-        </ul>
-        <small>
-          Prototypen bruker realistiske {activeFishingRules.metadata.seasonYear}-regler. Kart,
-          persondata, forhold og statistikk er demonstrasjonsdata.
-        </small>
-      </aside>
+      <DemoControlPanel
+        scenarios={demoStatuses}
+        selected={selectedDemo}
+        selectStatus={actions.selectDemoStatus}
+        startTest={() => {
+          actions.navigate("home");
+          actions.setFlow("start");
+        }}
+      />
     </main>
   );
 }

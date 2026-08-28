@@ -127,8 +127,8 @@ test("responsiv stil dekker sikre områder, dynamisk høyde og redusert bevegels
 });
 
 test("interaktive valg har tilgjengelig valgt tilstand", async () => {
-  const [app, map, statistics, rules, sessionStep, catchStep] = await Promise.all([
-    readFile(new URL("../components/layout/easy-fisk-app.tsx", import.meta.url), "utf8"),
+  const [navigation, map, statistics, rules, sessionStep, catchStep] = await Promise.all([
+    readFile(new URL("../components/layout/bottom-navigation.tsx", import.meta.url), "utf8"),
     readFile(new URL("../features/map/map-screen.tsx", import.meta.url), "utf8"),
     readFile(new URL("../features/statistics/statistics-screen.tsx", import.meta.url), "utf8"),
     readFile(
@@ -145,7 +145,7 @@ test("interaktive valg har tilgjengelig valgt tilstand", async () => {
     ),
   ]);
 
-  assert.match(app, /aria-current=/);
+  assert.match(navigation, /aria-current=/);
   assert.match(map, /aria-pressed=/);
   assert.match(statistics, /aria-pressed=/);
   assert.match(rules, /disabled=\{!confirmed\}/);

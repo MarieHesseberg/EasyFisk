@@ -9,9 +9,10 @@ import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
+import { ActiveSessionCard } from "@/features/fishing-session/components/active-session-card";
+import { CatchHistoryList } from "@/features/fishing-session/components/catch-history-list";
+import { SessionHistoryList } from "@/features/fishing-session/components/session-history-list";
 import { PastSessionForm } from "@/features/history/past-session-form";
-import { FishingHistoryCard } from "@/features/statistics/fishing-history-card";
-import { formatClock, formatDuration, formatLongDuration } from "@/lib/time";
 
 export function FishingActivityScreen({
   active,
@@ -58,26 +59,14 @@ export function FishingActivityScreen({
     <div className={embedded ? "activity-embedded" : "screen"}>
       {!embedded && <ScreenHeader title="Min aktivitet" />}
       {active ? (
-        <section className="active-session">
-          <span className="pulse" />
-          <small>AKTIV FISKEØKT</small>
-          <h2>{activeZone}</h2>
-          <div className="big-time">{formatDuration(elapsed)}</div>
-          <p>Startet i dag kl. {formatClock(startTime)} · GPS-sone bekreftet</p>
-          <div className="session-actions">
-            <button onClick={() => setShowCatchReport(true)}>
-              <Icon name="fish" />
-              Registrer fangst
-            </button>
-            <button onClick={onShowRules}>
-              <Icon name="map" />
-              Sone og regler
-            </button>
-          </div>
-          <button className="outline-danger" onClick={onStop}>
-            Stopp · bekreft fangst eller nullfangst
-          </button>
-        </section>
+        <ActiveSessionCard
+          activeZone={activeZone}
+          elapsed={elapsed}
+          startTime={startTime}
+          registerCatch={() => setShowCatchReport(true)}
+          showRules={onShowRules}
+          stop={onStop}
+        />
       ) : (
         <section className="empty">
           <span>
@@ -100,67 +89,13 @@ export function FishingActivityScreen({
         <Icon name="chevron" size={18} />
       </button>
 
-      {catches.length > 0 && (
-        <section>
-          <div className="section-head">
-            <h3>Siste fangster</h3>
-          </div>
-          {catches
-            .slice()
-            .reverse()
-            .map((item) => (
-              <button
-                className="catch-history-card"
-                key={item.id}
-                onClick={() => setSelectedCatch(item)}
-              >
-                <span>
-                  <Icon name="fish" />
-                </span>
-                <p>
-                  <b>
-                    {item.species} · {item.result.toLowerCase()}
-                  </b>
-                  <small>
-                    {item.zone} · {item.length} cm · {item.weight} kg
-                  </small>
-                  <em>
-                    {formatClock(item.caughtAt)} ·{" "}
-                    {item.late ? "forsinket rapport" : "rapportert innen fristen"}
-                    {item.correction ? " · rettelse meldt" : ""}
-                  </em>
-                </p>
-                {item.violation ? (
-                  <i className="catch-violation">!</i>
-                ) : (
-                  <Icon name="check" size={17} />
-                )}
-              </button>
-            ))}
-        </section>
-      )}
-
-      <section>
-        <div className="section-head">
-          <h3>Siste fiskeøkter</h3>
-          <button onClick={() => setShowAllHistory((current) => !current)}>
-            {showAllHistory ? "Vis færre" : "Se alle"}
-          </button>
-        </div>
-        {lastSession && (
-          <FishingHistoryCard
-            day={String(new Date(lastSession.end).getDate()).padStart(2, "0")}
-            title={lastSession.zone}
-            time={`${formatClock(lastSession.start)}–${formatClock(lastSession.end)} · ${formatLongDuration(lastSession.duration)}`}
-            result={lastSession.result}
-          />
-        )}
-        {activityHistory.map((entry, index) =>
-          showAllHistory || index === 0 || index === activityHistory.length - 1 ? (
-            <FishingHistoryCard key={`${entry.day}-${entry.title}`} {...entry} />
-          ) : null,
-        )}
-      </section>
+      <CatchHistoryList catches={catches} selectCatch={setSelectedCatch} />
+      <SessionHistoryList
+        entries={activityHistory}
+        lastSession={lastSession}
+        showAll={showAllHistory}
+        toggleAll={() => setShowAllHistory((current) => !current)}
+      />
 
       {(showCatchReport || finishAfterCatch) && (
         <CatchReportModal
