@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   padding: 9px 8px 15px;
-  z-index: 20;
+  z-index: var(--layer-navigation);
 }
 .bottom-nav button {
   position: relative;
@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2);
   font-size: 9px;
   font-weight: 700;
 }
@@ -30,7 +30,7 @@
   position: absolute;
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-notification);
   right: 17px;
 }

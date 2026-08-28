@@ -2,7 +2,7 @@
   position: absolute;
   inset: 0;
   background: #102c4677;
-  z-index: 30;
+  z-index: var(--layer-dialog);
   display: flex;
   align-items: flex-end;
 }
@@ -32,7 +32,7 @@
 .choice {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
+  gap: var(--space-2);
 }
 .choice.two {
   grid-template-columns: 1fr 1fr;
@@ -40,8 +40,8 @@
 .choice button {
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  border-radius: 11px;
-  padding: 12px 5px;
+  border-radius: var(--radius-control);
+  padding: var(--space-5) var(--space-2);
 }
 .choice .selected {
   background: var(--color-primary);
@@ -50,19 +50,19 @@
 .input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 9px;
+  gap: var(--space-3);
 }
 .input-row input {
   width: 100%;
   border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: var(--radius-control);
+  padding: var(--space-5);
   margin-top: 6px;
 }
 .auto-note {
   background: var(--color-primary-soft);
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: var(--radius-control);
+  padding: var(--space-4);
   font-size: 10px;
   display: flex;
   gap: 6px;
