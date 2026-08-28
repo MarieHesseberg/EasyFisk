@@ -154,3 +154,7 @@ Hjemskjermen sammenlignes automatisk på iPhone-, Android- og skrivebordsstørre
 Playwright. Kjør `npm run test:visual` for å kontrollere referansebildene lokalt. Oppdater
 bildene bare ved en bevisst og godkjent designendring med
 `npm run test:visual -- --update-snapshots`.
+
+Skjermbildetesten tillater inntil åtte prosent pikselforskjell fordi Chromium gjengir
+skrifter litt forskjellig på Windows og Linux. Strukturelle endringer kontrolleres i
+tillegg av de rendertestede brukerflytene.
