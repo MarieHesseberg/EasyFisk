@@ -24,16 +24,6 @@ export function useFishingLogController(repository: FishingLogRepository) {
     };
   }, [repository]);
 
-  function saveSession(session: SessionRecord) {
-    const result = repository.saveSession(session);
-    if (!result.ok) {
-      logger.error(result.error, { cause: result.cause });
-      return result;
-    }
-    setLastSession(session);
-    return result;
-  }
-
   function saveCatch(record: CatchRecord) {
     const submittedAt = Date.now();
     const completed = completeCatchRecord(record, `ME-${submittedAt}`, submittedAt);
@@ -47,8 +37,14 @@ export function useFishingLogController(repository: FishingLogRepository) {
   }
 
   function savePastSession(session: SessionRecord, records: CatchRecord[] = []) {
-    const sessionResult = saveSession(session);
-    if (!sessionResult.ok) return sessionResult;
+    return saveCompletedSession(session, records, false);
+  }
+
+  function saveCompletedSession(
+    session: SessionRecord,
+    records: CatchRecord[] = [],
+    clearActiveSession = true,
+  ) {
     const submittedAt = Date.now();
     const completed = records.map((record, index) =>
       completeCatchRecord(
@@ -57,15 +53,14 @@ export function useFishingLogController(repository: FishingLogRepository) {
         submittedAt,
       ),
     );
-    for (const record of completed) {
-      const result = repository.saveCatch(record);
-      if (!result.ok) {
-        logger.error(result.error, { cause: result.cause });
-        return result;
-      }
+    const result = repository.saveCompletedSession(session, completed, clearActiveSession);
+    if (!result.ok) {
+      logger.error(result.error, { cause: result.cause });
+      return operationFailed(result.error, result.cause);
     }
+    setLastSession(session);
     if (completed.length) setCatches((current) => [...current, ...completed]);
-    return operationSucceeded(undefined);
+    return operationSucceeded(completed);
   }
 
   function correctCatch(id: string, note: string) {
@@ -82,6 +77,6 @@ export function useFishingLogController(repository: FishingLogRepository) {
 
   return {
     state: { catches, lastSession },
-    actions: { correctCatch, saveCatch, savePastSession, saveSession },
+    actions: { correctCatch, saveCatch, saveCompletedSession, savePastSession },
   };
 }

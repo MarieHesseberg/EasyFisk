@@ -10,5 +10,10 @@ export interface FishingLogRepository {
   saveCatch(record: CatchRecord): OperationResult<void>;
   saveSession(record: SessionRecord): OperationResult<void>;
   saveActiveSession(session: ActiveSessionSnapshot | null): OperationResult<void>;
+  saveCompletedSession(
+    session: SessionRecord,
+    catches: CatchRecord[],
+    clearActiveSession: boolean,
+  ): OperationResult<void>;
   updateCatchCorrection(id: string, note: string): OperationResult<void>;
 }

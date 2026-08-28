@@ -43,6 +43,13 @@ export function createLocalStorageFishingLogRepository(
       update((current) => ({ ...current, catches: [...current.catches, record] })),
     saveSession: (record) => update((current) => ({ ...current, latestSession: record })),
     saveActiveSession: (session) => update((current) => ({ ...current, activeSession: session })),
+    saveCompletedSession: (session, catches, clearActiveSession) =>
+      update((current) => ({
+        ...current,
+        latestSession: session,
+        catches: [...current.catches, ...catches],
+        activeSession: clearActiveSession ? null : current.activeSession,
+      })),
     updateCatchCorrection: (id, note) =>
       update((current) => ({
         ...current,

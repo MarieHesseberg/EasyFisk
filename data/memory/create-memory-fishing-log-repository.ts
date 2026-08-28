@@ -33,6 +33,12 @@ export function createMemoryFishingLogRepository(
       activeSession = session;
       return operationSucceeded(undefined);
     },
+    saveCompletedSession: (session, completedCatches, clearActiveSession) => {
+      latestSession = session;
+      catches = [...catches, ...completedCatches];
+      if (clearActiveSession) activeSession = null;
+      return operationSucceeded(undefined);
+    },
     updateCatchCorrection: (id, note) => {
       catches = catches.map((record) =>
         record.id === id ? { ...record, correction: note } : record,

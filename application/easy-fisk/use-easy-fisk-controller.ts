@@ -50,9 +50,13 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         findZoneName(sessionZone, fishingContentRepository.getZones()),
         "Nullfangst registrert",
       );
-      log.actions.saveSession(completed);
+      const result = log.actions.saveCompletedSession(completed, [], true);
+      if (!result.ok) {
+        showToast(result.error);
+        return;
+      }
       session.actions.setElapsed(completed.duration);
-      session.actions.stop();
+      session.actions.setActive(false);
       navigation.actions.setFlow("summary");
       return;
     }
@@ -61,24 +65,30 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
 
   function addCatch(record: CatchRecord) {
+    if (finishAfterCatch) {
+      const end = Date.now();
+      const completedSession = createSessionRecord(
+        startTime ?? end,
+        end,
+        record.zone,
+        `1 ${record.species.toLowerCase()} · ${record.result.toLowerCase()}`,
+      );
+      const completedResult = log.actions.saveCompletedSession(completedSession, [record], true);
+      if (!completedResult.ok) {
+        showToast(completedResult.error);
+        return;
+      }
+      session.actions.setActive(false);
+      showToast("Fangsten er lagret og kvoten er oppdatert");
+      return;
+    }
+
     const savedResult = log.actions.saveCatch(record);
     if (!savedResult.ok) {
       showToast(savedResult.error);
       return;
     }
-    const saved = savedResult.value;
     showToast("Fangsten er lagret og kvoten er oppdatert");
-    if (!finishAfterCatch) return;
-    const end = Date.now();
-    log.actions.saveSession(
-      createSessionRecord(
-        startTime ?? end,
-        end,
-        record.zone,
-        `1 ${saved.species.toLowerCase()} · ${saved.result.toLowerCase()}`,
-      ),
-    );
-    session.actions.stop();
   }
 
   function addPastSession(record: SessionRecord, records?: CatchRecord[]) {
@@ -87,8 +97,12 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
 
   function selectDemoStatus(status: typeof demoStatus) {
+    const stopResult = session.actions.stop();
+    if (!stopResult.ok) {
+      showToast(stopResult.error);
+      return;
+    }
     navigation.actions.setDemoStatus(status);
-    session.actions.stop();
     navigation.actions.closeFlow();
   }
 

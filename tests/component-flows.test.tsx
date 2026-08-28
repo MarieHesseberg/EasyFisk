@@ -8,6 +8,7 @@ import { ProfileDetailDialog } from "../features/profile/profile-detail-dialog";
 import { useEasyFiskController } from "../application/easy-fisk/use-easy-fisk-controller";
 import { createMemoryFishingLogRepository } from "../data/memory/create-memory-fishing-log-repository";
 import { StopSessionStep } from "../features/fishing-session/fishing-flow/stop-session-step";
+import { operationFailed } from "../domain/shared/operation-result";
 
 afterEach(cleanup);
 
@@ -157,4 +158,23 @@ test("tidligere økt og fangst kan etterregistreres", () => {
   });
   expect(result.current.state.lastSession).toEqual(session);
   expect(result.current.state.catches).toHaveLength(1);
+});
+
+test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", () => {
+  const memoryRepository = createMemoryFishingLogRepository();
+  const repository = {
+    ...memoryRepository,
+    saveCompletedSession: () => operationFailed("Kunne ikke lagre fiskedata på enheten."),
+  };
+  const { result } = renderHook(() => useEasyFiskController(repository));
+
+  act(() => result.current.actions.setFlow("start"));
+  act(() => result.current.actions.finishSessionFlow(undefined, 3));
+  act(() => result.current.actions.setFlow("stop"));
+  act(() => result.current.actions.finishSessionFlow(false));
+
+  expect(result.current.state.active).toBe(true);
+  expect(result.current.state.lastSession).toBe(null);
+  expect(result.current.state.flow).toBe("stop");
+  expect(result.current.state.toast).toBe("Kunne ikke lagre fiskedata på enheten.");
 });

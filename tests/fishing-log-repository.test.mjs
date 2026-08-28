@@ -53,3 +53,16 @@ test("fangstkorrigering oppdaterer bare valgt fangst", () => {
   assert.equal(repository.listCatches()[0].correction, undefined);
   assert.equal(repository.listCatches()[1].correction, "Kontrollert mot originalrapport");
 });
+
+test("ferdig økt lagres samlet med fangster og avslutter aktiv økt", () => {
+  const repository = createMemoryFishingLogRepository({
+    activeSession: { startTime: 1_000, zone: 3 },
+  });
+
+  const result = repository.saveCompletedSession(session, [catchRecord], true);
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(repository.getLatestSession(), session);
+  assert.deepEqual(repository.listCatches(), [catchRecord]);
+  assert.equal(repository.getActiveSession(), null);
+});

@@ -72,6 +72,33 @@ test("localStorage quota-feil returneres som et forståelig resultat", () => {
   assert.match(result.error, /Kunne ikke lagre/);
 });
 
+test("feil under sluttlagring etterlater ingen delvis lagret økt", () => {
+  const values = new Map();
+  let failWrites = false;
+  const storage = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => {
+      if (failWrites) throw new DOMException("full", "QuotaExceededError");
+      values.set(key, value);
+    },
+  };
+  const repository = createLocalStorageFishingLogRepository(storage);
+  const activeSession = { startTime: 1_000, zone: 3 };
+  repository.saveActiveSession(activeSession);
+  failWrites = true;
+
+  const result = repository.saveCompletedSession(
+    { start: 1_000, end: 4_000, duration: 3, zone: "Sone 3", result: "1 fangst" },
+    [catchRecord],
+    true,
+  );
+
+  assert.equal(result.ok, false);
+  assert.equal(repository.getLatestSession(), null);
+  assert.deepEqual(repository.listCatches(), []);
+  assert.deepEqual(repository.getActiveSession(), activeSession);
+});
+
 test("ødelagt localStorage-data gir trygge standardverdier", () => {
   const storage = createStorage();
   storage.setItem("easyfisk:fishing-log:v1", "ikke gyldig JSON");
