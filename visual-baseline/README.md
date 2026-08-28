@@ -158,3 +158,6 @@ bildene bare ved en bevisst og godkjent designendring med
 Skjermbildetesten tillater inntil åtte prosent pikselforskjell fordi Chromium gjengir
 skrifter litt forskjellig på Windows og Linux. Strukturelle endringer kontrolleres i
 tillegg av de rendertestede brukerflytene.
+
+Mobilbildene dekker hele siden. Desktopbildet dekker den faste viewporten på 1440 × 900
+for å unngå plattformavhengige høydeforskjeller fra skriftrendering.

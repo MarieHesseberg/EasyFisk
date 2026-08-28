@@ -14,7 +14,7 @@ for (const viewport of viewports) {
     await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
     await expect(page).toHaveScreenshot(`home-${viewport.name}.png`, {
       animations: "disabled",
-      fullPage: true,
+      fullPage: viewport.name !== "desktop",
       // Chromium rasteriserer skrifter litt forskjellig på Windows og Linux i CI.
       // Grensen tåler dette, men fanger fortsatt tydelige layout- og stilendringer.
       maxDiffPixelRatio: 0.08,
