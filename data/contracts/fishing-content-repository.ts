@@ -6,5 +6,6 @@ export interface FishingContentRepository {
   getDemoScenarios(): readonly DemoScenario[];
   getRuleSections(): readonly RuleSection[];
   getZones(): readonly FishingZone[];
+  getSuggestedZoneId(): ZoneId;
   findZone(zoneId: ZoneId): FishingZone | undefined;
 }

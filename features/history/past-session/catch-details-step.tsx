@@ -1,11 +1,8 @@
 import { FormError } from "@/components/ui/form-error";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
-import type { CatchOutcome, FishSpecies } from "@/domain/catches/catch";
+import { catchOutcomeOptions, fishSpeciesOptions } from "@/domain/catches/catch";
 import type { PastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock } from "@/lib/time";
-
-const speciesOptions: readonly FishSpecies[] = ["Laks", "Sjøørret", "Annen art"];
-const outcomeOptions: readonly CatchOutcome[] = ["Gjenutsatt", "Avlivet"];
 
 export function CatchDetailsStep({ controller }: { controller: PastSessionController }) {
   const {
@@ -63,7 +60,7 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
       </label>
       <label>Art</label>
       <div className="choice">
-        {speciesOptions.map((x) => (
+        {fishSpeciesOptions.map((x) => (
           <button
             key={x}
             className={species === x ? "selected" : ""}
@@ -76,7 +73,7 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
       </div>
       <label>Resultat</label>
       <div className="choice two">
-        {outcomeOptions.map((x) => (
+        {catchOutcomeOptions.map((x) => (
           <button
             key={x}
             className={outcome === x ? "selected" : ""}

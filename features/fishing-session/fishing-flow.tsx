@@ -24,6 +24,7 @@ export function FishingFlow({
   elapsed,
   lastSession,
   resolveBlock,
+  sessionZone,
 }: {
   mode: FlowMode;
   finish: (caught?: boolean, selectedZone?: ZoneId) => void;
@@ -33,6 +34,7 @@ export function FishingFlow({
   elapsed: number;
   lastSession: SessionRecord | null;
   resolveBlock: () => void;
+  sessionZone: ZoneId;
 }) {
   const [step, setStep] = useState(1);
   const [selectedZone, setSelectedZone] = useState<ZoneId>(3);
@@ -71,6 +73,7 @@ export function FishingFlow({
                 next={() => setStep(2)}
                 resolveBlock={resolveBlock}
                 scenario={scenario}
+                selectedZone={selectedZone}
               />
             )}
             {step === 2 && <PositionStep back={() => setStep(1)} next={() => setStep(3)} />}
@@ -99,6 +102,7 @@ export function FishingFlow({
             elapsed={elapsed}
             finish={finish}
             startTime={startTime}
+            zoneName={fishingContentRepository.findZone(sessionZone)?.name ?? `Sone ${sessionZone}`}
           />
         )}
 

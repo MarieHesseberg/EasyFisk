@@ -107,6 +107,7 @@ export function EasyFiskApp() {
             elapsed={elapsed}
             lastSession={lastSession}
             resolveBlock={actions.resolveBlockedStatus}
+            sessionZone={sessionZone}
           />
         )}
         {globalDetail && (

@@ -8,46 +8,6 @@ import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 
-type MenuItem = {
-  destination: Exclude<DetailDestination, "feedback" | "control-card">;
-  icon: string;
-  title: string;
-  description: string;
-};
-
-const items: MenuItem[] = [
-  {
-    destination: "permits",
-    icon: "ticket",
-    title: "Mine fiskekort",
-    description: "Aktive, kommende og tidligere kort",
-  },
-  {
-    destination: "disinfection",
-    icon: "shield",
-    title: "Desinfisering",
-    description: "Gyldighet og registreringssted",
-  },
-  {
-    destination: "notifications",
-    icon: "bell",
-    title: "Varsler og stengninger",
-    description: "Regelendringer, temperatur og frister",
-  },
-  {
-    destination: "favorite-zones",
-    icon: "map",
-    title: "Favorittsoner",
-    description: "Rask tilgang til soner og delsoner",
-  },
-  {
-    destination: "profile-privacy",
-    icon: "user",
-    title: "Profil og personvern",
-    description: "Språk, samtykker og konto",
-  },
-];
-
 export function ProfileScreen() {
   const [detail, setDetail] = useState<DetailDestination | null>(null);
   const { profile } = appContentRepository.getContent();
@@ -63,7 +23,7 @@ export function ProfileScreen() {
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
-        {items.map(({ destination, icon, title, description }) => (
+        {profile.menuItems.map(({ destination, icon, title, description }) => (
           <button key={destination} onClick={() => setDetail(destination)}>
             <span>
               <Icon name={icon} />

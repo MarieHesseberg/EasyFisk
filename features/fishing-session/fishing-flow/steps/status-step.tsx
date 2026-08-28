@@ -2,6 +2,10 @@ import { CheckRow } from "@/components/ui/check-row";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
+import { appContentRepository } from "@/data/repositories/app-content";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
+import type { ZoneId } from "@/domain/zones/zone";
 
 export function StatusStep({
   cancel,
@@ -9,14 +13,18 @@ export function StatusStep({
   next,
   resolveBlock,
   scenario,
+  selectedZone,
 }: {
   cancel: () => void;
   demoStatus: DemoStatus;
   next: () => void;
   resolveBlock: () => void;
   scenario: DemoScenario;
+  selectedZone: ZoneId;
 }) {
-  const { season, temperature } = activeFishingRules;
+  const { temperature } = activeFishingRules;
+  const { riverStatus } = appContentRepository.getContent();
+  const zoneName = fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
   const blocked = scenario.level === "blocked";
 
   return (
@@ -39,13 +47,13 @@ export function StatusStep({
       </div>
       <div className="flow-checks">
         <CheckRow
-          title="Fiskekort · Sone 3"
+          title={`Fiskekort · ${zoneName}`}
           sub={
             demoStatus === "noPermit"
               ? "Ikke funnet"
               : demoStatus === "wrongZone"
-                ? "Kortet gjelder Sone 2"
-                : "Gyldig til kl. 17:59"
+                ? `Kortet gjelder ${riverStatus.alternatePermitZoneShortName}`
+                : `Gyldig til kl. ${riverStatus.permitExpiry}`
           }
           state={["noPermit", "wrongZone"].includes(demoStatus) ? "error" : "ok"}
         />
@@ -91,11 +99,11 @@ export function StatusStep({
               ? `${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C · fisket er stanset`
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel"
-                : "11 °C · elva er åpen"
+                : `${riverStatus.temperatureCelsius} °C · elva er åpen`
           }
           state={["hotWater", "closed"].includes(demoStatus) ? "error" : "ok"}
         />
-        <CheckRow title="Fiskesesong" sub={`Sone 3 · ${season.standardZoneLabel}`} />
+        <CheckRow title="Fiskesesong" sub={`${zoneName} · ${getZoneSeasonLabel(selectedZone)}`} />
       </div>
       {blocked ? (
         <>

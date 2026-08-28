@@ -4,6 +4,17 @@ import { activeFishingRules } from "../../domain/fishing-rules/mandalselva-2026.
 const { metadata, temperature } = activeFishingRules;
 
 export const mockAppContent: AppContent = {
+  demoFeatures: [
+    "Samlet kontroll av fiskekort, avgift, desinfisering og kvote",
+    "Start/stopp av fiskeøkt med GPS-forslag til sone",
+    "Fangstrapport i tre steg med automatisk tid og sone",
+    "Nullfangst, fiskehistorikk og personlig kvoteregnskap",
+    "Veiledende kart over de fire faktiske hovedsonene",
+    "Regler tilpasset sesong, sone og fangst",
+    "Varsler om temperatur, stengninger og rapporteringsfrist",
+    "Eksempel på aggregert fangst- og innsatsstatistikk",
+    "Kontrollkort for oppsyn, favorittsoner og tilbakemeldinger",
+  ],
   riverStatus: {
     currentZoneName: "Sone 3 · Øyslebø–Laudal",
     currentZoneShortName: "Sone 3",
@@ -135,6 +146,38 @@ export const mockAppContent: AppContent = {
         id: "reportingDeadline",
         label: "Rapporteringsfrist",
         description: "Påminnelse hvis en fangst ikke er ferdig rapportert",
+      },
+    ],
+    menuItems: [
+      {
+        destination: "permits",
+        icon: "ticket",
+        title: "Mine fiskekort",
+        description: "Aktive, kommende og tidligere kort",
+      },
+      {
+        destination: "disinfection",
+        icon: "shield",
+        title: "Desinfisering",
+        description: "Gyldighet og registreringssted",
+      },
+      {
+        destination: "notifications",
+        icon: "bell",
+        title: "Varsler og stengninger",
+        description: "Regelendringer, temperatur og frister",
+      },
+      {
+        destination: "favorite-zones",
+        icon: "map",
+        title: "Favorittsoner",
+        description: "Rask tilgang til soner og delsoner",
+      },
+      {
+        destination: "profile-privacy",
+        icon: "user",
+        title: "Profil og personvern",
+        description: "Språk, samtykker og konto",
       },
     ],
   },

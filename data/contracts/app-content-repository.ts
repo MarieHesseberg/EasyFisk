@@ -1,9 +1,11 @@
 import type { NotificationPreference } from "@/domain/preferences/preferences";
+import type { DetailDestination } from "@/domain/navigation/navigation";
 
 export type LabelValue = { label: string; value: string; isPositive?: boolean };
 export type HistoryEntry = { day: string; title: string; time: string; result: string };
 
 export type AppContent = {
+  demoFeatures: readonly string[];
   riverStatus: {
     currentZoneName: string;
     currentZoneShortName: string;
@@ -55,6 +57,12 @@ export type AppContent = {
     notificationOptions: readonly {
       id: NotificationPreference;
       label: string;
+      description: string;
+    }[];
+    menuItems: readonly {
+      destination: Exclude<DetailDestination, "feedback" | "control-card">;
+      icon: string;
+      title: string;
       description: string;
     }[];
   };

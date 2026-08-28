@@ -1,6 +1,9 @@
 export type FishSpecies = "Laks" | "Sjøørret" | "Annen art";
 export type CatchOutcome = "Gjenutsatt" | "Avlivet";
 
+export const fishSpeciesOptions: readonly FishSpecies[] = ["Laks", "Sjøørret", "Annen art"];
+export const catchOutcomeOptions: readonly CatchOutcome[] = ["Gjenutsatt", "Avlivet"];
+
 export type CatchRecord = {
   id: string;
   caughtAt: number;

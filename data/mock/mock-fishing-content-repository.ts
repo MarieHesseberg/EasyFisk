@@ -7,5 +7,6 @@ export const mockFishingContentRepository: FishingContentRepository = {
   getDemoScenarios: () => demoStatuses,
   getRuleSections: () => ruleSections,
   getZones: () => zones,
+  getSuggestedZoneId: () => 3,
   findZone: (zoneId) => zones.find((zone) => zone.id === zoneId),
 };

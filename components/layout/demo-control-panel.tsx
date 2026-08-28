@@ -1,18 +1,7 @@
 import { Icon } from "@/components/ui/icon";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
-
-const features = [
-  "Samlet kontroll av fiskekort, avgift, desinfisering og kvote",
-  "Start/stopp av fiskeøkt med GPS-forslag til sone",
-  "Fangstrapport i tre steg med automatisk tid og sone",
-  "Nullfangst, fiskehistorikk og personlig kvoteregnskap",
-  "Veiledende kart over de fire faktiske hovedsonene",
-  "Regler tilpasset sesong, sone og fangst",
-  "Varsler om temperatur, stengninger og rapporteringsfrist",
-  "Eksempel på aggregert fangst- og innsatsstatistikk",
-  "Kontrollkort for oppsyn, favorittsoner og tilbakemeldinger",
-];
+import { appContentRepository } from "@/data/repositories/app-content";
 
 export function DemoControlPanel({
   scenarios,
@@ -25,6 +14,7 @@ export function DemoControlPanel({
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
 }) {
+  const { demoFeatures } = appContentRepository.getContent();
   return (
     <aside className="prototype-note feature-panel">
       <span>DEMONSTRASJONSMODUS</span>
@@ -63,7 +53,7 @@ export function DemoControlPanel({
       <div className="feature-divider" />
       <span>FUNKSJONER I PROTOTYPEN</span>
       <ul>
-        {features.map((feature) => (
+        {demoFeatures.map((feature) => (
           <li key={feature}>
             <Icon name="check" size={16} />
             <span>{feature}</span>

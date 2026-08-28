@@ -3,6 +3,7 @@ import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import type { ZoneId } from "@/domain/zones/zone";
+import { getSubzones } from "@/domain/zones/zone-rules";
 
 const zones = fishingContentRepository.getZones();
 
@@ -20,17 +21,20 @@ export function ZoneStep({
   selectZone: (zone: ZoneId) => void;
 }) {
   const nearBorder = demoStatus === "zoneBorder";
+  const selectedZoneContent = zones.find((zone) => zone.id === selectedZone) ?? zones[0];
+  const selectedSubzones = getSubzones(selectedZone);
+  const zoneLabel = selectedZoneContent.name.split(" · ")[0];
 
   return (
     <>
       <FlowTitle
         icon="map"
         eyebrow="SONEFORSLAG"
-        title={nearBorder ? "Du er nær en sonegrense" : "Vi fant Sone 3"}
+        title={nearBorder ? "Du er nær en sonegrense" : `Vi fant ${zoneLabel}`}
         text={
           nearBorder
-            ? "GPS-posisjonen kan ligge i Sone 2 eller Sone 3. Velg sonen som stemmer med fysisk skilting."
-            : "Posisjonen din ser ut til å være i Sone 3 mellom Øyslebø og Laudal."
+            ? "GPS-posisjonen kan ligge nær to soner. Velg sonen som stemmer med fysisk skilting."
+            : `Posisjonen din ser ut til å være i ${selectedZoneContent.name}.`
         }
       />
       {nearBorder && (
@@ -56,14 +60,13 @@ export function ZoneStep({
             </option>
           ))}
         </select>
-        {selectedZone === 2 && (
+        {selectedSubzones.length > 0 && (
           <>
             <label htmlFor="session-subzone">Delsone</label>
             <select id="session-subzone">
-              <option>Fuskeland B</option>
-              <option>Hauge</option>
-              <option>Holmesland</option>
-              <option>Nøding</option>
+              {selectedSubzones.map((subzone) => (
+                <option key={subzone}>{subzone}</option>
+              ))}
             </select>
           </>
         )}

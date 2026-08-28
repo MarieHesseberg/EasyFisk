@@ -9,16 +9,15 @@ type LocationState =
   | "permission-denied"
   | "unavailable"
   | "timeout";
-const messages: Record<LocationState, string> = {
+const messages: Omit<Record<LocationState, string>, "success"> = {
   idle: "",
   loading: "Henter posisjon …",
-  success: "Posisjon funnet · foreslått Sone 3",
   "permission-denied": "Posisjonstilgang ble avslått. Velg sone manuelt.",
   unavailable: "Posisjon er ikke tilgjengelig. Velg sone manuelt.",
   timeout: "Posisjonshentingen tok for lang tid. Prøv igjen eller velg sone manuelt.",
 };
 
-export function useUserLocation(onSuccess: () => void) {
+export function useUserLocation(onSuccess: () => void, suggestedZoneName: string) {
   const [state, setState] = useState<LocationState>("idle");
   function locate() {
     if (!navigator.geolocation) {
@@ -43,5 +42,7 @@ export function useUserLocation(onSuccess: () => void) {
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 60_000 },
     );
   }
-  return { isLoading: state === "loading", locate, message: messages[state], state };
+  const message =
+    state === "success" ? `Posisjon funnet · foreslått ${suggestedZoneName}` : messages[state];
+  return { isLoading: state === "loading", locate, message, state };
 }

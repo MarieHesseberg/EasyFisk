@@ -18,8 +18,12 @@ export function MapScreen({
   setSelected: (zone: ZoneId) => void;
   onUseZone: (zone: ZoneId) => void;
 }) {
-  const z = zones[selected - 1];
-  const location = useUserLocation(() => setSelected(3));
+  const z = fishingContentRepository.findZone(selected) ?? zones[0];
+  const suggestedZoneId = fishingContentRepository.getSuggestedZoneId();
+  const suggestedZoneName =
+    fishingContentRepository.findZone(suggestedZoneId)?.name.split(" · ")[0] ??
+    `Sone ${suggestedZoneId}`;
+  const location = useUserLocation(() => setSelected(suggestedZoneId), suggestedZoneName);
   return (
     <div className="screen map-screen">
       <ScreenHeader title="Fiskesoner" eyebrow="MANDALSELVA · VEILEDENDE KART" />

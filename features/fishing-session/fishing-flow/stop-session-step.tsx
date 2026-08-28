@@ -6,11 +6,13 @@ export function StopSessionStep({
   elapsed,
   finish,
   startTime,
+  zoneName,
 }: {
   cancel: () => void;
   elapsed: number;
   finish: (caught: boolean) => void;
   startTime: number | null;
+  zoneName: string;
 }) {
   return (
     <div className="flow-content">
@@ -23,7 +25,7 @@ export function StopSessionStep({
       <div className="stop-summary">
         <span>
           <small>SONE</small>
-          <b>Sone 3</b>
+          <b>{zoneName}</b>
         </span>
         <span>
           <small>START</small>

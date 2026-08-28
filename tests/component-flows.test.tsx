@@ -7,8 +7,22 @@ import { MapScreen } from "../features/map/map-screen";
 import { ProfileDetailDialog } from "../features/profile/profile-detail-dialog";
 import { useEasyFiskController } from "../application/easy-fisk/use-easy-fisk-controller";
 import { createMemoryFishingLogRepository } from "../data/memory/create-memory-fishing-log-repository";
+import { StopSessionStep } from "../features/fishing-session/fishing-flow/stop-session-step";
 
 afterEach(cleanup);
+
+test("avslutningsdialogen viser sonen fra den aktive økten", () => {
+  render(
+    <StopSessionStep
+      cancel={() => undefined}
+      elapsed={3600}
+      finish={() => undefined}
+      startTime={Date.now() - 3600_000}
+      zoneName="Sone 4 · Laudal–Kavfossen"
+    />,
+  );
+  expect(screen.getByText("Sone 4 · Laudal–Kavfossen")).toBeTruthy();
+});
 
 test("hovednavigasjonen markerer valgt side og sender navigasjonshandling", async () => {
   let destination = "";
