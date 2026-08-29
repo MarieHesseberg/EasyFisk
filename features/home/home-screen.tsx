@@ -49,6 +49,14 @@ export function HomeScreen({
         zone={riverStatus.currentZoneShortName}
         openFlow={onStart}
       />
+      <button className="home-past-session-button" onClick={onPastSession}>
+        <Icon name="clock" size={20} />
+        <span>
+          <b>Registrer tidligere fisketur</b>
+          <small>Etterregistrer en tur uten å starte en ny fiskeøkt</small>
+        </span>
+        <Icon name="chevron" size={18} />
+      </button>
       <RequirementsOverview
         demoStatus={demoStatus}
         scenario={scenario}
@@ -77,7 +85,7 @@ export function HomeScreen({
         flow={riverStatus.flowCubicMetersPerSecond}
         zone={riverStatus.currentZoneShortName}
       />
-      <HomeShortcuts openPastSession={onPastSession} openMap={onMapShortcut} openRules={onRules} />
+      <HomeShortcuts openMap={onMapShortcut} openRules={onRules} />
       <section className="info-card">
         <small>REGLER OPPDATERT {metadata.versionLabel.toUpperCase()}</small>
         <h3>{quota.killedSalmonPerDay} laks per fiskerdøgn</h3>

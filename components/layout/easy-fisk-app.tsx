@@ -27,6 +27,7 @@ export function EasyFiskApp() {
     flow,
     globalDetail,
     lastSession,
+    pastSessionRequested,
     requestedCatchTime,
     screen,
     sessions,
@@ -49,7 +50,7 @@ export function EasyFiskApp() {
             onRules={() => actions.navigate("rules")}
             onFeedback={() => actions.openDetail("feedback")}
             onControlCard={() => actions.openDetail("control-card")}
-            onPastSession={actions.openCatchHistory}
+            onPastSession={actions.openPastSession}
             onMapShortcut={() => actions.navigate("map")}
             active={active}
             elapsed={elapsed}
@@ -77,6 +78,7 @@ export function EasyFiskApp() {
             onCorrectCatch={actions.correctCatch}
             onShowRules={() => actions.navigate("rules")}
             openMine={statsMineRequested}
+            openPastSession={pastSessionRequested}
             onCatchFlowComplete={actions.completeCatchFlow}
             finishAfterCatch={finishAfterCatch}
             catches={catches}

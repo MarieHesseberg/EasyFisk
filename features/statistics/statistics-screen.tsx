@@ -86,6 +86,7 @@ export function StatisticsScreen({
   onCorrectCatch,
   onShowRules,
   openMine,
+  openPastSession,
   elapsed,
   startTime,
   sessions,
@@ -103,6 +104,7 @@ export function StatisticsScreen({
   onCorrectCatch: (id: string, note: string) => void;
   onShowRules: () => void;
   openMine: boolean;
+  openPastSession: boolean;
   elapsed: number;
   startTime: number | null;
   sessions: SessionRecord[];
@@ -134,6 +136,7 @@ export function StatisticsScreen({
           <PersonalStatisticsPanel statistics={calculatePersonalStatistics(catches, sessions)} />
           <FishingActivityScreen
             embedded
+            openPastSession={openPastSession}
             active={active}
             onStart={onStart}
             onStop={onStop}

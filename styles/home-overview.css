@@ -54,6 +54,36 @@
 .stop-button {
   color: #8b3d2b;
 }
+
+.home-past-session-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card-large);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  text-align: left;
+}
+
+.home-past-session-button > span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.home-past-session-button b {
+  font-size: 12px;
+}
+
+.home-past-session-button small {
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
 .timer {
   font: 700 37px Georgia;
   letter-spacing: 2px;
@@ -164,7 +194,7 @@
 }
 .quick-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 9px;
 }
 .quick-grid button {

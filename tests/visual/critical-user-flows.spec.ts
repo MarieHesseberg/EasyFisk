@@ -35,12 +35,8 @@ test.beforeEach(async ({ page }) => {
 test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page }) => {
   await page.getByRole("button", { name: "Registrer tidligere fisketur" }).click();
 
-  await expect(page.getByRole("button", { name: "Min fangst og fiskehistorikk" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await expect(page.getByRole("button", { name: /Registrer tidligere fisketur/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Ingen aktiv fiskeøkt" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Registrer tidligere fisketur" })).toBeVisible();
+  await expect(page.getByLabel("Dato påkrevd")).toBeVisible();
 });
 
 test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) => {

@@ -31,6 +31,7 @@ export function FishingActivityScreen({
   elapsed,
   startTime,
   embedded = false,
+  openPastSession = false,
 }: {
   active: boolean;
   onStart: () => void;
@@ -48,9 +49,10 @@ export function FishingActivityScreen({
   startTime: number | null;
   sessions: SessionRecord[];
   embedded?: boolean;
+  openPastSession?: boolean;
 }) {
   const [showCatchReport, setShowCatchReport] = useState(false);
-  const [showPastSession, setShowPastSession] = useState(false);
+  const [showPastSession, setShowPastSession] = useState(openPastSession);
   const [selectedCatch, setSelectedCatch] = useState<CatchRecord | null>(null);
   const [showAllHistory, setShowAllHistory] = useState(false);
 

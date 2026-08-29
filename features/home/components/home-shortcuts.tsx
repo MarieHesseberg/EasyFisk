@@ -1,10 +1,8 @@
 import { Icon } from "@/components/ui/icon";
 export function HomeShortcuts({
-  openPastSession,
   openMap,
   openRules,
 }: {
-  openPastSession: () => void;
   openMap: () => void;
   openRules: () => void;
 }) {
@@ -14,10 +12,6 @@ export function HomeShortcuts({
         <h3>Snarveier</h3>
       </div>
       <div className="quick-grid">
-        <button onClick={openPastSession}>
-          <Icon name="clock" />
-          <span>Registrer tidligere fisketur</span>
-        </button>
         <button onClick={openMap}>
           <Icon name="map" />
           <span>Finn riktig sone</span>

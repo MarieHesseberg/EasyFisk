@@ -13,19 +13,30 @@ export function useAppNavigationController() {
   const [globalDetail, setGlobalDetail] = useState<DetailDestination | null>(null);
   const [zone, setZone] = useState<ZoneId>(3);
   const [statsMineRequested, setStatsMineRequested] = useState(false);
+  const [pastSessionRequested, setPastSessionRequested] = useState(false);
 
   function navigate(nextScreen: Screen) {
+    setPastSessionRequested(false);
     if (nextScreen === "stats") setStatsMineRequested(false);
     setScreen(nextScreen);
   }
 
   return {
-    state: { demoStatus, flow, globalDetail, screen, statsMineRequested, zone },
+    state: {
+      demoStatus,
+      flow,
+      globalDetail,
+      pastSessionRequested,
+      screen,
+      statsMineRequested,
+      zone,
+    },
     actions: {
       closeDetail: () => setGlobalDetail(null),
       closeFlow: () => setFlow(null),
       navigate,
-      openCatchHistory: () => {
+      openPastSession: () => {
+        setPastSessionRequested(true);
         setStatsMineRequested(true);
         setScreen("stats");
       },
