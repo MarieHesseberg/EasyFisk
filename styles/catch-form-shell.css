@@ -21,6 +21,7 @@
 }
 .steps {
   display: flex;
+  pointer-events: none;
   align-items: center;
   justify-content: center;
   margin: 2px 0 14px;

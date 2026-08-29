@@ -102,6 +102,18 @@ test("fangstskjemaets neste-knapp er tilgjengelig på en lav mobilskjerm", async
   await expect(dialog.getByRole("heading", { name: "Størrelse og dokumentasjon" })).toBeVisible();
 });
 
+test("fangstskjemaet kan lukkes med X på en lav mobilskjerm", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 500 });
+  await startFishing(page);
+  await page.getByRole("button", { name: "Registrer fangst" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
+  await dialog.getByRole("button", { name: "Lukk fangstrapport" }).click();
+
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
+});
+
 test("stopp økt med fangst fullfører rapporten før økten avsluttes", async ({ page }) => {
   await startFishing(page);
   await page.getByRole("button", { name: "Stopp · bekreft fangst eller nullfangst" }).click();
