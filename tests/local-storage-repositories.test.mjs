@@ -84,6 +84,46 @@ test("localStorage quota-feil returneres som et forståelig resultat", () => {
   assert.match(result.error, /Kunne ikke lagre/);
 });
 
+test("bildedata fyller ikke localStorage, men filnavnet beholdes", () => {
+  const values = new Map();
+  const storage = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => {
+      if (value.length > 2_000) throw new DOMException("full", "QuotaExceededError");
+      values.set(key, value);
+    },
+  };
+  const repository = createLocalStorageFishingLogRepository(storage);
+  const result = repository.saveCatch({
+    ...catchRecord,
+    imageName: "fangst.jpg",
+    imageData: `data:image/jpeg;base64,${"A".repeat(10_000)}`,
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(repository.listCatches()[0].imageName, "fangst.jpg");
+  assert.equal(repository.listCatches()[0].imageData, undefined);
+});
+
+test("allerede lagrede bildedata endres ikke ved senere oppdateringer", () => {
+  const storage = createStorage();
+  const repository = createLocalStorageFishingLogRepository(storage);
+  const existingImageData = "data:image/jpeg;base64,BEHOLD_MEG";
+
+  storage.setItem(
+    "easyfisk:fishing-log:v1",
+    JSON.stringify({
+      version: 2,
+      catches: [{ ...catchRecord, imageName: "eldre.jpg", imageData: existingImageData }],
+      sessions: [],
+      activeSession: null,
+    }),
+  );
+  repository.updateCatchCorrection(catchRecord.id, "Oppdatert kommentar");
+
+  assert.equal(repository.listCatches()[0].imageData, existingImageData);
+});
+
 test("feil under sluttlagring etterlater ingen delvis lagret økt", () => {
   const values = new Map();
   let failWrites = false;

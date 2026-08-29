@@ -40,13 +40,16 @@ export function createLocalStorageFishingLogRepository(
     getActiveSession: () => readLog(storage, key).activeSession ?? null,
     listCatches: () => [...readLog(storage, key).catches],
     saveCatch: (record) =>
-      update((current) => ({ ...current, catches: [...current.catches, record] })),
+      update((current) => ({
+        ...current,
+        catches: [...current.catches, prepareCatchForLocalStorage(record)],
+      })),
     saveActiveSession: (session) => update((current) => ({ ...current, activeSession: session })),
     saveCompletedSession: (session, catches, clearActiveSession) =>
       update((current) => ({
         ...current,
         sessions: [session, ...current.sessions.filter((record) => record.id !== session.id)],
-        catches: [...current.catches, ...catches],
+        catches: [...current.catches, ...catches.map(prepareCatchForLocalStorage)],
         activeSession: clearActiveSession ? null : current.activeSession,
       })),
     updateCatchCorrection: (id, note) =>
@@ -57,4 +60,10 @@ export function createLocalStorageFishingLogRepository(
         ),
       })),
   };
+}
+
+function prepareCatchForLocalStorage(catchRecord: StoredFishingLog["catches"][number]) {
+  const persistedRecord = { ...catchRecord };
+  delete persistedRecord.imageData;
+  return persistedRecord;
 }
