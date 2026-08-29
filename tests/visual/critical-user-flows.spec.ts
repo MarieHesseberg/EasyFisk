@@ -33,10 +33,32 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
   await page.getByRole("button", { name: "Registrer tidligere fisketur" }).click();
 
-  await expect(page.getByRole("dialog", { name: "Registrer tidligere fisketur" })).toBeVisible();
-  await expect(page.getByLabel("Dato påkrevd")).toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
+  const nextButton = dialog.getByRole("button", { name: "Neste · regelkontroll" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Lukk registrering" })).toBeInViewport();
+  await expect(nextButton).toBeInViewport();
+  await dialog.getByRole("button", { name: "Ja · legg til fangst" }).click();
+  await expect(dialog.getByRole("button", { name: "Neste · registrer fangst" })).toBeInViewport();
+  await dialog.getByRole("button", { name: "Nei · nullfangst" }).click();
+  await nextButton.click();
+  await expect(
+    dialog.getByRole("heading", { name: "Kontroller turen før innsending" }),
+  ).toBeVisible();
+});
+
+test("etterregistrering kan lukkes med X på mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.getByRole("button", { name: "Registrer tidligere fisketur" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
+  await dialog.getByRole("button", { name: "Lukk registrering" }).click();
+
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Statistikk", exact: true })).toBeVisible();
 });
 
 test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) => {

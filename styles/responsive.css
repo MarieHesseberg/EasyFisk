@@ -119,6 +119,23 @@ textarea:focus-visible,
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
+  .past-session-modal {
+    max-height: calc(100dvh - max(8px, env(safe-area-inset-top)));
+    padding-top: 12px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .past-session-modal > .modal-close {
+    position: sticky;
+    top: 0;
+    float: right;
+    margin-bottom: -44px;
+  }
+
+  .past-session-modal > .primary {
+    bottom: env(safe-area-inset-bottom);
+  }
+
   .catch-modal-step-1 {
     position: relative;
     padding-bottom: calc(72px + env(safe-area-inset-bottom));

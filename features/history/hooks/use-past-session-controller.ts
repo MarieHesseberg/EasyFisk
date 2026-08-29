@@ -27,6 +27,7 @@ export function usePastSessionController({
   const zones = fishingContentRepository.getZones();
   const [openedAt] = useState(() => Date.now());
   const today = getNorwegianCalendarDate(openedAt);
+  const suggestedPastDate = getNorwegianCalendarDate(openedAt - 24 * 60 * 60 * 1000);
   const [step, setStep] = useState(1);
   const sessionForm = useFormFields<{
     caught: boolean;
@@ -37,7 +38,7 @@ export function usePastSessionController({
     zone: ZoneId;
   }>({
     caught: false,
-    date: today,
+    date: suggestedPastDate,
     from: "17:00",
     subzone: "",
     to: "19:00",
