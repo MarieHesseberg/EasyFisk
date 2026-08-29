@@ -32,6 +32,31 @@ test.beforeEach(async ({ page }) => {
   await resetApp(page);
 });
 
+test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page }) => {
+  await page.getByRole("button", { name: "Registrer tidligere fisketur" }).click();
+
+  await expect(page.getByRole("button", { name: "Min fangst og fiskehistorikk" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("button", { name: /Registrer tidligere fisketur/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ingen aktiv fiskeøkt" })).toBeVisible();
+});
+
+test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) => {
+  await page.getByRole("button", { name: "Mer" }).click();
+  await page.getByRole("button", { name: /Statusmotor/ }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Statusmotor" });
+  await dialog.getByLabel("Situasjon").selectOption("noPermit");
+  await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
+  await dialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+
+  const startDialog = page.getByRole("dialog", { name: "Start fiske" });
+  await expect(startDialog.getByRole("heading", { name: "Du mangler fiskekort" })).toBeVisible();
+  await expect(startDialog.getByRole("button", { name: "Registrer fiskekort" })).toBeVisible();
+});
+
 test("start fiske går gjennom fire steg og aktiv økt overlever refresh", async ({ page }) => {
   await startFishing(page);
 
@@ -62,6 +87,19 @@ test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", as
 
   await expect(detail.getByText("Rettelse er meldt")).toBeVisible();
   await expect(detail.getByText("Korrekt vekt er 3,2 kg.")).toBeVisible();
+});
+
+test("fangstskjemaets neste-knapp er tilgjengelig på en lav mobilskjerm", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 600 });
+  await startFishing(page);
+  await page.getByRole("button", { name: "Registrer fangst" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
+  const nextButton = dialog.getByRole("button", { name: "Neste · størrelse" });
+
+  await expect(nextButton).toBeInViewport();
+  await nextButton.click();
+  await expect(dialog.getByRole("heading", { name: "Størrelse og dokumentasjon" })).toBeVisible();
 });
 
 test("stopp økt med fangst fullfører rapporten før økten avsluttes", async ({ page }) => {
@@ -98,6 +136,17 @@ test("tidligere økt med fangst kan registreres gjennom hele skjemaet", async ({
   await expect(
     dialog.getByRole("heading", { name: "Tur og fangster er registrert" }),
   ).toBeVisible();
+  await dialog.getByRole("button", { name: "Åpne historikken" }).click();
+  await page.locator(".history-card").filter({ hasText: "Sone 2" }).click();
+  await expect(page.getByRole("dialog", { name: "Detaljer for fiskeøkt" })).toContainText(
+    "Gjenutsatt · 62 cm · 2,8 kg",
+  );
+  await page.getByRole("button", { name: "Lukk øktdetaljer" }).click();
+
+  await page.reload();
+  await page.getByRole("button", { name: "Statistikk" }).click();
+  await page.getByRole("button", { name: "Min fangst og fiskehistorikk" }).click();
+  await expect(page.locator(".history-card").filter({ hasText: "Sone 2" })).toBeVisible();
 });
 
 test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page }) => {

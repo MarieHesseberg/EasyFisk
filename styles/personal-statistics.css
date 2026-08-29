@@ -1,0 +1,116 @@
+.personal-statistics {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.personal-statistics .section-head {
+  margin-bottom: 0;
+}
+
+.personal-statistics .section-head small {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.personal-statistics .section-head h2 {
+  margin: var(--space-1) 0 0;
+}
+
+.personal-statistics-empty,
+.personal-quota-card,
+.personal-statistics-grid article {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.personal-statistics-empty {
+  margin: 0;
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.personal-statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.personal-statistics-grid article {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-3);
+}
+
+.personal-statistics-grid svg {
+  color: var(--color-primary);
+}
+
+.personal-statistics-grid small,
+.personal-catch-summary,
+.personal-quota-row {
+  color: var(--color-text-muted);
+}
+
+.personal-statistics-grid strong {
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+.personal-catch-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: 12px;
+}
+
+.personal-quota-card {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.personal-quota-card h3,
+.personal-quota-group b {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.personal-quota-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.personal-quota-row {
+  display: grid;
+  gap: var(--space-2);
+  font-size: 12px;
+}
+
+.personal-quota-row > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.personal-quota-row progress {
+  width: 100%;
+  height: 0.5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-round);
+  background: var(--color-primary-surface);
+}
+
+.personal-quota-row progress::-webkit-progress-bar {
+  background: var(--color-primary-surface);
+}
+
+.personal-quota-row progress::-webkit-progress-value,
+.personal-quota-row progress::-moz-progress-bar {
+  background: var(--color-primary);
+}

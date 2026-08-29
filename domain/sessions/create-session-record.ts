@@ -7,6 +7,7 @@ export function createSessionRecord(
   result: string,
 ): SessionRecord {
   return {
+    id: `EF-OKT-${start}-${end}`,
     start,
     end,
     duration: Math.max(1, Math.floor((end - start) / 1000)),

@@ -37,14 +37,26 @@ test("localStorage-adapter beholder fangst og korrigering mellom instanser", () 
   assert.equal(reloaded.listCatches()[0].correction, "Kontrollert");
 });
 
-test("localStorage-adapter beholder siste fiskeøkt", () => {
+test("localStorage-adapter beholder komplett fiskehistorikk", () => {
   const storage = createStorage();
   const repository = createLocalStorageFishingLogRepository(storage);
-  const session = { start: 1_000, end: 4_000, duration: 3, zone: "Sone 3", result: "Nullfangst" };
+  const session = {
+    id: "EF-OKT-1000-4000",
+    start: 1_000,
+    end: 4_000,
+    duration: 3,
+    zone: "Sone 3",
+    result: "Nullfangst",
+  };
+  const secondSession = { ...session, id: "EF-OKT-5000-9000", start: 5_000, end: 9_000 };
 
-  repository.saveSession(session);
+  repository.saveCompletedSession(session, [], false);
+  repository.saveCompletedSession(secondSession, [], false);
 
-  assert.deepEqual(createLocalStorageFishingLogRepository(storage).getLatestSession(), session);
+  assert.deepEqual(createLocalStorageFishingLogRepository(storage).listSessions(), [
+    secondSession,
+    session,
+  ]);
 });
 
 test("aktiv fiskeøkt overlever refresh og kan avsluttes", () => {
@@ -88,13 +100,20 @@ test("feil under sluttlagring etterlater ingen delvis lagret økt", () => {
   failWrites = true;
 
   const result = repository.saveCompletedSession(
-    { start: 1_000, end: 4_000, duration: 3, zone: "Sone 3", result: "1 fangst" },
+    {
+      id: "EF-OKT-1000-4000",
+      start: 1_000,
+      end: 4_000,
+      duration: 3,
+      zone: "Sone 3",
+      result: "1 fangst",
+    },
     [catchRecord],
     true,
   );
 
   assert.equal(result.ok, false);
-  assert.equal(repository.getLatestSession(), null);
+  assert.deepEqual(repository.listSessions(), []);
   assert.deepEqual(repository.listCatches(), []);
   assert.deepEqual(repository.getActiveSession(), activeSession);
 });
@@ -119,7 +138,37 @@ test("syntaktisk gyldig JSON med ugyldige domenedata avvises", () => {
 
   const repository = createLocalStorageFishingLogRepository(storage);
   assert.deepEqual(repository.listCatches(), []);
-  assert.equal(repository.getLatestSession(), null);
+  assert.deepEqual(repository.listSessions(), []);
+});
+
+test("eldre localStorage-data migreres til øktliste med stabil ID", () => {
+  const storage = createStorage();
+  storage.setItem(
+    "easyfisk:fishing-log:v1",
+    JSON.stringify({
+      version: 1,
+      catches: [],
+      latestSession: {
+        start: 1_000,
+        end: 4_000,
+        duration: 3,
+        zone: "Sone 3",
+        result: "Nullfangst",
+      },
+      activeSession: null,
+    }),
+  );
+
+  assert.deepEqual(createLocalStorageFishingLogRepository(storage).listSessions(), [
+    {
+      id: "EF-OKT-1000-4000",
+      start: 1_000,
+      end: 4_000,
+      duration: 3,
+      zone: "Sone 3",
+      result: "Nullfangst",
+    },
+  ]);
 });
 
 test("ugyldige innstillingstyper erstattes med sikre standardverdier", () => {

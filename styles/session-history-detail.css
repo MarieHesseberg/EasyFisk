@@ -1,0 +1,36 @@
+.session-history-detail h3 {
+  margin: var(--space-5) 0 var(--space-3);
+  font-size: 13px;
+}
+
+.session-catch-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.session-catch-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.session-catch-list p {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  font-size: 10px;
+}
+
+.session-catch-list span {
+  color: var(--color-text-muted);
+  text-align: right;
+}

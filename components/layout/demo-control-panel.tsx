@@ -2,6 +2,7 @@ import { Icon } from "@/components/ui/icon";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { appContentRepository } from "@/data/repositories/app-content";
+import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
 
 export function DemoControlPanel({
   scenarios,
@@ -22,34 +23,13 @@ export function DemoControlPanel({
       <p className="demo-intro">
         Velg en situasjon. Valget påvirker statuskontrollen og hva brukeren kan gjøre videre.
       </p>
-      <label className="demo-select-label" htmlFor="demo-status">
-        Situasjon
-      </label>
-      <select
-        id="demo-status"
-        className="demo-select"
-        value={selected.id}
-        onChange={(event) => selectStatus(event.target.value as DemoStatus)}
-      >
-        {scenarios.map((scenario) => (
-          <option value={scenario.id} key={scenario.id}>
-            {scenario.label}
-          </option>
-        ))}
-      </select>
-      <div className={`demo-result ${selected.level}`}>
-        <b>
-          {selected.level === "blocked"
-            ? "Blokkerer oppstart"
-            : selected.level === "warning"
-              ? "Krever vurdering"
-              : "Oppstart tillatt"}
-        </b>
-        <span>{selected.detail}</span>
-      </div>
-      <button className="demo-start" onClick={startTest}>
-        Test valgt situasjon
-      </button>
+      <StatusEngineControl
+        id="desktop-demo-status"
+        scenarios={scenarios}
+        selected={selected}
+        selectStatus={selectStatus}
+        startTest={startTest}
+      />
       <div className="feature-divider" />
       <span>FUNKSJONER I PROTOTYPEN</span>
       <ul>

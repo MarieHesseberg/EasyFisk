@@ -11,9 +11,100 @@ import { createMemoryFishingLogRepository } from "../data/memory/create-memory-f
 import { StopSessionStep } from "../features/fishing-session/fishing-flow/stop-session-step";
 import { operationFailed } from "../domain/shared/operation-result";
 import { CatchHistoryList } from "../features/fishing-session/components/catch-history-list";
+import { SessionHistoryList } from "../features/fishing-session/components/session-history-list";
 import { usePreferencesController } from "../features/profile/hooks/use-preferences-controller";
+import { PersonalStatisticsPanel } from "../features/statistics/personal-statistics-panel";
+import { calculatePersonalStatistics } from "../domain/statistics/calculate-personal-statistics";
 
 afterEach(cleanup);
+
+test("personlig statistikk viser lokalt beregnet historikk og kvoter", () => {
+  const now = Date.parse("2026-07-10T12:00:00+02:00");
+  const catches = [
+    {
+      id: "EF-FANGST-1",
+      caughtAt: now,
+      submittedAt: now,
+      sessionStart: now - 3_600_000,
+      species: "Laks" as const,
+      result: "Avlivet" as const,
+      length: 60,
+      weight: 3,
+      zone: "Sone 1",
+      violation: false,
+      late: false,
+    },
+  ];
+  const sessions = [
+    {
+      id: "EF-OKT-1",
+      start: now - 3_600_000,
+      end: now,
+      duration: 3_600,
+      zone: "Sone 1",
+      result: "1 laks · avlivet",
+    },
+  ];
+
+  render(
+    <PersonalStatisticsPanel statistics={calculatePersonalStatistics(catches, sessions, now)} />,
+  );
+
+  expect(screen.getByRole("heading", { name: "Din statistikk" })).toBeTruthy();
+  expect(screen.getByText("1 t 0 min")).toBeTruthy();
+  expect(screen.getByText("Laks: 1")).toBeTruthy();
+  expect(screen.getByText("1 av 5 brukt · 4 igjen")).toBeTruthy();
+});
+
+test("økthistorikken viser tomtilstand uten lagrede økter", () => {
+  render(
+    <SessionHistoryList catches={[]} sessions={[]} showAll={false} toggleAll={() => undefined} />,
+  );
+
+  expect(screen.getByText("Ingen tidligere fiskeøkter")).toBeTruthy();
+  expect(screen.queryByRole("button", { name: "Se alle" })).toBeNull();
+});
+
+test("en lagret økt kan åpnes med tilhørende fangster", async () => {
+  const start = new Date(2026, 6, 10, 17, 0).getTime();
+  const end = new Date(2026, 6, 10, 19, 0).getTime();
+  render(
+    <SessionHistoryList
+      catches={[
+        {
+          id: "ME-1",
+          caughtAt: start + 30_000,
+          submittedAt: end,
+          sessionStart: start,
+          species: "Laks",
+          result: "Gjenutsatt",
+          length: 70,
+          weight: 4,
+          zone: "Sone 3",
+          violation: false,
+          late: false,
+        },
+      ]}
+      sessions={[
+        {
+          id: `EF-OKT-${start}-${end}`,
+          start,
+          end,
+          duration: 7_200,
+          zone: "Sone 3",
+          result: "1 laks · gjenutsatt",
+        },
+      ]}
+      showAll={false}
+      toggleAll={() => undefined}
+    />,
+  );
+
+  await userEvent.setup().click(screen.getByRole("button", { name: /Sone 3/ }));
+
+  expect(screen.getByRole("dialog", { name: "Detaljer for fiskeøkt" })).toBeTruthy();
+  expect(screen.getByText("Gjenutsatt · 70 cm · 4 kg")).toBeTruthy();
+});
 
 test("avslutningsdialogen viser sonen fra den aktive økten", () => {
   render(
@@ -182,6 +273,7 @@ test("tidligere økt og fangst kan etterregistreres", () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
   const session = {
+    id: "EF-OKT-1000-4000",
     start: 1_000,
     end: 4_000,
     duration: 3,
@@ -205,6 +297,7 @@ test("tidligere økt og fangst kan etterregistreres", () => {
     result.current.actions.addPastSession(session, [catchRecord]);
   });
   expect(result.current.state.lastSession).toEqual(session);
+  expect(result.current.state.sessions).toEqual([session]);
   expect(result.current.state.catches).toHaveLength(1);
 });
 
@@ -267,6 +360,7 @@ test("mislykket etterregistrering returneres til skjemaet", () => {
   let saveResult: ReturnType<typeof result.current.actions.addPastSession> | undefined;
   act(() => {
     saveResult = result.current.actions.addPastSession({
+      id: "EF-OKT-1000-4000",
       start: 1_000,
       end: 4_000,
       duration: 3,

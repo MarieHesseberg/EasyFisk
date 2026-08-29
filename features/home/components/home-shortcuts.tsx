@@ -1,10 +1,10 @@
 import { Icon } from "@/components/ui/icon";
 export function HomeShortcuts({
-  openCatchHistory,
+  openPastSession,
   openMap,
   openRules,
 }: {
-  openCatchHistory: () => void;
+  openPastSession: () => void;
   openMap: () => void;
   openRules: () => void;
 }) {
@@ -14,9 +14,9 @@ export function HomeShortcuts({
         <h3>Snarveier</h3>
       </div>
       <div className="quick-grid">
-        <button onClick={openCatchHistory}>
-          <Icon name="fish" />
-          <span>Registrer fangst</span>
+        <button onClick={openPastSession}>
+          <Icon name="clock" />
+          <span>Registrer tidligere fisketur</span>
         </button>
         <button onClick={openMap}>
           <Icon name="map" />

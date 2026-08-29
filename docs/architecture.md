@@ -33,6 +33,7 @@ domain/
   fishing-rules/
   navigation/
   quotas/
+  statistics/
   sessions/
   zones/
 
@@ -134,6 +135,8 @@ Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at
 - Delt serverdata skal senere hentes gjennom et datalag.
 - Avledede verdier skal beregnes, ikke lagres som duplisert tilstand.
 - Aktiv fiskeøkt lagres gjennom `FishingLogRepository`, slik at starttid og sone overlever refresh.
+- Fullførte og etterregistrerte økter lagres som en versjonert liste med stabile ID-er. Fangster
+  kobles til økten gjennom starttidspunktet, og eldre prototype-data migreres ved lesing.
 
 ## Feil og asynkrone handlinger
 

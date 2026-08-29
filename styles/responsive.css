@@ -108,6 +108,47 @@ textarea:focus-visible,
   .app-header {
     padding-top: calc(20px + env(safe-area-inset-top));
   }
+
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+  }
+
+  .catch-modal {
+    max-height: calc(100dvh - max(8px, env(safe-area-inset-top)));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 599px) and (max-height: 700px) {
+  .catch-modal {
+    padding-top: var(--space-3);
+  }
+
+  .catch-modal .sheet-handle {
+    margin-bottom: var(--space-2);
+  }
+
+  .catch-modal .steps {
+    margin-bottom: var(--space-3);
+  }
+
+  .catch-modal h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .catch-modal > label {
+    margin-top: var(--space-3);
+  }
+
+  .catch-modal .choice button {
+    padding-block: var(--space-3);
+  }
+
+  .catch-modal .selection-recap {
+    margin-block: var(--space-4);
+    padding-block: var(--space-3);
+  }
 }
 
 @media (min-width: 600px) and (max-width: 900px) {

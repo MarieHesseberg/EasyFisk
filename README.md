@@ -2,6 +2,9 @@
 
 EasyFisk er en mobiltilpasset prototype for fiske i Mandalselva. Appen samler statuskontroll, sonevalg, fiskeøkter, fangstrapportering, kvoter, historikk, regler og tilbakemeldinger i én oversiktlig brukeropplevelse.
 
+Fiskeøkter, fangster og valgte profilinnstillinger lagres lokalt i nettleseren. Hele
+økthistorikken overlever oppdatering av siden, og hver økt kan åpnes med tilhørende fangster.
+
 Dette er fortsatt en prototype. Betaling, GPS, fiskekortkontroll, varsler og innsending til elveeigarlaget er demonstrasjonsdata og simulerte handlinger.
 
 ## Kom i gang

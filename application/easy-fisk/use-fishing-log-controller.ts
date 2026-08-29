@@ -10,14 +10,14 @@ import { logger } from "@/lib/logger";
 
 export function useFishingLogController(repository: FishingLogRepository) {
   const [catches, setCatches] = useState<CatchRecord[]>([]);
-  const [lastSession, setLastSession] = useState<SessionRecord | null>(null);
+  const [sessions, setSessions] = useState<SessionRecord[]>([]);
 
   useEffect(() => {
     let isMounted = true;
     queueMicrotask(() => {
       if (!isMounted) return;
       setCatches(repository.listCatches());
-      setLastSession(repository.getLatestSession());
+      setSessions(repository.listSessions());
     });
     return () => {
       isMounted = false;
@@ -58,7 +58,7 @@ export function useFishingLogController(repository: FishingLogRepository) {
       logger.error(result.error, { cause: result.cause });
       return operationFailed(result.error, result.cause);
     }
-    setLastSession(session);
+    setSessions((current) => [session, ...current.filter((record) => record.id !== session.id)]);
     if (completed.length) setCatches((current) => [...current, ...completed]);
     return operationSucceeded(completed);
   }
@@ -76,7 +76,7 @@ export function useFishingLogController(repository: FishingLogRepository) {
   }
 
   return {
-    state: { catches, lastSession },
+    state: { catches, lastSession: sessions[0] ?? null, sessions },
     actions: { correctCatch, saveCatch, saveCompletedSession, savePastSession },
   };
 }

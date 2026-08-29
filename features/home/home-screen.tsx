@@ -15,7 +15,7 @@ export function HomeScreen({
   onRules,
   onFeedback,
   onControlCard,
-  onCatchShortcut,
+  onPastSession,
   onMapShortcut,
   active,
   elapsed,
@@ -27,7 +27,7 @@ export function HomeScreen({
   onRules: () => void;
   onFeedback: () => void;
   onControlCard: () => void;
-  onCatchShortcut: () => void;
+  onPastSession: () => void;
   onMapShortcut: () => void;
   active: boolean;
   elapsed: number;
@@ -53,7 +53,7 @@ export function HomeScreen({
         demoStatus={demoStatus}
         scenario={scenario}
         riverStatus={riverStatus}
-        remainingSalmon={Math.max(0, quota.killedSalmonPerSeason - 1 - salmonKilled)}
+        remainingSalmon={Math.max(0, quota.killedSalmonPerSeason - salmonKilled)}
         seasonQuota={quota.killedSalmonPerSeason}
         openControlCard={onControlCard}
       />
@@ -77,11 +77,7 @@ export function HomeScreen({
         flow={riverStatus.flowCubicMetersPerSecond}
         zone={riverStatus.currentZoneShortName}
       />
-      <HomeShortcuts
-        openCatchHistory={onCatchShortcut}
-        openMap={onMapShortcut}
-        openRules={onRules}
-      />
+      <HomeShortcuts openPastSession={onPastSession} openMap={onMapShortcut} openRules={onRules} />
       <section className="info-card">
         <small>REGLER OPPDATERT {metadata.versionLabel.toUpperCase()}</small>
         <h3>{quota.killedSalmonPerDay} laks per fiskerdøgn</h3>

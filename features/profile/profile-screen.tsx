@@ -6,11 +6,27 @@ import { Icon } from "@/components/ui/icon";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
+import type { DemoStatus } from "@/domain/fishing-rules/rule";
+import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
+import { StatusEngineSettingsDialog } from "@/features/profile/status-engine-settings-dialog";
 
-export function ProfileScreen() {
-  const [detail, setDetail] = useState<DetailDestination | null>(null);
+type ProfileDestination = DetailDestination | "status-engine";
+
+export function ProfileScreen({
+  demoStatus,
+  selectDemoStatus,
+  testDemoStatus,
+}: {
+  demoStatus: DemoStatus;
+  selectDemoStatus: (status: DemoStatus) => void;
+  testDemoStatus: () => void;
+}) {
+  const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { profile } = appContentRepository.getContent();
+  const scenarios = fishingContentRepository.getDemoScenarios();
+  const selectedScenario = findDemoStatus(demoStatus, scenarios);
   return (
     <div className="screen">
       <ScreenHeader title="Mer" />
@@ -35,6 +51,16 @@ export function ProfileScreen() {
             <Icon name="chevron" size={18} />
           </button>
         ))}
+        <button onClick={() => setDetail("status-engine")}>
+          <span>
+            <Icon name="stats" />
+          </span>
+          <p>
+            <b>Statusmotor</b>
+            <small>Velg situasjon for prototypens statuskontroll</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
       </div>
       <section className="more-feedback-card">
         <small>TILBAKEMELDING OG OBSERVASJON</small>
@@ -46,7 +72,18 @@ export function ProfileScreen() {
         EasyFisk prototype · innhold kontrollert{" "}
         {activeFishingRules.metadata.numericSourcesCheckedLabel}
       </p>
-      {detail && <ProfileDetailDialog destination={detail} close={() => setDetail(null)} />}
+      {detail === "status-engine" && (
+        <StatusEngineSettingsDialog
+          close={() => setDetail(null)}
+          scenarios={scenarios}
+          selected={selectedScenario}
+          selectStatus={selectDemoStatus}
+          startTest={testDemoStatus}
+        />
+      )}
+      {detail && detail !== "status-engine" && (
+        <ProfileDetailDialog destination={detail} close={() => setDetail(null)} />
+      )}
     </div>
   );
 }

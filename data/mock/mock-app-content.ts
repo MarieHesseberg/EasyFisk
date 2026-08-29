@@ -31,32 +31,6 @@ export const mockAppContent: AppContent = {
     { icon: "clock", message: "Fiskekortet utløper i dag kl. 17:59." },
     { icon: "bell", message: `Reglene ble oppdatert ${metadata.shortVersionLabel}.` },
   ],
-  activityHistory: [
-    {
-      day: "16",
-      title: "Sone 2 · Fuskeland B",
-      time: "18:10–21:42 · 3 t 32 min",
-      result: "1 laks · gjenutsatt",
-    },
-    {
-      day: "08",
-      title: "Sone 1 · Mandal–Krossen",
-      time: "19:20–20:55 · 1 t 35 min",
-      result: "1 sjøørret · gjenutsatt",
-    },
-    {
-      day: "03",
-      title: "Sone 4 · Laudal–Kavfossen",
-      time: "06:40–09:05 · 2 t 25 min",
-      result: "Nullfangst rapportert",
-    },
-    {
-      day: "12",
-      title: "Sone 3 · Øyslebø–Laudal",
-      time: "07:15–10:03 · 2 t 48 min",
-      result: "Nullfangst rapportert",
-    },
-  ],
   statistics: {
     areas: ["Hele elva", "Sone 3", "Sone 4"],
     periods: ["Sesongen", "Siste 30 dager", "Denne uken"],

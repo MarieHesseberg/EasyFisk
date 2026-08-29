@@ -4,6 +4,7 @@ import test from "node:test";
 import { createMemoryFishingLogRepository } from "../data/memory/create-memory-fishing-log-repository.ts";
 
 const session = {
+  id: "EF-OKT-1000-4000",
   start: 1_000,
   end: 4_000,
   duration: 3,
@@ -28,10 +29,9 @@ const catchRecord = {
 test("minnelager lagrer økt og fangst gjennom samme kontrakt", () => {
   const repository = createMemoryFishingLogRepository();
 
-  repository.saveSession(session);
-  repository.saveCatch(catchRecord);
+  repository.saveCompletedSession(session, [catchRecord], false);
 
-  assert.deepEqual(repository.getLatestSession(), session);
+  assert.deepEqual(repository.listSessions(), [session]);
   assert.deepEqual(repository.listCatches(), [catchRecord]);
 });
 
@@ -62,7 +62,25 @@ test("ferdig økt lagres samlet med fangster og avslutter aktiv økt", () => {
   const result = repository.saveCompletedSession(session, [catchRecord], true);
 
   assert.equal(result.ok, true);
-  assert.deepEqual(repository.getLatestSession(), session);
+  assert.deepEqual(repository.listSessions(), [session]);
   assert.deepEqual(repository.listCatches(), [catchRecord]);
   assert.equal(repository.getActiveSession(), null);
+});
+
+test("minnelager beholder alle økter med nyeste først", () => {
+  const older = { ...session, id: "EF-OKT-500-900", start: 500, end: 900 };
+  const repository = createMemoryFishingLogRepository({ sessions: [older] });
+
+  repository.saveCompletedSession(session, [], false);
+
+  assert.deepEqual(repository.listSessions(), [session, older]);
+});
+
+test("minnelager beskytter øktlisten mot direkte endring", () => {
+  const repository = createMemoryFishingLogRepository({ sessions: [session] });
+  const sessions = repository.listSessions();
+
+  sessions.length = 0;
+
+  assert.equal(repository.listSessions().length, 1);
 });

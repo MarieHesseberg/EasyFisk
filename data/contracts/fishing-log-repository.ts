@@ -4,11 +4,10 @@ import type { OperationResult } from "../../domain/shared/operation-result";
 
 /** Lagring av brukerens fiskeøkter og fangster. */
 export interface FishingLogRepository {
-  getLatestSession(): SessionRecord | null;
+  listSessions(): SessionRecord[];
   listCatches(): CatchRecord[];
   getActiveSession(): ActiveSessionSnapshot | null;
   saveCatch(record: CatchRecord): OperationResult<void>;
-  saveSession(record: SessionRecord): OperationResult<void>;
   saveActiveSession(session: ActiveSessionSnapshot | null): OperationResult<void>;
   saveCompletedSession(
     session: SessionRecord,

@@ -6,9 +6,9 @@ import { parseStoredFishingLog, type StoredFishingLog } from "./parse-persisted-
 const defaultStorageKey = "easyfisk:fishing-log:v1";
 
 const emptyLog: StoredFishingLog = {
-  version: 1,
+  version: 2,
   catches: [],
-  latestSession: null,
+  sessions: [],
   activeSession: null,
 };
 
@@ -36,17 +36,16 @@ export function createLocalStorageFishingLogRepository(
   };
 
   return {
-    getLatestSession: () => readLog(storage, key).latestSession,
+    listSessions: () => [...readLog(storage, key).sessions],
     getActiveSession: () => readLog(storage, key).activeSession ?? null,
     listCatches: () => [...readLog(storage, key).catches],
     saveCatch: (record) =>
       update((current) => ({ ...current, catches: [...current.catches, record] })),
-    saveSession: (record) => update((current) => ({ ...current, latestSession: record })),
     saveActiveSession: (session) => update((current) => ({ ...current, activeSession: session })),
     saveCompletedSession: (session, catches, clearActiveSession) =>
       update((current) => ({
         ...current,
-        latestSession: session,
+        sessions: [session, ...current.sessions.filter((record) => record.id !== session.id)],
         catches: [...current.catches, ...catches],
         activeSession: clearActiveSession ? null : current.activeSession,
       })),

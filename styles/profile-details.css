@@ -190,3 +190,10 @@
   opacity: 0.75;
   margin: 4px 0 0;
 }
+
+.status-engine-settings {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card-large);
+  background: var(--color-surface);
+}

@@ -9,7 +9,9 @@ import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { OperationResult } from "@/domain/shared/operation-result";
+import { calculatePersonalStatistics } from "@/domain/statistics/calculate-personal-statistics";
 import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
+import { PersonalStatisticsPanel } from "@/features/statistics/personal-statistics-panel";
 
 const zones = fishingContentRepository.getZones();
 const { statistics } = appContentRepository.getContent();
@@ -86,7 +88,7 @@ export function StatisticsScreen({
   openMine,
   elapsed,
   startTime,
-  lastSession,
+  sessions,
 }: {
   active: boolean;
   onStart: () => void;
@@ -103,7 +105,7 @@ export function StatisticsScreen({
   openMine: boolean;
   elapsed: number;
   startTime: number | null;
-  lastSession: SessionRecord | null;
+  sessions: SessionRecord[];
 }) {
   const [view, setView] = useState<"general" | "mine">(active || openMine ? "mine" : "general");
   return (
@@ -128,24 +130,27 @@ export function StatisticsScreen({
       {view === "general" ? (
         <StatisticsOverview />
       ) : (
-        <FishingActivityScreen
-          embedded
-          active={active}
-          onStart={onStart}
-          onStop={onStop}
-          onAddPast={onAddPast}
-          onCatch={onCatch}
-          onCatchFlowComplete={onCatchFlowComplete}
-          finishAfterCatch={finishAfterCatch}
-          catches={catches}
-          activeZone={activeZone}
-          requestedCatchTime={requestedCatchTime}
-          onCorrectCatch={onCorrectCatch}
-          onShowRules={onShowRules}
-          elapsed={elapsed}
-          startTime={startTime}
-          lastSession={lastSession}
-        />
+        <>
+          <PersonalStatisticsPanel statistics={calculatePersonalStatistics(catches, sessions)} />
+          <FishingActivityScreen
+            embedded
+            active={active}
+            onStart={onStart}
+            onStop={onStop}
+            onAddPast={onAddPast}
+            onCatch={onCatch}
+            onCatchFlowComplete={onCatchFlowComplete}
+            finishAfterCatch={finishAfterCatch}
+            catches={catches}
+            activeZone={activeZone}
+            requestedCatchTime={requestedCatchTime}
+            onCorrectCatch={onCorrectCatch}
+            onShowRules={onShowRules}
+            elapsed={elapsed}
+            startTime={startTime}
+            sessions={sessions}
+          />
+        </>
       )}
     </div>
   );

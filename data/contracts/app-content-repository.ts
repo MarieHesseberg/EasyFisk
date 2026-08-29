@@ -2,8 +2,6 @@ import type { NotificationPreference } from "@/domain/preferences/preferences";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 
 export type LabelValue = { label: string; value: string; isPositive?: boolean };
-export type HistoryEntry = { day: string; title: string; time: string; result: string };
-
 export type AppContent = {
   demoFeatures: readonly string[];
   riverStatus: {
@@ -18,7 +16,6 @@ export type AppContent = {
     measurementStation: string;
   };
   headerAlerts: readonly { icon: string; message: string }[];
-  activityHistory: readonly HistoryEntry[];
   statistics: {
     areas: readonly string[];
     periods: readonly string[];

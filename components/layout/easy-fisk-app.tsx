@@ -6,7 +6,7 @@ import { DemoControlPanel } from "@/components/layout/demo-control-panel";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import { countKilledSalmon } from "@/domain/quotas/count-killed-salmon";
+import { calculatePersonalStatistics } from "@/domain/statistics/calculate-personal-statistics";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
 import { HomeScreen } from "@/features/home/home-screen";
@@ -29,6 +29,7 @@ export function EasyFiskApp() {
     lastSession,
     requestedCatchTime,
     screen,
+    sessions,
     sessionZone,
     startTime,
     statsMineRequested,
@@ -38,6 +39,7 @@ export function EasyFiskApp() {
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
+  const personalStatistics = calculatePersonalStatistics(catches, sessions);
   return (
     <main className="prototype-shell">
       <div className="phone-app">
@@ -47,13 +49,13 @@ export function EasyFiskApp() {
             onRules={() => actions.navigate("rules")}
             onFeedback={() => actions.openDetail("feedback")}
             onControlCard={() => actions.openDetail("control-card")}
-            onCatchShortcut={actions.openCatchHistory}
+            onPastSession={actions.openCatchHistory}
             onMapShortcut={() => actions.navigate("map")}
             active={active}
             elapsed={elapsed}
             startTime={startTime}
             demoStatus={demoStatus}
-            salmonKilled={countKilledSalmon(catches)}
+            salmonKilled={personalStatistics.killedSalmonQuota.usedThisSeason}
           />
         )}{" "}
         {screen === "map" && (
@@ -82,10 +84,19 @@ export function EasyFiskApp() {
             requestedCatchTime={requestedCatchTime}
             elapsed={elapsed}
             startTime={startTime}
-            lastSession={lastSession}
+            sessions={sessions}
           />
         )}{" "}
-        {screen === "more" && <ProfileScreen />}
+        {screen === "more" && (
+          <ProfileScreen
+            demoStatus={demoStatus}
+            selectDemoStatus={actions.selectDemoStatus}
+            testDemoStatus={() => {
+              actions.navigate("home");
+              actions.setFlow("start");
+            }}
+          />
+        )}
         <BottomNavigation
           activeScreen={screen}
           hasActiveSession={active}

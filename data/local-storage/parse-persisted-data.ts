@@ -3,11 +3,13 @@ import type { UserPreferences } from "@/domain/preferences/preferences";
 import type { ActiveSessionSnapshot, SessionRecord } from "@/domain/sessions/session";
 
 export type StoredFishingLog = {
-  version: 1;
+  version: 2;
   catches: CatchRecord[];
-  latestSession: SessionRecord | null;
+  sessions: SessionRecord[];
   activeSession: ActiveSessionSnapshot | null;
 };
+
+type LegacySessionRecord = Omit<SessionRecord, "id">;
 
 export type StoredPreferences = { version: 1; preferences: UserPreferences };
 
@@ -49,12 +51,28 @@ function isCatchRecord(value: unknown): value is CatchRecord {
 function isSessionRecord(value: unknown): value is SessionRecord {
   return (
     isObject(value) &&
+    typeof value.id === "string" &&
     isFiniteNumber(value.start) &&
     isFiniteNumber(value.end) &&
     isFiniteNumber(value.duration) &&
     typeof value.zone === "string" &&
     typeof value.result === "string"
   );
+}
+
+function isLegacySessionRecord(value: unknown): value is LegacySessionRecord {
+  return (
+    isObject(value) &&
+    isFiniteNumber(value.start) &&
+    isFiniteNumber(value.end) &&
+    isFiniteNumber(value.duration) &&
+    typeof value.zone === "string" &&
+    typeof value.result === "string"
+  );
+}
+
+function addSessionId(session: LegacySessionRecord): SessionRecord {
+  return { ...session, id: `EF-OKT-${session.start}-${session.end}` };
 }
 
 function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
@@ -66,16 +84,24 @@ function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
 }
 
 export function parseStoredFishingLog(value: unknown): StoredFishingLog | null {
-  if (!isObject(value) || value.version !== 1 || !Array.isArray(value.catches)) return null;
+  if (!isObject(value) || !Array.isArray(value.catches)) return null;
   if (!value.catches.every(isCatchRecord)) return null;
-  if (value.latestSession !== null && !isSessionRecord(value.latestSession)) return null;
   const activeSession = value.activeSession ?? null;
   if (activeSession !== null && !isActiveSession(activeSession)) return null;
 
+  if (value.version === 2) {
+    if (!Array.isArray(value.sessions) || !value.sessions.every(isSessionRecord)) return null;
+    return { version: 2, catches: value.catches, sessions: value.sessions, activeSession };
+  }
+
+  if (value.version !== 1) return null;
+  const latestSession = value.latestSession ?? null;
+  if (latestSession !== null && !isLegacySessionRecord(latestSession)) return null;
+
   return {
-    version: 1,
+    version: 2,
     catches: value.catches,
-    latestSession: value.latestSession,
+    sessions: latestSession ? [addSessionId(latestSession)] : [],
     activeSession,
   };
 }

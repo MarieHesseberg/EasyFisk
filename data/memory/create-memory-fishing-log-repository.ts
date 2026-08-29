@@ -5,7 +5,7 @@ import { operationSucceeded } from "../../domain/shared/operation-result.ts";
 
 type InitialFishingLog = {
   catches?: CatchRecord[];
-  latestSession?: SessionRecord | null;
+  sessions?: SessionRecord[];
   activeSession?: ActiveSessionSnapshot | null;
 };
 
@@ -14,19 +14,15 @@ export function createMemoryFishingLogRepository(
   initial: InitialFishingLog = {},
 ): FishingLogRepository {
   let catches = [...(initial.catches ?? [])];
-  let latestSession = initial.latestSession ?? null;
+  let sessions = [...(initial.sessions ?? [])];
   let activeSession = initial.activeSession ?? null;
 
   return {
-    getLatestSession: () => latestSession,
+    listSessions: () => [...sessions],
     getActiveSession: () => activeSession,
     listCatches: () => [...catches],
     saveCatch: (record) => {
       catches = [...catches, record];
-      return operationSucceeded(undefined);
-    },
-    saveSession: (record) => {
-      latestSession = record;
       return operationSucceeded(undefined);
     },
     saveActiveSession: (session) => {
@@ -34,7 +30,7 @@ export function createMemoryFishingLogRepository(
       return operationSucceeded(undefined);
     },
     saveCompletedSession: (session, completedCatches, clearActiveSession) => {
-      latestSession = session;
+      sessions = [session, ...sessions.filter((record) => record.id !== session.id)];
       catches = [...catches, ...completedCatches];
       if (clearActiveSession) activeSession = null;
       return operationSucceeded(undefined);

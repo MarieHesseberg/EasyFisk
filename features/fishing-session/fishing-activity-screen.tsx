@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import { appContentRepository } from "@/data/repositories/app-content";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { OperationResult } from "@/domain/shared/operation-result";
@@ -28,7 +27,7 @@ export function FishingActivityScreen({
   requestedCatchTime,
   onCorrectCatch,
   onShowRules,
-  lastSession,
+  sessions,
   elapsed,
   startTime,
   embedded = false,
@@ -47,10 +46,9 @@ export function FishingActivityScreen({
   onShowRules: () => void;
   elapsed: number;
   startTime: number | null;
-  lastSession: SessionRecord | null;
+  sessions: SessionRecord[];
   embedded?: boolean;
 }) {
-  const { activityHistory } = appContentRepository.getContent();
   const [showCatchReport, setShowCatchReport] = useState(false);
   const [showPastSession, setShowPastSession] = useState(false);
   const [selectedCatch, setSelectedCatch] = useState<CatchRecord | null>(null);
@@ -92,8 +90,8 @@ export function FishingActivityScreen({
 
       <CatchHistoryList catches={catches} selectCatch={setSelectedCatch} />
       <SessionHistoryList
-        entries={activityHistory}
-        lastSession={lastSession}
+        catches={catches}
+        sessions={sessions}
         showAll={showAllHistory}
         toggleAll={() => setShowAllHistory((current) => !current)}
       />
