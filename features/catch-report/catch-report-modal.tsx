@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { OperationResult } from "@/domain/shared/operation-result";
@@ -31,6 +32,7 @@ export function CatchReportModal({
   startTime: number | null;
 }) {
   const [caughtAt] = useState(() => requestedCatchTime || Date.now());
+  const portalTarget = document.querySelector<HTMLElement>(".phone-app") ?? document.body;
   const controller = useCatchReportController({
     activeZone,
     catches,
@@ -46,11 +48,11 @@ export function CatchReportModal({
     if (finishAfterCatch) onCatchFlowComplete();
   }
 
-  return (
+  return createPortal(
     <div className="modal-bg" onClick={finishAfterCatch ? undefined : onClose}>
       <div
         ref={dialogRef}
-        className="catch-modal"
+        className={`catch-modal catch-modal-step-${step}`}
         role="dialog"
         aria-modal="true"
         aria-label="Registrer fangst"
@@ -85,6 +87,7 @@ export function CatchReportModal({
           />
         )}
       </div>
-    </div>
+    </div>,
+    portalTarget,
   );
 }

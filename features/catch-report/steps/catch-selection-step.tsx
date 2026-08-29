@@ -45,7 +45,7 @@ export function CatchSelectionStep({ controller }: { controller: CatchReportCont
           </b>
         </span>
       </div>
-      <button className="primary" onClick={() => setStep(2)}>
+      <button className="primary mobile-fixed-action" onClick={() => setStep(2)}>
         Neste · størrelse
       </button>
     </>

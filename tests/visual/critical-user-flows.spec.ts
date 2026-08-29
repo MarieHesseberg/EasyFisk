@@ -90,7 +90,7 @@ test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", as
 });
 
 test("fangstskjemaets neste-knapp er tilgjengelig på en lav mobilskjerm", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 600 });
+  await page.setViewportSize({ width: 390, height: 500 });
   await startFishing(page);
   await page.getByRole("button", { name: "Registrer fangst" }).click();
 
