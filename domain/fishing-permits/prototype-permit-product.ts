@@ -2,17 +2,52 @@ import type { ZoneId } from "@/domain/zones/zone";
 
 export type PrototypePermitType = "day" | "week" | "season" | "boat" | "reporting";
 
+export type PrototypePermitAction = "purchase" | "register-reporting-day";
+
+export type PrototypePermitValidity = {
+  label: string;
+  startsAt?: string;
+  endsAt?: string;
+  seasonStartsOn?: string;
+  seasonEndsOn?: string;
+};
+
+export type PrototypePermitCapacity = {
+  label: string;
+  permitsPerFishingDay?: number;
+  permitsPerSeason?: number;
+  maximumRods?: number;
+};
+
+export type PrototypePermitPrice = {
+  amountNok: number | null;
+  status: "verified" | "not-published";
+};
+
+export type PrototypePermitRequirements = {
+  requiresNationalFishingFee: boolean;
+  requiresDisinfection: boolean;
+  requiresRuleAcceptance: boolean;
+  requiresSeasonPermit?: boolean;
+};
+
+export type PrototypePermitSource = {
+  url: string;
+  checkedAt: string;
+  status: "verified-public-source";
+};
+
 export type PrototypePermitProduct = {
   id: string;
   zoneId: ZoneId;
   areaName: string;
   title: string;
   type: PrototypePermitType;
-  validityLabel: string;
-  capacityLabel: string;
-  priceNok: number | null;
-  sourceUrl: string;
-  sourceCheckedAt: string;
-  isPurchasable: boolean;
+  action: PrototypePermitAction;
+  validity: PrototypePermitValidity;
+  capacity: PrototypePermitCapacity;
+  price: PrototypePermitPrice;
+  requirements: PrototypePermitRequirements;
+  source: PrototypePermitSource;
   note: string;
 };

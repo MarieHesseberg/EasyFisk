@@ -42,6 +42,7 @@ data/
   local-storage/
   memory/
   mock/
+  prototype/
   repositories/
 
 hooks/
@@ -101,6 +102,8 @@ Inneholder implementasjoner som leser eller lagrer data. React-komponenter skal 
 - `local-storage/` gir prototypen versjonert lagring som overlever oppdatering av siden.
 - `memory/` lagrer brukerdata midlertidig mens appen kjører.
 - `mock/` inneholder lokale eksempeldata og adapteren som leser dem.
+- `prototype/` inneholder kontrollerte produktregistre og adaptere for funksjoner som ennå ikke
+  har en ekte backend.
 - `repositories/` velger aktiv adapter. En framtidig API- eller databaseadapter kobles inn her.
 
 Bare filer under `data/` kan importere fra `data/mock`. Komponenter og domenelogikk bruker den
@@ -122,7 +125,9 @@ historiske rapporter og framtidig datamigrering.
 Database og API legges til bak små grensesnitt. `FishingContentRepository` leverer soner, regler og
 demonstrasjonsscenarioer. `AppContentRepository` leverer typet profil-, status-, statistikk- og
 demonstrasjonsinnhold uten at visningskomponentene kjenner mockadapteren. `FishingLogRepository`
-lagrer økter og fangster. Den aktive
+lagrer økter og fangster. `PermitCatalogRepository` leverer fiskekortprodukter til kartet og en
+framtidig kjøpsflyt. Den typede prototypelisten kan derfor erstattes med en API-adapter uten å
+endre kartkomponenten. Den aktive
 minneimplementasjonen brukes i tester, mens nettleserprototypen bruker `localStorage`. Begge kan
 senere erstattes med en databaseadapter uten å endre skjermene eller domenereglene.
 

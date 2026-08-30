@@ -4,7 +4,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
-import { getPrototypePermitProducts } from "@/data/prototype/mandalselva-permit-products";
+import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
 import type { ZoneId } from "@/domain/zones/zone";
 import { useUserLocation } from "@/features/map/hooks/use-user-location";
 
@@ -20,7 +20,7 @@ export function MapScreen({
   onUseZone: (zone: ZoneId) => void;
 }) {
   const z = fishingContentRepository.findZone(selected) ?? zones[0];
-  const permitProducts = getPrototypePermitProducts(z.id);
+  const permitProducts = permitCatalogRepository.listProductsByZone(z.id);
   const suggestedZoneId = fishingContentRepository.getSuggestedZoneId();
   const suggestedZoneName =
     fishingContentRepository.findZone(suggestedZoneId)?.name.split(" · ")[0] ??
@@ -103,11 +103,15 @@ export function MapScreen({
                   <small>{product.areaName}</small>
                   <h4>{product.title}</h4>
                 </div>
-                <b>{product.priceNok === null ? "Pris ikke oppgitt" : `${product.priceNok} kr`}</b>
-                <p>{product.validityLabel}</p>
-                <p>{product.capacityLabel}</p>
+                <b>
+                  {product.price.amountNok === null
+                    ? "Pris ikke oppgitt"
+                    : `${product.price.amountNok} kr`}
+                </b>
+                <p>{product.validity.label}</p>
+                <p>{product.capacity.label}</p>
                 <p>{product.note}</p>
-                <a href={product.sourceUrl} target="_blank" rel="noreferrer">
+                <a href={product.source.url} target="_blank" rel="noreferrer">
                   Kontroller kilde
                 </a>
               </article>

@@ -19,7 +19,7 @@ import { calculatePersonalStatistics } from "../domain/statistics/calculate-pers
 import { useFishingLogController } from "../application/easy-fisk/use-fishing-log-controller";
 import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
-import { getPrototypePermitProducts } from "../data/prototype/mandalselva-permit-products";
+import { permitCatalogRepository } from "../data/repositories/permit-catalog";
 
 afterEach(cleanup);
 
@@ -201,7 +201,7 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
 
 test("kartprototypen viser Holmegård-kort og et produkt i hver hovedsone", () => {
   for (const zoneId of [1, 2, 3, 4] as const) {
-    expect(getPrototypePermitProducts(zoneId).length).toBeGreaterThan(0);
+    expect(permitCatalogRepository.listProductsByZone(zoneId).length).toBeGreaterThan(0);
   }
 
   render(<MapScreen selected={2} setSelected={() => undefined} onUseZone={() => undefined} />);
@@ -211,6 +211,18 @@ test("kartprototypen viser Holmegård-kort og et produkt i hver hovedsone", () =
   expect(screen.getByRole("heading", { name: "Rapporteringskort for sesongkort" })).toBeTruthy();
   expect(screen.getByText("2 dagskort per fiskedøgn")).toBeTruthy();
   expect(screen.getByText("15 sesongkort totalt")).toBeTruthy();
+});
+
+test("fiskekortkatalogen tilbyr strukturerte produktdata gjennom repositoryet", () => {
+  const dayPermit = permitCatalogRepository.findProduct("zone-2-holmegard-day");
+  const reportingPermit = permitCatalogRepository.findProduct("zone-2-holmegard-reporting");
+
+  expect(dayPermit?.validity.startsAt).toBe("18:00");
+  expect(dayPermit?.capacity.permitsPerFishingDay).toBe(2);
+  expect(dayPermit?.requirements.requiresDisinfection).toBe(true);
+  expect(dayPermit?.source.status).toBe("verified-public-source");
+  expect(reportingPermit?.action).toBe("register-reporting-day");
+  expect(reportingPermit?.requirements.requiresSeasonPermit).toBe(true);
 });
 
 test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {

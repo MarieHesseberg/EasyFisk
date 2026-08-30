@@ -1,7 +1,17 @@
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
-import type { ZoneId } from "@/domain/zones/zone";
-
 const sourceCheckedAt = "2026-08-31";
+
+const commonRequirements = {
+  requiresNationalFishingFee: true,
+  requiresDisinfection: true,
+  requiresRuleAcceptance: true,
+} as const;
+
+const source = (url: string) => ({
+  url,
+  checkedAt: sourceCheckedAt,
+  status: "verified-public-source" as const,
+});
 
 export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
   {
@@ -10,12 +20,12 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Hele sone 1 · munningen–Vik",
     title: "Båtkort sone 1",
     type: "boat",
-    validityLabel: "Valgt fiskedøgn",
-    capacityLabel: "Inntil 2 stenger fra båt",
-    priceNok: null,
-    sourceUrl: "https://www.inatur.no/laksefiske/646eff4c4e534d1b1e53baaf",
-    sourceCheckedAt,
-    isPurchasable: true,
+    action: "purchase",
+    validity: { label: "Valgt fiskedøgn" },
+    capacity: { label: "Inntil 2 stenger fra båt", maximumRods: 2 },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/646eff4c4e534d1b1e53baaf"),
     note: "Båtleie inngår ikke. Kortet gjelder båtfiske i hele hovedsonen.",
   },
   {
@@ -24,12 +34,12 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Holmegård",
     title: "Holmegård dagskort",
     type: "day",
-    validityLabel: "Kl. 18.00–17.59 neste dag",
-    capacityLabel: "2 dagskort per fiskedøgn",
-    priceNok: null,
-    sourceUrl: "https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f",
-    sourceCheckedAt,
-    isPurchasable: true,
+    action: "purchase",
+    validity: { label: "Kl. 18.00–17.59 neste dag", startsAt: "18:00", endsAt: "17:59" },
+    capacity: { label: "2 dagskort per fiskedøgn", permitsPerFishingDay: 2 },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f"),
     note: "Enkel hytte og gapahuk/grillhytte ved elvebredden inngår.",
   },
   {
@@ -38,12 +48,16 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Holmegård",
     title: "Holmegård sesongkort",
     type: "season",
-    validityLabel: "1. juni–31. august 2026",
-    capacityLabel: "15 sesongkort totalt",
-    priceNok: null,
-    sourceUrl: "https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f",
-    sourceCheckedAt,
-    isPurchasable: true,
+    action: "purchase",
+    validity: {
+      label: "1. juni–31. august 2026",
+      seasonStartsOn: "2026-06-01",
+      seasonEndsOn: "2026-08-31",
+    },
+    capacity: { label: "15 sesongkort totalt", permitsPerSeason: 15 },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f"),
     note: "Krever eget rapporteringskort for hvert fiskedøgn.",
   },
   {
@@ -52,12 +66,12 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Holmegård",
     title: "Rapporteringskort for sesongkort",
     type: "reporting",
-    validityLabel: "Ett valgt fiskedøgn",
-    capacityLabel: "For innehaver av sesongkort",
-    priceNok: null,
-    sourceUrl: "https://lakseelver.no/nb/elver/mandalselva/about",
-    sourceCheckedAt,
-    isPurchasable: false,
+    action: "register-reporting-day",
+    validity: { label: "Ett valgt fiskedøgn" },
+    capacity: { label: "For innehaver av sesongkort" },
+    price: { amountNok: null, status: "not-published" },
+    requirements: { ...commonRequirements, requiresSeasonPermit: true },
+    source: source("https://lakseelver.no/nb/elver/mandalselva/about"),
     note: "Obligatorisk døgnregistrering, ikke et separat fiskekortkjøp.",
   },
   {
@@ -66,12 +80,12 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Hele sone 3 · Øyslebø–Laudal",
     title: "Sone 3 døgnkort",
     type: "day",
-    validityLabel: "Valgt fiskedøgn",
-    capacityLabel: "Ingen offentlig kapasitet oppgitt",
-    priceNok: 455,
-    sourceUrl: "https://www.inatur.no/laksefiske/62079e1029f7c11a486f170d",
-    sourceCheckedAt,
-    isPurchasable: true,
+    action: "purchase",
+    validity: { label: "Valgt fiskedøgn" },
+    capacity: { label: "Ingen offentlig kapasitet oppgitt" },
+    price: { amountNok: 455, status: "verified" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/62079e1029f7c11a486f170d"),
     note: "Ett kort dekker hele hovedsonen.",
   },
   {
@@ -80,16 +94,12 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     areaName: "Lakseosen",
     title: "Lakseosen døgnkort",
     type: "day",
-    validityLabel: "Kl. 18.00–17.59 neste dag",
-    capacityLabel: "2 døgnkort per fiskedøgn",
-    priceNok: 600,
-    sourceUrl: "https://www.inatur.no/laksefiske/65c9d61268b6ab0e73b36b69",
-    sourceCheckedAt,
-    isPurchasable: true,
+    action: "purchase",
+    validity: { label: "Kl. 18.00–17.59 neste dag", startsAt: "18:00", endsAt: "17:59" },
+    capacity: { label: "2 døgnkort per fiskedøgn", permitsPerFishingDay: 2 },
+    price: { amountNok: 600, status: "verified" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/65c9d61268b6ab0e73b36b69"),
     note: "Kortet gjelder den navngitte delsonen ved utløpet av Manflåvann.",
   },
 ];
-
-export function getPrototypePermitProducts(zoneId: ZoneId) {
-  return prototypePermitProducts.filter((product) => product.zoneId === zoneId);
-}
