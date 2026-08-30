@@ -61,10 +61,11 @@
   align-items: center;
   gap: var(--space-4);
   margin-top: var(--space-5);
-  padding: var(--space-5) var(--space-6);
-  border: 1px solid var(--color-border);
+  padding: var(--space-6);
+  min-height: 84px;
+  border: 2px solid var(--color-primary);
   border-radius: var(--radius-card-large);
-  background: var(--color-surface);
+  background: var(--color-primary-soft);
   color: var(--color-primary);
   text-align: left;
 }
@@ -77,12 +78,12 @@
 }
 
 .home-past-session-button b {
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .home-past-session-button small {
   color: var(--color-text-muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .timer {
   font: 700 37px Georgia;

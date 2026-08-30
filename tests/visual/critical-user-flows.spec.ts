@@ -50,6 +50,75 @@ test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page })
   ).toBeVisible();
 });
 
+test("fiskekort kan registreres lokalt med originalvedlegg og beholdes etter refresh", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.getByRole("button", { name: /Fiskekort/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Mine fiskekort" });
+  await dialog.getByRole("button", { name: "Registrer fiskekort" }).click();
+  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
+  await dialog.getByLabel("Utsteder / selger *").fill("INatur");
+  await dialog.getByLabel("Korttype *").selectOption("Døgnkort");
+  await dialog.getByLabel("Vassdrag, sone og eventuell delsone *").fill("Mandalselva · Sone 3");
+  await dialog.getByLabel("Gyldig fra (norsk tid) *").fill("2026-08-20T18:00");
+  await dialog.getByLabel("Gyldig til (norsk tid) *").fill("2026-08-21T18:00");
+  await dialog.getByLabel(/Bilde eller PDF/).setInputFiles({
+    name: "fiskekort.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("%PDF-1.4 prototype"),
+  });
+  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
+  await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
+  await expect(dialog.getByText("Egenregistrert · ikke eksternt verifisert")).toBeVisible();
+  await expect(dialog.getByRole("link", { name: /fiskekort.pdf/ })).toBeVisible();
+  await page.reload();
+  await page.getByRole("button", { name: /Fiskekort/ }).click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Mine fiskekort" })
+      .getByRole("heading", { name: "Kari Fisker" }),
+  ).toBeVisible();
+});
+
+test("desinfisering og fiskeravgift kan registreres med relevante opplysninger", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.getByRole("button", { name: /Desinfisering/ }).click();
+  let dialog = page.getByRole("dialog", { name: "Desinfisering" });
+  await dialog.getByRole("button", { name: "Registrer desinfisering" }).click();
+  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
+  await dialog
+    .getByLabel("Stasjon / hvem som utførte desinfiseringen *")
+    .fill("Møll Bensinstasjon");
+  await dialog.getByLabel("Utført (norsk tid) *").fill("2026-08-20T12:30");
+  await dialog.getByLabel("Utstyr som ble desinfisert *").fill("Stang, snelle, vadere og håv");
+  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
+  await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
+  await dialog.getByRole("button", { name: /Tilbake/ }).click();
+
+  await page.getByRole("button", { name: /Statlig fiskeravgift/ }).click();
+  dialog = page.getByRole("dialog", { name: "Statlig fiskeravgift" });
+  await dialog.getByRole("button", { name: "Registrer statlig fiskeravgift" }).click();
+  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
+  await dialog.getByLabel("Kalenderår *").fill("2026");
+  await dialog.getByLabel("Avgift / fritak *").selectOption("Enkeltperson");
+  await dialog.getByLabel("Betalingsdato (ikke nødvendig ved fritak)").fill("2026-05-15");
+  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
+  await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
+});
+
+test("hjemskjermen viser at mer innhold finnes og kan rulle videre", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  const screen = page.locator(".screen");
+  const hint = page.getByRole("button", { name: /Mer nedenfor/ });
+  await expect(hint).toBeVisible();
+  const before = await screen.evaluate((element) => element.scrollTop);
+  await hint.click();
+  await expect.poll(() => screen.evaluate((element) => element.scrollTop)).toBeGreaterThan(before);
+});
+
 test("etterregistrering kan lukkes med X på mobil", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   await page.getByRole("button", { name: "Registrer tidligere fisketur" }).click();

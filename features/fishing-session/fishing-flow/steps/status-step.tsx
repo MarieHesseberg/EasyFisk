@@ -31,9 +31,9 @@ export function StatusStep({
     <>
       <FlowTitle
         icon="shield"
-        eyebrow="STATUSKONTROLL"
+        eyebrow="SIMULERT STATUSKONTROLL"
         title={scenario.title}
-        text={scenario.detail}
+        text={`${scenario.detail} Dette er statusmotorens demonstrasjon, ikke verifisering av dokumentene dine.`}
       />
       <div className={"scenario-banner " + scenario.level}>
         <b>

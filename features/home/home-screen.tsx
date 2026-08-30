@@ -9,12 +9,14 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
+import type { DetailDestination } from "@/domain/navigation/navigation";
 
 export function HomeScreen({
   onStart,
   onRules,
   onFeedback,
   onControlCard,
+  onDocument,
   onPastSession,
   onMapShortcut,
   active,
@@ -27,6 +29,7 @@ export function HomeScreen({
   onRules: () => void;
   onFeedback: () => void;
   onControlCard: () => void;
+  onDocument: (destination: DetailDestination) => void;
   onPastSession: () => void;
   onMapShortcut: () => void;
   active: boolean;
@@ -60,7 +63,7 @@ export function HomeScreen({
       <RequirementsOverview
         demoStatus={demoStatus}
         scenario={scenario}
-        riverStatus={riverStatus}
+        openDocument={onDocument}
         remainingSalmon={Math.max(0, quota.killedSalmonPerSeason - salmonKilled)}
         seasonQuota={quota.killedSalmonPerSeason}
         openControlCard={onControlCard}

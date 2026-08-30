@@ -51,6 +51,16 @@ export function ProfileScreen({
             <Icon name="chevron" size={18} />
           </button>
         ))}
+        <button onClick={() => setDetail("fee")}>
+          <span>
+            <Icon name="book" />
+          </span>
+          <p>
+            <b>Statlig fiskeravgift</b>
+            <small>Registrer kvittering eller fritak</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
         <button onClick={() => setDetail("status-engine")}>
           <span>
             <Icon name="stats" />

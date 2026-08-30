@@ -43,7 +43,7 @@ export function HomeSessionCard({
           </p>
         </>
       ) : (
-        <p>{scenario.detail}</p>
+        <p>Demostatus: {scenario.detail} Dokumenter må kontrolleres separat.</p>
       )}
       <button className={active ? "stop-button" : "start-button"} onClick={openFlow}>
         <Icon name={active ? "clock" : "activity"} size={20} />

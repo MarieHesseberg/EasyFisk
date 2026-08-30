@@ -2,6 +2,7 @@
 
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
+import { ScrollHint } from "@/components/layout/scroll-hint";
 import { DemoControlPanel } from "@/components/layout/demo-control-panel";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
@@ -50,6 +51,7 @@ export function EasyFiskApp() {
             onRules={() => actions.navigate("rules")}
             onFeedback={() => actions.openDetail("feedback")}
             onControlCard={() => actions.openDetail("control-card")}
+            onDocument={actions.openDetail}
             onPastSession={actions.openPastSession}
             onMapShortcut={() => actions.navigate("map")}
             active={active}
@@ -126,6 +128,7 @@ export function EasyFiskApp() {
         {globalDetail && (
           <ProfileDetailDialog destination={globalDetail} close={actions.closeDetail} />
         )}
+        <ScrollHint />
       </div>
       <DemoControlPanel
         scenarios={demoStatuses}

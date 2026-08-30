@@ -5,6 +5,7 @@ import { FavoriteZonesDetail } from "./favorite-zones-detail";
 import { NotificationsDetail } from "./notifications-detail";
 import { PermitsDetail } from "./permits-detail";
 import { ProfilePrivacyDetail } from "./profile-privacy-detail";
+import { DocumentsPanel } from "@/features/documents/documents-panel";
 
 export function ProfileDetailContent({
   destination,
@@ -18,6 +19,8 @@ export function ProfileDetailContent({
       return <PermitsDetail />;
     case "disinfection":
       return <DisinfectionDetail />;
+    case "fee":
+      return <DocumentsPanel kind="fee" />;
     case "notifications":
       return <NotificationsDetail />;
     case "favorite-zones":
