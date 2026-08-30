@@ -8,7 +8,8 @@ interface ThumbPosition {
   visible: boolean;
 }
 
-const initialPosition: ThumbPosition = { height: 100, top: 0, visible: false };
+const thumbHeight = 52;
+const initialPosition: ThumbPosition = { height: thumbHeight, top: 0, visible: false };
 
 export function ScrollIndicator() {
   const marker = useRef<HTMLDivElement>(null);
@@ -31,9 +32,9 @@ export function ScrollIndicator() {
         setThumb(initialPosition);
         return;
       }
-      const height = Math.max(12, (target.clientHeight / target.scrollHeight) * 100);
       const progress = target.scrollTop / (target.scrollHeight - target.clientHeight);
-      setThumb({ height, top: progress * (100 - height), visible: true });
+      const availableDistance = Math.max(0, marker.current!.clientHeight - thumbHeight);
+      setThumb({ height: thumbHeight, top: progress * availableDistance, visible: true });
     }
 
     const schedule = () => {
@@ -62,7 +63,7 @@ export function ScrollIndicator() {
       className={`scroll-indicator ${thumb.visible ? "visible" : ""}`}
       aria-hidden="true"
     >
-      <i style={{ height: `${thumb.height}%`, top: `${thumb.top}%` }} />
+      <i style={{ height: `${thumb.height}px`, top: `${thumb.top}px` }} />
     </div>
   );
 }

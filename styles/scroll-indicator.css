@@ -1,15 +1,14 @@
 .scroll-indicator {
   position: absolute;
-  top: 50%;
+  top: calc(10px + env(safe-area-inset-top));
   right: 4px;
+  bottom: calc(91px + env(safe-area-inset-bottom));
   z-index: var(--layer-dialog-content);
   width: 6px;
-  height: clamp(120px, 28%, 170px);
   border-radius: 999px;
   background: transparent;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-50%);
   transition: opacity 160ms ease;
 }
 

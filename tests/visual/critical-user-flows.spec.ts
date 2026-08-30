@@ -134,11 +134,18 @@ test("hjemskjermen viser en rulleindikator som følger siden", async ({ page }) 
   const indicator = page.locator(".scroll-indicator.visible");
   const thumb = indicator.locator("i");
   await expect(indicator).toBeVisible();
-  const before = await thumb.evaluate((element) => getComputedStyle(element).top);
-  await screen.evaluate((element) => element.scrollBy(0, 500));
+  const trackAtTop = await indicator.boundingBox();
+  const thumbAtTop = await thumb.boundingBox();
+  expect(Math.abs(thumbAtTop!.y - trackAtTop!.y)).toBeLessThanOrEqual(1);
+
+  await screen.evaluate((element) => element.scrollTo(0, element.scrollHeight));
   await expect
-    .poll(() => thumb.evaluate((element) => getComputedStyle(element).top))
-    .not.toBe(before);
+    .poll(async () => {
+      const track = await indicator.boundingBox();
+      const marker = await thumb.boundingBox();
+      return Math.abs(marker!.y + marker!.height - (track!.y + track!.height));
+    })
+    .toBeLessThanOrEqual(1);
 });
 
 test("fiskestart blokkeres når nødvendig dokumentasjon mangler", async ({ page }) => {
