@@ -13,15 +13,6 @@ export type AppContent = {
     disinfectionSummary: string;
   };
   headerAlerts: readonly { icon: string; message: string }[];
-  statistics: {
-    areas: readonly string[];
-    periods: readonly string[];
-    totalCatches: string;
-    metrics: readonly { icon: string; label: string; value: string }[];
-    weeklyCatchPercentages: readonly number[];
-    zoneCatchPercentages: readonly number[];
-    zoneCatchTotals: readonly number[];
-  };
   feedback: {
     categories: readonly string[];
     organizationName: string;

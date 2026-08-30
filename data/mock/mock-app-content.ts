@@ -28,20 +28,6 @@ export const mockAppContent: AppContent = {
     { icon: "clock", message: "Eksempelkortet utløper i dag kl. 17:59." },
     { icon: "bell", message: `Reglene ble oppdatert ${metadata.shortVersionLabel}.` },
   ],
-  statistics: {
-    areas: ["Hele elva", "Sone 3", "Sone 4"],
-    periods: ["Sesongen", "Siste 30 dager", "Denne uken"],
-    totalCatches: "286",
-    metrics: [
-      { icon: "clock", label: "FISKETIMER", value: "4 820" },
-      { icon: "stats", label: "FANGST / 10 T", value: "0,59" },
-      { icon: "fish", label: "GJENUTSATT", value: "64 %" },
-      { icon: "user", label: "FISKEØKTER", value: "418" },
-    ],
-    weeklyCatchPercentages: [18, 32, 46, 66, 87, 74, 54, 41, 25],
-    zoneCatchPercentages: [72, 91, 84, 58],
-    zoneCatchTotals: [58, 79, 73, 46],
-  },
   feedback: {
     categories: [
       "Ulovlig eller mistenkelig fiske",

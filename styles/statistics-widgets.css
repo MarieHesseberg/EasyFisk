@@ -1,13 +1,31 @@
 .filter-row {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 7px;
 }
-.filter-row button {
+.filter-row > span,
+.filter-row label {
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   border-radius: var(--radius-large);
   padding: 8px 12px;
   font-size: 10px;
+}
+.filter-row label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.filter-row label > span {
+  color: var(--color-text-muted);
+}
+.filter-row select {
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 800;
 }
 .hero-stat {
   background: var(--color-primary);
@@ -86,8 +104,11 @@
 }
 .bar-chart small {
   height: 18px;
-  font-size: 7px;
+  font-size: 8px;
   padding-top: 5px;
+}
+.bar-chart div:not(.selected) span {
+  opacity: 0.55;
 }
 .zone-bar {
   display: grid;
@@ -112,4 +133,7 @@
   text-align: center;
   font-size: 9px;
   color: var(--color-text-muted);
+}
+.privacy-note a {
+  color: var(--color-primary);
 }

@@ -119,17 +119,14 @@ export function EasyFiskApp() {
             isStatusTestMode={isStatusTestMode}
             selectDemoStatus={actions.selectDemoStatus}
             useActualStatus={actions.useActualStatus}
+            openStatistics={() => actions.navigate("stats")}
             testDemoStatus={() => {
               if (!actions.startStatusTest()) return;
               actions.navigate("home");
             }}
           />
         )}
-        <BottomNavigation
-          activeScreen={screen}
-          hasActiveSession={active}
-          navigate={actions.navigate}
-        />
+        <BottomNavigation activeScreen={screen} navigate={actions.navigate} />
         {toast && (
           <div className="toast" role="status" aria-live="polite" aria-atomic="true">
             <Icon name="check" size={18} />

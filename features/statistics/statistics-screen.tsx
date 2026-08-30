@@ -3,71 +3,105 @@
 import { useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import { fishingContentRepository } from "@/data/repositories/fishing-content";
-import { appContentRepository } from "@/data/repositories/app-content";
+import {
+  mandalselvaSeasonStatistics,
+  mandalselvaStatisticsSource,
+} from "@/data/statistics/mandalselva-statistics";
 import type { CatchRecord } from "@/domain/catches/catch";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { calculatePersonalStatistics } from "@/domain/statistics/calculate-personal-statistics";
+import {
+  calculateAverageWeight,
+  calculateChangeFromPrevious,
+} from "@/domain/statistics/river-statistics";
 import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
 import { PersonalStatisticsPanel } from "@/features/statistics/personal-statistics-panel";
 
-const zones = fishingContentRepository.getZones();
-const { statistics } = appContentRepository.getContent();
-
-function nextOption(current: string, options: readonly string[]) {
-  return options[(options.indexOf(current) + 1) % options.length];
-}
+const numberFormatter = new Intl.NumberFormat("nb-NO");
+const decimalFormatter = new Intl.NumberFormat("nb-NO", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 
 export function StatisticsOverview() {
-  const [area, setArea] = useState(statistics.areas[0]),
-    [period, setPeriod] = useState(statistics.periods[0]);
+  const latest = mandalselvaSeasonStatistics.at(-1)!;
+  const [selectedYear, setSelectedYear] = useState(latest.year);
+  const selectedIndex = mandalselvaSeasonStatistics.findIndex(({ year }) => year === selectedYear);
+  const selected = mandalselvaSeasonStatistics[selectedIndex];
+  const previous = mandalselvaSeasonStatistics[selectedIndex - 1];
+  const change = calculateChangeFromPrevious(selected, previous);
+  const maximumCatch = Math.max(
+    ...mandalselvaSeasonStatistics.map(({ salmonCount }) => salmonCount),
+  );
   return (
     <>
       <div className="filter-row">
-        <button onClick={() => setArea(nextOption(area, statistics.areas))}>{area}⌄</button>
-        <button onClick={() => setPeriod(nextOption(period, statistics.periods))}>{period}⌄</button>
+        <span>Hele Mandalselva</span>
+        <label>
+          <span>Sesong</span>
+          <select
+            aria-label="Velg sesong"
+            value={selectedYear}
+            onChange={(event) => setSelectedYear(Number(event.target.value))}
+          >
+            {[...mandalselvaSeasonStatistics].reverse().map(({ year }) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
       <section className="hero-stat">
-        <small>REGISTRERTE FANGSTER · EKSEMPEL</small>
-        <strong>{statistics.totalCatches}</strong>
+        <small>RAPPORTERT LAKS · {selected.year}</small>
+        <strong>{numberFormatter.format(selected.salmonCount)}</strong>
         <div>
-          <span>Fangst + innsats</span> gir bedre forvaltningsdata
+          <span>Offisiell fangststatistikk</span> for hele Mandalselva
         </div>
       </section>
       <div className="stat-grid">
-        {statistics.metrics.map((metric) => (
-          <Stat key={metric.label} {...metric} />
-        ))}
+        <Stat
+          icon="fish"
+          label="LAKS · KILOGRAM"
+          value={numberFormatter.format(selected.salmonWeightKg)}
+        />
+        <Stat
+          icon="stats"
+          label="SNITTVEKT LAKS"
+          value={`${decimalFormatter.format(calculateAverageWeight(selected))} kg`}
+        />
+        <Stat
+          icon="fish"
+          label="SJØØRRET · ANTALL"
+          value={numberFormatter.format(selected.seaTroutCount)}
+        />
+        <Stat
+          icon="clock"
+          label="ENDRING FRA ÅRET FØR"
+          value={
+            change === null ? "–" : `${change > 0 ? "+" : ""}${decimalFormatter.format(change)} %`
+          }
+        />
       </div>
       <section className="chart-card">
-        <h3>Fangst gjennom sesongen</h3>
-        <div className="bar-chart">
-          {statistics.weeklyCatchPercentages.map((h, i) => (
-            <div key={i}>
-              <span style={{ height: h + "%" }} />
-              <small>{i % 2 === 0 ? "U" + (23 + i) : ""}</small>
+        <h3>Rapportert laks per sesong</h3>
+        <div className="bar-chart" aria-label="Antall rapporterte laks fra 2021 til 2025">
+          {mandalselvaSeasonStatistics.map(({ year, salmonCount }) => (
+            <div key={year} className={year === selectedYear ? "selected" : undefined}>
+              <span style={{ height: `${(salmonCount / maximumCatch) * 100}%` }} />
+              <small>{year}</small>
             </div>
           ))}
         </div>
       </section>
-      <section className="chart-card">
-        <h3>Fangst per hovedsone</h3>
-        {zones.map((z, i) => (
-          <div className="zone-bar" key={z.id}>
-            <span>Sone {z.id}</span>
-            <div>
-              <i style={{ width: statistics.zoneCatchPercentages[i] + "%" }} />
-            </div>
-            <b>{statistics.zoneCatchTotals[i]}</b>
-          </div>
-        ))}
-      </section>
       <p className="privacy-note">
-        Tallene demonstrerer ønsket funksjon. De er ikke offisielle{" "}
-        {activeFishingRules.metadata.seasonYear}-tall. Statistikk skal aggregeres uten å vise
-        enkeltfiskeres posisjon.
+        Kilde:{" "}
+        <a href={mandalselvaStatisticsSource.url} target="_blank" rel="noreferrer">
+          {mandalselvaStatisticsSource.label}
+        </a>
+        , {mandalselvaStatisticsSource.updatedLabel}. Tallene gjelder hele vassdraget og er ikke
+        fordelt på fiskesoner.
       </p>
     </>
   );

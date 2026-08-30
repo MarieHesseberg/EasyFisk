@@ -14,6 +14,7 @@ import { CatchHistoryList } from "../features/fishing-session/components/catch-h
 import { SessionHistoryList } from "../features/fishing-session/components/session-history-list";
 import { usePreferencesController } from "../features/profile/hooks/use-preferences-controller";
 import { PersonalStatisticsPanel } from "../features/statistics/personal-statistics-panel";
+import { StatisticsOverview } from "../features/statistics/statistics-screen";
 import { calculatePersonalStatistics } from "../domain/statistics/calculate-personal-statistics";
 import { useFishingLogController } from "../application/easy-fisk/use-fishing-log-controller";
 import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
@@ -57,6 +58,19 @@ test("personlig statistikk viser lokalt beregnet historikk og kvoter", () => {
   expect(screen.getByText("1 t 0 min")).toBeTruthy();
   expect(screen.getByText("Laks: 1")).toBeTruthy();
   expect(screen.getByText("1 av 5 brukt · 4 igjen")).toBeTruthy();
+});
+
+test("offisiell Mandalselva-statistikk oppdateres når sesongen endres", async () => {
+  render(<StatisticsOverview />);
+
+  expect(screen.getByText("1 045")).toBeTruthy();
+  await userEvent
+    .setup()
+    .selectOptions(screen.getByRole("combobox", { name: "Velg sesong" }), "2023");
+
+  expect(screen.getByText("2 691")).toBeTruthy();
+  expect(screen.getByText("9 007")).toBeTruthy();
+  expect(screen.getByText("206")).toBeTruthy();
 });
 
 test("økthistorikken viser tomtilstand uten lagrede økter", () => {
@@ -142,13 +156,13 @@ test("hovednavigasjonen markerer valgt side og sender navigasjonshandling", asyn
   render(
     <BottomNavigation
       activeScreen="home"
-      hasActiveSession
       navigate={(screen) => {
         destination = screen;
       }}
     />,
   );
   expect(screen.getByRole("button", { name: /Hjem/ }).getAttribute("aria-current")).toBe("page");
+  expect(screen.queryByRole("button", { name: /Statistikk/ })).toBeNull();
   await userEvent.setup().click(screen.getByRole("button", { name: /Kart/ }));
   expect(destination).toBe("map");
 });

@@ -22,6 +22,7 @@ export function ProfileScreen({
   selectDemoStatus,
   testDemoStatus,
   useActualStatus,
+  openStatistics,
 }: {
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
@@ -29,6 +30,7 @@ export function ProfileScreen({
   selectDemoStatus: (status: DemoStatus) => void;
   testDemoStatus: () => void;
   useActualStatus: () => void;
+  openStatistics: () => void;
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { profile } = appContentRepository.getContent();
@@ -46,6 +48,16 @@ export function ProfileScreen({
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
+        <button onClick={openStatistics}>
+          <span>
+            <Icon name="stats" />
+          </span>
+          <p>
+            <b>Statistikk og fiskehistorikk</b>
+            <small>Mandalselva og dine registrerte fiskeøkter</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
         {profile.menuItems.map(({ destination, icon, title, description }) => (
           <button key={destination} onClick={() => setDetail(destination)}>
             <span>

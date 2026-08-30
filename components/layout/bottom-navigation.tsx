@@ -5,31 +5,28 @@ const destinations = [
   ["home", "Hjem", "home"],
   ["map", "Kart", "map"],
   ["rules", "Regler", "book"],
-  ["stats", "Statistikk", "stats"],
   ["more", "Mer", "more"],
 ] as const;
 
 export function BottomNavigation({
   activeScreen,
-  hasActiveSession,
   navigate,
 }: {
   activeScreen: Screen;
-  hasActiveSession: boolean;
   navigate: (screen: Screen) => void;
 }) {
+  const selectedScreen = activeScreen === "stats" ? "more" : activeScreen;
   return (
     <nav className="bottom-nav" aria-label="Hovednavigasjon">
       {destinations.map(([id, label, icon]) => (
         <button
           key={id}
           onClick={() => navigate(id)}
-          className={activeScreen === id ? "selected" : ""}
-          aria-current={activeScreen === id ? "page" : undefined}
+          className={selectedScreen === id ? "selected" : ""}
+          aria-current={selectedScreen === id ? "page" : undefined}
         >
           <Icon name={icon} />
           <span>{label}</span>
-          {id === "stats" && hasActiveSession && <i />}
         </button>
       ))}
     </nav>
