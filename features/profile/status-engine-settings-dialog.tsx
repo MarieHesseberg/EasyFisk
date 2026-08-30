@@ -6,14 +6,18 @@ export function StatusEngineSettingsDialog({
   close,
   scenarios,
   selected,
+  isTestMode,
   selectStatus,
   startTest,
+  useActualStatus,
 }: {
   close: () => void;
   scenarios: readonly DemoScenario[];
   selected: DemoScenario;
+  isTestMode: boolean;
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
+  useActualStatus: () => void;
 }) {
   const dialogRef = useDialogAccessibility(close);
 
@@ -41,8 +45,10 @@ export function StatusEngineSettingsDialog({
           id="mobile-demo-status"
           scenarios={scenarios}
           selected={selected}
+          isTestMode={isTestMode}
           selectStatus={selectStatus}
           startTest={startTest}
+          useActualStatus={useActualStatus}
         />
       </section>
     </div>

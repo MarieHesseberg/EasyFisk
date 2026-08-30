@@ -7,13 +7,17 @@ import { StatusEngineControl } from "@/features/status-engine/status-engine-cont
 export function DemoControlPanel({
   scenarios,
   selected,
+  isTestMode,
   selectStatus,
   startTest,
+  useActualStatus,
 }: {
   scenarios: readonly DemoScenario[];
   selected: DemoScenario;
+  isTestMode: boolean;
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
+  useActualStatus: () => void;
 }) {
   const { demoFeatures } = appContentRepository.getContent();
   return (
@@ -27,8 +31,10 @@ export function DemoControlPanel({
         id="desktop-demo-status"
         scenarios={scenarios}
         selected={selected}
+        isTestMode={isTestMode}
         selectStatus={selectStatus}
         startTest={startTest}
+        useActualStatus={useActualStatus}
       />
       <div className="feature-divider" />
       <span>FUNKSJONER I PROTOTYPEN</span>

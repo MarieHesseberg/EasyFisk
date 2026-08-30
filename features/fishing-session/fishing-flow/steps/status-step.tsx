@@ -7,11 +7,13 @@ import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { ZoneId } from "@/domain/zones/zone";
-import { getStatusEngineDocumentReadiness } from "@/domain/fishing-rules/get-status-engine-document-readiness";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function StatusStep({
   cancel,
   demoStatus,
+  documentReadiness,
+  isStatusTestMode,
   next,
   resolveBlock,
   scenario,
@@ -19,6 +21,8 @@ export function StatusStep({
 }: {
   cancel: () => void;
   demoStatus: DemoStatus;
+  documentReadiness: DocumentReadiness;
+  isStatusTestMode: boolean;
   next: () => void;
   resolveBlock: () => void;
   scenario: DemoScenario;
@@ -26,7 +30,6 @@ export function StatusStep({
 }) {
   const { temperature } = activeFishingRules;
   const zoneName = fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
-  const documentReadiness = getStatusEngineDocumentReadiness(demoStatus);
   const documentsBlocked = !documentReadiness.complete;
   const blocked = scenario.level === "blocked" || documentsBlocked;
   const title =
@@ -39,13 +42,18 @@ export function StatusStep({
     scenario.level === "blocked"
       ? scenario.detail
       : documentsBlocked
-        ? `Statusmotoren har satt ${documentReadiness.missingLabels.join(", ")} som manglende.`
+        ? `${isStatusTestMode ? "Testmodus har satt" : "Registrert dokumentasjon viser"} ${documentReadiness.missingLabels.join(", ")} som manglende.`
         : `${scenario.detail} Egenregistrerte dokumenter må fortsatt kunne fremvises i original.`;
   const effectiveLevel = blocked ? "blocked" : scenario.level === "ok" ? "warning" : scenario.level;
 
   return (
     <>
-      <FlowTitle icon="shield" eyebrow="SIMULERT STATUSKONTROLL" title={title} text={text} />
+      <FlowTitle
+        icon="shield"
+        eyebrow={isStatusTestMode ? "SIMULERT STATUSKONTROLL" : "STATUS FRA DINE DOKUMENTER"}
+        title={title}
+        text={text}
+      />
       <div className={"scenario-banner " + effectiveLevel}>
         <b>
           {blocked

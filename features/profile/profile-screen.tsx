@@ -16,12 +16,16 @@ type ProfileDestination = DetailDestination | "status-engine";
 
 export function ProfileScreen({
   demoStatus,
+  isStatusTestMode,
   selectDemoStatus,
   testDemoStatus,
+  useActualStatus,
 }: {
   demoStatus: DemoStatus;
+  isStatusTestMode: boolean;
   selectDemoStatus: (status: DemoStatus) => void;
   testDemoStatus: () => void;
+  useActualStatus: () => void;
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { profile } = appContentRepository.getContent();
@@ -87,8 +91,10 @@ export function ProfileScreen({
           close={() => setDetail(null)}
           scenarios={scenarios}
           selected={selectedScenario}
+          isTestMode={isStatusTestMode}
           selectStatus={selectDemoStatus}
           startTest={testDemoStatus}
+          useActualStatus={useActualStatus}
         />
       )}
       {detail && detail !== "status-engine" && (

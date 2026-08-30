@@ -99,13 +99,18 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
 
   function selectDemoStatus(status: typeof demoStatus) {
+    navigation.actions.setDemoStatus(status);
+  }
+
+  function startStatusTest() {
     const stopResult = session.actions.stop();
     if (!stopResult.ok) {
       showToast(stopResult.error);
-      return;
+      return false;
     }
-    navigation.actions.setDemoStatus(status);
+    navigation.actions.setIsStatusTestMode(true);
     navigation.actions.closeFlow();
+    return true;
   }
 
   function useZone(selectedZone: ZoneId) {
@@ -128,11 +133,13 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       correctCatch: log.actions.correctCatch,
       finishSessionFlow,
       openSessionFlow: () => navigation.actions.setFlow(active ? "stop" : "start"),
-      resolveBlockedStatus: () => {
+      resolveBlockedStatus: (status = demoStatus) => {
         navigation.actions.closeFlow();
-        navigation.actions.openDetail(getStatusResolution(demoStatus));
+        navigation.actions.openDetail(getStatusResolution(status));
       },
       selectDemoStatus,
+      startStatusTest,
+      useActualStatus: () => navigation.actions.setIsStatusTestMode(false),
       useZone,
     },
   };

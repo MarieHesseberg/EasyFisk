@@ -5,6 +5,7 @@ import { isReportLate, reportingDeadlineMs } from "../domain/catches/reporting-d
 import { parseMeasurement, validateCatch } from "../domain/catches/validate-catch.ts";
 import { getStatusResolution, statusState } from "../domain/fishing-rules/status-checks.ts";
 import { activeFishingRules } from "../domain/fishing-rules/mandalselva-2026.ts";
+import { resolveStatusEngine } from "../domain/fishing-rules/resolve-status-engine.ts";
 import {
   countKilledSalmonForDay,
   getNorwegianCalendarDate,
@@ -24,6 +25,48 @@ import {
 test("fangstmål leses med både komma og punktum", () => {
   assert.equal(parseMeasurement("64,5"), 64.5);
   assert.equal(parseMeasurement("2.4"), 2.4);
+});
+
+test("normalmodus bruker registrerte dokumenter som eneste statusgrunnlag", () => {
+  const actual = {
+    complete: false,
+    valid: { permit: true, disinfection: false, fee: true },
+    missingLabels: ["gyldig desinfisering"],
+  };
+  const selectedTest = {
+    id: "ok",
+    label: "Alt i orden",
+    title: "Du er klar",
+    detail: "Simulert godkjenning",
+    level: "ok",
+  };
+
+  const resolved = resolveStatusEngine(actual, selectedTest, false);
+
+  assert.equal(resolved.readiness, actual);
+  assert.equal(resolved.status, "expiredDisinfection");
+  assert.equal(resolved.scenario.level, "blocked");
+});
+
+test("testmodus overstyrer dokumentstatus uten å endre faktiske dokumenter", () => {
+  const actual = {
+    complete: false,
+    valid: { permit: false, disinfection: false, fee: false },
+    missingLabels: ["gyldig fiskekort", "gyldig desinfisering", "fiskeravgift"],
+  };
+  const selectedTest = {
+    id: "ok",
+    label: "Alt i orden",
+    title: "Du er klar",
+    detail: "Simulert godkjenning",
+    level: "ok",
+  };
+
+  const resolved = resolveStatusEngine(actual, selectedTest, true);
+
+  assert.equal(resolved.readiness.complete, true);
+  assert.equal(resolved.scenario, selectedTest);
+  assert.equal(actual.complete, false);
 });
 
 test("fangstvalidering håndhever minste- og maksimumsmål", () => {

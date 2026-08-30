@@ -22,6 +22,7 @@ export function HomeScreen({
   elapsed,
   startTime,
   demoStatus,
+  isStatusTestMode,
   salmonKilled,
 }: {
   onStart: () => void;
@@ -35,6 +36,7 @@ export function HomeScreen({
   elapsed: number;
   startTime: number | null;
   demoStatus: DemoStatus;
+  isStatusTestMode: boolean;
   salmonKilled: number;
 }) {
   const { riverStatus } = appContentRepository.getContent();
@@ -48,6 +50,7 @@ export function HomeScreen({
         elapsed={elapsed}
         startTime={startTime}
         scenario={scenario}
+        isTestMode={isStatusTestMode}
         zone={riverStatus.currentZoneShortName}
         openFlow={onStart}
       />

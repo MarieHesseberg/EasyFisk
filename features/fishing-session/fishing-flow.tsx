@@ -14,12 +14,15 @@ import { ZoneStep } from "@/features/fishing-session/fishing-flow/steps/zone-ste
 import { SessionSummaryStep } from "@/features/fishing-session/fishing-flow/session-summary-step";
 import { StopSessionStep } from "@/features/fishing-session/fishing-flow/stop-session-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function FishingFlow({
   mode,
   finish,
   cancel,
   demoStatus,
+  documentReadiness,
+  isStatusTestMode,
   startTime,
   elapsed,
   lastSession,
@@ -30,6 +33,8 @@ export function FishingFlow({
   finish: (caught?: boolean, selectedZone?: ZoneId) => void;
   cancel: () => void;
   demoStatus: DemoStatus;
+  documentReadiness: DocumentReadiness;
+  isStatusTestMode: boolean;
   startTime: number | null;
   elapsed: number;
   lastSession: SessionRecord | null;
@@ -70,6 +75,8 @@ export function FishingFlow({
               <StatusStep
                 cancel={cancel}
                 demoStatus={demoStatus}
+                documentReadiness={documentReadiness}
+                isStatusTestMode={isStatusTestMode}
                 next={() => setStep(2)}
                 resolveBlock={resolveBlock}
                 scenario={scenario}

@@ -6,6 +6,7 @@ export function HomeSessionCard({
   elapsed,
   startTime,
   scenario,
+  isTestMode,
   zone,
   openFlow,
 }: {
@@ -13,6 +14,7 @@ export function HomeSessionCard({
   elapsed: number;
   startTime: number | null;
   scenario: DemoScenario;
+  isTestMode: boolean;
   zone: string;
   openFlow: () => void;
 }) {
@@ -47,7 +49,7 @@ export function HomeSessionCard({
           </p>
         </>
       ) : (
-        <p>Testsituasjon: {scenario.detail}</p>
+        <p>{isTestMode ? `Testsituasjon: ${scenario.detail}` : scenario.detail}</p>
       )}
       <button className={active ? "stop-button" : "start-button"} onClick={openFlow}>
         <Icon name={active ? "clock" : "activity"} size={20} />

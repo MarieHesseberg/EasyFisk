@@ -16,9 +16,13 @@ import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 import { ProfileScreen } from "@/features/profile/profile-screen";
 import { RulesScreen } from "@/features/rules/rules-screen";
 import { StatisticsScreen } from "@/features/statistics/statistics-screen";
+import { useDocuments } from "@/features/documents/use-documents";
+import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
+import { resolveStatusEngine } from "@/domain/fishing-rules/resolve-status-engine";
 
 export function EasyFiskApp() {
   const { state, actions } = useEasyFiskController();
+  const { documents } = useDocuments();
   const {
     active,
     catches,
@@ -27,6 +31,7 @@ export function EasyFiskApp() {
     finishAfterCatch,
     flow,
     globalDetail,
+    isStatusTestMode,
     lastSession,
     pastSessionRequested,
     requestedCatchTime,
@@ -41,6 +46,11 @@ export function EasyFiskApp() {
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
+  const effectiveStatus = resolveStatusEngine(
+    getDocumentReadiness(documents),
+    selectedDemo,
+    isStatusTestMode,
+  );
   const personalStatistics = calculatePersonalStatistics(catches, sessions);
   return (
     <main className="prototype-shell">
@@ -57,7 +67,8 @@ export function EasyFiskApp() {
             active={active}
             elapsed={elapsed}
             startTime={startTime}
-            demoStatus={demoStatus}
+            demoStatus={effectiveStatus.status}
+            isStatusTestMode={isStatusTestMode}
             salmonKilled={personalStatistics.killedSalmonQuota.usedThisSeason}
           />
         )}{" "}
@@ -66,7 +77,7 @@ export function EasyFiskApp() {
         )}{" "}
         {screen === "rules" && (
           <RulesScreen
-            demoStatus={demoStatus}
+            demoStatus={effectiveStatus.status}
             onRegisterPermit={() => actions.openDetail("permits")}
           />
         )}{" "}
@@ -94,8 +105,11 @@ export function EasyFiskApp() {
         {screen === "more" && (
           <ProfileScreen
             demoStatus={demoStatus}
+            isStatusTestMode={isStatusTestMode}
             selectDemoStatus={actions.selectDemoStatus}
+            useActualStatus={actions.useActualStatus}
             testDemoStatus={() => {
+              if (!actions.startStatusTest()) return;
               actions.navigate("home");
               actions.setFlow("start");
             }}
@@ -117,11 +131,13 @@ export function EasyFiskApp() {
             mode={flow}
             finish={actions.finishSessionFlow}
             cancel={actions.closeFlow}
-            demoStatus={demoStatus}
+            demoStatus={effectiveStatus.status}
+            documentReadiness={effectiveStatus.readiness}
+            isStatusTestMode={isStatusTestMode}
             startTime={startTime}
             elapsed={elapsed}
             lastSession={lastSession}
-            resolveBlock={actions.resolveBlockedStatus}
+            resolveBlock={() => actions.resolveBlockedStatus(effectiveStatus.status)}
             sessionZone={sessionZone}
           />
         )}
@@ -133,8 +149,11 @@ export function EasyFiskApp() {
       <DemoControlPanel
         scenarios={demoStatuses}
         selected={selectedDemo}
+        isTestMode={isStatusTestMode}
         selectStatus={actions.selectDemoStatus}
+        useActualStatus={actions.useActualStatus}
         startTest={() => {
+          if (!actions.startStatusTest()) return;
           actions.navigate("home");
           actions.setFlow("start");
         }}
