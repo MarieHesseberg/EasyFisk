@@ -79,6 +79,10 @@
 .document-overview small {
   display: block;
 }
+.home-buy-permit {
+  width: 100%;
+  margin-top: var(--space-4);
+}
 .document-overview b {
   font-size: 14px;
 }

@@ -18,6 +18,7 @@ export function HomeScreen({
   onDocument,
   onPastSession,
   onMapShortcut,
+  onBuyPermit,
   active,
   elapsed,
   startTime,
@@ -35,6 +36,7 @@ export function HomeScreen({
   onDocument: (destination: DetailDestination) => void;
   onPastSession: () => void;
   onMapShortcut: () => void;
+  onBuyPermit: () => void;
   active: boolean;
   elapsed: number;
   startTime: number | null;
@@ -77,6 +79,7 @@ export function HomeScreen({
         seasonQuota={quota.killedSalmonPerSeason}
         quotaStatus={quotaStatus}
         openControlCard={onControlCard}
+        openPermitShop={onBuyPermit}
       />
       <button className="home-feedback-card" onClick={onFeedback}>
         <span>

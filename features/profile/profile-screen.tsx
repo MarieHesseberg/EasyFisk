@@ -23,6 +23,7 @@ export function ProfileScreen({
   testDemoStatus,
   useActualStatus,
   openStatistics,
+  openPermitShop,
 }: {
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
@@ -31,6 +32,7 @@ export function ProfileScreen({
   testDemoStatus: () => void;
   useActualStatus: () => void;
   openStatistics: () => void;
+  openPermitShop: () => void;
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { profile } = appContentRepository.getContent();
@@ -48,6 +50,16 @@ export function ProfileScreen({
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
+        <button onClick={openPermitShop}>
+          <span>
+            <Icon name="ticket" />
+          </span>
+          <p>
+            <b>Fiskekort og kjøp</b>
+            <small>Utforsk kort etter sone og korttype</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
         <button onClick={openStatistics}>
           <span>
             <Icon name="stats" />
@@ -117,6 +129,10 @@ export function ProfileScreen({
           destination={detail}
           close={() => setDetail(null)}
           testReadiness={isStatusTestMode ? documentReadiness : undefined}
+          openPermitShop={() => {
+            setDetail(null);
+            openPermitShop();
+          }}
         />
       )}
     </div>

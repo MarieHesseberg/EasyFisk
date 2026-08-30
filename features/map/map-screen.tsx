@@ -14,10 +14,12 @@ export function MapScreen({
   selected,
   setSelected,
   onUseZone,
+  onBuyPermit,
 }: {
   selected: ZoneId;
   setSelected: (zone: ZoneId) => void;
   onUseZone: (zone: ZoneId) => void;
+  onBuyPermit: () => void;
 }) {
   const z = fishingContentRepository.findZone(selected) ?? zones[0];
   const permitProducts = permitCatalogRepository.listProductsByZone(z.id);
@@ -121,6 +123,9 @@ export function MapScreen({
             Produktdataene er et datert øyeblikksbilde. Tilgjengelighet og kjøp er ikke aktive i
             prototypen.
           </p>
+          <button className="primary" onClick={onBuyPermit}>
+            Se og velg fiskekort i sone {z.id}
+          </button>
         </section>
         <p className="zone-note">
           <Icon name="book" size={19} /> Kartet er veiledende. Fysisk oppmerking og lokale regler

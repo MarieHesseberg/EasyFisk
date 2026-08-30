@@ -16,6 +16,7 @@ export function RequirementsOverview({
   quotaStatus,
   openControlCard,
   openDocument,
+  openPermitShop,
 }: {
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
@@ -26,6 +27,7 @@ export function RequirementsOverview({
   quotaStatus: FishingStartQuotaStatus;
   openControlCard: () => void;
   openDocument: (destination: DetailDestination) => void;
+  openPermitShop: () => void;
 }) {
   return (
     <section>
@@ -37,6 +39,11 @@ export function RequirementsOverview({
         open={openDocument}
         testReadiness={isStatusTestMode ? documentReadiness : undefined}
       />
+      {!documentReadiness.valid.permit && (
+        <button className="primary home-buy-permit" onClick={openPermitShop}>
+          Kjøp fiskekort
+        </button>
+      )}
       <div className="check-grid">
         <RequirementStatusRow
           icon="fish"

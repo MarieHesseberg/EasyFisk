@@ -71,6 +71,7 @@ export function EasyFiskApp() {
             onDocument={actions.openDetail}
             onPastSession={actions.openPastSession}
             onMapShortcut={() => actions.navigate("map")}
+            onBuyPermit={() => actions.openDetail("permit-shop")}
             active={active}
             elapsed={elapsed}
             startTime={startTime}
@@ -83,7 +84,12 @@ export function EasyFiskApp() {
           />
         )}{" "}
         {screen === "map" && (
-          <MapScreen selected={zone} setSelected={actions.setZone} onUseZone={actions.useZone} />
+          <MapScreen
+            selected={zone}
+            setSelected={actions.setZone}
+            onUseZone={actions.useZone}
+            onBuyPermit={() => actions.openDetail("permit-shop")}
+          />
         )}{" "}
         {screen === "rules" && (
           <RulesScreen
@@ -120,6 +126,7 @@ export function EasyFiskApp() {
             selectDemoStatus={actions.selectDemoStatus}
             useActualStatus={actions.useActualStatus}
             openStatistics={() => actions.navigate("stats")}
+            openPermitShop={() => actions.openDetail("permit-shop")}
             testDemoStatus={() => {
               if (!actions.startStatusTest()) return;
               actions.navigate("home");
@@ -147,6 +154,10 @@ export function EasyFiskApp() {
             elapsed={elapsed}
             lastSession={lastSession}
             resolveBlock={() => actions.resolveBlockedStatus(effectiveStatus.status)}
+            openPermitShop={() => {
+              actions.closeFlow();
+              actions.openDetail("permit-shop");
+            }}
             sessionZone={sessionZone}
           />
         )}
@@ -155,6 +166,8 @@ export function EasyFiskApp() {
             destination={globalDetail}
             close={actions.closeDetail}
             testReadiness={isStatusTestMode ? effectiveStatus.readiness : undefined}
+            openPermitShop={() => actions.openDetail("permit-shop")}
+            selectedZone={zone}
           />
         )}
         <ScrollIndicator />

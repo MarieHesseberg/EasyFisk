@@ -1,0 +1,82 @@
+.permit-shop {
+  display: grid;
+  gap: var(--space-6);
+  line-height: 1.5;
+}
+.permit-shop > p {
+  margin: 0;
+}
+.permit-shop fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.permit-shop legend {
+  margin-bottom: var(--space-3);
+  font-weight: 800;
+}
+.permit-shop-zones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+.permit-shop-zones button {
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+.permit-shop-zones button[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+.permit-shop-list {
+  display: grid;
+  gap: var(--space-4);
+}
+.permit-shop-list article {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+.permit-shop-list small,
+.permit-shop-list p {
+  color: var(--color-text-muted);
+}
+.permit-shop-list h3 {
+  margin: var(--space-2) 0;
+  font-size: 18px;
+}
+.permit-shop-list > article > b {
+  color: var(--color-primary);
+}
+.permit-shop-list article > div {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.permit-shop-list .primary {
+  width: 100%;
+}
+.permit-shop-list a {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+.permit-shop-message {
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.permit-shop-disclaimer {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}

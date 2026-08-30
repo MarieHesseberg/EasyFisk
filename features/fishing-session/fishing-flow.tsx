@@ -29,6 +29,7 @@ export function FishingFlow({
   elapsed,
   lastSession,
   resolveBlock,
+  openPermitShop,
   sessionZone,
 }: {
   mode: FlowMode;
@@ -43,6 +44,7 @@ export function FishingFlow({
   elapsed: number;
   lastSession: SessionRecord | null;
   resolveBlock: () => void;
+  openPermitShop: () => void;
   sessionZone: ZoneId;
 }) {
   const [step, setStep] = useState(1);
@@ -83,6 +85,7 @@ export function FishingFlow({
                 quotaStatus={quotaStatus}
                 next={() => setStep(2)}
                 resolveBlock={resolveBlock}
+                openPermitShop={openPermitShop}
                 scenario={scenario}
                 selectedZone={selectedZone}
               />

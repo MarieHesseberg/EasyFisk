@@ -20,6 +20,7 @@ import { useFishingLogController } from "../application/easy-fisk/use-fishing-lo
 import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
 import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { PermitShop } from "../features/fishing-permits/permit-shop";
 
 afterEach(cleanup);
 
@@ -194,7 +195,14 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
         } as GeolocationPositionError),
     },
   });
-  render(<MapScreen selected={3} setSelected={() => undefined} onUseZone={() => undefined} />);
+  render(
+    <MapScreen
+      selected={3}
+      setSelected={() => undefined}
+      onUseZone={() => undefined}
+      onBuyPermit={() => undefined}
+    />,
+  );
   await userEvent.setup().click(screen.getByRole("button", { name: "Finn min posisjon" }));
   expect((await screen.findByRole("status")).textContent).toContain("Posisjonstilgang ble avslått");
 });
@@ -204,7 +212,14 @@ test("kartprototypen viser Holmegård-kort og et produkt i hver hovedsone", () =
     expect(permitCatalogRepository.listProductsByZone(zoneId).length).toBeGreaterThan(0);
   }
 
-  render(<MapScreen selected={2} setSelected={() => undefined} onUseZone={() => undefined} />);
+  render(
+    <MapScreen
+      selected={2}
+      setSelected={() => undefined}
+      onUseZone={() => undefined}
+      onBuyPermit={() => undefined}
+    />,
+  );
 
   expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
   expect(screen.getByRole("heading", { name: "Holmegård sesongkort" })).toBeTruthy();
@@ -223,6 +238,35 @@ test("fiskekortkatalogen tilbyr strukturerte produktdata gjennom repositoryet", 
   expect(dayPermit?.source.status).toBe("verified-public-source");
   expect(reportingPermit?.action).toBe("register-reporting-day");
   expect(reportingPermit?.requirements.requiresSeasonPermit).toBe(true);
+});
+
+test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", async () => {
+  render(<PermitShop initialZone={2} />);
+
+  expect(screen.getByRole("button", { name: "Sone 2" }).getAttribute("aria-pressed")).toBe("true");
+  expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "Sone 4" }));
+  expect(screen.getByRole("heading", { name: "Lakseosen døgnkort" })).toBeTruthy();
+});
+
+test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
+  let opened = false;
+  render(
+    <MapScreen
+      selected={2}
+      setSelected={() => undefined}
+      onUseZone={() => undefined}
+      onBuyPermit={() => {
+        opened = true;
+      }}
+    />,
+  );
+
+  await userEvent
+    .setup()
+    .click(screen.getByRole("button", { name: "Se og velg fiskekort i sone 2" }));
+  expect(opened).toBe(true);
 });
 
 test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {

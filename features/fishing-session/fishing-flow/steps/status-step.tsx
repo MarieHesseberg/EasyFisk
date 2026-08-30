@@ -18,6 +18,7 @@ export function StatusStep({
   quotaStatus,
   next,
   resolveBlock,
+  openPermitShop,
   scenario,
   selectedZone,
 }: {
@@ -28,6 +29,7 @@ export function StatusStep({
   quotaStatus: FishingStartQuotaStatus;
   next: () => void;
   resolveBlock: () => void;
+  openPermitShop: () => void;
   scenario: DemoScenario;
   selectedZone: ZoneId;
 }) {
@@ -48,6 +50,8 @@ export function StatusStep({
         ? `${isStatusTestMode ? "Testmodus har satt" : "Registrert dokumentasjon viser"} ${documentReadiness.missingLabels.join(", ")} som manglende.`
         : `${scenario.detail} Egenregistrerte dokumenter må fortsatt kunne fremvises i original.`;
   const effectiveLevel = blocked ? "blocked" : scenario.level === "ok" ? "warning" : scenario.level;
+  const permitBlocked =
+    !documentReadiness.valid.permit || ["noPermit", "wrongZone"].includes(demoStatus);
 
   return (
     <>
@@ -144,9 +148,13 @@ export function StatusStep({
         <>
           <button
             className="primary blocked-action"
-            onClick={scenario.level === "blocked" ? resolveBlock : cancel}
+            onClick={
+              permitBlocked ? openPermitShop : scenario.level === "blocked" ? resolveBlock : cancel
+            }
           >
-            {scenario.action ?? "Lukk og registrer dokumentasjon"}
+            {permitBlocked
+              ? "Finn og kjøp fiskekort"
+              : (scenario.action ?? "Lukk og registrer dokumentasjon")}
           </button>
           <button className="secondary" onClick={cancel}>
             Avbryt oppstart

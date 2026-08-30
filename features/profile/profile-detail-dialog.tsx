@@ -5,15 +5,20 @@ import { ProfileDetailContent } from "@/features/profile/detail-pages/profile-de
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { ZoneId } from "@/domain/zones/zone";
 
 export function ProfileDetailDialog({
   destination,
   close,
   testReadiness,
+  openPermitShop,
+  selectedZone,
 }: {
   destination: DetailDestination;
   close: () => void;
   testReadiness?: DocumentReadiness;
+  openPermitShop?: () => void;
+  selectedZone?: ZoneId;
 }) {
   const dialogRef = useDialogAccessibility(close);
   const title = detailTitles[destination];
@@ -35,7 +40,12 @@ export function ProfileDetailDialog({
         {destination === "feedback" ? (
           <FeedbackForm />
         ) : (
-          <ProfileDetailContent destination={destination} testReadiness={testReadiness} />
+          <ProfileDetailContent
+            destination={destination}
+            testReadiness={testReadiness}
+            openPermitShop={openPermitShop}
+            selectedZone={selectedZone}
+          />
         )}
       </div>
     </AppDialogPortal>

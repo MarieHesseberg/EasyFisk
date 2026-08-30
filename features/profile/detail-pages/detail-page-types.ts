@@ -2,6 +2,7 @@ import type { DetailDestination } from "@/domain/navigation/navigation";
 
 export const detailTitles: Record<DetailDestination, string> = {
   permits: "Mine fiskekort",
+  "permit-shop": "Fiskekort og kjøp",
   disinfection: "Desinfisering",
   fee: "Statlig fiskeravgift",
   notifications: "Varsler og stengninger",

@@ -7,13 +7,19 @@ import { ProfilePrivacyDetail } from "./profile-privacy-detail";
 import { DocumentsPanel } from "@/features/documents/documents-panel";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { PermitShop } from "@/features/fishing-permits/permit-shop";
+import type { ZoneId } from "@/domain/zones/zone";
 
 export function ProfileDetailContent({
   destination,
   testReadiness,
+  openPermitShop,
+  selectedZone,
 }: {
   destination: Exclude<DetailDestination, "feedback">;
   testReadiness?: DocumentReadiness;
+  openPermitShop?: () => void;
+  selectedZone?: ZoneId;
 }) {
   const testDocuments = fishingContentRepository.getDemoDocuments();
   const testDocument = (kind: "permit" | "disinfection" | "fee") =>
@@ -26,7 +32,11 @@ export function ProfileDetailContent({
     case "control-card":
       return <ControlCardDetail testReadiness={testReadiness} />;
     case "permits":
-      return <PermitsDetail testDocument={testDocument("permit")} />;
+      return (
+        <PermitsDetail testDocument={testDocument("permit")} openPermitShop={openPermitShop} />
+      );
+    case "permit-shop":
+      return <PermitShop initialZone={selectedZone} />;
     case "disinfection":
       return <DisinfectionDetail testDocument={testDocument("disinfection")} />;
     case "fee":
