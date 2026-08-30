@@ -1,14 +1,15 @@
 .scroll-indicator {
   position: absolute;
-  top: calc(10px + env(safe-area-inset-top));
-  right: 3px;
-  bottom: calc(91px + env(safe-area-inset-bottom));
+  top: 50%;
+  right: 4px;
   z-index: var(--layer-dialog-content);
-  width: 4px;
-  border-radius: var(--radius-round);
+  width: 6px;
+  height: clamp(120px, 28%, 170px);
+  border-radius: 999px;
   background: transparent;
   opacity: 0;
   pointer-events: none;
+  transform: translateY(-50%);
   transition: opacity 160ms ease;
 }
 
@@ -19,9 +20,9 @@
 .scroll-indicator i {
   position: absolute;
   right: 0;
-  width: 4px;
-  min-height: 34px;
-  border-radius: var(--radius-round);
+  width: 6px;
+  min-height: 38px;
+  border-radius: 999px;
   background: var(--color-text-muted);
 }
 
