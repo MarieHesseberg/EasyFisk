@@ -8,7 +8,7 @@ interface ThumbPosition {
   visible: boolean;
 }
 
-const thumbHeight = 52;
+const thumbHeight = 64;
 const initialPosition: ThumbPosition = { height: thumbHeight, top: 0, visible: false };
 
 export function ScrollIndicator() {
