@@ -1,7 +1,7 @@
 import type { AppContent } from "../contracts/app-content-repository.ts";
 import { activeFishingRules } from "../../domain/fishing-rules/mandalselva-2026.ts";
 
-const { metadata, temperature } = activeFishingRules;
+const { currentNotice, metadata, temperature } = activeFishingRules;
 
 export const mockAppContent: AppContent = {
   demoFeatures: [
@@ -27,8 +27,8 @@ export const mockAppContent: AppContent = {
     measurementStation: "Kjølemo",
   },
   headerAlerts: [
-    { icon: "check", message: "Elva og Sone 3 er åpne." },
-    { icon: "clock", message: "Fiskekortet utløper i dag kl. 17:59." },
+    { icon: "bell", message: currentNotice.title },
+    { icon: "clock", message: "Eksempelkortet utløper i dag kl. 17:59." },
     { icon: "bell", message: `Reglene ble oppdatert ${metadata.shortVersionLabel}.` },
   ],
   statistics: {
@@ -84,22 +84,24 @@ export const mockAppContent: AppContent = {
       { title: "Sone 3 · Øyslebø–Laudal", description: "12. juni · utløpt" },
     ],
     disinfection: {
-      station: "Marnar Laksesenter",
+      station: "Mandalselva Villakssenter",
       registeredAt: "30. juli 2026 · 14:22",
       validUntil: "19. august 2026 · 14:22",
       otherRivers: "Ingen registrert etterpå",
     },
     disinfectionStations: [
-      { title: "Marnar Laksesenter", description: "Øyslebø · 2,4 km" },
-      { title: "Laudal kortutsalg", description: "Laudal · 13 km" },
-      { title: "Mandal servicesenter", description: "Mandal · 21 km" },
+      { title: "Mandalselva Villakssenter", description: "Laudal" },
+      { title: "Villmarkscampen", description: "Mjåland" },
+      { title: "Sandnes Camping", description: "Mandal" },
+      { title: "Desinfisering ved fiskesonene", description: "Fuskeland" },
     ],
-    favoriteSuggestion: "Sone 4 · Laudal–Bjelland",
+    favoriteSuggestion: "Sone 4",
     favoriteZoneDescriptions: [
-      "Åpen · 11 °C · fiskekort registrert",
-      "Åpen · delsone med eget fiskekort",
+      "Eksempel · fiskekort registrert",
+      "Eksempel · delsone med eget fiskekort",
     ],
-    notificationStatus: "11 °C ved Kjølemo · ingen aktive stengninger",
+    notificationStatus:
+      "Ingen direktekobling til elvas varslingssystem. Kontroller alltid dagsaktuelle meldinger hos Mandalselva Elveeigarlag.",
     notificationOptions: [
       {
         id: "emergencyClosure",

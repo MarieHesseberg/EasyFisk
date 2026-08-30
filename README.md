@@ -69,7 +69,7 @@ visual-baseline/    Skjermbilder og krav som bevarer dagens utseende
 docs/               Arkitektur og utviklingsregler
 ```
 
-Den detaljerte ansvarsdelingen og reglene for videre utvidelser er dokumentert i [docs/architecture.md](docs/architecture.md).
+Den detaljerte ansvarsdelingen og reglene for videre utvidelser er dokumentert i [docs/architecture.md](docs/architecture.md). Kilder, kontrolltidspunkt og aktive 2026-regler er dokumentert i [docs/mandalselva-rules-2026.md](docs/mandalselva-rules-2026.md).
 
 ## Språk og navn
 

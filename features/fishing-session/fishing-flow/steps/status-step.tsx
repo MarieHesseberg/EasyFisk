@@ -125,7 +125,7 @@ export function StatusStep({
               ? `${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C · fisket er stanset`
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel"
-                : `${riverStatus.temperatureCelsius} °C · elva er åpen`
+                : `Eksempeldata: ${riverStatus.temperatureCelsius} °C · kontroller dagsstatus`
           }
           state={["hotWater", "closed"].includes(demoStatus) ? "error" : "ok"}
         />

@@ -26,6 +26,7 @@ export const ruleSections: RuleSection[] = [
       `Sone 4 er utvidet til ${season.extendedEndLabel} ${metadata.seasonYear} etter midtsesongevalueringen.`,
       `Delsonene Bjåhylen og Nodehylen i sone 4 stenger ${season.standardEndLabel}.`,
       "Kosåna følger fisketidene for sone 4. Fisketidene kan endres dersom bestandssituasjonen krever det.",
+      "Fiskekortsalget ble avsluttet 26. august 2026 kl. 09.00. Allerede kjøpte kort kan brukes i gyldighetstiden.",
     ],
   },
   {

@@ -117,9 +117,19 @@ test("økttid håndterer varighet og grenseverdier", () => {
 test("soneregler definerer sesong og delsoner", () => {
   assert.equal(getZoneSeasonEnd(3), "2026-08-31");
   assert.equal(getZoneSeasonEnd(4), "2026-09-15");
+  assert.equal(getZoneSeasonEnd(4, "Bjåhylen"), "2026-08-31");
   assert.equal(isDateWithinZoneSeason("2026-06-01", 3), true);
   assert.equal(isDateWithinZoneSeason("2026-09-01", 3), false);
-  assert.deepEqual(getSubzones(2), ["Fuskeland B", "Hauge", "Holmesland", "Nøding", "Bringsdal"]);
+  assert.equal(isDateWithinZoneSeason("2026-09-01", 4, "Bjåhylen"), false);
+  assert.equal(getSubzones(2).length, 33);
+  assert.deepEqual(getSubzones(4), [
+    "Strædethylen",
+    "Bjåhylen",
+    "Laksehylen",
+    "Steinshylen",
+    "Klevelandsfossen",
+    "Nodehylen",
+  ]);
 });
 
 test("aktivt regelgrunnlag samler versjon, sesong, størrelser og kvoter", () => {
@@ -130,6 +140,8 @@ test("aktivt regelgrunnlag samler versjon, sesong, størrelser og kvoter", () =>
   assert.equal(activeFishingRules.catchSize.largeSalmonMaximumCm, 90);
   assert.equal(activeFishingRules.quota.killedSalmonPerSeason, 5);
   assert.equal(activeFishingRules.reporting.deadlineHours, 2);
+  assert.equal(activeFishingRules.metadata.sourcesCheckedDate, "2026-08-30");
+  assert.equal(activeFishingRules.currentNotice.publishedDate, "2026-08-26");
 });
 
 test("statuskontroll gir visningstilstand og riktig løsning", () => {

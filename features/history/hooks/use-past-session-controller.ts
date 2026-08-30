@@ -75,7 +75,7 @@ export function usePastSessionController({
   const weightNumber = parseMeasurement(weight);
   const zoneBase = zones.find((item) => item.id === zone)?.name || `Sone ${zone}`;
   const zoneName = subzone ? `${zoneBase} · ${subzone}` : zoneBase;
-  const withinSeason = isDateWithinZoneSeason(date, zone);
+  const withinSeason = isDateWithinZoneSeason(date, zone, subzone);
   const quota = getQuotaStatus(existingCatches, reports);
   const catchValid =
     validateCatch(species, outcome, lengthNumber, weightNumber).detailsValid && validCatchTime;

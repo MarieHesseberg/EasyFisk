@@ -7,9 +7,9 @@ export const mandalselvaRules2026 = {
     versionLabel: "1. august 2026",
     shortVersionLabel: "1. august",
     numericVersionLabel: "01.08.2026",
-    sourcesCheckedDate: "2026-08-19",
-    sourcesCheckedLabel: "19. august 2026",
-    numericSourcesCheckedLabel: "19.08.2026",
+    sourcesCheckedDate: "2026-08-30",
+    sourcesCheckedLabel: "30. august 2026",
+    numericSourcesCheckedLabel: "30.08.2026",
   },
   season: {
     startDate: "2026-06-01",
@@ -43,6 +43,17 @@ export const mandalselvaRules2026 = {
   },
   nature: {
     fireBanPeriodLabel: "15. april–15. september",
+  },
+  currentNotice: {
+    title: "Fiskekortsalget er avsluttet for 2026",
+    detail:
+      "Ingen nye fiskekort selges etter 26. august kl. 09.00. Allerede kjøpte kort kan brukes som normalt i gyldighetstiden.",
+    publishedDate: "2026-08-26",
+  },
+  sources: {
+    localRules: "https://lakseelver.no/nb/elver/mandalselva/about",
+    currentNotices: "https://lakseelver.no/nb/elver/mandalselva",
+    publicRegulation: "https://lovdata.no/dokument/LTI/forskrift/2025-04-04-618",
   },
 } as const;
 

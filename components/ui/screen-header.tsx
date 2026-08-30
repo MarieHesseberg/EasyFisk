@@ -31,7 +31,7 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
             ×
           </button>
           <small>VARSLER</small>
-          <h3>Ingen kritiske varsler</h3>
+          <h3>Kontrollerte meldinger og eksempelvarsler</h3>
           {headerAlerts.map((alert) => (
             <p key={alert.message}>
               <Icon name={alert.icon} size={15} /> {alert.message}

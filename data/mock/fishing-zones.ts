@@ -7,7 +7,7 @@ export const zones: FishingZone[] = [
   {
     id: 1,
     name: "Sone 1 · Nedre Mandalselva",
-    status: "Åpen",
+    status: "Kontroller dagsstatus",
     note: "5 km · munningen–Vik",
     color: "#8bb5d9",
     season: season.standardZoneLabel,
@@ -16,7 +16,7 @@ export const zones: FishingZone[] = [
   {
     id: 2,
     name: "Sone 2 · Leirkjær–Øyslebø",
-    status: "Åpen",
+    status: "Kontroller dagsstatus",
     note: "14 km · 32 delsoner",
     color: "#5f91bd",
     season: season.standardZoneLabel,
@@ -25,7 +25,7 @@ export const zones: FishingZone[] = [
   {
     id: 3,
     name: "Sone 3 · Øyslebø–Laudal",
-    status: "Din sone",
+    status: "Valgt demosone",
     note: "13 km · ett kort",
     color: "#2563a6",
     season: season.standardZoneLabel,
@@ -34,10 +34,10 @@ export const zones: FishingZone[] = [
   {
     id: 4,
     name: "Sone 4 · Laudal–Kavfossen",
-    status: "Åpen",
+    status: "Kontroller dagsstatus",
     note: "18 km · Kosåna inkludert",
     color: "#a8c7e0",
     season: season.extendedZoneLabel,
-    desc: "Hovedsone fra Manflå til Kavfossen og Kosåna, samt seks navngitte delsoner.",
+    desc: "Hovedsone fra dam Manflå til Kavfossen og lakseførende del av Kosåna, samt seks navngitte delsoner.",
   },
 ];

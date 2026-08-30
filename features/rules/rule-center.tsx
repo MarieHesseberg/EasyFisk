@@ -9,7 +9,7 @@ const ruleSections = fishingContentRepository.getRuleSections();
 
 export function RuleCenter() {
   const [open, setOpen] = useState("seasonquota");
-  const { metadata, season } = activeFishingRules;
+  const { currentNotice, metadata, season, sources } = activeFishingRules;
   return (
     <div className="rule-center">
       <div className="rule-version">
@@ -32,6 +32,13 @@ export function RuleCenter() {
             Sone {season.extendedZoneId} er forlenget til {season.extendedEndLabel}, med unntak for
             Bjåhylen og Nodehylen som stenger {season.standardEndLabel}.
           </p>
+        </div>
+      </div>
+      <div className="season-alert">
+        <Icon name="bell" size={18} />
+        <div>
+          <b>{currentNotice.title}</b>
+          <p>{currentNotice.detail}</p>
         </div>
       </div>
       {ruleSections.map((section) => (
@@ -60,8 +67,14 @@ export function RuleCenter() {
       ))}
       <div className="rule-sources">
         <b>Offisielle kilder</b>
-        <a href="https://lakseelver.no/nb/elver/mandalselva/about" target="_blank" rel="noreferrer">
+        <a href={sources.localRules} target="_blank" rel="noreferrer">
           Mandalselva Elveeigarlag · fullstendige regler
+        </a>
+        <a href={sources.currentNotices} target="_blank" rel="noreferrer">
+          Mandalselva Elveeigarlag · dagsaktuelle meldinger
+        </a>
+        <a href={sources.publicRegulation} target="_blank" rel="noreferrer">
+          Lovdata · offentlig forskrift
         </a>
         <a
           href="https://www.statsforvalteren.no/agder/miljo-og-klima/fiskeforvaltning/tema/lakse--og-sjoaurefiske-i-vassdrag/"

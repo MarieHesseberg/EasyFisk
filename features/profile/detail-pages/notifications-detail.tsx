@@ -13,10 +13,10 @@ export function NotificationsDetail() {
   return (
     <div className="specific-detail">
       <div className="detail-alert">
-        <Icon name="check" />
+        <Icon name="bell" />
         <div>
-          <small>STATUS NÅ</small>
-          <h3>Elva er åpen</h3>
+          <small>PROTOTYPE UTEN LIVE-DATA</small>
+          <h3>Kontroller dagsaktuell status</h3>
           <p>{notificationStatus}</p>
         </div>
       </div>
