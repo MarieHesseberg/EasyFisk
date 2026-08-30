@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 const focusableSelector =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export function useDialogAccessibility(onClose?: () => void, active = true) {
+export function useDialogAccessibility(
+  onClose?: () => void,
+  active = true,
+  returnFocusRef?: RefObject<HTMLElement | null>,
+) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
 
@@ -19,6 +23,7 @@ export function useDialogAccessibility(onClose?: () => void, active = true) {
     if (!dialog) return;
 
     const previousFocus = document.activeElement as HTMLElement | null;
+    const returnFocus = returnFocusRef?.current ?? previousFocus;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -55,9 +60,9 @@ export function useDialogAccessibility(onClose?: () => void, active = true) {
     return () => {
       dialog.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
-      previousFocus?.focus();
+      returnFocus?.focus();
     };
-  }, [active]);
+  }, [active, returnFocusRef]);
 
   return dialogRef;
 }

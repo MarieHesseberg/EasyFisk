@@ -251,9 +251,22 @@ test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", a
 
   expect(screen.getByRole("button", { name: "Sone 2" }).getAttribute("aria-pressed")).toBe("true");
   expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Holmegård sesongkort" })).toBeTruthy();
+
+  await userEvent
+    .setup()
+    .selectOptions(screen.getByLabelText("Delsone eller salgsområde"), "Fuskeland");
+  expect(screen.getByRole("heading", { name: "Fuskeland gruppekort" })).toBeTruthy();
 
   await userEvent.setup().click(screen.getByRole("button", { name: "Sone 4" }));
   expect(screen.getByRole("heading", { name: "Lakseosen døgnkort" })).toBeTruthy();
+});
+
+test("produktregisteret har døgnkort, sesongkort og gruppekort", () => {
+  const types = new Set(permitCatalogRepository.listProducts().map((product) => product.type));
+  expect(types.has("day")).toBe(true);
+  expect(types.has("season")).toBe(true);
+  expect(types.has("group")).toBe(true);
 });
 
 test("produktregisteret dekker alle simulerte tilgjengelighetssituasjoner", () => {

@@ -9,7 +9,21 @@ Fiskeøkter, fangster og valgte profilinnstillinger lagres lokalt i nettleseren.
 dokumentvedlegg lagres separat i IndexedDB, slik at de ikke fyller localStorage. Hele
 økthistorikken, inkludert fangstbilder, overlever oppdatering av siden.
 
-Dette er fortsatt en prototype. Betaling, GPS, fiskekortkontroll, varsler og innsending til elveeigarlaget er demonstrasjonsdata og simulerte handlinger.
+Dette er fortsatt en prototype. Betaling, GPS, fiskekortkontroll, varsler og innsending til
+elveeigarlaget er demonstrasjonsdata og simulerte handlinger.
+
+## Fiskekort og testkjøp
+
+Fiskekortbutikken bruker et kontrollert øyeblikksbilde av offentlig produktinformasjon, kontrollert 31. august 2026. Produktene, prisene og kapasiteten er ikke sanntidsdata. Tilgjengelighet,
+reservasjon og betaling er simulert, og ingen penger trekkes.
+
+En godkjent testbetaling oppretter et lokalt, tydelig merket testkort i nettleserens IndexedDB.
+Kortet vises under «Mine fiskekort», påvirker normal statuskontroll og begrenser sonevalget så lenge
+testdatoen er gyldig. Avbrutt eller feilet testbetaling lagrer ingenting. Testkjøpte kort kan fjernes
+med «Nullstill testkjøpte fiskekort» i fiskekortbutikken.
+
+Kildegrunnlag, kontrolltidspunkt og kjente begrensninger er dokumentert i
+[`docs/mandalselva-fishing-permits-2026.md`](docs/mandalselva-fishing-permits-2026.md).
 
 ## Kom i gang
 
@@ -38,7 +52,13 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
+npm run test:visual
 ```
+
+Nettlesertestene dekker de viktigste brukerflytene, tilgjengelig samhandling på mobil og visuelle
+referansebilder for dokumenterte skjermbredder. Se
+[`docs/fishing-permit-prototype-testing.md`](docs/fishing-permit-prototype-testing.md) for testmatrisen
+til fiskekortprototypen.
 
 ## Teknologi
 

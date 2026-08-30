@@ -6,6 +6,7 @@ export const testPurchaseDocumentPrefix = "test-purchase-permit-";
 const categories = {
   boat: "Annet",
   day: "Døgnkort",
+  group: "Gruppekort",
   reporting: "Annet",
   season: "Sesongkort",
   week: "Ukekort",

@@ -17,10 +17,16 @@ export function PermitShop({
   onPermitPurchased?: (zoneId: ZoneId) => void;
 }) {
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
+  const [selectedArea, setSelectedArea] = useState("all");
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [resetMessage, setResetMessage] = useState("");
   const documents = useDocuments();
-  const products = permitCatalogRepository.listProductsByZone(selectedZone);
+  const zoneProducts = permitCatalogRepository.listProductsByZone(selectedZone);
+  const areas = Array.from(new Set(zoneProducts.map((product) => product.areaName)));
+  const products =
+    selectedArea === "all"
+      ? zoneProducts
+      : zoneProducts.filter((product) => product.areaName === selectedArea);
   const selectedProduct = selectedProductId
     ? permitCatalogRepository.findProduct(selectedProductId)
     : undefined;
@@ -66,6 +72,7 @@ export function PermitShop({
               aria-pressed={selectedZone === zoneId}
               onClick={() => {
                 setSelectedZone(zoneId);
+                setSelectedArea("all");
                 setResetMessage("");
               }}
             >
@@ -74,6 +81,19 @@ export function PermitShop({
           ))}
         </div>
       </fieldset>
+      {areas.length > 1 && (
+        <label className="permit-area-filter">
+          Delsone eller salgsområde
+          <select value={selectedArea} onChange={(event) => setSelectedArea(event.target.value)}>
+            <option value="all">Vis alle i sone {selectedZone}</option>
+            {areas.map((area) => (
+              <option key={area} value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <div className="permit-shop-list">
         {products.map((product) => (
           <article key={product.id}>

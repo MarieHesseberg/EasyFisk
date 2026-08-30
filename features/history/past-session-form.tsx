@@ -1,5 +1,6 @@
 "use client";
 
+import type { RefObject } from "react";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
@@ -15,14 +16,16 @@ export function PastSessionForm({
   onClose,
   onSave,
   existingCatches,
+  returnFocusRef,
 }: {
   onClose: () => void;
   onSave: (record: SessionRecord, catches?: CatchRecord[]) => AsyncOperationResult<unknown>;
   existingCatches: CatchRecord[];
+  returnFocusRef?: RefObject<HTMLElement | null>;
 }) {
   const controller = usePastSessionController({ existingCatches, onSave });
   const { step } = controller.state;
-  const dialogRef = useDialogAccessibility(onClose);
+  const dialogRef = useDialogAccessibility(onClose, true, returnFocusRef);
   return (
     <AppDialogPortal>
       <div className="modal-bg" onClick={step === 4 ? onClose : undefined}>

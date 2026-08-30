@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
@@ -55,6 +55,7 @@ export function FishingActivityScreen({
   const [showPastSession, setShowPastSession] = useState(openPastSession);
   const [selectedCatch, setSelectedCatch] = useState<CatchRecord | null>(null);
   const [showAllHistory, setShowAllHistory] = useState(false);
+  const pastSessionButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div className={embedded ? "activity-embedded" : "screen"}>
@@ -81,7 +82,11 @@ export function FishingActivityScreen({
         </section>
       )}
 
-      <button className="past-session-button" onClick={() => setShowPastSession(true)}>
+      <button
+        ref={pastSessionButtonRef}
+        className="past-session-button"
+        onClick={() => setShowPastSession(true)}
+      >
         <Icon name="clock" />
         <span>
           <b>Registrer tidligere fisketur</b>
@@ -116,6 +121,7 @@ export function FishingActivityScreen({
           onClose={() => setShowPastSession(false)}
           existingCatches={catches}
           onSave={onAddPast}
+          returnFocusRef={pastSessionButtonRef}
         />
       )}
 

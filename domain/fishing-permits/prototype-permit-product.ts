@@ -1,6 +1,6 @@
 import type { ZoneId } from "@/domain/zones/zone";
 
-export type PrototypePermitType = "day" | "week" | "season" | "boat" | "reporting";
+export type PrototypePermitType = "day" | "week" | "season" | "boat" | "group" | "reporting";
 
 export type PrototypePermitAction = "purchase" | "register-reporting-day";
 
@@ -30,6 +30,7 @@ export type PrototypePermitCapacity = {
   permitsPerFishingDay?: number;
   permitsPerSeason?: number;
   maximumRods?: number;
+  maximumFishers?: number;
 };
 
 export type PrototypePermitPrice = {
