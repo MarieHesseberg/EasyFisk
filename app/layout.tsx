@@ -29,7 +29,7 @@ import "@/styles/violation.css";
 import "@/styles/mobile-shell.css";
 import "@/styles/responsive.css";
 import "@/styles/documents.css";
-import "@/styles/scroll-hint.css";
+import "@/styles/scroll-indicator.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

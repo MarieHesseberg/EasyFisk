@@ -2,13 +2,88 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function resetApp(page: Page) {
   await page.goto("/");
-  await page.evaluate(() => window.localStorage.clear());
+  await page.evaluate(async () => {
+    window.localStorage.clear();
+    await new Promise<void>((resolve) => {
+      const request = indexedDB.deleteDatabase("easyfisk-documents");
+      request.onsuccess = request.onerror = request.onblocked = () => resolve();
+    });
+  });
   await page.reload();
 }
 
+async function seedRequiredDocuments(page: Page) {
+  await page.evaluate(async () => {
+    const now = new Date();
+    const localInput = (date: Date) => {
+      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+      return local.toISOString().slice(0, 16);
+    };
+    const year = new Intl.DateTimeFormat("nb-NO", {
+      year: "numeric",
+      timeZone: "Europe/Oslo",
+    }).format(now);
+    const records = [
+      {
+        id: "test-permit",
+        kind: "permit",
+        updatedAt: now.getTime(),
+        values: {
+          holder: "Testfisker",
+          issuer: "Testutsteder",
+          category: "Døgnkort",
+          area: "Mandalselva · Sone 3",
+          startsAt: localInput(new Date(now.getTime() - 60 * 60 * 1000)),
+          endsAt: localInput(new Date(now.getTime() + 24 * 60 * 60 * 1000)),
+        },
+      },
+      {
+        id: "test-disinfection",
+        kind: "disinfection",
+        updatedAt: now.getTime(),
+        values: {
+          holder: "Testfisker",
+          issuer: "Teststasjon",
+          performedAt: localInput(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+          equipment: "Stang, snelle og vadere",
+        },
+      },
+      {
+        id: "test-fee",
+        kind: "fee",
+        updatedAt: now.getTime(),
+        values: {
+          holder: "Testfisker",
+          year,
+          category: "Enkeltperson",
+          paidAt: `${year}-01-15`,
+        },
+      },
+    ];
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.open("easyfisk-documents", 1);
+      request.onupgradeneeded = () =>
+        request.result.createObjectStore("documents", { keyPath: "id" });
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const transaction = request.result.transaction("documents", "readwrite");
+        records.forEach((record) => transaction.objectStore("documents").put(record));
+        transaction.oncomplete = () => {
+          request.result.close();
+          window.dispatchEvent(new Event("easyfisk-documents-changed"));
+          resolve();
+        };
+        transaction.onerror = () => reject(transaction.error);
+      };
+    });
+  });
+  await expect(page.getByRole("heading", { name: "Kontroller dokumentene" })).toBeVisible();
+}
+
 async function startFishing(page: Page) {
-  await page.getByRole("button", { name: "START FISKE" }).click();
-  await page.getByRole("button", { name: "Fortsett til posisjon" }).click();
+  await seedRequiredDocuments(page);
+  await page.getByRole("button", { name: "KONTROLLER OG START" }).click();
+  await page.getByRole("button", { name: "Jeg har kontrollert originalene · fortsett" }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByLabel("Hovedsone").selectOption("3");
   await page.getByRole("button", { name: "Bekreft sone og se regler" }).click();
@@ -109,14 +184,28 @@ test("desinfisering og fiskeravgift kan registreres med relevante opplysninger",
   await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
 });
 
-test("hjemskjermen viser at mer innhold finnes og kan rulle videre", async ({ page }) => {
+test("hjemskjermen viser en rulleindikator som følger siden", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   const screen = page.locator(".screen");
-  const hint = page.getByRole("button", { name: /Mer nedenfor/ });
-  await expect(hint).toBeVisible();
-  const before = await screen.evaluate((element) => element.scrollTop);
-  await hint.click();
-  await expect.poll(() => screen.evaluate((element) => element.scrollTop)).toBeGreaterThan(before);
+  const indicator = page.locator(".scroll-indicator.visible");
+  const thumb = indicator.locator("i");
+  await expect(indicator).toBeVisible();
+  const before = await thumb.evaluate((element) => getComputedStyle(element).top);
+  await screen.evaluate((element) => element.scrollBy(0, 500));
+  await expect
+    .poll(() => thumb.evaluate((element) => getComputedStyle(element).top))
+    .not.toBe(before);
+});
+
+test("fiskestart blokkeres når nødvendig dokumentasjon mangler", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: "Dokumentasjon mangler" })).toBeVisible();
+  await page.getByRole("button", { name: "SE HVA SOM MANGLER" }).click();
+  const dialog = page.getByRole("dialog", { name: "Start fiske" });
+  await expect(dialog.getByRole("heading", { name: "Dokumentasjon mangler" })).toBeVisible();
+  await expect(
+    dialog.getByRole("button", { name: "Lukk og registrer dokumentasjon" }),
+  ).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Fortsett til posisjon" })).toHaveCount(0);
 });
 
 test("etterregistrering kan lukkes med X på mobil", async ({ page }) => {
@@ -212,7 +301,7 @@ test("stopp økt med fangst fullfører rapporten før økten avsluttes", async (
   const summary = page.getByRole("dialog", { name: "Økt fullført" });
   await expect(summary.getByRole("heading", { name: "Takk for rapporteringen" })).toBeVisible();
   await summary.getByRole("button", { name: "Tilbake til oversikten" }).click();
-  await expect(page.getByRole("button", { name: "START FISKE" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "KONTROLLER OG START" })).toBeVisible();
   await expect(page.getByText("FISKEØKT PÅGÅR")).toHaveCount(0);
 });
 
@@ -269,13 +358,16 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
 });
 
 test("dialoger holder tastaturfokus og kan lukkes med Escape", async ({ page }) => {
-  const trigger = page.getByRole("button", { name: "START FISKE" });
+  await seedRequiredDocuments(page);
+  const trigger = page.getByRole("button", { name: "KONTROLLER OG START" });
   await trigger.focus();
   await trigger.press("Enter");
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(startDialog.getByRole("button", { name: "Lukk" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(startDialog.getByRole("button", { name: "Fortsett til posisjon" })).toBeFocused();
+  await expect(
+    startDialog.getByRole("button", { name: "Jeg har kontrollert originalene · fortsett" }),
+  ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(startDialog).toHaveCount(0);
   await expect(trigger).toBeFocused();

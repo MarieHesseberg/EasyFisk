@@ -3,6 +3,7 @@
 import { documentTitles, type DocumentKind } from "@/domain/documents/fishing-document";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { useDocuments } from "./use-documents";
+import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 const destinations: Record<DocumentKind, DetailDestination> = {
   permit: "permits",
@@ -13,6 +14,7 @@ const kinds: DocumentKind[] = ["permit", "disinfection", "fee"];
 
 export function DocumentOverview({ open }: { open: (destination: DetailDestination) => void }) {
   const { documents, loading, error } = useDocuments();
+  const readiness = getDocumentReadiness(documents);
   return (
     <div className="document-overview">
       {error && <p role="alert">{error}</p>}
@@ -28,7 +30,9 @@ export function DocumentOverview({ open }: { open: (destination: DetailDestinati
                   : error
                     ? "Kunne ikke lese lagring"
                     : count
-                      ? `${count} egenregistrert · ikke verifisert`
+                      ? readiness.valid[kind]
+                        ? `${count} registrert · gyldig tidsrom · ikke verifisert`
+                        : `${count} registrert · utløpt eller må fornyes`
                       : "Ingen registrert – legg til dokumentasjon"}
               </small>
             </span>

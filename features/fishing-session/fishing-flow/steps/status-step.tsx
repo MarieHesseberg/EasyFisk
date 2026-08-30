@@ -1,3 +1,5 @@
+"use client";
+
 import { CheckRow } from "@/components/ui/check-row";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { FlowTitle } from "@/components/ui/flow-title";
@@ -6,6 +8,8 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { ZoneId } from "@/domain/zones/zone";
+import { useDocuments } from "@/features/documents/use-documents";
+import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function StatusStep({
   cancel,
@@ -25,53 +29,86 @@ export function StatusStep({
   const { temperature } = activeFishingRules;
   const { riverStatus } = appContentRepository.getContent();
   const zoneName = fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
-  const blocked = scenario.level === "blocked";
+  const documentStore = useDocuments();
+  const documentReadiness = getDocumentReadiness(documentStore.documents);
+  const documentsBlocked =
+    documentStore.loading || Boolean(documentStore.error) || !documentReadiness.complete;
+  const blocked = scenario.level === "blocked" || documentsBlocked;
+  const title =
+    scenario.level === "blocked"
+      ? scenario.title
+      : documentsBlocked
+        ? documentStore.loading
+          ? "Kontrollerer dokumentasjon"
+          : documentStore.error
+            ? "Dokumentstatus er utilgjengelig"
+            : "Dokumentasjon mangler"
+        : scenario.title;
+  const text =
+    scenario.level === "blocked"
+      ? scenario.detail
+      : documentsBlocked
+        ? documentStore.loading
+          ? "Venter på den lokale dokumentmappen."
+          : documentStore.error
+            ? "Dokumentene kunne ikke leses. Avbryt og prøv igjen."
+            : `Registrer ${documentReadiness.missingLabels.join(", ")} før du starter.`
+        : `${scenario.detail} Egenregistrerte dokumenter må fortsatt kunne fremvises i original.`;
+  const effectiveLevel = blocked ? "blocked" : scenario.level === "ok" ? "warning" : scenario.level;
 
   return (
     <>
-      <FlowTitle
-        icon="shield"
-        eyebrow="SIMULERT STATUSKONTROLL"
-        title={scenario.title}
-        text={`${scenario.detail} Dette er statusmotorens demonstrasjon, ikke verifisering av dokumentene dine.`}
-      />
-      <div className={"scenario-banner " + scenario.level}>
+      <FlowTitle icon="shield" eyebrow="SIMULERT STATUSKONTROLL" title={title} text={text} />
+      <div className={"scenario-banner " + effectiveLevel}>
         <b>
           {blocked
             ? "Kan ikke starte"
-            : scenario.level === "warning"
+            : effectiveLevel === "warning"
               ? "Krever bekreftelse"
               : "Alle kontroller er godkjent"}
         </b>
-        <span>{scenario.label}</span>
+        <span>
+          {documentsBlocked
+            ? "Lokale dokumentkrav er ikke oppfylt"
+            : "Dokumenter registrert · originalene er ikke eksternt verifisert"}
+        </span>
       </div>
       <div className="flow-checks">
         <CheckRow
           title={`Fiskekort · ${zoneName}`}
           sub={
-            demoStatus === "noPermit"
-              ? "Ikke funnet"
-              : demoStatus === "wrongZone"
-                ? `Kortet gjelder ${riverStatus.alternatePermitZoneShortName}`
-                : `Gyldig til kl. ${riverStatus.permitExpiry}`
+            documentReadiness.valid.permit
+              ? "Gyldig tidsrom · egenregistrert, ikke verifisert"
+              : "Mangler eller er utløpt"
           }
-          state={["noPermit", "wrongZone"].includes(demoStatus) ? "error" : "ok"}
+          state={
+            documentReadiness.valid.permit && !["noPermit", "wrongZone"].includes(demoStatus)
+              ? "ok"
+              : "error"
+          }
         />
         <CheckRow
           title="Statlig fiskeravgift"
-          sub={demoStatus === "noFee" ? "Ikke dokumentert" : "Betalt og dokumentert"}
-          state={demoStatus === "noFee" ? "error" : "ok"}
+          sub={
+            documentReadiness.valid.fee
+              ? "Gjeldende år · egenregistrert, ikke verifisert"
+              : "Mangler for gjeldende år"
+          }
+          state={documentReadiness.valid.fee && demoStatus !== "noFee" ? "ok" : "error"}
         />
         <CheckRow
           title="Desinfisering"
           sub={
-            demoStatus === "expiredDisinfection"
-              ? "Utløpt"
-              : demoStatus === "otherRiver"
-                ? "Nytt vassdrag registrert"
-                : "Gyldig · ikke besøkt annet vassdrag"
+            documentReadiness.valid.disinfection
+              ? "Innen 20 dager · intet senere vassdrag registrert"
+              : "Mangler, er utløpt eller annet vassdrag er besøkt"
           }
-          state={["expiredDisinfection", "otherRiver"].includes(demoStatus) ? "error" : "ok"}
+          state={
+            documentReadiness.valid.disinfection &&
+            !["expiredDisinfection", "otherRiver"].includes(demoStatus)
+              ? "ok"
+              : "error"
+          }
         />
         <CheckRow
           title="Kvoter og rapportering"
@@ -107,8 +144,11 @@ export function StatusStep({
       </div>
       {blocked ? (
         <>
-          <button className="primary blocked-action" onClick={resolveBlock}>
-            {scenario.action}
+          <button
+            className="primary blocked-action"
+            onClick={scenario.level === "blocked" ? resolveBlock : cancel}
+          >
+            {scenario.level === "blocked" ? scenario.action : "Lukk og registrer dokumentasjon"}
           </button>
           <button className="secondary" onClick={cancel}>
             Avbryt oppstart
@@ -116,7 +156,7 @@ export function StatusStep({
         </>
       ) : (
         <button className="primary" onClick={next}>
-          {scenario.level === "warning" ? "Jeg forstår · fortsett" : "Fortsett til posisjon"}
+          Jeg har kontrollert originalene · fortsett
         </button>
       )}
     </>

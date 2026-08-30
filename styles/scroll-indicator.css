@@ -1,0 +1,32 @@
+.scroll-indicator {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  right: 3px;
+  bottom: calc(91px + env(safe-area-inset-bottom));
+  z-index: var(--layer-dialog-content);
+  width: 4px;
+  border-radius: var(--radius-round);
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.scroll-indicator.visible {
+  opacity: 1;
+}
+
+.scroll-indicator i {
+  position: absolute;
+  right: 0;
+  width: 4px;
+  min-height: 34px;
+  border-radius: var(--radius-round);
+  background: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator {
+    transition: none;
+  }
+}

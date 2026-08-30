@@ -2,7 +2,7 @@
 
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
-import { ScrollHint } from "@/components/layout/scroll-hint";
+import { ScrollIndicator } from "@/components/layout/scroll-indicator";
 import { DemoControlPanel } from "@/components/layout/demo-control-panel";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
@@ -128,7 +128,7 @@ export function EasyFiskApp() {
         {globalDetail && (
           <ProfileDetailDialog destination={globalDetail} close={actions.closeDetail} />
         )}
-        <ScrollHint />
+        <ScrollIndicator />
       </div>
       <DemoControlPanel
         scenarios={demoStatuses}
