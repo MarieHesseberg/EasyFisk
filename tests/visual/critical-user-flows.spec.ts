@@ -18,7 +18,8 @@ async function selectAllOkayStatus(page: Page, startTest = true) {
   const dialog = page.getByRole("dialog", { name: "Statusmotor" });
   await dialog.getByLabel("Situasjon").selectOption("ok");
   if (startTest) {
-    await dialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+    await dialog.getByRole("button", { name: /test valgt situasjon/i }).click();
+    await page.getByRole("button", { name: "START FISKE" }).click();
   } else {
     await dialog.getByRole("button", { name: /Tilbake/ }).click();
     await page.getByRole("button", { name: "Hjem" }).click();
@@ -178,7 +179,11 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
   await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
   await dialog.getByLabel("Situasjon").selectOption("noPermit");
   await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
-  await dialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+  await dialog.getByRole("button", { name: /test valgt situasjon/i }).click();
+
+  await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
+  await expect(page.getByText("Testdata · mangler eller er ikke gyldig")).toBeVisible();
+  await page.getByRole("button", { name: "SE HVA SOM MANGLER" }).click();
 
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(startDialog.getByRole("heading", { name: "Du mangler fiskekort" })).toBeVisible();
@@ -191,12 +196,13 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
   const readyDialog = page.getByRole("dialog", { name: "Statusmotor" });
   await readyDialog.getByLabel("Situasjon").selectOption("ok");
   await expect(readyDialog.getByRole("status")).toContainText("Oppstart tillatt");
-  await readyDialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+  await readyDialog.getByRole("button", { name: /valgt testsituasjon/i }).click();
+  await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
+  await expect(page.getByText("Testdata · Døgnkort for sone 3 · gyldig i dag")).toBeVisible();
   await expect(
-    page
-      .getByRole("dialog", { name: "Start fiske" })
-      .getByRole("button", { name: "Jeg har kontrollert originalene · fortsett" }),
+    page.getByText("Testdata · attest registrert i dag · gyldig i 20 dager"),
   ).toBeVisible();
+  await expect(page.getByText("Testdata · fiskeravgift betalt for 2026")).toBeVisible();
 });
 
 test("start fiske går gjennom fire steg og aktiv økt overlever refresh", async ({ page }) => {

@@ -68,6 +68,7 @@ export function EasyFiskApp() {
             elapsed={elapsed}
             startTime={startTime}
             demoStatus={effectiveStatus.status}
+            documentReadiness={effectiveStatus.readiness}
             isStatusTestMode={isStatusTestMode}
             salmonKilled={personalStatistics.killedSalmonQuota.usedThisSeason}
           />
@@ -105,13 +106,13 @@ export function EasyFiskApp() {
         {screen === "more" && (
           <ProfileScreen
             demoStatus={demoStatus}
+            documentReadiness={effectiveStatus.readiness}
             isStatusTestMode={isStatusTestMode}
             selectDemoStatus={actions.selectDemoStatus}
             useActualStatus={actions.useActualStatus}
             testDemoStatus={() => {
               if (!actions.startStatusTest()) return;
               actions.navigate("home");
-              actions.setFlow("start");
             }}
           />
         )}
@@ -142,7 +143,11 @@ export function EasyFiskApp() {
           />
         )}
         {globalDetail && (
-          <ProfileDetailDialog destination={globalDetail} close={actions.closeDetail} />
+          <ProfileDetailDialog
+            destination={globalDetail}
+            close={actions.closeDetail}
+            testReadiness={isStatusTestMode ? effectiveStatus.readiness : undefined}
+          />
         )}
         <ScrollIndicator />
       </div>
@@ -155,7 +160,6 @@ export function EasyFiskApp() {
         startTest={() => {
           if (!actions.startStatusTest()) return;
           actions.navigate("home");
-          actions.setFlow("start");
         }}
       />
     </main>

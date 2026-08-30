@@ -9,6 +9,7 @@ import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function HomeScreen({
   onStart,
@@ -22,6 +23,7 @@ export function HomeScreen({
   elapsed,
   startTime,
   demoStatus,
+  documentReadiness,
   isStatusTestMode,
   salmonKilled,
 }: {
@@ -36,6 +38,7 @@ export function HomeScreen({
   elapsed: number;
   startTime: number | null;
   demoStatus: DemoStatus;
+  documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   salmonKilled: number;
 }) {
@@ -64,6 +67,8 @@ export function HomeScreen({
       </button>
       <RequirementsOverview
         demoStatus={demoStatus}
+        documentReadiness={documentReadiness}
+        isStatusTestMode={isStatusTestMode}
         scenario={scenario}
         openDocument={onDocument}
         remainingSalmon={Math.max(0, quota.killedSalmonPerSeason - salmonKilled)}

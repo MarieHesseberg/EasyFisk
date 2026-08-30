@@ -8,10 +8,12 @@ export function DocumentCard({
   document,
   edit,
   remove,
+  isMock = false,
 }: {
   document: FishingDocument;
-  edit: () => void;
-  remove: () => Promise<void>;
+  edit?: () => void;
+  remove?: () => Promise<void>;
+  isMock?: boolean;
 }) {
   const url = useMemo(
     () => (document.attachment ? URL.createObjectURL(document.attachment) : ""),
@@ -27,7 +29,11 @@ export function DocumentCard({
   return (
     <article className="document-card">
       <h3>{document.values.holder}</h3>
-      <p className="document-status">Egenregistrert · ikke eksternt verifisert</p>
+      <p className="document-status">
+        {isMock
+          ? "Testdata · ikke et virkelig dokument"
+          : "Egenregistrert · ikke eksternt verifisert"}
+      </p>
       <dl>
         {documentFields[document.kind]
           .filter((field) => document.values[field.key])
@@ -48,17 +54,19 @@ export function DocumentCard({
       ) : (
         <p>Ingen kopi vedlagt. Ta med original dokumentasjon.</p>
       )}
-      <button className="secondary" onClick={edit}>
-        Endre opplysninger
-      </button>
-      {confirm ? (
+      {!isMock && (
+        <button className="secondary" onClick={edit}>
+          Endre opplysninger
+        </button>
+      )}
+      {!isMock && confirm ? (
         <div>
           <p>Slette denne lokale kopien? Originalen hos utsteder endres ikke.</p>
           <button
             disabled={busy}
             onClick={async () => {
               setBusy(true);
-              await remove();
+              await remove?.();
               setBusy(false);
               setConfirm(false);
             }}
@@ -67,9 +75,9 @@ export function DocumentCard({
           </button>
           <button onClick={() => setConfirm(false)}>Behold</button>
         </div>
-      ) : (
+      ) : !isMock ? (
         <button onClick={() => setConfirm(true)}>Slett lokal kopi</button>
-      )}
+      ) : null}
     </article>
   );
 }

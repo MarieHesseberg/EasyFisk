@@ -4,13 +4,16 @@ import { detailTitles } from "@/features/profile/detail-pages/detail-page-types"
 import { ProfileDetailContent } from "@/features/profile/detail-pages/profile-detail-content";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function ProfileDetailDialog({
   destination,
   close,
+  testReadiness,
 }: {
   destination: DetailDestination;
   close: () => void;
+  testReadiness?: DocumentReadiness;
 }) {
   const dialogRef = useDialogAccessibility(close);
   const title = detailTitles[destination];
@@ -32,7 +35,7 @@ export function ProfileDetailDialog({
         {destination === "feedback" ? (
           <FeedbackForm />
         ) : (
-          <ProfileDetailContent destination={destination} />
+          <ProfileDetailContent destination={destination} testReadiness={testReadiness} />
         )}
       </div>
     </AppDialogPortal>

@@ -3,9 +3,12 @@ import { DocumentOverview } from "@/features/documents/document-overview";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { statusState } from "@/domain/fishing-rules/status-checks";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function RequirementsOverview({
   demoStatus,
+  documentReadiness,
+  isStatusTestMode,
   scenario,
   remainingSalmon,
   seasonQuota,
@@ -13,6 +16,8 @@ export function RequirementsOverview({
   openDocument,
 }: {
   demoStatus: DemoStatus;
+  documentReadiness: DocumentReadiness;
+  isStatusTestMode: boolean;
   scenario: DemoScenario;
   remainingSalmon: number;
   seasonQuota: number;
@@ -25,7 +30,10 @@ export function RequirementsOverview({
         <h3>Dokumentasjon og status</h3>
         <button onClick={openControlCard}>Mine dokumenter</button>
       </div>
-      <DocumentOverview open={openDocument} />
+      <DocumentOverview
+        open={openDocument}
+        testReadiness={isStatusTestMode ? documentReadiness : undefined}
+      />
       <div className="check-grid">
         <RequirementStatusRow
           icon="fish"

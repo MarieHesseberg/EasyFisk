@@ -11,17 +11,20 @@ import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 import { StatusEngineSettingsDialog } from "@/features/profile/status-engine-settings-dialog";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 type ProfileDestination = DetailDestination | "status-engine";
 
 export function ProfileScreen({
   demoStatus,
+  documentReadiness,
   isStatusTestMode,
   selectDemoStatus,
   testDemoStatus,
   useActualStatus,
 }: {
   demoStatus: DemoStatus;
+  documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   selectDemoStatus: (status: DemoStatus) => void;
   testDemoStatus: () => void;
@@ -98,7 +101,11 @@ export function ProfileScreen({
         />
       )}
       {detail && detail !== "status-engine" && (
-        <ProfileDetailDialog destination={detail} close={() => setDetail(null)} />
+        <ProfileDetailDialog
+          destination={detail}
+          close={() => setDetail(null)}
+          testReadiness={isStatusTestMode ? documentReadiness : undefined}
+        />
       )}
     </div>
   );

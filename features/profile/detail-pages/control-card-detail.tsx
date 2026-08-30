@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { DocumentsPanel } from "@/features/documents/documents-panel";
 import { documentTitles, type DocumentKind } from "@/domain/documents/fishing-document";
+import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
 
-export function ControlCardDetail() {
+export function ControlCardDetail({ testReadiness }: { testReadiness?: DocumentReadiness }) {
   const [kind, setKind] = useState<DocumentKind>("permit");
+  const testDocuments = fishingContentRepository.getDemoDocuments();
   return (
     <div>
       <p>
@@ -24,7 +27,17 @@ export function ControlCardDetail() {
           </button>
         ))}
       </div>
-      <DocumentsPanel key={kind} kind={kind} />
+      <DocumentsPanel
+        key={kind}
+        kind={kind}
+        testDocument={
+          testReadiness === undefined
+            ? undefined
+            : testReadiness.valid[kind]
+              ? testDocuments[kind]
+              : null
+        }
+      />
     </div>
   );
 }
