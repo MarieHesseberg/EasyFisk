@@ -4,6 +4,7 @@ import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { statusState } from "@/domain/fishing-rules/status-checks";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
 
 export function RequirementsOverview({
   demoStatus,
@@ -12,6 +13,7 @@ export function RequirementsOverview({
   scenario,
   remainingSalmon,
   seasonQuota,
+  quotaStatus,
   openControlCard,
   openDocument,
 }: {
@@ -21,6 +23,7 @@ export function RequirementsOverview({
   scenario: DemoScenario;
   remainingSalmon: number;
   seasonQuota: number;
+  quotaStatus: FishingStartQuotaStatus;
   openControlCard: () => void;
   openDocument: (destination: DetailDestination) => void;
 }) {
@@ -38,7 +41,13 @@ export function RequirementsOverview({
         <RequirementStatusRow
           icon="fish"
           title="Sesongkvote laks"
-          sub={`${remainingSalmon} av ${seasonQuota} avlivet gjenstår`}
+          sub={
+            demoStatus === "dailyQuota"
+              ? `Døgnkvote nådd · ${quotaStatus.killedToday} avlivet · ${quotaStatus.releasedToday} gjenutsatt`
+              : demoStatus === "seasonQuota"
+                ? `Sesongkvote nådd · ${quotaStatus.killedThisSeason} avlivet · ${quotaStatus.releasedThisSeason} gjenutsatt`
+                : `${remainingSalmon} av ${seasonQuota} avlivet gjenstår`
+          }
           quota
           state={statusState(
             demoStatus,

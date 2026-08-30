@@ -3,8 +3,7 @@
 import { useState } from "react";
 
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
-import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import type { DemoStatus } from "@/domain/fishing-rules/rule";
+import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { FlowMode, SessionRecord } from "@/domain/sessions/session";
 import type { ZoneId } from "@/domain/zones/zone";
 import { PositionStep } from "@/features/fishing-session/fishing-flow/steps/position-step";
@@ -15,14 +14,17 @@ import { SessionSummaryStep } from "@/features/fishing-session/fishing-flow/sess
 import { StopSessionStep } from "@/features/fishing-session/fishing-flow/stop-session-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
 
 export function FishingFlow({
   mode,
   finish,
   cancel,
   demoStatus,
+  scenario,
   documentReadiness,
   isStatusTestMode,
+  quotaStatus,
   startTime,
   elapsed,
   lastSession,
@@ -33,8 +35,10 @@ export function FishingFlow({
   finish: (caught?: boolean, selectedZone?: ZoneId) => void;
   cancel: () => void;
   demoStatus: DemoStatus;
+  scenario: DemoScenario;
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
+  quotaStatus: FishingStartQuotaStatus;
   startTime: number | null;
   elapsed: number;
   lastSession: SessionRecord | null;
@@ -43,7 +47,6 @@ export function FishingFlow({
 }) {
   const [step, setStep] = useState(1);
   const [selectedZone, setSelectedZone] = useState<ZoneId>(3);
-  const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
   const total = mode === "start" ? 4 : 1;
   const dialogRef = useDialogAccessibility(cancel);
 
@@ -77,6 +80,7 @@ export function FishingFlow({
                 demoStatus={demoStatus}
                 documentReadiness={documentReadiness}
                 isStatusTestMode={isStatusTestMode}
+                quotaStatus={quotaStatus}
                 next={() => setStep(2)}
                 resolveBlock={resolveBlock}
                 scenario={scenario}

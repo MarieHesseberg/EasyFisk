@@ -1,6 +1,7 @@
 import type { DocumentReadiness } from "../documents/get-document-readiness.ts";
 import { getStatusEngineDocumentReadiness } from "./get-status-engine-document-readiness.ts";
 import type { DemoScenario, DemoStatus } from "./rule.ts";
+import type { FishingStartQuotaStatus } from "../quotas/get-fishing-start-quota-status.ts";
 
 const documentStatuses = new Set<DemoStatus>([
   "allMissing",
@@ -21,6 +22,7 @@ export function resolveStatusEngine(
   actualReadiness: DocumentReadiness,
   selectedScenario: DemoScenario,
   isTestMode: boolean,
+  actualQuota?: FishingStartQuotaStatus,
 ) {
   if (isTestMode) {
     const simulated = getStatusEngineDocumentReadiness(selectedScenario.id);
@@ -41,10 +43,48 @@ export function resolveStatusEngine(
   }
 
   const status = getActualDocumentStatus(actualReadiness);
+  if (actualReadiness.complete && actualQuota?.dailyReached) {
+    return {
+      readiness: actualReadiness,
+      status: "dailyQuota" as const,
+      scenario: createQuotaScenario("dailyQuota", actualQuota),
+    };
+  }
+  if (actualReadiness.complete && actualQuota?.seasonReached) {
+    return {
+      readiness: actualReadiness,
+      status: "seasonQuota" as const,
+      scenario: createQuotaScenario("seasonQuota", actualQuota),
+    };
+  }
   return {
     readiness: actualReadiness,
     status,
     scenario: createDocumentScenario(actualReadiness, status, "Faktisk status"),
+  };
+}
+
+function createQuotaScenario(
+  status: "dailyQuota" | "seasonQuota",
+  quota: FishingStartQuotaStatus,
+): DemoScenario {
+  if (status === "dailyQuota") {
+    return {
+      id: status,
+      label: "Faktisk kvotestatus",
+      title: "Døgnkvoten er nådd",
+      detail: `Lokale fangster viser ${quota.killedToday} avlivet og ${quota.releasedToday} gjenutsatt laks i dag. Fisket kan ikke fortsette før neste fiskerdøgn.`,
+      level: "blocked",
+      action: "Se kvoteregnskap",
+    };
+  }
+  return {
+    id: status,
+    label: "Faktisk kvotestatus",
+    title: "Sesongkvoten er nådd",
+    detail: `Lokale fangster viser ${quota.killedThisSeason} avlivet og ${quota.releasedThisSeason} gjenutsatt laks denne sesongen. Kontroller reglene før videre fiske.`,
+    level: "warning",
+    action: "Se regler for gjenutsetting",
   };
 }
 

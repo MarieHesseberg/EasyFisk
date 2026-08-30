@@ -3,13 +3,12 @@ import { Icon } from "@/components/ui/icon";
 import { HomeSessionCard } from "@/features/home/components/home-session-card";
 import { RequirementsOverview } from "@/features/home/components/requirements-overview";
 import { HomeShortcuts } from "@/features/home/components/home-shortcuts";
-import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { appContentRepository } from "@/data/repositories/app-content";
-import type { DemoStatus } from "@/domain/fishing-rules/rule";
-import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
+import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
 
 export function HomeScreen({
   onStart,
@@ -23,9 +22,11 @@ export function HomeScreen({
   elapsed,
   startTime,
   demoStatus,
+  scenario,
   documentReadiness,
   isStatusTestMode,
   salmonKilled,
+  quotaStatus,
 }: {
   onStart: () => void;
   onRules: () => void;
@@ -38,12 +39,13 @@ export function HomeScreen({
   elapsed: number;
   startTime: number | null;
   demoStatus: DemoStatus;
+  scenario: DemoScenario;
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   salmonKilled: number;
+  quotaStatus: FishingStartQuotaStatus;
 }) {
   const { riverStatus } = appContentRepository.getContent();
-  const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
   const { catchSize, metadata, quota } = activeFishingRules;
   return (
     <div className="screen">
@@ -73,6 +75,7 @@ export function HomeScreen({
         openDocument={onDocument}
         remainingSalmon={Math.max(0, quota.killedSalmonPerSeason - salmonKilled)}
         seasonQuota={quota.killedSalmonPerSeason}
+        quotaStatus={quotaStatus}
         openControlCard={onControlCard}
       />
       <button className="home-feedback-card" onClick={onFeedback}>

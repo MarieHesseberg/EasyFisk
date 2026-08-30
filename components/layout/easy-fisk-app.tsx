@@ -19,6 +19,10 @@ import { StatisticsScreen } from "@/features/statistics/statistics-screen";
 import { useDocuments } from "@/features/documents/use-documents";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { resolveStatusEngine } from "@/domain/fishing-rules/resolve-status-engine";
+import {
+  getDisplayedQuotaStatus,
+  getFishingStartQuotaStatus,
+} from "@/domain/quotas/get-fishing-start-quota-status";
 
 export function EasyFiskApp() {
   const { state, actions } = useEasyFiskController();
@@ -46,10 +50,13 @@ export function EasyFiskApp() {
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
+  const quotaStatus = getFishingStartQuotaStatus(catches);
+  const displayedQuotaStatus = getDisplayedQuotaStatus(quotaStatus, demoStatus, isStatusTestMode);
   const effectiveStatus = resolveStatusEngine(
     getDocumentReadiness(documents),
     selectedDemo,
     isStatusTestMode,
+    quotaStatus,
   );
   const personalStatistics = calculatePersonalStatistics(catches, sessions);
   return (
@@ -68,9 +75,11 @@ export function EasyFiskApp() {
             elapsed={elapsed}
             startTime={startTime}
             demoStatus={effectiveStatus.status}
+            scenario={effectiveStatus.scenario}
             documentReadiness={effectiveStatus.readiness}
             isStatusTestMode={isStatusTestMode}
             salmonKilled={personalStatistics.killedSalmonQuota.usedThisSeason}
+            quotaStatus={displayedQuotaStatus}
           />
         )}{" "}
         {screen === "map" && (
@@ -133,7 +142,9 @@ export function EasyFiskApp() {
             finish={actions.finishSessionFlow}
             cancel={actions.closeFlow}
             demoStatus={effectiveStatus.status}
+            scenario={effectiveStatus.scenario}
             documentReadiness={effectiveStatus.readiness}
+            quotaStatus={displayedQuotaStatus}
             isStatusTestMode={isStatusTestMode}
             startTime={startTime}
             elapsed={elapsed}

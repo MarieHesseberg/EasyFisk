@@ -8,12 +8,14 @@ import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { ZoneId } from "@/domain/zones/zone";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
 
 export function StatusStep({
   cancel,
   demoStatus,
   documentReadiness,
   isStatusTestMode,
+  quotaStatus,
   next,
   resolveBlock,
   scenario,
@@ -23,6 +25,7 @@ export function StatusStep({
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
+  quotaStatus: FishingStartQuotaStatus;
   next: () => void;
   resolveBlock: () => void;
   scenario: DemoScenario;
@@ -109,9 +112,9 @@ export function StatusStep({
           title="Kvoter og rapportering"
           sub={
             demoStatus === "dailyQuota"
-              ? "Døgnkvote nådd"
+              ? `Døgnkvote nådd · ${quotaStatus.killedToday} avlivet · ${quotaStatus.releasedToday} gjenutsatt`
               : demoStatus === "seasonQuota"
-                ? "Sesongkvote nådd"
+                ? `Sesongkvote nådd · ${quotaStatus.killedThisSeason} avlivet · ${quotaStatus.releasedThisSeason} gjenutsatt`
                 : demoStatus === "lateReport"
                   ? "Forsinket fangstrapport"
                   : "Kvoter tilgjengelig · rapporter ajour"

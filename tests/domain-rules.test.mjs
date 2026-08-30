@@ -7,6 +7,10 @@ import { getStatusResolution, statusState } from "../domain/fishing-rules/status
 import { activeFishingRules } from "../domain/fishing-rules/mandalselva-2026.ts";
 import { resolveStatusEngine } from "../domain/fishing-rules/resolve-status-engine.ts";
 import {
+  getDisplayedQuotaStatus,
+  getFishingStartQuotaStatus,
+} from "../domain/quotas/get-fishing-start-quota-status.ts";
+import {
   countKilledSalmonForDay,
   getNorwegianCalendarDate,
   getQuotaStatus,
@@ -89,6 +93,76 @@ test("registrert dokument løser tilsvarende mangel i testmodus", () => {
   assert.equal(resolved.readiness.valid.permit, true);
   assert.equal(resolved.status, "ok");
   assert.equal(resolved.scenario.level, "ok");
+});
+
+test("normalmodus blokkerer oppstart når virkelig døgnkvote er nådd", () => {
+  const documents = {
+    complete: true,
+    valid: { permit: true, disinfection: true, fee: true },
+    missingLabels: [],
+  };
+  const allOkay = {
+    id: "ok",
+    label: "Alt i orden",
+    title: "Du er klar",
+    detail: "Alle krav er kontrollert",
+    level: "ok",
+  };
+  const quota = {
+    dailyReached: true,
+    seasonReached: false,
+    killedToday: 1,
+    killedThisSeason: 1,
+    releasedToday: 0,
+    releasedThisSeason: 0,
+  };
+
+  const resolved = resolveStatusEngine(documents, allOkay, false, quota);
+
+  assert.equal(resolved.status, "dailyQuota");
+  assert.equal(resolved.scenario.level, "blocked");
+});
+
+test("testmodus kan overstyre en virkelig nådd kvote", () => {
+  const actual = {
+    dailyReached: true,
+    seasonReached: true,
+    killedToday: 1,
+    killedThisSeason: 5,
+    releasedToday: 0,
+    releasedThisSeason: 0,
+  };
+  const displayed = getDisplayedQuotaStatus(actual, "ok", true);
+
+  assert.equal(displayed.dailyReached, false);
+  assert.equal(displayed.seasonReached, false);
+  assert.equal(displayed.killedToday, 0);
+});
+
+test("lokale fangster beregner både avlivet og gjenutsatt døgnkvote", () => {
+  const now = Date.parse("2026-07-10T12:00:00+02:00");
+  const base = {
+    id: "ME-1",
+    caughtAt: now,
+    submittedAt: now,
+    sessionStart: now - 1_000,
+    species: "Laks",
+    length: 55,
+    weight: 2,
+    zone: "Sone 3",
+    violation: false,
+    late: false,
+  };
+  const status = getFishingStartQuotaStatus(
+    [
+      { ...base, result: "Gjenutsatt" },
+      { ...base, id: "ME-2", result: "Gjenutsatt" },
+    ],
+    now,
+  );
+
+  assert.equal(status.releasedToday, 2);
+  assert.equal(status.dailyReached, true);
 });
 
 test("fangstvalidering håndhever minste- og maksimumsmål", () => {
