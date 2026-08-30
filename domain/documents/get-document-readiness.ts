@@ -1,4 +1,6 @@
 import type { DocumentKind, FishingDocument } from "./fishing-document.ts";
+import type { ZoneId } from "../zones/zone.ts";
+import { getPermitZoneId, isPermitValid } from "./get-permit-zones.ts";
 
 export interface DocumentReadiness {
   complete: boolean;
@@ -19,13 +21,13 @@ function norwegianYear(now: number) {
 export function getDocumentReadiness(
   documents: FishingDocument[],
   now = Date.now(),
+  requiredZone?: ZoneId,
 ): DocumentReadiness {
   const valid = {
     permit: documents.some(
       (document) =>
-        document.kind === "permit" &&
-        new Date(document.values.startsAt ?? "").getTime() <= now &&
-        new Date(document.values.endsAt ?? "").getTime() >= now,
+        isPermitValid(document, now) &&
+        (requiredZone === undefined || getPermitZoneId(document) === requiredZone),
     ),
     disinfection: documents.some((document) => {
       if (document.kind !== "disinfection" || document.values.otherRiverAt) return false;

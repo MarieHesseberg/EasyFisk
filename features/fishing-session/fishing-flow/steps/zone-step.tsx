@@ -13,12 +13,14 @@ export function ZoneStep({
   next,
   selectedZone,
   selectZone,
+  permittedZoneIds,
 }: {
   back: () => void;
   demoStatus: DemoStatus;
   next: () => void;
   selectedZone: ZoneId;
   selectZone: (zone: ZoneId) => void;
+  permittedZoneIds: readonly ZoneId[];
 }) {
   const nearBorder = demoStatus === "zoneBorder";
   const selectedZoneContent = zones.find((zone) => zone.id === selectedZone) ?? zones[0];
@@ -55,7 +57,11 @@ export function ZoneStep({
           onChange={(event) => selectZone(Number(event.target.value) as ZoneId)}
         >
           {zones.map((zone) => (
-            <option key={zone.id} value={zone.id}>
+            <option
+              key={zone.id}
+              value={zone.id}
+              disabled={permittedZoneIds.length > 0 && !permittedZoneIds.includes(zone.id)}
+            >
               {zone.name}
             </option>
           ))}
@@ -72,7 +78,10 @@ export function ZoneStep({
         )}
       </div>
       <p className="auto-note">
-        <Icon name="book" size={17} /> Kontroller fysisk skilting dersom du står nær en grense.
+        <Icon name="book" size={17} />
+        {permittedZoneIds.length > 0
+          ? `Fiskekortet ditt gjelder ${permittedZoneIds.map((zoneId) => `Sone ${zoneId}`).join(" og ")}. Andre soner kan ikke velges for denne økten.`
+          : "Kontroller fysisk skilting dersom du står nær en grense."}
       </p>
       <button className="primary" onClick={next}>
         Bekreft sone og se regler

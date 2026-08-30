@@ -31,6 +31,8 @@ export function FishingFlow({
   resolveBlock,
   openPermitShop,
   sessionZone,
+  initialZone,
+  permittedZoneIds,
 }: {
   mode: FlowMode;
   finish: (caught?: boolean, selectedZone?: ZoneId) => void;
@@ -46,9 +48,11 @@ export function FishingFlow({
   resolveBlock: () => void;
   openPermitShop: () => void;
   sessionZone: ZoneId;
+  initialZone: ZoneId;
+  permittedZoneIds: readonly ZoneId[];
 }) {
   const [step, setStep] = useState(1);
-  const [selectedZone, setSelectedZone] = useState<ZoneId>(3);
+  const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const total = mode === "start" ? 4 : 1;
   const dialogRef = useDialogAccessibility(cancel);
 
@@ -98,6 +102,7 @@ export function FishingFlow({
                 next={() => setStep(4)}
                 selectedZone={selectedZone}
                 selectZone={setSelectedZone}
+                permittedZoneIds={permittedZoneIds}
               />
             )}
             {step === 4 && (

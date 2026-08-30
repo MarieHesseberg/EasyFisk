@@ -18,14 +18,19 @@ export function PermitCheckout({
   product,
   back,
   save,
+  onPurchased,
 }: {
   product: PrototypePermitProduct;
   back: () => void;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
+  onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
 }) {
   const [outcome, setOutcome] = useState<PaymentOutcome>("approved");
   const [status, setStatus] = useState<"idle" | PaymentOutcome | "saving-error">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(() =>
+    new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
+  );
 
   async function submit() {
     if (outcome !== "approved") {
@@ -33,9 +38,10 @@ export function PermitCheckout({
       return;
     }
     setIsSubmitting(true);
-    const result = await save(createTestPermitDocument(product));
+    const result = await save(createTestPermitDocument(product, selectedDate));
     setIsSubmitting(false);
     setStatus(result.ok ? "approved" : "saving-error");
+    if (result.ok) onPurchased?.(product.zoneId);
   }
 
   return (
@@ -57,6 +63,20 @@ export function PermitCheckout({
         </b>
         <p>{product.validity.label}</p>
       </article>
+      <label className="permit-test-date">
+        Testdato for fiskekortet
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(event) => {
+            setSelectedDate(event.target.value);
+            setStatus("idle");
+          }}
+        />
+        <small>
+          Velg dagens dato for et gyldig kort, eller en tidligere dato for å teste utløp.
+        </small>
+      </label>
       <fieldset>
         <legend>Velg resultat for testbetalingen</legend>
         {Object.entries(outcomeLabels).map(([value, label]) => (

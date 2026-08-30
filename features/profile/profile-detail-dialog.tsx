@@ -13,12 +13,14 @@ export function ProfileDetailDialog({
   testReadiness,
   openPermitShop,
   selectedZone,
+  onPermitPurchased,
 }: {
   destination: DetailDestination;
   close: () => void;
   testReadiness?: DocumentReadiness;
   openPermitShop?: () => void;
   selectedZone?: ZoneId;
+  onPermitPurchased?: (zoneId: ZoneId) => void;
 }) {
   const dialogRef = useDialogAccessibility(close);
   const title = detailTitles[destination];
@@ -45,6 +47,7 @@ export function ProfileDetailDialog({
             testReadiness={testReadiness}
             openPermitShop={openPermitShop}
             selectedZone={selectedZone}
+            onPermitPurchased={onPermitPurchased}
           />
         )}
       </div>

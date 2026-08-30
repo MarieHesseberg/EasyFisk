@@ -26,6 +26,7 @@ import { createTestPermitDocument } from "../features/fishing-permits/create-tes
 import { operationSucceeded } from "../domain/shared/operation-result";
 import { isFishingDocument } from "../domain/documents/validate-document";
 import { getDocumentReadiness } from "../domain/documents/get-document-readiness";
+import { ZoneStep } from "../features/fishing-session/fishing-flow/steps/zone-step";
 
 afterEach(cleanup);
 
@@ -288,6 +289,36 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   expect(getDocumentReadiness(saved).valid.permit).toBe(true);
   expect(screen.getByRole("status").textContent).toContain("Betaling godkjent");
   expect(screen.getByText(/overlever refresh/)).toBeTruthy();
+});
+
+test("valgt testdato kan lage et utløpt kort for riktig sone", () => {
+  const product = permitCatalogRepository.findProduct("zone-2-holmegard-day");
+  if (!product) throw new Error("Testprodukt mangler");
+  const now = Date.parse("2026-08-31T12:00:00+02:00");
+  const expiredPermit = createTestPermitDocument(product, "2026-08-29", now);
+
+  expect(getDocumentReadiness([expiredPermit], now, 2).valid.permit).toBe(false);
+  expect(expiredPermit.values.area).toContain("Sone 2");
+  expect(expiredPermit.values.endsAt).toBe("2026-08-29T23:59");
+});
+
+test("sonevalget begrenses til sonene brukerens gyldige fiskekort dekker", () => {
+  render(
+    <ZoneStep
+      back={() => undefined}
+      demoStatus="ok"
+      next={() => undefined}
+      selectedZone={2}
+      selectZone={() => undefined}
+      permittedZoneIds={[2]}
+    />,
+  );
+
+  expect((screen.getByRole("option", { name: /Sone 2/ }) as HTMLOptionElement).disabled).toBe(
+    false,
+  );
+  expect((screen.getByRole("option", { name: /Sone 3/ }) as HTMLOptionElement).disabled).toBe(true);
+  expect(screen.getByText(/Andre soner kan ikke velges/)).toBeTruthy();
 });
 
 test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {

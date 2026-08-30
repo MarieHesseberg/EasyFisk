@@ -70,6 +70,24 @@ test("fiskestart krever gyldige dokumenter av alle tre typer", () => {
   assert.equal(complete.complete, true);
 });
 
+test("fiskekort gjelder bare riktig sone og gyldig tidsrom", () => {
+  const now = new Date("2026-08-30T12:00:00+02:00").getTime();
+  const permit = {
+    id: "zone-2-permit",
+    kind: "permit",
+    updatedAt: now,
+    values: {
+      area: "Mandalselva · Sone 2 · Holmegård",
+      startsAt: "2026-08-30T00:00",
+      endsAt: "2026-08-30T23:59",
+    },
+  };
+
+  assert.equal(getDocumentReadiness([permit], now, 2).valid.permit, true);
+  assert.equal(getDocumentReadiness([permit], now, 3).valid.permit, false);
+  assert.equal(getDocumentReadiness([permit], now + 24 * 60 * 60 * 1000, 2).valid.permit, false);
+});
+
 test("statusmotoren kan simulere alle, enkelte eller ingen manglende dokumenter", () => {
   assert.deepEqual(getStatusEngineDocumentReadiness("allMissing").valid, {
     permit: false,

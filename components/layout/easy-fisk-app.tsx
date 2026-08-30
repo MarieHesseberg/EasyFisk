@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { ScrollIndicator } from "@/components/layout/scroll-indicator";
@@ -23,10 +24,13 @@ import {
   getDisplayedQuotaStatus,
   getFishingStartQuotaStatus,
 } from "@/domain/quotas/get-fishing-start-quota-status";
+import { getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
+import { useCurrentTime } from "@/hooks/use-current-time";
 
 export function EasyFiskApp() {
   const { state, actions } = useEasyFiskController();
   const { documents } = useDocuments();
+  const documentCheckTime = useCurrentTime();
   const {
     active,
     catches,
@@ -52,8 +56,17 @@ export function EasyFiskApp() {
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
   const quotaStatus = getFishingStartQuotaStatus(catches);
   const displayedQuotaStatus = getDisplayedQuotaStatus(quotaStatus, demoStatus, isStatusTestMode);
+  const actualDocumentReadiness = getDocumentReadiness(documents, documentCheckTime, zone);
+  const validPermitZoneIds = getValidPermitZoneIds(documents, documentCheckTime);
+  const preferredPermitZoneId = validPermitZoneIds[0];
+  const hasPermitForSelectedZone = validPermitZoneIds.includes(zone);
+  const setZone = actions.setZone;
+  useEffect(() => {
+    if (preferredPermitZoneId !== undefined && !hasPermitForSelectedZone)
+      setZone(preferredPermitZoneId);
+  }, [hasPermitForSelectedZone, preferredPermitZoneId, setZone]);
   const effectiveStatus = resolveStatusEngine(
-    getDocumentReadiness(documents),
+    actualDocumentReadiness,
     selectedDemo,
     isStatusTestMode,
     quotaStatus,
@@ -159,6 +172,14 @@ export function EasyFiskApp() {
               actions.openDetail("permit-shop");
             }}
             sessionZone={sessionZone}
+            initialZone={zone}
+            permittedZoneIds={
+              isStatusTestMode &&
+              effectiveStatus.readiness.valid.permit &&
+              !validPermitZoneIds.length
+                ? [zone]
+                : validPermitZoneIds
+            }
           />
         )}
         {globalDetail && (
@@ -168,6 +189,7 @@ export function EasyFiskApp() {
             testReadiness={isStatusTestMode ? effectiveStatus.readiness : undefined}
             openPermitShop={() => actions.openDetail("permit-shop")}
             selectedZone={zone}
+            onPermitPurchased={actions.setZone}
           />
         )}
         <ScrollIndicator />

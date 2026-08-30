@@ -9,7 +9,13 @@ import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 
-export function PermitShop({ initialZone = 3 }: { initialZone?: ZoneId }) {
+export function PermitShop({
+  initialZone = 3,
+  onPermitPurchased,
+}: {
+  initialZone?: ZoneId;
+  onPermitPurchased?: (zoneId: ZoneId) => void;
+}) {
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [resetMessage, setResetMessage] = useState("");
@@ -39,6 +45,7 @@ export function PermitShop({ initialZone = 3 }: { initialZone?: ZoneId }) {
         product={selectedProduct}
         back={() => setSelectedProductId(null)}
         save={documents.save}
+        onPurchased={onPermitPurchased}
       />
     );
   }

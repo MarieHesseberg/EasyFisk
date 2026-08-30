@@ -15,11 +15,13 @@ export function ProfileDetailContent({
   testReadiness,
   openPermitShop,
   selectedZone,
+  onPermitPurchased,
 }: {
   destination: Exclude<DetailDestination, "feedback">;
   testReadiness?: DocumentReadiness;
   openPermitShop?: () => void;
   selectedZone?: ZoneId;
+  onPermitPurchased?: (zoneId: ZoneId) => void;
 }) {
   const testDocuments = fishingContentRepository.getDemoDocuments();
   const testDocument = (kind: "permit" | "disinfection" | "fee") =>
@@ -36,7 +38,7 @@ export function ProfileDetailContent({
         <PermitsDetail testDocument={testDocument("permit")} openPermitShop={openPermitShop} />
       );
     case "permit-shop":
-      return <PermitShop initialZone={selectedZone} />;
+      return <PermitShop initialZone={selectedZone} onPermitPurchased={onPermitPurchased} />;
     case "disinfection":
       return <DisinfectionDetail testDocument={testDocument("disinfection")} />;
     case "fee":

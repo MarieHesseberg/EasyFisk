@@ -1,6 +1,10 @@
 "use client";
 
-import { documentTitles, type DocumentKind } from "@/domain/documents/fishing-document";
+import {
+  documentTitles,
+  type DocumentKind,
+  type FishingDocument,
+} from "@/domain/documents/fishing-document";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { useDocuments } from "./use-documents";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
@@ -18,6 +22,19 @@ const mockSummaries: Record<DocumentKind, string> = {
   fee: "Testdata · fiskeravgift betalt for 2026",
 };
 
+function documentSummary(kind: DocumentKind, documents: FishingDocument[]) {
+  const document = documents
+    .filter((entry) => entry.kind === kind)
+    .sort((left, right) => (right.values.endsAt ?? "").localeCompare(left.values.endsAt ?? ""))[0];
+  if (kind !== "permit" || !document) return undefined;
+  const validUntil = new Intl.DateTimeFormat("nb-NO", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "Europe/Oslo",
+  }).format(new Date(document.values.endsAt ?? ""));
+  return `${document.values.area} · gyldig til ${validUntil}`;
+}
+
 export function DocumentOverview({
   open,
   testReadiness,
@@ -32,6 +49,7 @@ export function DocumentOverview({
       {error && <p role="alert">{error}</p>}
       {kinds.map((kind) => {
         const count = documents.filter((document) => document.kind === kind).length;
+        const summary = documentSummary(kind, documents);
         const isTestData = testReadiness !== undefined && !actualReadiness.valid[kind];
         const isValid = isTestData ? testReadiness.valid[kind] : actualReadiness.valid[kind];
         return (
@@ -49,7 +67,7 @@ export function DocumentOverview({
                       ? "Kunne ikke lese lagring"
                       : count
                         ? actualReadiness.valid[kind]
-                          ? `${count} registrert · gyldig tidsrom · ikke verifisert`
+                          ? (summary ?? `${count} registrert · gyldig tidsrom · ikke verifisert`)
                           : `${count} registrert · utløpt eller må fornyes`
                         : "Ingen registrert – legg til dokumentasjon"}
               </small>
