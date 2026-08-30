@@ -10,6 +10,7 @@ import { DocumentForm } from "./document-form";
 import { DocumentCard } from "./document-card";
 import { documentGuidance } from "./document-guidance";
 import { useDocuments } from "./use-documents";
+import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function DocumentsPanel({
   kind,
@@ -23,7 +24,10 @@ export function DocumentsPanel({
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const guidance = documentGuidance[kind];
-  const isTestView = testDocument !== undefined;
+  const actualDocuments = store.documents.filter((document) => document.kind === kind);
+  const hasValidActualDocument = getDocumentReadiness(actualDocuments).valid[kind];
+  const isMockView = testDocument !== undefined && testDocument !== null && !hasValidActualDocument;
+  const isMissingTest = testDocument === null && !hasValidActualDocument;
   return (
     <section className="documents-panel" aria-label={documentTitles[kind]}>
       <p>{guidance.text}</p>
@@ -31,27 +35,25 @@ export function DocumentsPanel({
         {guidance.link} ↗
       </a>
       <p className="document-status">
-        {isTestView
+        {isMockView
           ? "Testmodus – opplysningene nedenfor er mockdata og lagres ikke."
-          : "Lokal dokumentmappe – ikke en godkjenning. Dokumentene er ikke eksternt verifisert."}
+          : isMissingTest
+            ? "Testmodus – registrer dokumentet nedenfor for å løse den simulerte mangelen."
+            : "Lokal dokumentmappe – ikke en godkjenning. Dokumentene er ikke eksternt verifisert."}
       </p>
       <p>
         Opplysningene og eventuelle vedlegg lagres ukryptert i denne nettleseren. Andre som bruker
         samme nettleserprofil kan se dem, og sletting av nettleserdata kan fjerne dem.
       </p>
-      {!isTestView && store.loading && <p role="status">Henter dokumenter …</p>}
-      {!isTestView && (store.error || error) && (
+      {!isMockView && store.loading && <p role="status">Henter dokumenter …</p>}
+      {!isMockView && (store.error || error) && (
         <p role="alert">
           {store.error || error} <button onClick={() => void store.reload()}>Prøv igjen</button>
         </p>
       )}
       {message && <p role="status">{message}</p>}
-      {isTestView ? (
-        testDocument ? (
-          <DocumentCard document={testDocument} isMock />
-        ) : (
-          <p>Testsituasjonen har ingen gyldig {documentTitles[kind].toLowerCase()}.</p>
-        )
+      {isMockView ? (
+        <DocumentCard document={testDocument} isMock />
       ) : editing ? (
         <DocumentForm
           key={editing === "new" ? "new" : editing.id}
@@ -78,33 +80,31 @@ export function DocumentsPanel({
           Registrer {documentTitles[kind].toLowerCase()}
         </button>
       )}
-      {!isTestView &&
+      {!isMockView &&
         !store.loading &&
         !store.error &&
         !store.documents.some((document) => document.kind === kind) && (
           <p>Ingen dokumenter registrert ennå.</p>
         )}
-      {!isTestView &&
-        store.documents
-          .filter((document) => document.kind === kind)
-          .map((document) => (
-            <DocumentCard
-              key={document.id}
-              document={document}
-              edit={() => {
-                setEditing(document);
-                setMessage("");
-              }}
-              remove={async () => {
-                const result = await store.remove(document.id);
-                if (!result.ok) setError(result.error);
-                else {
-                  setError("");
-                  setMessage("Den lokale kopien er slettet.");
-                }
-              }}
-            />
-          ))}
+      {!isMockView &&
+        actualDocuments.map((document) => (
+          <DocumentCard
+            key={document.id}
+            document={document}
+            edit={() => {
+              setEditing(document);
+              setMessage("");
+            }}
+            remove={async () => {
+              const result = await store.remove(document.id);
+              if (!result.ok) setError(result.error);
+              else {
+                setError("");
+                setMessage("Den lokale kopien er slettet.");
+              }
+            }}
+          />
+        ))}
     </section>
   );
 }

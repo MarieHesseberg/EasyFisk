@@ -32,7 +32,7 @@ export function DocumentOverview({
       {error && <p role="alert">{error}</p>}
       {kinds.map((kind) => {
         const count = documents.filter((document) => document.kind === kind).length;
-        const isTestData = testReadiness !== undefined;
+        const isTestData = testReadiness !== undefined && !actualReadiness.valid[kind];
         const isValid = isTestData ? testReadiness.valid[kind] : actualReadiness.valid[kind];
         return (
           <button key={kind} onClick={() => open(destinations[kind])}>

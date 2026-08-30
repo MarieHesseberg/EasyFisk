@@ -69,6 +69,28 @@ test("testmodus overstyrer dokumentstatus uten å endre faktiske dokumenter", ()
   assert.equal(actual.complete, false);
 });
 
+test("registrert dokument løser tilsvarende mangel i testmodus", () => {
+  const actual = {
+    complete: false,
+    valid: { permit: true, disinfection: false, fee: false },
+    missingLabels: ["gyldig desinfisering", "fiskeravgift"],
+  };
+  const missingPermit = {
+    id: "noPermit",
+    label: "Mangler fiskekort",
+    title: "Du mangler fiskekort",
+    detail: "Det finnes ikke et gyldig fiskekort på profilen din.",
+    level: "blocked",
+  };
+
+  const resolved = resolveStatusEngine(actual, missingPermit, true);
+
+  assert.equal(resolved.readiness.complete, true);
+  assert.equal(resolved.readiness.valid.permit, true);
+  assert.equal(resolved.status, "ok");
+  assert.equal(resolved.scenario.level, "ok");
+});
+
 test("fangstvalidering håndhever minste- og maksimumsmål", () => {
   assert.equal(validateCatch("Laks", "Avlivet", 34.9, 2).blocked, true);
   assert.equal(validateCatch("Laks", "Avlivet", 35, 2).blocked, false);
