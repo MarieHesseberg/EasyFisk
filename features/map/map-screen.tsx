@@ -4,6 +4,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { getPrototypePermitProducts } from "@/data/prototype/mandalselva-permit-products";
 import type { ZoneId } from "@/domain/zones/zone";
 import { useUserLocation } from "@/features/map/hooks/use-user-location";
 
@@ -19,6 +20,7 @@ export function MapScreen({
   onUseZone: (zone: ZoneId) => void;
 }) {
   const z = fishingContentRepository.findZone(selected) ?? zones[0];
+  const permitProducts = getPrototypePermitProducts(z.id);
   const suggestedZoneId = fishingContentRepository.getSuggestedZoneId();
   const suggestedZoneName =
     fishingContentRepository.findZone(suggestedZoneId)?.name.split(" · ")[0] ??
@@ -86,6 +88,36 @@ export function MapScreen({
             <b>{z.note}</b>
           </div>
         </div>
+        <section className="map-permit-products" aria-labelledby="map-permit-products-title">
+          <div className="map-permit-heading">
+            <div>
+              <small>PROTOTYPEUTVALG</small>
+              <h3 id="map-permit-products-title">Fiskekort i sonen</h3>
+            </div>
+            <span>Kontrollert 31.08.2026</span>
+          </div>
+          <div className="map-permit-list">
+            {permitProducts.map((product) => (
+              <article key={product.id}>
+                <div>
+                  <small>{product.areaName}</small>
+                  <h4>{product.title}</h4>
+                </div>
+                <b>{product.priceNok === null ? "Pris ikke oppgitt" : `${product.priceNok} kr`}</b>
+                <p>{product.validityLabel}</p>
+                <p>{product.capacityLabel}</p>
+                <p>{product.note}</p>
+                <a href={product.sourceUrl} target="_blank" rel="noreferrer">
+                  Kontroller kilde
+                </a>
+              </article>
+            ))}
+          </div>
+          <p className="map-permit-disclaimer">
+            Produktdataene er et datert øyeblikksbilde. Tilgjengelighet og kjøp er ikke aktive i
+            prototypen.
+          </p>
+        </section>
         <p className="zone-note">
           <Icon name="book" size={19} /> Kartet er veiledende. Fysisk oppmerking og lokale regler
           gjelder alltid.

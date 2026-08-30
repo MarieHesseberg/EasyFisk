@@ -19,6 +19,7 @@ import { calculatePersonalStatistics } from "../domain/statistics/calculate-pers
 import { useFishingLogController } from "../application/easy-fisk/use-fishing-log-controller";
 import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
+import { getPrototypePermitProducts } from "../data/prototype/mandalselva-permit-products";
 
 afterEach(cleanup);
 
@@ -196,6 +197,20 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
   render(<MapScreen selected={3} setSelected={() => undefined} onUseZone={() => undefined} />);
   await userEvent.setup().click(screen.getByRole("button", { name: "Finn min posisjon" }));
   expect((await screen.findByRole("status")).textContent).toContain("Posisjonstilgang ble avslått");
+});
+
+test("kartprototypen viser Holmegård-kort og et produkt i hver hovedsone", () => {
+  for (const zoneId of [1, 2, 3, 4] as const) {
+    expect(getPrototypePermitProducts(zoneId).length).toBeGreaterThan(0);
+  }
+
+  render(<MapScreen selected={2} setSelected={() => undefined} onUseZone={() => undefined} />);
+
+  expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Holmegård sesongkort" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Rapporteringskort for sesongkort" })).toBeTruthy();
+  expect(screen.getByText("2 dagskort per fiskedøgn")).toBeTruthy();
+  expect(screen.getByText("15 sesongkort totalt")).toBeTruthy();
 });
 
 test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {

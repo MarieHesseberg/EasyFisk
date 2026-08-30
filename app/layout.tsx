@@ -3,6 +3,7 @@ import "@/styles/foundations.css";
 import "@/styles/home-overview.css";
 import "@/styles/navigation-and-prototype.css";
 import "@/styles/map.css";
+import "@/styles/map-permits.css";
 import "@/styles/activity-and-history-cards.css";
 import "@/styles/forms-and-modals.css";
 import "@/styles/statistics-widgets.css";

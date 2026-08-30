@@ -154,6 +154,21 @@ Hvert produkt bør senere registreres med:
 - krav om rapporteringskort eller fangstrapport
 - kildekommentar og verifiseringsgrad
 
+## Valgt register for første kartprototype
+
+Kartprototypen prioriterer Holmegård og viser følgende daterte produktutvalg:
+
+- Sone 1: Båtkort for hele hovedsonen, inntil to stenger fra båt.
+- Sone 2, Holmegård: dagskort, to kort per fiskedøgn.
+- Sone 2, Holmegård: sesongkort, 15 kort totalt.
+- Sone 2, Holmegård: rapporteringskort for sesongkort som tilknyttet registrering, ikke kjøp.
+- Sone 3: døgnkort for hele hovedsonen, offentlig oppgitt pris 455 kr.
+- Sone 4: døgnkort for Lakseosen, to kort per døgn og offentlig oppgitt pris 600 kr.
+
+Holmegård-priser og sone 1-pris vises som «Pris ikke oppgitt». Utvalget representerer alle fire
+hovedsoner, en åpen hovedsone, begrensede delsoner, båtkort, døgnkort, sesongkort og obligatorisk
+rapporteringskort.
+
 ## Uavklarte opplysninger før prototypedata kan ferdigstilles
 
 Følgende skal ikke gjettes:
