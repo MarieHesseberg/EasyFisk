@@ -55,6 +55,26 @@
 .permit-shop-list > article > b {
   color: var(--color-primary);
 }
+.permit-availability {
+  display: block;
+  width: fit-content;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-compact);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 12px;
+}
+.permit-availability.low,
+.permit-availability.not-on-sale {
+  background: var(--color-warning-surface);
+  color: var(--color-warning-text);
+}
+.permit-availability.sold-out,
+.permit-availability.no-fishing-date {
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
+}
 .permit-shop-list article > div {
   display: grid;
   gap: var(--space-3);
@@ -79,4 +99,65 @@
 .permit-shop-disclaimer {
   color: var(--color-text-muted);
   font-size: 12px;
+}
+.permit-checkout {
+  display: grid;
+  gap: var(--space-6);
+}
+.permit-checkout > .back {
+  width: fit-content;
+}
+.permit-test-warning,
+.permit-payment-result {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-card);
+  background: var(--color-warning-surface);
+  color: var(--color-warning-text);
+}
+.permit-checkout article {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+.permit-checkout article h3 {
+  margin: var(--space-2) 0;
+}
+.permit-checkout fieldset {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.permit-checkout legend {
+  margin-bottom: var(--space-3);
+  font-weight: 800;
+}
+.permit-checkout label {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+.permit-checkout input {
+  width: 20px;
+  height: 20px;
+}
+.permit-payment-result.success {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.permit-payment-result.error {
+  border-color: var(--color-danger);
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
 }

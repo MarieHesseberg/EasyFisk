@@ -4,6 +4,19 @@ export type PrototypePermitType = "day" | "week" | "season" | "boat" | "reportin
 
 export type PrototypePermitAction = "purchase" | "register-reporting-day";
 
+export type PrototypePermitAvailabilityStatus =
+  | "available"
+  | "low"
+  | "sold-out"
+  | "not-on-sale"
+  | "no-fishing-date";
+
+export type PrototypePermitAvailability = {
+  status: PrototypePermitAvailabilityStatus;
+  label: string;
+  remainingUnits: number | null;
+};
+
 export type PrototypePermitValidity = {
   label: string;
   startsAt?: string;
@@ -44,6 +57,7 @@ export type PrototypePermitProduct = {
   title: string;
   type: PrototypePermitType;
   action: PrototypePermitAction;
+  availability: PrototypePermitAvailability;
   validity: PrototypePermitValidity;
   capacity: PrototypePermitCapacity;
   price: PrototypePermitPrice;

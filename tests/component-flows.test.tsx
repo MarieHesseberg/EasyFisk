@@ -21,6 +21,11 @@ import { createMemoryCatchImageRepository } from "../data/memory/create-memory-c
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
 import { permitCatalogRepository } from "../data/repositories/permit-catalog";
 import { PermitShop } from "../features/fishing-permits/permit-shop";
+import { PermitCheckout } from "../features/fishing-permits/permit-checkout";
+import { createTestPermitDocument } from "../features/fishing-permits/create-test-permit-document";
+import { operationSucceeded } from "../domain/shared/operation-result";
+import { isFishingDocument } from "../domain/documents/validate-document";
+import { getDocumentReadiness } from "../domain/documents/get-document-readiness";
 
 afterEach(cleanup);
 
@@ -248,6 +253,68 @@ test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", a
 
   await userEvent.setup().click(screen.getByRole("button", { name: "Sone 4" }));
   expect(screen.getByRole("heading", { name: "Lakseosen døgnkort" })).toBeTruthy();
+});
+
+test("produktregisteret dekker alle simulerte tilgjengelighetssituasjoner", () => {
+  const states = new Set(
+    permitCatalogRepository.listProducts().map((product) => product.availability.status),
+  );
+
+  expect(states).toEqual(
+    new Set(["available", "low", "sold-out", "not-on-sale", "no-fishing-date"]),
+  );
+});
+
+test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
+  const product = permitCatalogRepository.findProduct("zone-3-day");
+  if (!product) throw new Error("Testprodukt mangler");
+  const saved = [] as ReturnType<typeof createTestPermitDocument>[];
+
+  render(
+    <PermitCheckout
+      product={product}
+      back={() => undefined}
+      save={async (document) => {
+        saved.push(document);
+        return operationSucceeded(undefined);
+      }}
+    />,
+  );
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+
+  expect(saved).toHaveLength(1);
+  expect(isFishingDocument(saved[0])).toBe(true);
+  expect(getDocumentReadiness(saved).valid.permit).toBe(true);
+  expect(screen.getByRole("status").textContent).toContain("Betaling godkjent");
+  expect(screen.getByText(/overlever refresh/)).toBeTruthy();
+});
+
+test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
+  const product = permitCatalogRepository.findProduct("zone-3-day");
+  if (!product) throw new Error("Testprodukt mangler");
+  let saves = 0;
+  const user = userEvent.setup();
+
+  render(
+    <PermitCheckout
+      product={product}
+      back={() => undefined}
+      save={async () => {
+        saves += 1;
+        return operationSucceeded(undefined);
+      }}
+    />,
+  );
+
+  await user.click(screen.getByRole("radio", { name: "Betaling avbrutt" }));
+  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  expect(screen.getByRole("alert").textContent).toContain("Betalingen ble avbrutt");
+
+  await user.click(screen.getByRole("radio", { name: "Betaling feilet" }));
+  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
+  expect(saves).toBe(0);
 });
 
 test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
