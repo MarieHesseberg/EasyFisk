@@ -12,77 +12,21 @@ async function resetApp(page: Page) {
   await page.reload();
 }
 
-async function seedRequiredDocuments(page: Page) {
-  await page.evaluate(async () => {
-    const now = new Date();
-    const localInput = (date: Date) => {
-      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
-      return local.toISOString().slice(0, 16);
-    };
-    const year = new Intl.DateTimeFormat("nb-NO", {
-      year: "numeric",
-      timeZone: "Europe/Oslo",
-    }).format(now);
-    const records = [
-      {
-        id: "test-permit",
-        kind: "permit",
-        updatedAt: now.getTime(),
-        values: {
-          holder: "Testfisker",
-          issuer: "Testutsteder",
-          category: "Døgnkort",
-          area: "Mandalselva · Sone 3",
-          startsAt: localInput(new Date(now.getTime() - 60 * 60 * 1000)),
-          endsAt: localInput(new Date(now.getTime() + 24 * 60 * 60 * 1000)),
-        },
-      },
-      {
-        id: "test-disinfection",
-        kind: "disinfection",
-        updatedAt: now.getTime(),
-        values: {
-          holder: "Testfisker",
-          issuer: "Teststasjon",
-          performedAt: localInput(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-          equipment: "Stang, snelle og vadere",
-        },
-      },
-      {
-        id: "test-fee",
-        kind: "fee",
-        updatedAt: now.getTime(),
-        values: {
-          holder: "Testfisker",
-          year,
-          category: "Enkeltperson",
-          paidAt: `${year}-01-15`,
-        },
-      },
-    ];
-    await new Promise<void>((resolve, reject) => {
-      const request = indexedDB.open("easyfisk-documents", 1);
-      request.onupgradeneeded = () =>
-        request.result.createObjectStore("documents", { keyPath: "id" });
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => {
-        const transaction = request.result.transaction("documents", "readwrite");
-        records.forEach((record) => transaction.objectStore("documents").put(record));
-        transaction.oncomplete = () => {
-          request.result.close();
-          window.dispatchEvent(new Event("easyfisk-documents-changed"));
-          resolve();
-        };
-        transaction.onerror = () => reject(transaction.error);
-      };
-    });
-  });
-  await expect(page.getByRole("heading", { name: "Kontroller dokumentene" })).toBeVisible();
+async function selectAllOkayStatus(page: Page, startTest = true) {
+  await page.getByRole("button", { name: "Mer" }).click();
+  await page.getByRole("button", { name: /Statusmotor/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Statusmotor" });
+  await dialog.getByLabel("Situasjon").selectOption("ok");
+  if (startTest) {
+    await dialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+  } else {
+    await dialog.getByRole("button", { name: /Tilbake/ }).click();
+    await page.getByRole("button", { name: "Hjem" }).click();
+  }
 }
 
 async function startFishing(page: Page) {
-  await seedRequiredDocuments(page);
-  await page.getByRole("button", { name: "KONTROLLER OG START" }).click();
+  await selectAllOkayStatus(page);
   await page.getByRole("button", { name: "Jeg har kontrollert originalene · fortsett" }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByLabel("Hovedsone").selectOption("3");
@@ -198,13 +142,11 @@ test("hjemskjermen viser en rulleindikator som følger siden", async ({ page }) 
 });
 
 test("fiskestart blokkeres når nødvendig dokumentasjon mangler", async ({ page }) => {
-  await expect(page.getByRole("heading", { name: "Dokumentasjon mangler" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "All dokumentasjon mangler" })).toBeVisible();
   await page.getByRole("button", { name: "SE HVA SOM MANGLER" }).click();
   const dialog = page.getByRole("dialog", { name: "Start fiske" });
-  await expect(dialog.getByRole("heading", { name: "Dokumentasjon mangler" })).toBeVisible();
-  await expect(
-    dialog.getByRole("button", { name: "Lukk og registrer dokumentasjon" }),
-  ).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "All dokumentasjon mangler" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Se dokumentasjon" })).toBeVisible();
   await expect(dialog.getByRole("button", { name: "Fortsett til posisjon" })).toHaveCount(0);
 });
 
@@ -220,10 +162,13 @@ test("etterregistrering kan lukkes med X på mobil", async ({ page }) => {
 });
 
 test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
 
   const dialog = page.getByRole("dialog", { name: "Statusmotor" });
+  await expect(dialog.getByLabel("Situasjon")).toHaveValue("allMissing");
+  await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
   await dialog.getByLabel("Situasjon").selectOption("noPermit");
   await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
   await dialog.getByRole("button", { name: "Test valgt situasjon" }).click();
@@ -231,6 +176,20 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(startDialog.getByRole("heading", { name: "Du mangler fiskekort" })).toBeVisible();
   await expect(startDialog.getByRole("button", { name: "Registrer fiskekort" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(startDialog).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Mer" }).click();
+  await page.getByRole("button", { name: /Statusmotor/ }).click();
+  const readyDialog = page.getByRole("dialog", { name: "Statusmotor" });
+  await readyDialog.getByLabel("Situasjon").selectOption("ok");
+  await expect(readyDialog.getByRole("status")).toContainText("Oppstart tillatt");
+  await readyDialog.getByRole("button", { name: "Test valgt situasjon" }).click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Start fiske" })
+      .getByRole("button", { name: "Jeg har kontrollert originalene · fortsett" }),
+  ).toBeVisible();
 });
 
 test("start fiske går gjennom fire steg og aktiv økt overlever refresh", async ({ page }) => {
@@ -301,7 +260,7 @@ test("stopp økt med fangst fullfører rapporten før økten avsluttes", async (
   const summary = page.getByRole("dialog", { name: "Økt fullført" });
   await expect(summary.getByRole("heading", { name: "Takk for rapporteringen" })).toBeVisible();
   await summary.getByRole("button", { name: "Tilbake til oversikten" }).click();
-  await expect(page.getByRole("button", { name: "KONTROLLER OG START" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "START FISKE" })).toBeVisible();
   await expect(page.getByText("FISKEØKT PÅGÅR")).toHaveCount(0);
 });
 
@@ -358,8 +317,8 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
 });
 
 test("dialoger holder tastaturfokus og kan lukkes med Escape", async ({ page }) => {
-  await seedRequiredDocuments(page);
-  const trigger = page.getByRole("button", { name: "KONTROLLER OG START" });
+  await selectAllOkayStatus(page, false);
+  const trigger = page.getByRole("button", { name: "START FISKE" });
   await trigger.focus();
   await trigger.press("Enter");
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });

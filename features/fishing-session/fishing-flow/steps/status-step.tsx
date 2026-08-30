@@ -8,8 +8,7 @@ import { appContentRepository } from "@/data/repositories/app-content";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { ZoneId } from "@/domain/zones/zone";
-import { useDocuments } from "@/features/documents/use-documents";
-import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
+import { getStatusEngineDocumentReadiness } from "@/domain/fishing-rules/get-status-engine-document-readiness";
 
 export function StatusStep({
   cancel,
@@ -29,30 +28,20 @@ export function StatusStep({
   const { temperature } = activeFishingRules;
   const { riverStatus } = appContentRepository.getContent();
   const zoneName = fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
-  const documentStore = useDocuments();
-  const documentReadiness = getDocumentReadiness(documentStore.documents);
-  const documentsBlocked =
-    documentStore.loading || Boolean(documentStore.error) || !documentReadiness.complete;
+  const documentReadiness = getStatusEngineDocumentReadiness(demoStatus);
+  const documentsBlocked = !documentReadiness.complete;
   const blocked = scenario.level === "blocked" || documentsBlocked;
   const title =
     scenario.level === "blocked"
       ? scenario.title
       : documentsBlocked
-        ? documentStore.loading
-          ? "Kontrollerer dokumentasjon"
-          : documentStore.error
-            ? "Dokumentstatus er utilgjengelig"
-            : "Dokumentasjon mangler"
+        ? "Dokumentasjon mangler"
         : scenario.title;
   const text =
     scenario.level === "blocked"
       ? scenario.detail
       : documentsBlocked
-        ? documentStore.loading
-          ? "Venter på den lokale dokumentmappen."
-          : documentStore.error
-            ? "Dokumentene kunne ikke leses. Avbryt og prøv igjen."
-            : `Registrer ${documentReadiness.missingLabels.join(", ")} før du starter.`
+        ? `Statusmotoren har satt ${documentReadiness.missingLabels.join(", ")} som manglende.`
         : `${scenario.detail} Egenregistrerte dokumenter må fortsatt kunne fremvises i original.`;
   const effectiveLevel = blocked ? "blocked" : scenario.level === "ok" ? "warning" : scenario.level;
 
@@ -148,7 +137,7 @@ export function StatusStep({
             className="primary blocked-action"
             onClick={scenario.level === "blocked" ? resolveBlock : cancel}
           >
-            {scenario.level === "blocked" ? scenario.action : "Lukk og registrer dokumentasjon"}
+            {scenario.action ?? "Lukk og registrer dokumentasjon"}
           </button>
           <button className="secondary" onClick={cancel}>
             Avbryt oppstart

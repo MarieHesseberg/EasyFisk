@@ -5,8 +5,16 @@ const { temperature } = activeFishingRules;
 
 export const demoStatuses: DemoScenario[] = [
   {
+    id: "allMissing",
+    label: "All dokumentasjon mangler",
+    title: "All dokumentasjon mangler",
+    detail: "Fiskekort, desinfisering og statlig fiskeravgift er satt som manglende.",
+    level: "blocked",
+    action: "Se dokumentasjon",
+  },
+  {
     id: "ok",
-    label: "Alt er i orden",
+    label: "Alt er i orden (oppstart tillatt)",
     title: "Du er klar til å fiske",
     detail: "Alle krav er kontrollert. Du kan fortsette til sonevalg.",
     level: "ok",

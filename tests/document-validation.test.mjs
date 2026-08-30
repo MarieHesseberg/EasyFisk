@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { attachmentError, validateDocument } from "../domain/documents/validate-document.ts";
 import { getDocumentReadiness } from "../domain/documents/get-document-readiness.ts";
+import { getStatusEngineDocumentReadiness } from "../domain/fishing-rules/get-status-engine-document-readiness.ts";
 
 test("fiskekort krever riktig tidsrekkefølge", () => {
   assert.equal(
@@ -67,4 +68,18 @@ test("fiskestart krever gyldige dokumenter av alle tre typer", () => {
     now,
   );
   assert.equal(complete.complete, true);
+});
+
+test("statusmotoren kan simulere alle, enkelte eller ingen manglende dokumenter", () => {
+  assert.deepEqual(getStatusEngineDocumentReadiness("allMissing").valid, {
+    permit: false,
+    disinfection: false,
+    fee: false,
+  });
+  assert.deepEqual(getStatusEngineDocumentReadiness("noFee").valid, {
+    permit: true,
+    disinfection: true,
+    fee: false,
+  });
+  assert.equal(getStatusEngineDocumentReadiness("ok").complete, true);
 });

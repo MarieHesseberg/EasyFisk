@@ -1,4 +1,5 @@
 export type DemoStatus =
+  | "allMissing"
   | "ok"
   | "noPermit"
   | "wrongZone"

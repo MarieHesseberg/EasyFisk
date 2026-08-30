@@ -9,7 +9,7 @@ import type { ZoneId } from "@/domain/zones/zone";
 export function useAppNavigationController() {
   const [screen, setScreen] = useState<Screen>("home");
   const [flow, setFlow] = useState<FlowMode | null>(null);
-  const [demoStatus, setDemoStatus] = useState<DemoStatus>("ok");
+  const [demoStatus, setDemoStatus] = useState<DemoStatus>("allMissing");
   const [globalDetail, setGlobalDetail] = useState<DetailDestination | null>(null);
   const [zone, setZone] = useState<ZoneId>(3);
   const [statsMineRequested, setStatsMineRequested] = useState(false);

@@ -33,7 +33,8 @@ export function StatusEngineSettingsDialog({
       <h2 id="status-engine-title">Statusmotor</h2>
       <p className="detail-lead">
         Velg situasjonen prototypen skal bruke. Statusen påvirker kontrollene på hjemskjermen og om
-        en fiskeøkt kan startes.
+        en fiskeøkt kan startes. Valget overstyrer lokalt registrerte dokumenter mens situasjonen
+        testes; dokumentene slettes ikke.
       </p>
       <section className="status-engine-settings">
         <StatusEngineControl

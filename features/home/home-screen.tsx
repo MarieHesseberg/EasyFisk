@@ -10,8 +10,6 @@ import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
-import { useDocuments } from "@/features/documents/use-documents";
-import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 
 export function HomeScreen({
   onStart,
@@ -42,8 +40,6 @@ export function HomeScreen({
 }) {
   const { riverStatus } = appContentRepository.getContent();
   const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
-  const documentStore = useDocuments();
-  const documentReadiness = getDocumentReadiness(documentStore.documents);
   const { catchSize, metadata, quota, temperature } = activeFishingRules;
   return (
     <div className="screen">
@@ -53,9 +49,6 @@ export function HomeScreen({
         elapsed={elapsed}
         startTime={startTime}
         scenario={scenario}
-        documentReadiness={documentReadiness}
-        documentsLoading={documentStore.loading}
-        documentsError={Boolean(documentStore.error)}
         zone={riverStatus.currentZoneShortName}
         openFlow={onStart}
       />

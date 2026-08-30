@@ -12,7 +12,7 @@ export function RulesScreen({
   demoStatus: DemoStatus;
   onRegisterPermit: () => void;
 }) {
-  const missing = demoStatus === "noPermit";
+  const missing = demoStatus === "noPermit" || demoStatus === "allMissing";
   const { metadata, quota, reporting, season } = activeFishingRules;
   const { riverStatus } = appContentRepository.getContent();
   const personalZone =
