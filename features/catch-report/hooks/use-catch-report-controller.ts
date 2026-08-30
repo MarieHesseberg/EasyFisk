@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
-import type { OperationResult } from "@/domain/shared/operation-result";
+import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { useFormSubmission } from "@/hooks/use-form-submission";
 import { useFormFields } from "@/hooks/use-form-fields";
 import { useImageSelection } from "@/hooks/use-image-selection";
@@ -19,7 +19,7 @@ export function useCatchReportController({
   activeZone: string;
   catches: CatchRecord[];
   caughtAt: number;
-  onCatch: (record: CatchRecord) => OperationResult<unknown>;
+  onCatch: (record: CatchRecord) => AsyncOperationResult<unknown>;
   sessionStart: number;
 }) {
   const [step, setStep] = useState(1);

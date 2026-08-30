@@ -7,7 +7,7 @@ import { isReportLate } from "@/domain/catches/reporting-deadline";
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
-import type { OperationResult } from "@/domain/shared/operation-result";
+import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import type { ZoneId } from "@/domain/zones/zone";
 import { getNorwegianCalendarDate, getQuotaStatus } from "@/domain/quotas/get-quota-status";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
@@ -22,7 +22,7 @@ export function usePastSessionController({
   onSave,
 }: {
   existingCatches: CatchRecord[];
-  onSave: (record: SessionRecord, catches?: CatchRecord[]) => OperationResult<unknown>;
+  onSave: (record: SessionRecord, catches?: CatchRecord[]) => AsyncOperationResult<unknown>;
 }) {
   const zones = fishingContentRepository.getZones();
   const [openedAt] = useState(() => Date.now());

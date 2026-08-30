@@ -22,7 +22,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   const { demoStatus, flow, zone } = navigation.state;
   const { active, finishAfterCatch, sessionZone, startTime } = session.state;
 
-  function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId) {
+  async function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId) {
     if (flow === "start") {
       const selected = selectedZone ?? zone;
       const result = session.actions.start(selected);
@@ -50,7 +50,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         findZoneName(sessionZone, fishingContentRepository.getZones()),
         "Nullfangst registrert",
       );
-      const result = log.actions.saveCompletedSession(completed, [], true);
+      const result = await log.actions.saveCompletedSession(completed, [], true);
       if (!result.ok) {
         showToast(result.error);
         return;
@@ -64,7 +64,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     navigation.actions.setScreen("home");
   }
 
-  function addCatch(record: CatchRecord) {
+  async function addCatch(record: CatchRecord) {
     if (finishAfterCatch) {
       const end = Date.now();
       const completedSession = createSessionRecord(
@@ -73,7 +73,11 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         record.zone,
         `1 ${record.species.toLowerCase()} · ${record.result.toLowerCase()}`,
       );
-      const completedResult = log.actions.saveCompletedSession(completedSession, [record], true);
+      const completedResult = await log.actions.saveCompletedSession(
+        completedSession,
+        [record],
+        true,
+      );
       if (!completedResult.ok) {
         showToast(completedResult.error);
         return completedResult;
@@ -83,7 +87,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       return completedResult;
     }
 
-    const savedResult = log.actions.saveCatch(record);
+    const savedResult = await log.actions.saveCatch(record);
     if (!savedResult.ok) {
       showToast(savedResult.error);
       return savedResult;
@@ -92,8 +96,8 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     return savedResult;
   }
 
-  function addPastSession(record: SessionRecord, records?: CatchRecord[]) {
-    const result = log.actions.savePastSession(record, records);
+  async function addPastSession(record: SessionRecord, records?: CatchRecord[]) {
+    const result = await log.actions.savePastSession(record, records);
     showToast(result.ok ? "Tidligere fisketur er registrert" : result.error);
     return result;
   }

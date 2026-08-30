@@ -42,6 +42,7 @@ function isCatchRecord(value: unknown): value is CatchRecord {
     typeof value.violation === "boolean" &&
     typeof value.late === "boolean" &&
     isOptionalString(value.imageName) &&
+    isOptionalString(value.imageId) &&
     isOptionalString(value.imageData) &&
     isOptionalString(value.comment) &&
     isOptionalString(value.correction)

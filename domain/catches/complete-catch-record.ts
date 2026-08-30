@@ -5,6 +5,7 @@ export function completeCatchRecord(record: CatchRecord, id: string, submittedAt
   return {
     ...record,
     id,
+    imageId: record.imageData ? id : record.imageId,
     submittedAt,
     late: isReportLate(record.caughtAt, submittedAt),
   };

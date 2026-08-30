@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { CatchRecord } from "@/domain/catches/catch";
-import type { OperationResult } from "@/domain/shared/operation-result";
+import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { useCatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { CatchConfirmationStep } from "@/features/catch-report/steps/catch-confirmation-step";
 import { CatchDetailsStep } from "@/features/catch-report/steps/catch-details-step";
@@ -25,7 +25,7 @@ export function CatchReportModal({
   activeZone: string;
   catches: CatchRecord[];
   finishAfterCatch: boolean;
-  onCatch: (record: CatchRecord) => OperationResult<unknown>;
+  onCatch: (record: CatchRecord) => AsyncOperationResult<unknown>;
   onCatchFlowComplete: () => void;
   onClose: () => void;
   requestedCatchTime: number;

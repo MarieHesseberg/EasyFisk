@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "vitest";
-import { act, cleanup, render, renderHook, screen } from "@testing-library/react";
+import { act, cleanup, render, renderHook, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BottomNavigation } from "../components/layout/bottom-navigation";
 import { CheckRow } from "../components/ui/check-row";
@@ -15,6 +15,9 @@ import { SessionHistoryList } from "../features/fishing-session/components/sessi
 import { usePreferencesController } from "../features/profile/hooks/use-preferences-controller";
 import { PersonalStatisticsPanel } from "../features/statistics/personal-statistics-panel";
 import { calculatePersonalStatistics } from "../domain/statistics/calculate-personal-statistics";
+import { useFishingLogController } from "../application/easy-fisk/use-fishing-log-controller";
+import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
+import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
 
 afterEach(cleanup);
 
@@ -224,20 +227,20 @@ test("profildialog kan lukkes med Escape", async () => {
   expect(closed).toBe(true);
 });
 
-test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", () => {
+test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", async () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
   act(() => {
     result.current.actions.setFlow("start");
   });
-  act(() => {
-    result.current.actions.finishSessionFlow(undefined, 4);
+  await act(async () => {
+    await result.current.actions.finishSessionFlow(undefined, 4);
   });
   expect(result.current.state.active).toBe(true);
   expect(result.current.state.sessionZone).toBe(4);
 
-  act(() => {
-    result.current.actions.addCatch({
+  await act(async () => {
+    await result.current.actions.addCatch({
       id: "pending",
       caughtAt: Date.now(),
       submittedAt: 0,
@@ -261,14 +264,14 @@ test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", () => {
   act(() => {
     result.current.actions.setFlow("stop");
   });
-  act(() => {
-    result.current.actions.finishSessionFlow(false);
+  await act(async () => {
+    await result.current.actions.finishSessionFlow(false);
   });
   expect(result.current.state.active).toBe(false);
   expect(result.current.state.lastSession?.result).toBe("Nullfangst registrert");
 });
 
-test("tidligere økt og fangst kan etterregistreres", () => {
+test("tidligere økt og fangst kan etterregistreres", async () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
   const session = {
@@ -292,15 +295,15 @@ test("tidligere økt og fangst kan etterregistreres", () => {
     violation: false,
     late: true,
   };
-  act(() => {
-    result.current.actions.addPastSession(session, [catchRecord]);
+  await act(async () => {
+    await result.current.actions.addPastSession(session, [catchRecord]);
   });
   expect(result.current.state.lastSession).toEqual(session);
   expect(result.current.state.sessions).toEqual([session]);
   expect(result.current.state.catches).toHaveLength(1);
 });
 
-test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", () => {
+test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", async () => {
   const memoryRepository = createMemoryFishingLogRepository();
   const repository = {
     ...memoryRepository,
@@ -309,9 +312,9 @@ test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", () => 
   const { result } = renderHook(() => useEasyFiskController(repository));
 
   act(() => result.current.actions.setFlow("start"));
-  act(() => result.current.actions.finishSessionFlow(undefined, 3));
+  await act(async () => void (await result.current.actions.finishSessionFlow(undefined, 3)));
   act(() => result.current.actions.setFlow("stop"));
-  act(() => result.current.actions.finishSessionFlow(false));
+  await act(async () => void (await result.current.actions.finishSessionFlow(false)));
 
   expect(result.current.state.active).toBe(true);
   expect(result.current.state.lastSession).toBe(null);
@@ -319,7 +322,7 @@ test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", () => 
   expect(result.current.state.toast).toBe("Kunne ikke lagre fiskedata på enheten.");
 });
 
-test("mislykket fangstlagring returneres til fangstskjemaet", () => {
+test("mislykket fangstlagring returneres til fangstskjemaet", async () => {
   const memoryRepository = createMemoryFishingLogRepository();
   const repository = {
     ...memoryRepository,
@@ -327,9 +330,9 @@ test("mislykket fangstlagring returneres til fangstskjemaet", () => {
   };
   const { result } = renderHook(() => useEasyFiskController(repository));
 
-  let saveResult: ReturnType<typeof result.current.actions.addCatch> | undefined;
-  act(() => {
-    saveResult = result.current.actions.addCatch({
+  let saveResult: Awaited<ReturnType<typeof result.current.actions.addCatch>> | undefined;
+  await act(async () => {
+    saveResult = await result.current.actions.addCatch({
       id: "pending",
       caughtAt: Date.now(),
       submittedAt: 0,
@@ -348,7 +351,7 @@ test("mislykket fangstlagring returneres til fangstskjemaet", () => {
   expect(result.current.state.catches).toHaveLength(0);
 });
 
-test("mislykket etterregistrering returneres til skjemaet", () => {
+test("mislykket etterregistrering returneres til skjemaet", async () => {
   const memoryRepository = createMemoryFishingLogRepository();
   const repository = {
     ...memoryRepository,
@@ -356,9 +359,9 @@ test("mislykket etterregistrering returneres til skjemaet", () => {
   };
   const { result } = renderHook(() => useEasyFiskController(repository));
 
-  let saveResult: ReturnType<typeof result.current.actions.addPastSession> | undefined;
-  act(() => {
-    saveResult = result.current.actions.addPastSession({
+  let saveResult: Awaited<ReturnType<typeof result.current.actions.addPastSession>> | undefined;
+  await act(async () => {
+    saveResult = await result.current.actions.addPastSession({
       id: "EF-OKT-1000-4000",
       start: 1_000,
       end: 4_000,
@@ -370,4 +373,45 @@ test("mislykket etterregistrering returneres til skjemaet", () => {
 
   expect(saveResult).toEqual({ ok: false, error: "Kunne ikke lagre fisketuren." });
   expect(result.current.state.lastSession).toBe(null);
+});
+
+test("fangstbilde hentes tilbake fra bildelager etter ny controller", async () => {
+  const values = new Map<string, string>();
+  const storage = {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => values.set(key, value),
+  };
+  const fishingLog = createLocalStorageFishingLogRepository(storage);
+  const images = createMemoryCatchImageRepository();
+  const first = renderHook(() => useFishingLogController(fishingLog, images));
+
+  await act(async () => {
+    await first.result.current.actions.saveCatch({
+      id: "pending",
+      caughtAt: Date.now(),
+      submittedAt: 0,
+      sessionStart: Date.now(),
+      species: "Laks",
+      result: "Gjenutsatt",
+      length: 55,
+      weight: 2,
+      zone: "Sone 3",
+      violation: false,
+      late: false,
+      imageName: "fangst.jpg",
+      imageData: "data:image/jpeg;base64,ZmFuZ3N0",
+    });
+  });
+  const storedId = first.result.current.state.catches[0].id;
+  first.unmount();
+
+  const second = renderHook(() => useFishingLogController(fishingLog, images));
+  await waitFor(() => expect(second.result.current.state.catches).toHaveLength(1));
+  await waitFor(() =>
+    expect(second.result.current.state.catches[0].imageData).toBe(
+      "data:image/jpeg;base64,ZmFuZ3N0",
+    ),
+  );
+
+  expect(second.result.current.state.catches[0].id).toBe(storedId);
 });

@@ -17,6 +17,7 @@ export type CatchRecord = {
   violation: boolean;
   late: boolean;
   imageName?: string;
+  imageId?: string;
   imageData?: string;
   comment?: string;
   correction?: string;

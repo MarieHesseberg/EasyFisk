@@ -2,7 +2,7 @@
 
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
-import type { OperationResult } from "@/domain/shared/operation-result";
+import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
 import { usePastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { CatchDetailsStep } from "@/features/history/past-session/catch-details-step";
@@ -17,7 +17,7 @@ export function PastSessionForm({
   existingCatches,
 }: {
   onClose: () => void;
-  onSave: (record: SessionRecord, catches?: CatchRecord[]) => OperationResult<unknown>;
+  onSave: (record: SessionRecord, catches?: CatchRecord[]) => AsyncOperationResult<unknown>;
   existingCatches: CatchRecord[];
 }) {
   const controller = usePastSessionController({ existingCatches, onSave });

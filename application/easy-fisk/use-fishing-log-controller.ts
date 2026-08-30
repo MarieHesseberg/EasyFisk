@@ -7,8 +7,13 @@ import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
 import { logger } from "@/lib/logger";
+import type { CatchImageRepository } from "@/data/contracts/catch-image-repository";
+import { catchImageRepository } from "@/data/repositories/catch-images";
 
-export function useFishingLogController(repository: FishingLogRepository) {
+export function useFishingLogController(
+  repository: FishingLogRepository,
+  imageRepository: CatchImageRepository = catchImageRepository,
+) {
   const [catches, setCatches] = useState<CatchRecord[]>([]);
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
 
@@ -16,19 +21,33 @@ export function useFishingLogController(repository: FishingLogRepository) {
     let isMounted = true;
     queueMicrotask(() => {
       if (!isMounted) return;
-      setCatches(repository.listCatches());
+      const storedCatches = repository.listCatches();
+      setCatches(storedCatches);
       setSessions(repository.listSessions());
+      void hydrateCatchImages(storedCatches, imageRepository).then((hydrated) => {
+        if (!isMounted) return;
+        const hydratedById = new Map(hydrated.map((record) => [record.id, record]));
+        setCatches((current) =>
+          current.map((record) => {
+            const stored = hydratedById.get(record.id);
+            return stored?.imageData ? { ...record, imageData: stored.imageData } : record;
+          }),
+        );
+      });
     });
     return () => {
       isMounted = false;
     };
-  }, [repository]);
+  }, [imageRepository, repository]);
 
-  function saveCatch(record: CatchRecord) {
+  async function saveCatch(record: CatchRecord) {
     const submittedAt = Date.now();
     const completed = completeCatchRecord(record, `ME-${submittedAt}`, submittedAt);
+    const imageResult = await saveCatchImages([completed], imageRepository);
+    if (!imageResult.ok) return imageResult;
     const result = repository.saveCatch(completed);
     if (!result.ok) {
+      await removeCatchImages(imageResult.value, imageRepository);
       logger.error(result.error, { cause: result.cause });
       return operationFailed(result.error, result.cause);
     }
@@ -36,11 +55,11 @@ export function useFishingLogController(repository: FishingLogRepository) {
     return operationSucceeded(completed);
   }
 
-  function savePastSession(session: SessionRecord, records: CatchRecord[] = []) {
+  async function savePastSession(session: SessionRecord, records: CatchRecord[] = []) {
     return saveCompletedSession(session, records, false);
   }
 
-  function saveCompletedSession(
+  async function saveCompletedSession(
     session: SessionRecord,
     records: CatchRecord[] = [],
     clearActiveSession = true,
@@ -53,8 +72,11 @@ export function useFishingLogController(repository: FishingLogRepository) {
         submittedAt,
       ),
     );
+    const imageResult = await saveCatchImages(completed, imageRepository);
+    if (!imageResult.ok) return imageResult;
     const result = repository.saveCompletedSession(session, completed, clearActiveSession);
     if (!result.ok) {
+      await removeCatchImages(imageResult.value, imageRepository);
       logger.error(result.error, { cause: result.cause });
       return operationFailed(result.error, result.cause);
     }
@@ -79,4 +101,35 @@ export function useFishingLogController(repository: FishingLogRepository) {
     state: { catches, lastSession: sessions[0] ?? null, sessions },
     actions: { correctCatch, saveCatch, saveCompletedSession, savePastSession },
   };
+}
+
+async function hydrateCatchImages(
+  catches: CatchRecord[],
+  repository: CatchImageRepository,
+): Promise<CatchRecord[]> {
+  return Promise.all(
+    catches.map(async (record) => {
+      if (!record.imageId) return record;
+      const result = await repository.get(record.imageId);
+      return result.ok && result.value ? { ...record, imageData: result.value } : record;
+    }),
+  );
+}
+
+async function saveCatchImages(records: CatchRecord[], repository: CatchImageRepository) {
+  const savedIds: string[] = [];
+  for (const record of records) {
+    if (!record.imageId || !record.imageData) continue;
+    const result = await repository.save(record.imageId, record.imageData);
+    if (!result.ok) {
+      await removeCatchImages(savedIds, repository);
+      return result;
+    }
+    savedIds.push(record.imageId);
+  }
+  return operationSucceeded(savedIds);
+}
+
+async function removeCatchImages(ids: string[], repository: CatchImageRepository) {
+  await Promise.all(ids.map((id) => repository.remove(id)));
 }

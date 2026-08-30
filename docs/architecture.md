@@ -126,6 +126,11 @@ lagrer økter og fangster. Den aktive
 minneimplementasjonen brukes i tester, mens nettleserprototypen bruker `localStorage`. Begge kan
 senere erstattes med en databaseadapter uten å endre skjermene eller domenereglene.
 
+Store vedlegg lagres ikke i `localStorage`. `CatchImageRepository` lagrer fangstbilder i IndexedDB
+med fangst-ID som nøkkel, mens fangstposten bare beholder `imageId` og filnavn. Dokumentvedlegg
+bruker tilsvarende IndexedDB-lagring. Applikasjonslaget henter bildene inn i visningsmodellen etter
+refresh og rydder opp dersom lagring av resten av fangstrapporten feiler.
+
 Dette gjør at brukergrensesnitt og domenelogikk kan testes uten database, og at leverandør kan byttes uten å skrive om skjermene.
 
 ## Tilstand
