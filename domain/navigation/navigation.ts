@@ -7,5 +7,4 @@ export type DetailDestination =
   | "notifications"
   | "feedback"
   | "control-card"
-  | "favorite-zones"
   | "profile-privacy";

@@ -42,18 +42,6 @@ export function usePreferencesController(
   return {
     error,
     preferences,
-    addFavorite: (zone: string) =>
-      update((current) => ({
-        ...current,
-        favoriteZones: current.favoriteZones.includes(zone)
-          ? current.favoriteZones
-          : [...current.favoriteZones, zone],
-      })),
-    removeFavorite: (zone: string) =>
-      update((current) => ({
-        ...current,
-        favoriteZones: current.favoriteZones.filter((favorite) => favorite !== zone),
-      })),
     setNotification: (id: NotificationPreference, enabled: boolean) =>
       update((current) => ({
         ...current,

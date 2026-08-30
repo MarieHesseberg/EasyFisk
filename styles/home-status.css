@@ -31,14 +31,3 @@
   background: var(--color-warning-surface);
   color: var(--color-warning-text);
 }
-.notice.error {
-  background: var(--color-danger-surface);
-  color: var(--color-danger-dark);
-}
-.notice.error .notice-icon {
-  color: var(--color-danger-text);
-}
-.notice.error p,
-.notice.error small {
-  color: var(--color-danger-dark);
-}

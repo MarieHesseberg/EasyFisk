@@ -109,8 +109,6 @@ export function parseStoredFishingLog(value: unknown): StoredFishingLog | null {
 export function parseStoredPreferences(value: unknown): StoredPreferences | null {
   if (!isObject(value) || value.version !== 1 || !isObject(value.preferences)) return null;
   const preferences = value.preferences;
-  if (!Array.isArray(preferences.favoriteZones)) return null;
-  if (!preferences.favoriteZones.every((zone) => typeof zone === "string")) return null;
   if (!isObject(preferences.notifications)) return null;
   const notifications = preferences.notifications;
   if (
@@ -127,7 +125,6 @@ export function parseStoredPreferences(value: unknown): StoredPreferences | null
   return {
     version: 1,
     preferences: {
-      favoriteZones: preferences.favoriteZones,
       notifications: {
         emergencyClosure: notifications.emergencyClosure,
         highTemperature: notifications.highTemperature,

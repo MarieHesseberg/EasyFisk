@@ -7,6 +7,5 @@ export const detailTitles: Record<DetailDestination, string> = {
   notifications: "Varsler og stengninger",
   feedback: "Tilbakemelding",
   "control-card": "Kontrollkort",
-  "favorite-zones": "Favorittsoner",
   "profile-privacy": "Profil og personvern",
 };

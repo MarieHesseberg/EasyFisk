@@ -3,7 +3,6 @@ import { Icon } from "@/components/ui/icon";
 import { HomeSessionCard } from "@/features/home/components/home-session-card";
 import { RequirementsOverview } from "@/features/home/components/requirements-overview";
 import { HomeShortcuts } from "@/features/home/components/home-shortcuts";
-import { RiverEnvironmentCard } from "@/features/home/components/river-environment-card";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { appContentRepository } from "@/data/repositories/app-content";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
@@ -40,7 +39,7 @@ export function HomeScreen({
 }) {
   const { riverStatus } = appContentRepository.getContent();
   const scenario = findDemoStatus(demoStatus, fishingContentRepository.getDemoScenarios());
-  const { catchSize, metadata, quota, temperature } = activeFishingRules;
+  const { catchSize, metadata, quota } = activeFishingRules;
   return (
     <div className="screen">
       <ScreenHeader title="Din fiskeoversikt" />
@@ -79,15 +78,6 @@ export function HomeScreen({
         </div>
         <Icon name="chevron" size={18} />
       </button>
-      <RiverEnvironmentCard
-        demoStatus={demoStatus}
-        station={riverStatus.measurementStation}
-        temperature={riverStatus.temperatureCelsius}
-        measuredHotTemperature={temperature.demoMeasuredCelsius}
-        closureTemperature={temperature.closureThresholdCelsius}
-        flow={riverStatus.flowCubicMetersPerSecond}
-        zone={riverStatus.currentZoneShortName}
-      />
       <HomeShortcuts openMap={onMapShortcut} openRules={onRules} />
       <section className="info-card">
         <small>REGLER OPPDATERT {metadata.versionLabel.toUpperCase()}</small>

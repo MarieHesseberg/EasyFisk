@@ -11,9 +11,6 @@ export type AppContent = {
     alternatePermitZoneShortName: string;
     permitExpiry: string;
     disinfectionSummary: string;
-    temperatureCelsius: number;
-    flowCubicMetersPerSecond: number;
-    measurementStation: string;
   };
   headerAlerts: readonly { icon: string; message: string }[];
   statistics: {
@@ -48,8 +45,6 @@ export type AppContent = {
       otherRivers: string;
     };
     disinfectionStations: readonly { title: string; description: string }[];
-    favoriteSuggestion: string;
-    favoriteZoneDescriptions: readonly string[];
     notificationStatus: string;
     notificationOptions: readonly {
       id: NotificationPreference;

@@ -218,7 +218,6 @@ test("ugyldige innstillingstyper erstattes med sikre standardverdier", () => {
     JSON.stringify({
       version: 1,
       preferences: {
-        favoriteZones: [3],
         notifications: { highTemperature: "ja" },
         positionSuggestions: "ja",
         shareAnonymousData: null,
@@ -229,7 +228,6 @@ test("ugyldige innstillingstyper erstattes med sikre standardverdier", () => {
   const preferences = createLocalStoragePreferencesRepository(storage).getPreferences();
   assert.equal(preferences.positionSuggestions, true);
   assert.equal(preferences.notifications.highTemperature, true);
-  assert.equal(typeof preferences.favoriteZones[0], "string");
 });
 
 test("profilinnstillinger beholdes etter ny repository-instans", () => {
@@ -237,11 +235,9 @@ test("profilinnstillinger beholdes etter ny repository-instans", () => {
   const repository = createLocalStoragePreferencesRepository(storage);
   const preferences = repository.getPreferences();
   preferences.notifications.highTemperature = false;
-  preferences.favoriteZones = ["Sone 4 · Laudal–Bjelland"];
   repository.savePreferences(preferences);
 
   const reloaded = createLocalStoragePreferencesRepository(storage).getPreferences();
 
   assert.equal(reloaded.notifications.highTemperature, false);
-  assert.deepEqual(reloaded.favoriteZones, ["Sone 4 · Laudal–Bjelland"]);
 });

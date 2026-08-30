@@ -4,7 +4,6 @@ import { CheckRow } from "@/components/ui/check-row";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
-import { appContentRepository } from "@/data/repositories/app-content";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { ZoneId } from "@/domain/zones/zone";
@@ -26,7 +25,6 @@ export function StatusStep({
   selectedZone: ZoneId;
 }) {
   const { temperature } = activeFishingRules;
-  const { riverStatus } = appContentRepository.getContent();
   const zoneName = fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
   const documentReadiness = getStatusEngineDocumentReadiness(demoStatus);
   const documentsBlocked = !documentReadiness.complete;
@@ -125,7 +123,7 @@ export function StatusStep({
               ? `${String(temperature.demoMeasuredCelsius).replace(".", ",")} °C · fisket er stanset`
               : demoStatus === "closed"
                 ? "Aktivt stengningsvarsel"
-                : `Eksempeldata: ${riverStatus.temperatureCelsius} °C · kontroller dagsstatus`
+                : "Ingen temperaturstengning i valgt testsituasjon"
           }
           state={["hotWater", "closed"].includes(demoStatus) ? "error" : "ok"}
         />

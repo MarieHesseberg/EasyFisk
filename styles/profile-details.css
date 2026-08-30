@@ -37,8 +37,7 @@
 }
 .detail-data,
 .detail-list,
-.toggle-list,
-.favorite-list {
+.toggle-list {
   background: var(--color-surface);
   border-radius: var(--radius-card-large);
   padding: 3px 13px;
@@ -130,47 +129,6 @@
   width: 34px;
   height: 18px;
   accent-color: var(--color-primary);
-}
-.favorite-list > div {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--color-border-subtle);
-}
-.favorite-list > div:last-child {
-  border: 0;
-}
-.favorite-number {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  background: var(--color-primary-surface);
-  color: var(--color-primary);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-}
-.favorite-list p {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space-1);
-  margin: 0;
-}
-.favorite-list b {
-  font-size: 10px;
-}
-.favorite-list small {
-  font-size: 8px;
-  color: var(--color-text-muted);
-}
-.favorite-list button {
-  border: 0;
-  background: transparent;
-  color: var(--color-danger-deep);
-  font-size: 8px;
-  font-weight: 700;
 }
 .profile-detail {
   display: flex;

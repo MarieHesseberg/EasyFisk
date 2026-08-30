@@ -190,7 +190,6 @@ test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {
 test("feil ved lagring av innstillinger blir tilgjengelig for brukergrensesnittet", () => {
   const repository = {
     getPreferences: () => ({
-      favoriteZones: [],
       notifications: {
         emergencyClosure: true,
         highTemperature: true,

@@ -13,7 +13,7 @@ export const mockAppContent: AppContent = {
     "Regler tilpasset sesong, sone og fangst",
     "Varsler om temperatur, stengninger og rapporteringsfrist",
     "Eksempel på aggregert fangst- og innsatsstatistikk",
-    "Kontrollkort for oppsyn, favorittsoner og tilbakemeldinger",
+    "Kontrollkort for oppsyn og tilbakemeldinger",
   ],
   riverStatus: {
     currentZoneName: "Sone 3 · Øyslebø–Laudal",
@@ -22,9 +22,6 @@ export const mockAppContent: AppContent = {
     alternatePermitZoneShortName: "Sone 2",
     permitExpiry: "17:59",
     disinfectionSummary: "Gyldig 20 dager · ingen andre vassdrag",
-    temperatureCelsius: 11,
-    flowCubicMetersPerSecond: 18,
-    measurementStation: "Kjølemo",
   },
   headerAlerts: [
     { icon: "bell", message: currentNotice.title },
@@ -95,11 +92,6 @@ export const mockAppContent: AppContent = {
       { title: "Sandnes Camping", description: "Mandal" },
       { title: "Desinfisering ved fiskesonene", description: "Fuskeland" },
     ],
-    favoriteSuggestion: "Sone 4",
-    favoriteZoneDescriptions: [
-      "Eksempel · fiskekort registrert",
-      "Eksempel · delsone med eget fiskekort",
-    ],
     notificationStatus:
       "Ingen direktekobling til elvas varslingssystem. Kontroller alltid dagsaktuelle meldinger hos Mandalselva Elveeigarlag.",
     notificationOptions: [
@@ -142,12 +134,6 @@ export const mockAppContent: AppContent = {
         icon: "bell",
         title: "Varsler og stengninger",
         description: "Regelendringer, temperatur og frister",
-      },
-      {
-        destination: "favorite-zones",
-        icon: "map",
-        title: "Favorittsoner",
-        description: "Rask tilgang til soner og delsoner",
       },
       {
         destination: "profile-privacy",

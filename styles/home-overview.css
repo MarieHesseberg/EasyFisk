@@ -154,44 +154,12 @@
   place-items: center;
   font-size: 12px;
 }
-.notice {
-  margin-top: 18px;
-  border-radius: var(--radius-large);
-  padding: 16px;
-  background: #e6eff8;
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-}
-.notice-icon {
-  width: 42px;
-  height: 42px;
-  background: var(--color-surface);
-  border-radius: var(--radius-round);
-  display: grid;
-  place-items: center;
-  color: var(--color-primary);
-}
-.notice small,
 .info-card small,
 .feedback small {
   font-size: 9px;
   letter-spacing: 1.2px;
   font-weight: bold;
   color: var(--color-text-muted);
-}
-.notice h3 {
-  font-size: 14px;
-  margin: 4px 0;
-}
-.notice p {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  margin: 0;
-}
-.trend {
-  margin-left: auto;
-  font-size: 24px;
 }
 .quick-grid {
   display: grid;
