@@ -12,37 +12,26 @@ type UpdateForm = <Key extends keyof PermitCheckoutForm>(
 
 export function PermitBuyerStep({
   selectedDate,
-  setSelectedDate,
   form,
   updateForm,
   availability,
-  minimumDate,
-  maximumDate,
   next,
 }: {
   selectedDate: string;
-  setSelectedDate: (value: string) => void;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
   availability: PrototypePermitAvailability;
-  minimumDate: string;
-  maximumDate: string;
   next: () => void;
 }) {
   return (
     <div className="permit-checkout-step">
       <h3>Fiskedato og kortinnehaver</h3>
       <p>Kortet utstedes til personen som skal være ansvarlig for kjøpet.</p>
-      <label>
-        Fiskedato
-        <input
-          type="date"
-          min={minimumDate}
-          max={maximumDate}
-          value={selectedDate}
-          onChange={(event) => setSelectedDate(event.target.value)}
-        />
-      </label>
+      <div className="permit-checkout-date-summary">
+        <b>Valgt fiskedato</b>
+        <span>{selectedDate.split("-").reverse().join(".")}</span>
+        <small>Datoen kan endres på produktsiden.</small>
+      </div>
       <div
         className={`permit-availability ${availability.status}`}
         role={["available", "low"].includes(availability.status) ? "status" : "alert"}

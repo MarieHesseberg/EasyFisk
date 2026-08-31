@@ -6,6 +6,9 @@ import {
   getPrototypePermitDateRange,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 import { getPrototypePermitProductDetails } from "@/data/prototype/mandalselva-permit-product-details";
+import type { FishingDocument } from "@/domain/documents/fishing-document";
+import { findQualifyingSeasonPermitForProduct } from "@/domain/fishing-permits/permit-reporting-day";
+import { PermitSalesCalendar } from "./permit-sales-calendar";
 
 const typeLabels = {
   day: "Døgnkort",
@@ -22,19 +25,26 @@ export function PermitProductDetail({
   setSelectedDate,
   back,
   continueToProduct,
+  documents,
 }: {
   product: PrototypePermitProduct;
   selectedDate: string;
   setSelectedDate: (date: string) => void;
   back: () => void;
   continueToProduct: () => void;
+  documents: FishingDocument[];
 }) {
   const availability = getPrototypePermitAvailability(product, selectedDate);
   const dateRange = getPrototypePermitDateRange(product);
   const details = getPrototypePermitProductDetails(product);
+  const hasQualifyingSeasonPermit =
+    product.action !== "register-reporting-day" ||
+    Boolean(findQualifyingSeasonPermitForProduct(documents, product));
   const canContinue =
-    product.action === "register-reporting-day" ||
-    (canPurchasePrototypePermit(product) && canSelectPrototypePermit(availability));
+    (product.action === "register-reporting-day" && hasQualifyingSeasonPermit) ||
+    (product.action === "purchase" &&
+      canPurchasePrototypePermit(product) &&
+      canSelectPrototypePermit(availability));
 
   return (
     <section className="permit-product-detail" aria-labelledby="permit-product-title">
@@ -59,19 +69,35 @@ export function PermitProductDetail({
         <small>Veiledende sonekart · fysisk oppmerking gjelder</small>
       </div>
 
-      <label className="permit-product-date">
-        Fiskedato
-        <input
-          type="date"
-          min={dateRange.startsOn}
-          max={dateRange.endsOn}
-          value={selectedDate}
-          onChange={(event) => setSelectedDate(event.target.value)}
-        />
-      </label>
-      <strong className={`permit-availability ${availability.status}`} aria-live="polite">
-        {availability.label}
-      </strong>
+      {product.type === "season" ? (
+        <div className="permit-season-period">
+          <b>Sesongkortets gyldighet</b>
+          <span>
+            {dateRange.startsOn.split("-").reverse().join(".")}–
+            {dateRange.endsOn.split("-").reverse().join(".")}
+          </span>
+          <small>Datoene settes automatisk for hele sesongen.</small>
+        </div>
+      ) : product.action === "register-reporting-day" && !hasQualifyingSeasonPermit ? (
+        <div className="permit-calendar-blocked" role="status">
+          <b>Sesongkort må registreres først</b>
+          <span>
+            Datokalenderen åpnes når et gyldig sesongkort for {product.areaName} er funnet.
+          </span>
+        </div>
+      ) : (
+        <>
+          <PermitSalesCalendar
+            product={product}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+          <strong className={`permit-availability ${availability.status}`} aria-live="polite">
+            {availability.label}
+          </strong>
+          <p className="permit-fishing-day-time">Fiskedøgnet: {product.validity.label}</p>
+        </>
+      )}
 
       <dl className="permit-product-facts">
         <div>

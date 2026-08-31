@@ -2,6 +2,7 @@ import type { FishingDocument } from "../documents/fishing-document.ts";
 import { getPermitZoneId } from "../documents/get-permit-zones.ts";
 import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
 import { calculatePermitValidity } from "./calculate-permit-validity.ts";
+import { getPrototypePermitDateRange } from "./get-prototype-permit-availability.ts";
 
 export type PermitReportingOutcome = "pending" | "catch" | "no-catch";
 
@@ -49,6 +50,21 @@ export function findQualifyingSeasonPermit(
       (document.values.startsAt ?? "") <= reportingPeriod.startsAt &&
       (document.values.endsAt ?? "") >= reportingPeriod.endsAt,
   );
+}
+
+export function findQualifyingSeasonPermitForProduct(
+  documents: FishingDocument[],
+  product: PrototypePermitProduct,
+) {
+  const range = getPrototypePermitDateRange(product);
+  const date = new Date(`${range.startsOn}T12:00:00Z`);
+  while (date.toISOString().slice(0, 10) <= range.endsOn) {
+    const fishingDate = date.toISOString().slice(0, 10);
+    const document = findQualifyingSeasonPermit(documents, product, fishingDate);
+    if (document) return { document, fishingDate };
+    date.setUTCDate(date.getUTCDate() + 1);
+  }
+  return undefined;
 }
 
 export function createPermitReportingDay(

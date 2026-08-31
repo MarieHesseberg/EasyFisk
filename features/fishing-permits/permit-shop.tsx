@@ -13,6 +13,7 @@ import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-re
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { PermitProductDetail } from "./permit-product-detail";
+import { getPrototypePermitDateRange } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 const todayInNorway = () =>
@@ -78,6 +79,7 @@ export function PermitShop({
           setSelectedDate={setSelectedDate}
           back={() => setSelectedProductId(null)}
           continueToProduct={() => setIsProductActionOpen(true)}
+          documents={documents.documents}
         />
       );
     if (selectedProduct.action === "register-reporting-day")
@@ -167,7 +169,17 @@ export function PermitShop({
                 className="primary"
                 type="button"
                 onClick={() => {
-                  setSelectedDate(todayInNorway());
+                  const range = getPrototypePermitDateRange(product);
+                  const today = todayInNorway();
+                  setSelectedDate(
+                    product.type === "season"
+                      ? range.startsOn
+                      : today < range.startsOn
+                        ? range.startsOn
+                        : today > range.endsOn
+                          ? range.endsOn
+                          : today,
+                  );
                   setIsProductActionOpen(false);
                   setSelectedProductId(product.id);
                 }}

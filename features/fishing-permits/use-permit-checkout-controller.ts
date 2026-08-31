@@ -45,7 +45,7 @@ export function usePermitCheckoutController({
   initialSelectedDate?: string;
 }) {
   const [step, setStep] = useState<CheckoutStep>("buyer");
-  const [selectedDate, setSelectedDate] = useState(initialSelectedDate ?? todayInNorway());
+  const [selectedDate] = useState(initialSelectedDate ?? todayInNorway());
   const [form, setForm] = useState<PermitCheckoutForm>(emptyPermitCheckoutForm);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -171,10 +171,6 @@ export function usePermitCheckoutController({
   return {
     step,
     selectedDate,
-    setSelectedDate: (value: string) => {
-      setSelectedDate(value);
-      setError("");
-    },
     form,
     updateForm,
     error,

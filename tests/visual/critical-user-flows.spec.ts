@@ -111,13 +111,10 @@ test("rapporteringskort krever sesongkort og åpner ikke testbetaling", async ({
   await page.getByRole("button", { name: "Sone 2" }).click();
   await page.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
   await page.getByRole("button", { name: "Velg rapporteringskort" }).click();
-  await page.getByRole("button", { name: "Fortsett til døgnregistrering" }).click();
-
-  const reporting = page.getByRole("region", { name: "Registrer rapporteringsdøgn" });
-  await expect(reporting).toBeVisible();
-  await expect(reporting.getByRole("alert")).toContainText("Gyldig sesongkort mangler");
+  await expect(page.getByText("Sesongkort må registreres først")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Salgskalender" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Fortsett til døgnregistrering" })).toBeDisabled();
   await expect(page.getByText(/Testbetaling/)).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Registrer rapporteringsdøgn" })).toBeDisabled();
 });
 
 test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ page }) => {
@@ -126,7 +123,7 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await shop.getByRole("button", { name: "Sone 2" }).click();
   await shop.getByLabel("Delsone eller salgsområde").selectOption("Fuskeland");
   await shop.getByRole("button", { name: "Se fiskekort" }).click();
-  await shop.getByLabel("Fiskedato").fill("2026-08-30");
+  await shop.getByRole("button", { name: /30\. august 2026/ }).click();
   await expect(shop.getByText("Fuskeland gruppekort")).toBeVisible();
   await expect(shop.getByText(/inntil tre stenger/i)).toBeVisible();
   await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
@@ -167,16 +164,14 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   const shop = page.locator(".permit-shop-screen");
   await shop.getByRole("button", { name: "Sone 3" }).click();
 
-  const soldOut = shop.locator("article").filter({ hasText: "Sone 3 sesongkort" });
+  const soldOut = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
   await soldOut.getByRole("button", { name: "Se fiskekort" }).click();
-  await shop.getByLabel("Fiskedato").fill("2026-08-24");
-  await expect(shop.getByText("Utsolgt denne datoen")).toBeVisible();
-  await expect(shop.getByRole("button", { name: "Fortsett til kjøp" })).toBeDisabled();
+  await expect(shop.getByRole("button", { name: /25\. august 2026: Utsolgt/ })).toBeDisabled();
   await shop.getByRole("button", { name: /Tilbake til fiskekort/ }).click();
 
   const dayPermit = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
   await dayPermit.getByRole("button", { name: "Se fiskekort" }).click();
-  await shop.getByLabel("Fiskedato").fill("2026-08-20");
+  await shop.getByRole("button", { name: /20\. august 2026/ }).click();
   await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(shop);
   await expect(shop.getByRole("radio")).toHaveCount(0);
@@ -191,7 +186,7 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await failedShop.getByRole("button", { name: "Sone 3" }).click();
   const failedPermit = failedShop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
   await failedPermit.getByRole("button", { name: "Se fiskekort" }).click();
-  await failedShop.getByLabel("Fiskedato").fill("2026-08-20");
+  await failedShop.getByRole("button", { name: /20\. august 2026/ }).click();
   await failedShop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(failedShop);
   await failedShop.getByRole("button", { name: "Gå til testbetaling" }).click();

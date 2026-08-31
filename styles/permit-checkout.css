@@ -190,3 +190,17 @@
   background: var(--color-danger-surface);
   color: var(--color-danger);
 }
+.permit-checkout-date-summary {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+}
+.permit-checkout-date-summary span {
+  font-size: 18px;
+  font-weight: 800;
+}
+.permit-checkout-date-summary small {
+  color: var(--color-text-muted);
+}
