@@ -47,11 +47,13 @@ inneholder derfor bare pris når den står eksplisitt i offentlig sidetekst:
 - Sone 3: døgnkort 455 kr, ukeskort 2 280 kr, sesongkort 7 980 kr.
 - Sone 4 Lakseosen: døgnkort 600 kr.
 - Fuskeland: gruppekort for inntil tre stenger 2 400 kr per fiskedøgn.
-- Den generelle beskrivelsen av sone 2 oppgir et spenn på 100–400 kr per døgn, men dette er ikke en
-  verifisert produktpris og skal ikke fordeles på enkeltsoner.
+- Den generelle beskrivelsen av sone 2 oppgir et spenn på 100–400 kr per døgn. Prototypen bruker
+  derfor simulerte enkeltpriser innenfor dette spennet for å demonstrere en komplett kjøpsreise.
 
-Alle øvrige priser merkes `ikke offentlig bekreftet`. De kan ikke kjøpes i prototypen. Produktsiden
-viser i stedet telefon og e-post til selgeren som er oppført på den aktuelle Inatur-siden.
+Simulerte priser er merket `simulert` i alle kjøpsflater og skal ikke forstås som selgerens faktiske
+pris. Piren, Sandnes og Klevlandsfossen har også simulerte prototypepriser basert på prisnivået i
+de andre tilbudene. Båtkortet og Fossefjellene beholdes som eksempler uten offentlig pris; de kan
+ikke kjøpes i prototypen og viser i stedet telefon og e-post til selgeren.
 
 ## Kontrollerte selgerkontakter
 

@@ -35,7 +35,7 @@ export type PrototypePermitCapacity = {
 
 export type PrototypePermitPrice = {
   amountNok: number | null;
-  status: "verified" | "not-published";
+  status: "verified" | "prototype-estimate" | "not-published";
 };
 
 export type PrototypePermitRequirements = {
@@ -84,6 +84,13 @@ export type PrototypePermitProduct = {
 export function canPurchasePrototypePermit(product: PrototypePermitProduct) {
   return (
     product.action !== "purchase" ||
-    (product.price.status === "verified" && product.price.amountNok !== null)
+    (product.price.status !== "not-published" && product.price.amountNok !== null)
   );
+}
+
+export function formatPrototypePermitPrice(product: PrototypePermitProduct) {
+  if (product.action === "register-reporting-day") return "Gratis døgnregistrering";
+  if (product.price.amountNok === null) return "Pris ikke offentliggjort";
+  const price = `${product.price.amountNok.toLocaleString("nb-NO")} kr`;
+  return product.price.status === "prototype-estimate" ? `${price} · simulert` : price;
 }

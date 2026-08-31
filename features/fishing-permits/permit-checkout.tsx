@@ -3,7 +3,10 @@
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
-import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
+import {
+  formatPrototypePermitPrice,
+  type PrototypePermitProduct,
+} from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
 import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import {
@@ -92,11 +95,7 @@ export function PermitCheckout({
       <article className="permit-selected-product">
         <small>{product.areaName}</small>
         <h2>{product.title}</h2>
-        <b>
-          {product.price.amountNok === null
-            ? "Testpris ikke oppgitt"
-            : `${product.price.amountNok} kr`}
-        </b>
+        <b>{formatPrototypePermitPrice(product)}</b>
         <p>{product.validity.label}</p>
       </article>
       {checkout.step === "buyer" && (

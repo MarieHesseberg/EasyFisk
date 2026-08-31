@@ -6,8 +6,8 @@
   padding-right: 20px;
 }
 .map-canvas {
-  height: 450px;
-  background: linear-gradient(30deg, #e8edf3, #d6e3ef);
+  height: 520px;
+  background: linear-gradient(145deg, #eef2f4, #dfe8ed);
   position: relative;
   overflow: hidden;
   border-block: 1px solid #c9d8e7;
@@ -30,31 +30,49 @@
 }
 .river path {
   fill: none;
-  stroke: #90b6c2;
-  stroke-width: 19;
 }
-.river .glow {
-  stroke: #cce2e6;
-  stroke-width: 8;
+.river .map-land {
+  fill: #f2edcf;
+  stroke: #a7b89a;
+  stroke-width: 1.5;
 }
-.map-label {
-  position: absolute;
-  font-size: 11px;
-  font-weight: bold;
-  color: #667a8e;
-  z-index: 2;
+.river .river-base {
+  stroke: #5697bb;
+  stroke-width: 20;
+  stroke-linecap: round;
 }
-.map-label.a {
-  top: 77px;
-  left: 68px;
+.river .river-water {
+  stroke: #b9e4f0;
+  stroke-width: 10;
+  stroke-linecap: round;
 }
-.map-label.b {
-  top: 225px;
-  right: 61px;
+.river .river-tributary {
+  stroke: #9fcfe0;
+  stroke-width: 3;
 }
-.map-label.c {
-  bottom: 62px;
-  left: 65px;
+.zone-boundaries path {
+  stroke: #56699a;
+  stroke-width: 1.5;
+}
+.map-place-dots circle {
+  fill: #a34b4b;
+}
+.map-place-names,
+.map-zone-names {
+  font-size: 10px;
+  font-weight: 700;
+  fill: #5d6570;
+}
+.map-zone-names {
+  font:
+    700 15px Georgia,
+    serif;
+  fill: #526cac;
+}
+.no-fishing-label {
+  font-size: 9px;
+  font-weight: 800;
+  fill: #b6463e;
 }
 .zone-pin {
   position: absolute;
@@ -83,20 +101,20 @@
   transform: scale(1.13);
 }
 .z1 {
-  right: 56px;
-  top: 37px;
+  left: 65px;
+  bottom: 23px;
 }
 .z2 {
-  left: 189px;
-  top: 133px;
+  left: 104px;
+  bottom: 124px;
 }
 .z3 {
-  left: 127px;
-  top: 247px;
+  left: 147px;
+  top: 214px;
 }
 .z4 {
-  left: 47px;
-  bottom: 58px;
+  left: 215px;
+  top: 62px;
 }
 .locate {
   position: absolute;
@@ -116,7 +134,7 @@
   position: absolute;
   z-index: var(--layer-map-marker);
   left: 15px;
-  bottom: 18px;
+  top: 14px;
   background: var(--color-surface-translucent);
   border-radius: var(--radius-small);
   padding: var(--space-3);

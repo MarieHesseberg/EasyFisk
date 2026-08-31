@@ -1,4 +1,7 @@
-import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
+import {
+  canPurchasePrototypePermit,
+  formatPrototypePermitPrice,
+} from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import {
   canSelectPrototypePermit,
@@ -72,7 +75,7 @@ export function PermitProductDetail({
 
       {!canPurchasePrototypePermit(product) && product.action === "purchase" ? (
         <div className="permit-contact-only-notice">
-          <b>Pris er ikke offentliggjort</b>
+          <b>Kjøp via selger</b>
           <span>
             Dette kortet kan ikke kjøpes i EasyFisk-prototypen. Kontakt selger for pris,
             tilgjengelighet og kjøp.
@@ -119,11 +122,7 @@ export function PermitProductDetail({
         </div>
         <div>
           <dt>Pris</dt>
-          <dd>
-            {product.price.amountNok === null
-              ? "Pris må bekreftes hos selger"
-              : `${product.price.amountNok} kr`}
-          </dd>
+          <dd>{formatPrototypePermitPrice(product)}</dd>
         </div>
         <div>
           <dt>Fiskere, kort og stenger</dt>

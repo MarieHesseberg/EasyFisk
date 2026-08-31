@@ -10,7 +10,10 @@ import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
 import { usePermitReportingDays } from "./use-permit-reporting-days";
 import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
-import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
+import {
+  canPurchasePrototypePermit,
+  formatPrototypePermitPrice,
+} from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { PermitProductDetail } from "./permit-product-detail";
 import { getPrototypePermitDateRange } from "@/domain/fishing-permits/get-prototype-permit-availability";
@@ -156,11 +159,7 @@ export function PermitShop({
           <article key={product.id}>
             <small>{product.areaName}</small>
             <h3>{product.title}</h3>
-            <b>
-              {product.price.amountNok === null
-                ? "Pris ikke offentliggjort"
-                : `${product.price.amountNok} kr`}
-            </b>
+            <b>{formatPrototypePermitPrice(product)}</b>
             {!canPurchasePrototypePermit(product) && (
               <span className="permit-shop-price-note">
                 Kontakt {product.seller.contactName} for pris og kjøp · {product.seller.phone}

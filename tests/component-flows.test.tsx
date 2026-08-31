@@ -288,7 +288,7 @@ test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", a
 test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyten", async () => {
   render(<PermitShop initialZone={1} />);
 
-  const product = screen.getByRole("heading", { name: "Piren døgnkort" }).closest("article");
+  const product = screen.getByRole("heading", { name: "Båtkort sone 1" }).closest("article");
   if (!product) throw new Error("Produktkort mangler");
 
   expect(product.textContent).toContain("Kontakt Karl Gjermund Damli for pris og kjøp");
@@ -296,10 +296,10 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
   const detailButton = product.querySelector("button");
   if (!detailButton) throw new Error("Knapp for produktdetaljer mangler");
   await userEvent.setup().click(detailButton);
-  expect(screen.getByRole("heading", { name: "Piren døgnkort" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Båtkort sone 1" })).toBeTruthy();
   expect(screen.getByText("Veiledende sonekart · fysisk oppmerking gjelder")).toBeTruthy();
-  expect(screen.getByText("Pris må bekreftes hos selger")).toBeTruthy();
-  expect(screen.getByText("Pris er ikke offentliggjort")).toBeTruthy();
+  expect(screen.getByText("Pris ikke offentliggjort")).toBeTruthy();
+  expect(screen.getByText("Kjøp via selger")).toBeTruthy();
   expect(screen.getByText("Karl Gjermund Damli")).toBeTruthy();
   expect(screen.getByRole("link", { name: /Ring \+47 901 44 337/ })).toBeTruthy();
   expect(screen.queryByRole("button", { name: "Fortsett til kjøp" })).toBeNull();
@@ -307,7 +307,7 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
 });
 
 test("kjøpskontrolleren avviser produkter uten dokumentert pris", async () => {
-  const product = permitCatalogRepository.findProduct("zone-1-piren-day");
+  const product = permitCatalogRepository.findProduct("zone-1-boat-day");
   if (!product) throw new Error("Testprodukt mangler");
 
   render(
@@ -430,6 +430,9 @@ test("produktregisteret dekker alle soner og bruker dokumenterte Inatur-priser",
   expect(permitCatalogRepository.findProduct("zone-3-season")?.price.amountNok).toBe(7980);
   expect(permitCatalogRepository.findProduct("zone-4-lakseosen-day")?.price.amountNok).toBe(600);
   expect(permitCatalogRepository.findProduct("zone-1-piren-day")?.price.status).toBe(
+    "prototype-estimate",
+  );
+  expect(permitCatalogRepository.findProduct("zone-1-boat-day")?.price.status).toBe(
     "not-published",
   );
 });
