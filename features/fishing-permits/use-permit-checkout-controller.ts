@@ -16,6 +16,10 @@ import {
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
 import { createTestPermitDocument } from "./create-test-permit-document";
+import {
+  canSelectPrototypePermit,
+  getPrototypePermitAvailability,
+} from "@/domain/fishing-permits/get-prototype-permit-availability";
 
 export type PaymentOutcome = "approved" | "cancelled" | "failed";
 export type CheckoutStep = "buyer" | "requirements" | "review" | "confirmation";
@@ -62,6 +66,8 @@ export function usePermitCheckoutController({
     } catch {
       return setError("Velg en gyldig fiskedato for dette kortet.");
     }
+    const availability = getPrototypePermitAvailability(product, selectedDate);
+    if (!canSelectPrototypePermit(availability)) return setError(availability.label);
     setError("");
     setStep("requirements");
   }
@@ -75,6 +81,8 @@ export function usePermitCheckoutController({
 
   async function submit() {
     if (!form.confirmsDetails) return setError("Bekreft at opplysningene er riktige.");
+    const availability = getPrototypePermitAvailability(product, selectedDate);
+    if (!canSelectPrototypePermit(availability)) return setError(availability.label);
     setIsSubmitting(true);
     const now = Date.now();
     const purchaseId = `permit-purchase-${crypto.randomUUID()}`;

@@ -13,6 +13,10 @@ import {
   PermitReviewStep,
 } from "./permit-checkout-steps";
 import { usePermitCheckoutController } from "./use-permit-checkout-controller";
+import {
+  getPrototypePermitAvailability,
+  getPrototypePermitDateRange,
+} from "@/domain/fishing-permits/get-prototype-permit-availability";
 
 const stepNumbers = { buyer: 1, requirements: 2, review: 3, confirmation: 4 } as const;
 
@@ -36,6 +40,8 @@ export function PermitCheckout({
   onGoHome?: () => void;
 }) {
   const checkout = usePermitCheckoutController({ product, save, savePurchase, onPurchased });
+  const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
+  const dateRange = getPrototypePermitDateRange(product);
   let validity = null;
   try {
     validity = calculatePermitValidity(product, checkout.selectedDate);
@@ -85,6 +91,9 @@ export function PermitCheckout({
           setSelectedDate={checkout.setSelectedDate}
           form={checkout.form}
           updateForm={checkout.updateForm}
+          availability={availability}
+          minimumDate={dateRange.startsOn}
+          maximumDate={dateRange.endsOn}
           next={checkout.continueFromBuyer}
         />
       )}

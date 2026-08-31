@@ -154,8 +154,11 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await shop.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
 
   const soldOut = shop.locator("article").filter({ hasText: "Holmegård sesongkort" });
-  await expect(soldOut.getByText("Utsolgt")).toBeVisible();
-  await expect(soldOut.getByRole("button", { name: "Velg fiskekort" })).toBeDisabled();
+  await soldOut.getByRole("button", { name: "Velg fiskekort" }).click();
+  await shop.getByLabel("Fiskedato").fill("2026-08-23");
+  await expect(shop.getByText("Utsolgt denne datoen")).toBeVisible();
+  await expect(shop.getByRole("button", { name: "Neste · krav og deltakere" })).toBeDisabled();
+  await shop.getByRole("button", { name: /Tilbake til fiskekort/ }).click();
 
   const dayPermit = shop.locator("article").filter({ hasText: "Holmegård dagskort" });
   await dayPermit.getByRole("button", { name: "Velg fiskekort" }).click();

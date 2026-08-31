@@ -4,6 +4,7 @@ import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchas
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import type { PaymentOutcome } from "./use-permit-checkout-controller";
+import type { PrototypePermitAvailability } from "@/domain/fishing-permits/prototype-permit-product";
 
 type UpdateForm = <Key extends keyof PermitCheckoutForm>(
   key: Key,
@@ -15,12 +16,18 @@ export function PermitBuyerStep({
   setSelectedDate,
   form,
   updateForm,
+  availability,
+  minimumDate,
+  maximumDate,
   next,
 }: {
   selectedDate: string;
   setSelectedDate: (value: string) => void;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
+  availability: PrototypePermitAvailability;
+  minimumDate: string;
+  maximumDate: string;
   next: () => void;
 }) {
   return (
@@ -31,10 +38,19 @@ export function PermitBuyerStep({
         Fiskedato
         <input
           type="date"
+          min={minimumDate}
+          max={maximumDate}
           value={selectedDate}
           onChange={(event) => setSelectedDate(event.target.value)}
         />
       </label>
+      <div
+        className={`permit-availability ${availability.status}`}
+        role={["available", "low"].includes(availability.status) ? "status" : "alert"}
+        aria-live="polite"
+      >
+        {availability.label}
+      </div>
       <label>
         Fullt navn
         <input
@@ -70,7 +86,12 @@ export function PermitBuyerStep({
           onChange={(event) => updateForm("phone", event.target.value)}
         />
       </label>
-      <button className="primary" type="button" onClick={next}>
+      <button
+        className="primary"
+        type="button"
+        disabled={!["available", "low"].includes(availability.status)}
+        onClick={next}
+      >
         Neste · krav og deltakere
       </button>
     </div>

@@ -132,8 +132,8 @@ export function PermitShop({
                 ? "Pris ikke offentliggjort"
                 : `${product.price.amountNok} kr`}
             </b>
-            <strong className={`permit-availability ${product.availability.status}`}>
-              {product.availability.label}
+            <strong className="permit-availability available">
+              Tilgjengelighet kontrolleres for valgt dato
             </strong>
             <p>{product.validity.label}</p>
             <p>{product.capacity.label}</p>
@@ -142,7 +142,6 @@ export function PermitShop({
               <button
                 className="primary"
                 type="button"
-                disabled={!["available", "low"].includes(product.availability.status)}
                 onClick={() => setSelectedProductId(product.id)}
               >
                 {product.action === "purchase" ? "Velg fiskekort" : "Velg rapporteringskort"}

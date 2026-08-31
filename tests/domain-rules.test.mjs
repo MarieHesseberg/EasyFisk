@@ -26,6 +26,10 @@ import {
   isDateWithinZoneSeason,
 } from "../domain/zones/zone-rules.ts";
 import { calculatePermitValidity } from "../domain/fishing-permits/calculate-permit-validity.ts";
+import {
+  canSelectPrototypePermit,
+  getPrototypePermitAvailability,
+} from "../domain/fishing-permits/get-prototype-permit-availability.ts";
 
 const permitProduct = (type, validity) => ({
   id: `test-${type}`,
@@ -61,6 +65,27 @@ test("døgnkort fra klokken 18 gjelder til 17.59 neste kalenderdag", () => {
     startsAt: "2026-08-31T18:00",
     endsAt: "2026-09-01T17:59",
   });
+});
+
+test("simulert korttilgjengelighet følger valgt dato og fiskesesong", () => {
+  const product = {
+    ...permitProduct("day", { label: "Fiskedøgn", startsAt: "18:00", endsAt: "17:59" }),
+    capacity: { label: "To kort", permitsPerFishingDay: 2 },
+  };
+
+  const beforeSeason = getPrototypePermitAvailability(product, "2026-05-31");
+  const duringSeason = getPrototypePermitAvailability(product, "2026-07-15");
+  const afterSeason = getPrototypePermitAvailability(product, "2026-09-01");
+  const futureSale = getPrototypePermitAvailability(product, "2027-06-01");
+
+  assert.equal(beforeSeason.status, "no-fishing-date");
+  assert.match(beforeSeason.label, /starter/);
+  assert.ok(["available", "low", "sold-out"].includes(duringSeason.status));
+  assert.equal(afterSeason.status, "no-fishing-date");
+  assert.match(afterSeason.label, /sluttet/);
+  assert.equal(futureSale.status, "not-on-sale");
+  assert.equal(canSelectPrototypePermit(beforeSeason), false);
+  assert.equal(canSelectPrototypePermit(duringSeason), duringSeason.status !== "sold-out");
 });
 
 test("sesongkort bruker produktets faktiske sesonggrenser", () => {
