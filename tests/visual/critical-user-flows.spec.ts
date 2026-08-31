@@ -134,6 +134,13 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(page.getByText(/Sone 2 · Fuskeland/)).toBeVisible();
   await expect(page.getByText("Ingen registrert – legg til dokumentasjon")).toHaveCount(2);
 
+  await page.getByRole("button", { name: "Kart" }).click();
+  await page.getByRole("button", { name: /Vis Sone 1/ }).click();
+  await expect(page.getByRole("heading", { name: /Sone 1/ })).toBeVisible();
+  await page.getByRole("button", { name: /Vis Sone 4/ }).click();
+  await expect(page.getByRole("heading", { name: /Sone 4/ })).toBeVisible();
+  await page.getByRole("button", { name: "Hjem" }).click();
+
   await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
   const permits = page.getByRole("dialog", { name: "Mine fiskekort" });
   await expect(permits).toContainText("Fuskeland");

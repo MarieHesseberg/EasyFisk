@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { ScrollIndicator } from "@/components/layout/scroll-indicator";
@@ -59,13 +58,6 @@ export function EasyFiskApp() {
   const displayedQuotaStatus = getDisplayedQuotaStatus(quotaStatus, demoStatus, isStatusTestMode);
   const actualDocumentReadiness = getDocumentReadiness(documents, documentCheckTime, zone);
   const validPermitZoneIds = getValidPermitZoneIds(documents, documentCheckTime);
-  const preferredPermitZoneId = validPermitZoneIds[0];
-  const hasPermitForSelectedZone = validPermitZoneIds.includes(zone);
-  const setZone = actions.setZone;
-  useEffect(() => {
-    if (preferredPermitZoneId !== undefined && !hasPermitForSelectedZone)
-      setZone(preferredPermitZoneId);
-  }, [hasPermitForSelectedZone, preferredPermitZoneId, setZone]);
   const effectiveStatus = resolveStatusEngine(
     actualDocumentReadiness,
     selectedDemo,
