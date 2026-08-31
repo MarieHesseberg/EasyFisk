@@ -5,6 +5,7 @@ import "@/styles/navigation-and-prototype.css";
 import "@/styles/map.css";
 import "@/styles/map-permits.css";
 import "@/styles/permit-shop.css";
+import "@/styles/permit-product-detail.css";
 import "@/styles/permit-checkout.css";
 import "@/styles/activity-and-history-cards.css";
 import "@/styles/forms-and-modals.css";

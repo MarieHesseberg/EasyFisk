@@ -33,6 +33,7 @@ export function PermitCheckout({
   onOpenPermits,
   onGoHome,
   paymentOutcome = "approved",
+  initialSelectedDate,
 }: {
   product: PrototypePermitProduct;
   documents?: FishingDocument[];
@@ -43,6 +44,7 @@ export function PermitCheckout({
   onOpenPermits?: () => void;
   onGoHome?: () => void;
   paymentOutcome?: PrototypePaymentOutcome;
+  initialSelectedDate?: string;
 }) {
   const checkout = usePermitCheckoutController({
     product,
@@ -50,6 +52,7 @@ export function PermitCheckout({
     savePurchase,
     onPurchased,
     paymentOutcome,
+    initialSelectedDate,
   });
   const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
   const dateRange = getPrototypePermitDateRange(product);

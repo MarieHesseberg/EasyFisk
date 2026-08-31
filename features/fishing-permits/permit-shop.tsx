@@ -12,8 +12,11 @@ import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { PermitProductDetail } from "./permit-product-detail";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
+const todayInNorway = () =>
+  new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
 
 export function PermitShop({
   initialZone = 3,
@@ -31,6 +34,8 @@ export function PermitShop({
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const [selectedArea, setSelectedArea] = useState("all");
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [isProductActionOpen, setIsProductActionOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(todayInNorway);
   const [resetMessage, setResetMessage] = useState("");
   const documents = useDocuments();
   const reportingDays = usePermitReportingDays();
@@ -65,12 +70,22 @@ export function PermitShop({
   }
 
   if (selectedProduct) {
+    if (!isProductActionOpen)
+      return (
+        <PermitProductDetail
+          product={selectedProduct}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          back={() => setSelectedProductId(null)}
+          continueToProduct={() => setIsProductActionOpen(true)}
+        />
+      );
     if (selectedProduct.action === "register-reporting-day")
       return (
         <PermitReportingRegistration
           product={selectedProduct}
           documents={documents.documents}
-          back={() => setSelectedProductId(null)}
+          back={() => setIsProductActionOpen(false)}
           save={reportingDays.save}
         />
       );
@@ -78,13 +93,14 @@ export function PermitShop({
       <PermitCheckout
         product={selectedProduct}
         documents={documents.documents}
-        back={() => setSelectedProductId(null)}
+        back={() => setIsProductActionOpen(false)}
         save={documents.save}
         savePurchase={purchases.save}
         onPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}
         onGoHome={onGoHome}
         paymentOutcome={paymentOutcome}
+        initialSelectedDate={selectedDate}
       />
     );
   }
@@ -150,14 +166,17 @@ export function PermitShop({
               <button
                 className="primary"
                 type="button"
-                disabled={!canPurchasePrototypePermit(product)}
-                onClick={() => setSelectedProductId(product.id)}
+                onClick={() => {
+                  setSelectedDate(todayInNorway());
+                  setIsProductActionOpen(false);
+                  setSelectedProductId(product.id);
+                }}
               >
                 {product.action === "register-reporting-day"
                   ? "Velg rapporteringskort"
                   : canPurchasePrototypePermit(product)
-                    ? "Velg fiskekort"
-                    : "Kjøp ikke tilgjengelig"}
+                    ? "Se fiskekort"
+                    : "Se produktinformasjon"}
               </button>
               <a href={product.source.url} target="_blank" rel="noreferrer">
                 Se produktinformasjon ↗

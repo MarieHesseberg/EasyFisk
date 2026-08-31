@@ -51,6 +51,12 @@ export type PrototypePermitSource = {
   status: "verified-public-source";
 };
 
+export type PrototypePermitProductDetails = {
+  ageRule: string;
+  equipmentAndFacilities: readonly string[];
+  reportingRule: string;
+};
+
 export type PrototypePermitProduct = {
   id: string;
   zoneId: ZoneId;

@@ -111,6 +111,7 @@ test("rapporteringskort krever sesongkort og åpner ikke testbetaling", async ({
   await page.getByRole("button", { name: "Sone 2" }).click();
   await page.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
   await page.getByRole("button", { name: "Velg rapporteringskort" }).click();
+  await page.getByRole("button", { name: "Fortsett til døgnregistrering" }).click();
 
   const reporting = page.getByRole("region", { name: "Registrer rapporteringsdøgn" });
   await expect(reporting).toBeVisible();
@@ -124,9 +125,12 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   const shop = page.locator(".permit-shop-screen");
   await shop.getByRole("button", { name: "Sone 2" }).click();
   await shop.getByLabel("Delsone eller salgsområde").selectOption("Fuskeland");
-  await shop.getByRole("button", { name: "Velg fiskekort" }).click();
-  await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
+  await shop.getByRole("button", { name: "Se fiskekort" }).click();
   await shop.getByLabel("Fiskedato").fill("2026-08-30");
+  await expect(shop.getByText("Fuskeland gruppekort")).toBeVisible();
+  await expect(shop.getByText(/inntil tre stenger/i)).toBeVisible();
+  await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
+  await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
   await completePermitCheckoutDetails(shop, true);
   await shop.getByRole("button", { name: "Gå til testbetaling" }).click();
   await expect(shop.getByText("Ingen kortopplysninger registreres")).toBeVisible();
@@ -164,15 +168,16 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await shop.getByRole("button", { name: "Sone 3" }).click();
 
   const soldOut = shop.locator("article").filter({ hasText: "Sone 3 sesongkort" });
-  await soldOut.getByRole("button", { name: "Velg fiskekort" }).click();
+  await soldOut.getByRole("button", { name: "Se fiskekort" }).click();
   await shop.getByLabel("Fiskedato").fill("2026-08-24");
   await expect(shop.getByText("Utsolgt denne datoen")).toBeVisible();
-  await expect(shop.getByRole("button", { name: "Neste · krav og deltakere" })).toBeDisabled();
+  await expect(shop.getByRole("button", { name: "Fortsett til kjøp" })).toBeDisabled();
   await shop.getByRole("button", { name: /Tilbake til fiskekort/ }).click();
 
   const dayPermit = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
-  await dayPermit.getByRole("button", { name: "Velg fiskekort" }).click();
+  await dayPermit.getByRole("button", { name: "Se fiskekort" }).click();
   await shop.getByLabel("Fiskedato").fill("2026-08-20");
+  await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(shop);
   await expect(shop.getByRole("radio")).toHaveCount(0);
   await shop.getByRole("button", { name: "Gå til testbetaling" }).click();
@@ -185,8 +190,9 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   const failedShop = page.locator(".permit-shop-screen");
   await failedShop.getByRole("button", { name: "Sone 3" }).click();
   const failedPermit = failedShop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
-  await failedPermit.getByRole("button", { name: "Velg fiskekort" }).click();
+  await failedPermit.getByRole("button", { name: "Se fiskekort" }).click();
   await failedShop.getByLabel("Fiskedato").fill("2026-08-20");
+  await failedShop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(failedShop);
   await failedShop.getByRole("button", { name: "Gå til testbetaling" }).click();
   await failedShop.getByRole("button", { name: "Betal 455 kr" }).click();
@@ -202,8 +208,8 @@ for (const viewport of [
     await page.getByRole("button", { name: "Kjøp fiskekort" }).click();
     const shop = page.getByRole("dialog", { name: "Fiskekort og kjøp" });
     await expect(shop.getByRole("button", { name: "Tilbake" })).toBeFocused();
-    await shop.getByRole("button", { name: "Velg fiskekort" }).first().scrollIntoViewIfNeeded();
-    await expect(shop.getByRole("button", { name: "Velg fiskekort" }).first()).toBeInViewport();
+    await shop.getByRole("button", { name: "Se fiskekort" }).first().scrollIntoViewIfNeeded();
+    await expect(shop.getByRole("button", { name: "Se fiskekort" }).first()).toBeInViewport();
     await page.keyboard.press("Escape");
     await expect(shop).toHaveCount(0);
   });

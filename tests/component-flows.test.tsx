@@ -292,8 +292,16 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
   if (!product) throw new Error("Produktkort mangler");
 
   expect(product.textContent).toContain("Pris må bekreftes hos selger");
-  expect((product.querySelector("button") as HTMLButtonElement | null)?.disabled).toBe(true);
   expect(product.querySelector("a")?.textContent).toContain("Se produktinformasjon");
+  const detailButton = product.querySelector("button");
+  if (!detailButton) throw new Error("Knapp for produktdetaljer mangler");
+  await userEvent.setup().click(detailButton);
+  expect(screen.getByRole("heading", { name: "Piren døgnkort" })).toBeTruthy();
+  expect(screen.getByText("Veiledende sonekart · fysisk oppmerking gjelder")).toBeTruthy();
+  expect(screen.getByText("Pris må bekreftes hos selger")).toBeTruthy();
+  expect(
+    (screen.getByRole("button", { name: "Fortsett til kjøp" }) as HTMLButtonElement).disabled,
+  ).toBe(true);
   expect(screen.queryByText("Fiskedato og kortinnehaver")).toBeNull();
 });
 

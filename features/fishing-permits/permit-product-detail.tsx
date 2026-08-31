@@ -1,0 +1,144 @@
+import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
+import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
+import {
+  canSelectPrototypePermit,
+  getPrototypePermitAvailability,
+  getPrototypePermitDateRange,
+} from "@/domain/fishing-permits/get-prototype-permit-availability";
+import { getPrototypePermitProductDetails } from "@/data/prototype/mandalselva-permit-product-details";
+
+const typeLabels = {
+  day: "Døgnkort",
+  week: "Ukekort",
+  season: "Sesongkort",
+  boat: "Båtkort",
+  group: "Gruppekort",
+  reporting: "Rapporteringskort",
+} as const;
+
+export function PermitProductDetail({
+  product,
+  selectedDate,
+  setSelectedDate,
+  back,
+  continueToProduct,
+}: {
+  product: PrototypePermitProduct;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  back: () => void;
+  continueToProduct: () => void;
+}) {
+  const availability = getPrototypePermitAvailability(product, selectedDate);
+  const dateRange = getPrototypePermitDateRange(product);
+  const details = getPrototypePermitProductDetails(product);
+  const canContinue =
+    product.action === "register-reporting-day" ||
+    (canPurchasePrototypePermit(product) && canSelectPrototypePermit(availability));
+
+  return (
+    <section className="permit-product-detail" aria-labelledby="permit-product-title">
+      <button className="back" type="button" onClick={back}>
+        ‹ Tilbake til fiskekort
+      </button>
+      <small>PRODUKTINFORMASJON · KONTROLLERT {product.source.checkedAt}</small>
+      <h2 id="permit-product-title">{product.title}</h2>
+      <p className="permit-product-area">{product.areaName}</p>
+
+      <div
+        className="permit-product-map"
+        role="img"
+        aria-label={`Veiledende kartmarkering av sone ${product.zoneId}`}
+      >
+        <span>Mandalselva</span>
+        {[4, 3, 2, 1].map((zoneId) => (
+          <i key={zoneId} className={zoneId === product.zoneId ? "selected" : ""}>
+            Sone {zoneId}
+          </i>
+        ))}
+        <small>Veiledende sonekart · fysisk oppmerking gjelder</small>
+      </div>
+
+      <label className="permit-product-date">
+        Fiskedato
+        <input
+          type="date"
+          min={dateRange.startsOn}
+          max={dateRange.endsOn}
+          value={selectedDate}
+          onChange={(event) => setSelectedDate(event.target.value)}
+        />
+      </label>
+      <strong className={`permit-availability ${availability.status}`} aria-live="polite">
+        {availability.label}
+      </strong>
+
+      <dl className="permit-product-facts">
+        <div>
+          <dt>Korttype</dt>
+          <dd>{typeLabels[product.type]}</dd>
+        </div>
+        <div>
+          <dt>Fiskedøgn og gyldighet</dt>
+          <dd>{product.validity.label}</dd>
+        </div>
+        <div>
+          <dt>Pris</dt>
+          <dd>
+            {product.price.amountNok === null
+              ? "Pris må bekreftes hos selger"
+              : `${product.price.amountNok} kr`}
+          </dd>
+        </div>
+        <div>
+          <dt>Fiskere, kort og stenger</dt>
+          <dd>{product.capacity.label}</dd>
+        </div>
+        <div>
+          <dt>Aldersregler</dt>
+          <dd>{details.ageRule}</dd>
+        </div>
+      </dl>
+
+      <section>
+        <h3>Utstyr og fasiliteter</h3>
+        <ul>
+          {details.equipmentAndFacilities.map((detail) => (
+            <li key={detail}>{detail}</li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h3>Krav før fiske</h3>
+        <ul>
+          {product.requirements.requiresNationalFishingFee && <li>Gyldig statlig fiskeravgift</li>}
+          {product.requirements.requiresDisinfection && <li>Gyldig desinfiseringsbevis</li>}
+          {product.requirements.requiresRuleAcceptance && <li>Fiskereglene må leses og godtas</li>}
+          {product.requirements.requiresSeasonPermit && <li>Gyldig sesongkort for samme område</li>}
+        </ul>
+      </section>
+      <section>
+        <h3>Fangst og rapportering</h3>
+        <p>{details.reportingRule}</p>
+      </section>
+      <p className="permit-product-note">{product.note}</p>
+      <a
+        className="permit-product-source"
+        href={product.source.url}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Se original produktkilde hos Inatur ↗
+      </a>
+
+      {!canPurchasePrototypePermit(product) && product.action === "purchase" && (
+        <p className="permit-shop-price-note">Kjøp er deaktivert frem til prisen er bekreftet.</p>
+      )}
+      <button className="primary" type="button" disabled={!canContinue} onClick={continueToProduct}>
+        {product.action === "register-reporting-day"
+          ? "Fortsett til døgnregistrering"
+          : "Fortsett til kjøp"}
+      </button>
+    </section>
+  );
+}

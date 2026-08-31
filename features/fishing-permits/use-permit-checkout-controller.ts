@@ -35,15 +35,17 @@ export function usePermitCheckoutController({
   savePurchase,
   onPurchased,
   paymentOutcome,
+  initialSelectedDate,
 }: {
   product: PrototypePermitProduct;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   paymentOutcome: PrototypePaymentOutcome;
+  initialSelectedDate?: string;
 }) {
   const [step, setStep] = useState<CheckoutStep>("buyer");
-  const [selectedDate, setSelectedDate] = useState(todayInNorway);
+  const [selectedDate, setSelectedDate] = useState(initialSelectedDate ?? todayInNorway());
   const [form, setForm] = useState<PermitCheckoutForm>(emptyPermitCheckoutForm);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
