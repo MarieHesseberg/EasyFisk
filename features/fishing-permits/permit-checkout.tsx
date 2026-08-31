@@ -26,7 +26,9 @@ export function PermitCheckout({
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
 }) {
   const [outcome, setOutcome] = useState<PaymentOutcome>("approved");
-  const [status, setStatus] = useState<"idle" | PaymentOutcome | "saving-error">("idle");
+  const [status, setStatus] = useState<"idle" | PaymentOutcome | "saving-error" | "invalid-date">(
+    "idle",
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDate, setSelectedDate] = useState(() =>
     new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
@@ -38,7 +40,15 @@ export function PermitCheckout({
       return;
     }
     setIsSubmitting(true);
-    const result = await save(createTestPermitDocument(product, selectedDate));
+    let document: FishingDocument;
+    try {
+      document = createTestPermitDocument(product, selectedDate);
+    } catch {
+      setIsSubmitting(false);
+      setStatus("invalid-date");
+      return;
+    }
+    const result = await save(document);
     setIsSubmitting(false);
     setStatus(result.ok ? "approved" : "saving-error");
     if (result.ok) onPurchased?.(product.zoneId);
@@ -115,7 +125,9 @@ export function PermitCheckout({
                 ? "Betalingen ble avbrutt"
                 : status === "failed"
                   ? "Testbetalingen feilet"
-                  : "Kortet kunne ikke lagres"}
+                  : status === "invalid-date"
+                    ? "Velg en gyldig fiskedato"
+                    : "Kortet kunne ikke lagres"}
           </b>
           <span>
             {status === "approved"

@@ -93,6 +93,7 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await shop.getByLabel("Delsone eller salgsområde").selectOption("Fuskeland");
   await shop.getByRole("button", { name: "Velg fiskekort" }).click();
   await expect(shop.getByText("Testbetaling – dette er en prototype.")).toBeVisible();
+  await shop.getByLabel("Testdato for fiskekortet").fill("2026-08-30");
   await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
   await expect(shop.getByRole("status")).toContainText("Betaling godkjent");
 

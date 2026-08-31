@@ -313,7 +313,8 @@ test("valgt testdato kan lage et utløpt kort for riktig sone", () => {
 
   expect(getDocumentReadiness([expiredPermit], now, 2).valid.permit).toBe(false);
   expect(expiredPermit.values.area).toContain("Sone 2");
-  expect(expiredPermit.values.endsAt).toBe("2026-08-29T23:59");
+  expect(expiredPermit.values.startsAt).toBe("2026-08-29T18:00");
+  expect(expiredPermit.values.endsAt).toBe("2026-08-30T17:59");
 });
 
 test("sonevalget begrenses til sonene brukerens gyldige fiskekort dekker", () => {

@@ -93,7 +93,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     type: "reporting",
     action: "register-reporting-day",
     availability: { status: "available", label: "Ledig", remainingUnits: null },
-    validity: { label: "Ett valgt fiskedøgn" },
+    validity: { label: "Kl. 18.00–17.59 neste dag", startsAt: "18:00", endsAt: "17:59" },
     capacity: { label: "For innehaver av sesongkort" },
     price: { amountNok: null, status: "not-published" },
     requirements: { ...commonRequirements, requiresSeasonPermit: true },

@@ -1,5 +1,6 @@
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
+import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
 
 export const testPurchaseDocumentPrefix = "test-purchase-permit-";
 
@@ -12,32 +13,12 @@ const categories = {
   week: "Ukekort",
 } as const;
 
-function toLocalDateTime(timestamp: number) {
-  return new Intl.DateTimeFormat("sv-SE", {
-    timeZone: "Europe/Oslo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  })
-    .format(timestamp)
-    .replace(" ", "T");
-}
-
 export function createTestPermitDocument(
   product: PrototypePermitProduct,
   selectedDate: string,
   now = Date.now(),
 ): FishingDocument {
-  const startsAt = `${selectedDate}T00:00`;
-  const selectedDay = new Date(`${selectedDate}T12:00:00`);
-  const seasonEnd = new Date(selectedDay.getTime() + 30 * 24 * 60 * 60 * 1000);
-  const endsAt =
-    product.type === "season"
-      ? `${toLocalDateTime(seasonEnd.getTime()).slice(0, 10)}T23:59`
-      : `${selectedDate}T23:59`;
+  const { startsAt, endsAt } = calculatePermitValidity(product, selectedDate);
   return {
     id: `${testPurchaseDocumentPrefix}${product.id}-${now}`,
     kind: "permit",

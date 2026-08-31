@@ -25,6 +25,90 @@ import {
   getZoneSeasonEnd,
   isDateWithinZoneSeason,
 } from "../domain/zones/zone-rules.ts";
+import { calculatePermitValidity } from "../domain/fishing-permits/calculate-permit-validity.ts";
+
+const permitProduct = (type, validity) => ({
+  id: `test-${type}`,
+  zoneId: 2,
+  areaName: "Testområde",
+  title: "Testkort",
+  type,
+  action: "purchase",
+  availability: { status: "available", label: "Ledig", remainingUnits: 1 },
+  validity,
+  capacity: { label: "Testkapasitet" },
+  price: { amountNok: 100, status: "verified" },
+  requirements: {
+    requiresNationalFishingFee: true,
+    requiresDisinfection: true,
+    requiresRuleAcceptance: true,
+  },
+  source: {
+    url: "https://example.com",
+    checkedAt: "2026-08-31",
+    status: "verified-public-source",
+  },
+  note: "Testprodukt",
+});
+
+test("døgnkort fra klokken 18 gjelder til 17.59 neste kalenderdag", () => {
+  const validity = calculatePermitValidity(
+    permitProduct("day", { label: "Fiskedøgn", startsAt: "18:00", endsAt: "17:59" }),
+    "2026-08-31",
+  );
+
+  assert.deepEqual(validity, {
+    startsAt: "2026-08-31T18:00",
+    endsAt: "2026-09-01T17:59",
+  });
+});
+
+test("sesongkort bruker produktets faktiske sesonggrenser", () => {
+  const validity = calculatePermitValidity(
+    permitProduct("season", {
+      label: "Sesongen 2026",
+      seasonStartsOn: "2026-06-01",
+      seasonEndsOn: "2026-08-31",
+    }),
+    "2026-07-15",
+  );
+
+  assert.deepEqual(validity, {
+    startsAt: "2026-06-01T00:00",
+    endsAt: "2026-08-31T23:59",
+  });
+});
+
+test("ukekort gjelder valgt dato og seks påfølgende kalenderdager", () => {
+  const validity = calculatePermitValidity(
+    permitProduct("week", { label: "Sju kalenderdager" }),
+    "2026-08-29",
+  );
+
+  assert.deepEqual(validity, {
+    startsAt: "2026-08-29T00:00",
+    endsAt: "2026-09-04T23:59",
+  });
+});
+
+test("kort uten egne klokkeslett gjelder hele valgt kalenderdag", () => {
+  const validity = calculatePermitValidity(
+    permitProduct("boat", { label: "Valgt fiskedøgn" }),
+    "2026-08-31",
+  );
+
+  assert.deepEqual(validity, {
+    startsAt: "2026-08-31T00:00",
+    endsAt: "2026-08-31T23:59",
+  });
+});
+
+test("ugyldig fiskedato avvises før et kort kan lagres", () => {
+  assert.throws(
+    () => calculatePermitValidity(permitProduct("day", { label: "Valgt fiskedøgn" }), "2026-02-30"),
+    /finnes ikke i kalenderen/,
+  );
+});
 
 test("fangstmål leses med både komma og punktum", () => {
   assert.equal(parseMeasurement("64,5"), 64.5);
