@@ -10,6 +10,7 @@ import {
   validatePermitParticipants,
   type PermitCheckoutForm,
   type PermitPurchase,
+  type PrototypePaymentOutcome,
   permitTermsVersion,
   prototypePermitIssuer,
 } from "@/domain/fishing-permits/permit-purchase";
@@ -22,8 +23,7 @@ import {
   getPrototypePermitAvailability,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
-export type PaymentOutcome = "approved" | "cancelled" | "failed";
-export type CheckoutStep = "buyer" | "requirements" | "review" | "confirmation";
+export type CheckoutStep = "buyer" | "requirements" | "review" | "payment" | "confirmation";
 
 function todayInNorway() {
   return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
@@ -34,16 +34,17 @@ export function usePermitCheckoutController({
   save,
   savePurchase,
   onPurchased,
+  paymentOutcome,
 }: {
   product: PrototypePermitProduct;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
+  paymentOutcome: PrototypePaymentOutcome;
 }) {
   const [step, setStep] = useState<CheckoutStep>("buyer");
   const [selectedDate, setSelectedDate] = useState(todayInNorway);
   const [form, setForm] = useState<PermitCheckoutForm>(emptyPermitCheckoutForm);
-  const [outcome, setOutcome] = useState<PaymentOutcome>("approved");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receipt, setReceipt] = useState<{
@@ -82,10 +83,15 @@ export function usePermitCheckoutController({
     setStep("review");
   }
 
+  function continueToPayment() {
+    if (!form.confirmsDetails) return setError("Bekreft at opplysningene er riktige.");
+    setError("");
+    setStep("payment");
+  }
+
   async function submit() {
     if (!canPurchasePrototypePermit(product))
       return setError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
-    if (!form.confirmsDetails) return setError("Bekreft at opplysningene er riktige.");
     const availability = getPrototypePermitAvailability(product, selectedDate);
     if (!canSelectPrototypePermit(availability)) return setError(availability.label);
     setIsSubmitting(true);
@@ -109,21 +115,21 @@ export function usePermitCheckoutController({
       acceptedRulesAt: now,
       acceptedTermsAt: now,
       createdAt: now,
-      status: outcome === "approved" ? "payment-approved" : outcome,
+      status: paymentOutcome === "approved" ? "payment-approved" : paymentOutcome,
       termsVersion: permitTermsVersion,
       issuer: prototypePermitIssuer,
     };
-    if (outcome !== "approved") {
+    if (paymentOutcome !== "approved") {
       const purchase: PermitPurchase = {
         ...basePurchase,
-        status: outcome,
-        ...(outcome === "cancelled" ? { cancelledAt: now } : {}),
+        status: paymentOutcome,
+        ...(paymentOutcome === "cancelled" ? { cancelledAt: now } : {}),
       };
       const stored = savePurchase(purchase);
       setIsSubmitting(false);
       if (!stored.ok) return setError(stored.error);
       return setError(
-        outcome === "cancelled"
+        paymentOutcome === "cancelled"
           ? "Betalingen ble avbrutt. Bestillingen er registrert, men ingen kort ble utstedt."
           : "Testbetalingen feilet. Bestillingen er registrert, men ingen kort ble utstedt.",
       );
@@ -169,16 +175,12 @@ export function usePermitCheckoutController({
     },
     form,
     updateForm,
-    outcome,
-    setOutcome: (value: PaymentOutcome) => {
-      setOutcome(value);
-      setError("");
-    },
     error,
     isSubmitting,
     receipt,
     continueFromBuyer,
     continueFromRequirements,
+    continueToPayment,
     submit,
     backTo: (target: CheckoutStep) => {
       setError("");

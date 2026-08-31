@@ -11,6 +11,7 @@ import { usePermitReportingDays } from "./use-permit-reporting-days";
 import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 
@@ -19,11 +20,13 @@ export function PermitShop({
   onPermitPurchased,
   onOpenPermits,
   onGoHome,
+  paymentOutcome = "approved",
 }: {
   initialZone?: ZoneId;
   onPermitPurchased?: (zoneId: ZoneId) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
+  paymentOutcome?: PrototypePaymentOutcome;
 }) {
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const [selectedArea, setSelectedArea] = useState("all");
@@ -81,6 +84,7 @@ export function PermitShop({
         onPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}
         onGoHome={onGoHome}
+        paymentOutcome={paymentOutcome}
       />
     );
   }

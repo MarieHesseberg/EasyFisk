@@ -456,7 +456,10 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
 
   const user = userEvent.setup();
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  expect(screen.queryByRole("radio", { name: /Betaling/ })).toBeNull();
+  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
+  expect(screen.getByRole("heading", { name: "Betal fiskekortet" })).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
 
   expect(saved).toHaveLength(1);
   expect(isFishingDocument(saved[0])).toBe(true);
@@ -511,9 +514,10 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   const purchaseStatuses: string[] = [];
   const user = userEvent.setup();
 
-  render(
+  const { unmount } = render(
     <PermitCheckout
       product={product}
+      paymentOutcome="cancelled"
       back={() => undefined}
       save={async () => {
         saves += 1;
@@ -527,13 +531,29 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   );
 
   await completePermitCheckoutDetails(user);
-
-  await user.click(screen.getByRole("radio", { name: "Betaling avbrutt" }));
-  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
+  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Betalingen ble avbrutt");
+  unmount();
 
-  await user.click(screen.getByRole("radio", { name: "Betaling feilet" }));
-  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  render(
+    <PermitCheckout
+      product={product}
+      paymentOutcome="failed"
+      back={() => undefined}
+      save={async () => {
+        saves += 1;
+        return operationSucceeded(undefined);
+      }}
+      savePurchase={(purchase) => {
+        purchaseStatuses.push(purchase.status);
+        return operationSucceeded(undefined);
+      }}
+    />,
+  );
+  await completePermitCheckoutDetails(user);
+  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
+  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
   expect(saves).toBe(0);
   expect(purchaseStatuses).toEqual(["cancelled", "failed"]);

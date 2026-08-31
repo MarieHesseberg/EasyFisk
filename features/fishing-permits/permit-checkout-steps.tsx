@@ -3,7 +3,6 @@ import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-perm
 import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
-import type { PaymentOutcome } from "./use-permit-checkout-controller";
 import type { PrototypePermitAvailability } from "@/domain/fishing-permits/prototype-permit-product";
 
 type UpdateForm = <Key extends keyof PermitCheckoutForm>(
@@ -174,26 +173,20 @@ export function PermitReviewStep({
   selectedDate,
   form,
   updateForm,
-  outcome,
-  setOutcome,
   back,
-  submit,
-  isSubmitting,
+  next,
 }: {
   product: PrototypePermitProduct;
   selectedDate: string;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
-  outcome: PaymentOutcome;
-  setOutcome: (value: PaymentOutcome) => void;
   back: () => void;
-  submit: () => void;
-  isSubmitting: boolean;
+  next: () => void;
 }) {
   const validity = calculatePermitValidity(product, selectedDate);
   return (
     <div className="permit-checkout-step">
-      <h3>Kontroller og betal</h3>
+      <h3>Kontroller bestillingen</h3>
       <dl className="permit-order-summary">
         <div>
           <dt>Kort</dt>
@@ -220,24 +213,6 @@ export function PermitReviewStep({
           </dd>
         </div>
       </dl>
-      <fieldset>
-        <legend>Simulert betalingsresultat</legend>
-        {(["approved", "cancelled", "failed"] as const).map((value) => (
-          <label className="permit-consent" key={value}>
-            <input
-              type="radio"
-              name="payment-outcome"
-              checked={outcome === value}
-              onChange={() => setOutcome(value)}
-            />
-            {value === "approved"
-              ? "Betaling godkjent"
-              : value === "cancelled"
-                ? "Betaling avbrutt"
-                : "Betaling feilet"}
-          </label>
-        ))}
-      </fieldset>
       <label className="permit-consent">
         <input
           type="checkbox"
@@ -250,8 +225,49 @@ export function PermitReviewStep({
         <button className="secondary" type="button" onClick={back}>
           Tilbake og endre
         </button>
+        <button className="primary" type="button" onClick={next}>
+          Gå til testbetaling
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function PermitPaymentStep({
+  product,
+  back,
+  submit,
+  isSubmitting,
+}: {
+  product: PrototypePermitProduct;
+  back: () => void;
+  submit: () => void;
+  isSubmitting: boolean;
+}) {
+  return (
+    <div className="permit-checkout-step permit-payment-step">
+      <small>SIKKER TESTBETALING</small>
+      <h3>Betal fiskekortet</h3>
+      <div className="permit-test-warning">
+        <b>Dette er en simulert betaling.</b>
+        <span>Ingen kortopplysninger registreres, og ingen penger trekkes.</span>
+      </div>
+      <dl className="permit-order-summary">
+        <div>
+          <dt>Betalingsmåte</dt>
+          <dd>Testkort ···· 4242</dd>
+        </div>
+        <div>
+          <dt>Beløp</dt>
+          <dd>{product.price.amountNok} kr</dd>
+        </div>
+      </dl>
+      <div className="permit-checkout-actions">
+        <button className="secondary" type="button" disabled={isSubmitting} onClick={back}>
+          Tilbake
+        </button>
         <button className="primary" type="button" disabled={isSubmitting} onClick={submit}>
-          {isSubmitting ? "Lagrer testkjøp …" : "Utfør testbetaling"}
+          {isSubmitting ? "Behandler testbetaling …" : `Betal ${product.price.amountNok} kr`}
         </button>
       </div>
     </div>

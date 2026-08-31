@@ -1,4 +1,5 @@
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function StatusEngineControl({
   id,
@@ -8,6 +9,8 @@ export function StatusEngineControl({
   selectStatus,
   startTest,
   useActualStatus,
+  paymentOutcome,
+  setPaymentOutcome,
 }: {
   id: string;
   scenarios: readonly DemoScenario[];
@@ -16,6 +19,8 @@ export function StatusEngineControl({
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
   useActualStatus: () => void;
+  paymentOutcome: PrototypePaymentOutcome;
+  setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   return (
     <>
@@ -47,6 +52,21 @@ export function StatusEngineControl({
           Avslutt testmodus · bruk registrerte dokumenter
         </button>
       )}
+      <div className="feature-divider" />
+      <label className="demo-select-label" htmlFor={`${id}-payment`}>
+        Resultat ved neste testbetaling
+      </label>
+      <select
+        id={`${id}-payment`}
+        className="demo-select"
+        value={paymentOutcome}
+        onChange={(event) => setPaymentOutcome(event.target.value as PrototypePaymentOutcome)}
+      >
+        <option value="approved">Betaling godkjennes</option>
+        <option value="cancelled">Betaling avbrytes</option>
+        <option value="failed">Betaling feiler</option>
+      </select>
+      <small>Dette er en intern prototypeinnstilling og vises ikke i kjøpsskjemaet.</small>
     </>
   );
 }

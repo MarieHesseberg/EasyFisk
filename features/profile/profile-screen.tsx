@@ -12,6 +12,7 @@ import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 import { StatusEngineSettingsDialog } from "@/features/profile/status-engine-settings-dialog";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 type ProfileDestination = DetailDestination | "status-engine";
 
@@ -24,6 +25,8 @@ export function ProfileScreen({
   useActualStatus,
   openStatistics,
   openPermitShop,
+  paymentOutcome,
+  setPaymentOutcome,
 }: {
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
@@ -33,6 +36,8 @@ export function ProfileScreen({
   useActualStatus: () => void;
   openStatistics: () => void;
   openPermitShop: () => void;
+  paymentOutcome: PrototypePaymentOutcome;
+  setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { profile } = appContentRepository.getContent();
@@ -122,6 +127,8 @@ export function ProfileScreen({
           selectStatus={selectDemoStatus}
           startTest={testDemoStatus}
           useActualStatus={useActualStatus}
+          paymentOutcome={paymentOutcome}
+          setPaymentOutcome={setPaymentOutcome}
         />
       )}
       {detail && detail !== "status-engine" && (

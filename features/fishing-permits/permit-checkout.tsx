@@ -9,6 +9,7 @@ import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import {
   PermitBuyerStep,
   PermitConfirmationStep,
+  PermitPaymentStep,
   PermitRequirementsStep,
   PermitReviewStep,
 } from "./permit-checkout-steps";
@@ -18,7 +19,9 @@ import {
   getPrototypePermitDateRange,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
-const stepNumbers = { buyer: 1, requirements: 2, review: 3, confirmation: 4 } as const;
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+
+const stepNumbers = { buyer: 1, requirements: 2, review: 3, payment: 4, confirmation: 5 } as const;
 
 export function PermitCheckout({
   product,
@@ -29,6 +32,7 @@ export function PermitCheckout({
   onPurchased,
   onOpenPermits,
   onGoHome,
+  paymentOutcome = "approved",
 }: {
   product: PrototypePermitProduct;
   documents?: FishingDocument[];
@@ -38,8 +42,15 @@ export function PermitCheckout({
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
+  paymentOutcome?: PrototypePaymentOutcome;
 }) {
-  const checkout = usePermitCheckoutController({ product, save, savePurchase, onPurchased });
+  const checkout = usePermitCheckoutController({
+    product,
+    save,
+    savePurchase,
+    onPurchased,
+    paymentOutcome,
+  });
   const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
   const dateRange = getPrototypePermitDateRange(product);
   let validity = null;
@@ -62,7 +73,7 @@ export function PermitCheckout({
         </button>
       )}
       <ol className="permit-checkout-progress" aria-label="Fremdrift">
-        {[1, 2, 3, 4].map((number) => (
+        {[1, 2, 3, 4, 5].map((number) => (
           <li
             key={number}
             aria-current={stepNumbers[checkout.step] === number ? "step" : undefined}
@@ -113,9 +124,14 @@ export function PermitCheckout({
           selectedDate={checkout.selectedDate}
           form={checkout.form}
           updateForm={checkout.updateForm}
-          outcome={checkout.outcome}
-          setOutcome={checkout.setOutcome}
           back={() => checkout.backTo("requirements")}
+          next={checkout.continueToPayment}
+        />
+      )}
+      {checkout.step === "payment" && (
+        <PermitPaymentStep
+          product={product}
+          back={() => checkout.backTo("review")}
           submit={() => void checkout.submit()}
           isSubmitting={checkout.isSubmitting}
         />

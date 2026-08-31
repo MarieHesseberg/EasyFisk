@@ -9,6 +9,7 @@ import type { DocumentReadiness } from "@/domain/documents/get-document-readines
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { PermitShop } from "@/features/fishing-permits/permit-shop";
 import type { ZoneId } from "@/domain/zones/zone";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function ProfileDetailContent({
   destination,
@@ -18,6 +19,7 @@ export function ProfileDetailContent({
   onPermitPurchased,
   onOpenPermits,
   onGoHome,
+  paymentOutcome,
 }: {
   destination: Exclude<DetailDestination, "feedback">;
   testReadiness?: DocumentReadiness;
@@ -26,6 +28,7 @@ export function ProfileDetailContent({
   onPermitPurchased?: (zoneId: ZoneId) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
+  paymentOutcome?: PrototypePaymentOutcome;
 }) {
   const testDocuments = fishingContentRepository.getDemoDocuments();
   const testDocument = (kind: "permit" | "disinfection" | "fee") =>
@@ -48,6 +51,7 @@ export function ProfileDetailContent({
           onPermitPurchased={onPermitPurchased}
           onOpenPermits={onOpenPermits}
           onGoHome={onGoHome}
+          paymentOutcome={paymentOutcome}
         />
       );
     case "disinfection":

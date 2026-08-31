@@ -42,6 +42,7 @@ export function EasyFiskApp() {
     isStatusTestMode,
     lastSession,
     pastSessionRequested,
+    paymentOutcome,
     requestedCatchTime,
     screen,
     sessions,
@@ -100,6 +101,7 @@ export function EasyFiskApp() {
         {screen === "permits" && (
           <PermitShopScreen
             initialZone={zone}
+            paymentOutcome={paymentOutcome}
             onPermitPurchased={(purchasedZone) => {
               actions.setZone(purchasedZone);
             }}
@@ -143,6 +145,8 @@ export function EasyFiskApp() {
             useActualStatus={actions.useActualStatus}
             openStatistics={() => actions.navigate("stats")}
             openPermitShop={() => actions.openDetail("permit-shop")}
+            paymentOutcome={paymentOutcome}
+            setPaymentOutcome={actions.setPaymentOutcome}
             testDemoStatus={() => {
               if (!actions.startStatusTest()) return;
               actions.navigate("home");
@@ -198,6 +202,7 @@ export function EasyFiskApp() {
               actions.closeDetail();
               actions.navigate("home");
             }}
+            paymentOutcome={paymentOutcome}
           />
         )}
         <ScrollIndicator />
@@ -208,6 +213,8 @@ export function EasyFiskApp() {
         isTestMode={isStatusTestMode}
         selectStatus={actions.selectDemoStatus}
         useActualStatus={actions.useActualStatus}
+        paymentOutcome={paymentOutcome}
+        setPaymentOutcome={actions.setPaymentOutcome}
         startTest={() => {
           if (!actions.startStatusTest()) return;
           actions.navigate("home");

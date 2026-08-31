@@ -5,6 +5,7 @@ import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import type { DetailDestination, Screen } from "@/domain/navigation/navigation";
 import type { FlowMode } from "@/domain/sessions/session";
 import type { ZoneId } from "@/domain/zones/zone";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function useAppNavigationController() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -15,6 +16,7 @@ export function useAppNavigationController() {
   const [zone, setZone] = useState<ZoneId>(3);
   const [statsMineRequested, setStatsMineRequested] = useState(false);
   const [pastSessionRequested, setPastSessionRequested] = useState(false);
+  const [paymentOutcome, setPaymentOutcome] = useState<PrototypePaymentOutcome>("approved");
 
   function navigate(nextScreen: Screen) {
     setPastSessionRequested(false);
@@ -29,6 +31,7 @@ export function useAppNavigationController() {
       globalDetail,
       isStatusTestMode,
       pastSessionRequested,
+      paymentOutcome,
       screen,
       statsMineRequested,
       zone,
@@ -45,6 +48,7 @@ export function useAppNavigationController() {
       openDetail: setGlobalDetail,
       setDemoStatus,
       setIsStatusTestMode,
+      setPaymentOutcome,
       setFlow,
       setScreen,
       setZone,

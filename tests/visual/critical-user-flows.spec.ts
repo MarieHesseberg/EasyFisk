@@ -60,6 +60,14 @@ async function completePermitCheckoutDetails(shop: Locator, group = false) {
   await shop.getByLabel(/Jeg bekrefter at opplysningene er riktige/).check();
 }
 
+async function selectPaymentOutcome(page: Page, outcome: "approved" | "cancelled" | "failed") {
+  await page.getByRole("button", { name: "Mer" }).click();
+  await page.getByRole("button", { name: /Statusmotor/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Statusmotor" });
+  await dialog.getByLabel("Resultat ved neste testbetaling").selectOption(outcome);
+  await dialog.getByRole("button", { name: "Tilbake" }).click();
+}
+
 test.beforeEach(async ({ page }) => {
   await resetApp(page);
 });
@@ -120,7 +128,9 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
   await shop.getByLabel("Fiskedato").fill("2026-08-30");
   await completePermitCheckoutDetails(shop, true);
-  await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
+  await shop.getByRole("button", { name: "Gå til testbetaling" }).click();
+  await expect(shop.getByText("Ingen kortopplysninger registreres")).toBeVisible();
+  await shop.getByRole("button", { name: "Betal 2400 kr" }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
   await expect(shop.getByRole("status")).toContainText("Sone 2 · Fuskeland");
   await expect(shop.getByRole("status")).toContainText("EF-TEST-");
@@ -148,8 +158,10 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
 });
 
 test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async ({ page }) => {
-  await page.getByRole("button", { name: "Kjøp fiskekort" }).click();
-  const shop = page.getByRole("dialog", { name: "Fiskekort og kjøp" });
+  await selectPaymentOutcome(page, "cancelled");
+  await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
+  const shop = page.locator(".permit-shop-screen");
+  await shop.getByRole("button", { name: "Sone 3" }).click();
 
   const soldOut = shop.locator("article").filter({ hasText: "Sone 3 sesongkort" });
   await soldOut.getByRole("button", { name: "Velg fiskekort" }).click();
@@ -162,13 +174,23 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await dayPermit.getByRole("button", { name: "Velg fiskekort" }).click();
   await shop.getByLabel("Fiskedato").fill("2026-08-20");
   await completePermitCheckoutDetails(shop);
-  await shop.getByRole("radio", { name: "Betaling avbrutt" }).check();
-  await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
+  await expect(shop.getByRole("radio")).toHaveCount(0);
+  await shop.getByRole("button", { name: "Gå til testbetaling" }).click();
+  await shop.getByRole("button", { name: "Betal 455 kr" }).click();
   await expect(shop.getByRole("alert")).toContainText("Betalingen ble avbrutt");
 
-  await shop.getByRole("radio", { name: "Betaling feilet" }).check();
-  await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
-  await expect(shop.getByRole("alert")).toContainText("Testbetalingen feilet");
+  await resetApp(page);
+  await selectPaymentOutcome(page, "failed");
+  await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
+  const failedShop = page.locator(".permit-shop-screen");
+  await failedShop.getByRole("button", { name: "Sone 3" }).click();
+  const failedPermit = failedShop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
+  await failedPermit.getByRole("button", { name: "Velg fiskekort" }).click();
+  await failedShop.getByLabel("Fiskedato").fill("2026-08-20");
+  await completePermitCheckoutDetails(failedShop);
+  await failedShop.getByRole("button", { name: "Gå til testbetaling" }).click();
+  await failedShop.getByRole("button", { name: "Betal 455 kr" }).click();
+  await expect(failedShop.getByRole("alert")).toContainText("Testbetalingen feilet");
 });
 
 for (const viewport of [

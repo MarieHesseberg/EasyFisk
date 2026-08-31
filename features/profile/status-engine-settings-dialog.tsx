@@ -1,6 +1,7 @@
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function StatusEngineSettingsDialog({
   close,
@@ -10,6 +11,8 @@ export function StatusEngineSettingsDialog({
   selectStatus,
   startTest,
   useActualStatus,
+  paymentOutcome,
+  setPaymentOutcome,
 }: {
   close: () => void;
   scenarios: readonly DemoScenario[];
@@ -18,6 +21,8 @@ export function StatusEngineSettingsDialog({
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
   useActualStatus: () => void;
+  paymentOutcome: PrototypePaymentOutcome;
+  setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   const dialogRef = useDialogAccessibility(close);
 
@@ -49,6 +54,8 @@ export function StatusEngineSettingsDialog({
           selectStatus={selectStatus}
           startTest={startTest}
           useActualStatus={useActualStatus}
+          paymentOutcome={paymentOutcome}
+          setPaymentOutcome={setPaymentOutcome}
         />
       </section>
     </div>

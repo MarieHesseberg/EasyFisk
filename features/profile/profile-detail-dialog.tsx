@@ -6,6 +6,7 @@ import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { ZoneId } from "@/domain/zones/zone";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function ProfileDetailDialog({
   destination,
@@ -16,6 +17,7 @@ export function ProfileDetailDialog({
   onPermitPurchased,
   onOpenPermits,
   onGoHome,
+  paymentOutcome,
 }: {
   destination: DetailDestination;
   close: () => void;
@@ -25,6 +27,7 @@ export function ProfileDetailDialog({
   onPermitPurchased?: (zoneId: ZoneId) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
+  paymentOutcome?: PrototypePaymentOutcome;
 }) {
   const dialogRef = useDialogAccessibility(close);
   const title = detailTitles[destination];
@@ -54,6 +57,7 @@ export function ProfileDetailDialog({
             onPermitPurchased={onPermitPurchased}
             onOpenPermits={onOpenPermits}
             onGoHome={onGoHome}
+            paymentOutcome={paymentOutcome}
           />
         )}
       </div>

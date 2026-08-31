@@ -2,6 +2,7 @@ import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
 
 export const permitTermsVersion = "easyfisk-prototype-2026-08-31";
 export const prototypePermitIssuer = "EasyFisk testbutikk";
+export type PrototypePaymentOutcome = "approved" | "cancelled" | "failed";
 
 export type PermitBuyer = { fullName: string; birthDate: string; email: string; phone: string };
 export type PermitPurchaseStatus =

@@ -3,6 +3,7 @@ import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
+import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 
 export function DemoControlPanel({
   scenarios,
@@ -11,6 +12,8 @@ export function DemoControlPanel({
   selectStatus,
   startTest,
   useActualStatus,
+  paymentOutcome,
+  setPaymentOutcome,
 }: {
   scenarios: readonly DemoScenario[];
   selected: DemoScenario;
@@ -18,6 +21,8 @@ export function DemoControlPanel({
   selectStatus: (status: DemoStatus) => void;
   startTest: () => void;
   useActualStatus: () => void;
+  paymentOutcome: PrototypePaymentOutcome;
+  setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   const { demoFeatures } = appContentRepository.getContent();
   return (
@@ -35,6 +40,8 @@ export function DemoControlPanel({
         selectStatus={selectStatus}
         startTest={startTest}
         useActualStatus={useActualStatus}
+        paymentOutcome={paymentOutcome}
+        setPaymentOutcome={setPaymentOutcome}
       />
       <div className="feature-divider" />
       <span>FUNKSJONER I PROTOTYPEN</span>
