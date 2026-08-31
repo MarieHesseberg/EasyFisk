@@ -1,5 +1,13 @@
 import { afterEach, expect, test } from "vitest";
-import { act, cleanup, render, renderHook, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  renderHook,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BottomNavigation } from "../components/layout/bottom-navigation";
 import { CheckRow } from "../components/ui/check-row";
@@ -22,6 +30,7 @@ import { createLocalStorageFishingLogRepository } from "../data/local-storage/cr
 import { permitCatalogRepository } from "../data/repositories/permit-catalog";
 import { PermitShop } from "../features/fishing-permits/permit-shop";
 import { PermitCheckout } from "../features/fishing-permits/permit-checkout";
+import { PermitReportingRegistration } from "../features/fishing-permits/permit-reporting-registration";
 import { createTestPermitDocument } from "../features/fishing-permits/create-test-permit-document";
 import { operationSucceeded } from "../domain/shared/operation-result";
 import { isFishingDocument } from "../domain/documents/validate-document";
@@ -268,6 +277,70 @@ test("produktregisteret har døgnkort, sesongkort og gruppekort", () => {
   expect(types.has("day")).toBe(true);
   expect(types.has("season")).toBe(true);
   expect(types.has("group")).toBe(true);
+});
+
+test("rapporteringskort krever sesongkort og bruker ikke betalingsflyten", async () => {
+  const product = permitCatalogRepository.findProduct("zone-2-holmegard-reporting");
+  if (!product) throw new Error("Rapporteringskort mangler");
+
+  render(
+    <PermitReportingRegistration
+      product={product}
+      documents={[]}
+      back={() => undefined}
+      save={() => operationSucceeded(undefined)}
+    />,
+  );
+
+  expect(screen.getByRole("alert").textContent).toContain("Gyldig sesongkort mangler");
+  expect(screen.queryByText(/Testbetaling/)).toBeNull();
+  expect(
+    (screen.getByRole("button", { name: "Registrer rapporteringsdøgn" }) as HTMLButtonElement)
+      .disabled,
+  ).toBe(true);
+});
+
+test("rapporteringsdøgn lagres separat med fangst eller nullfangst", async () => {
+  const product = permitCatalogRepository.findProduct("zone-2-holmegard-reporting");
+  if (!product) throw new Error("Rapporteringskort mangler");
+  const saved: unknown[] = [];
+  const seasonPermit = {
+    id: "season-holmegard",
+    kind: "permit" as const,
+    updatedAt: Date.now(),
+    values: {
+      holder: "Kari Fisker",
+      issuer: "Testutsteder",
+      category: "Sesongkort",
+      area: "Mandalselva · Sone 2 · Holmegård",
+      startsAt: "2026-06-01T00:00",
+      endsAt: "2026-08-31T23:59",
+    },
+  };
+  const user = userEvent.setup();
+
+  render(
+    <PermitReportingRegistration
+      product={product}
+      documents={[seasonPermit]}
+      back={() => undefined}
+      save={(record) => {
+        saved.push(record);
+        return operationSucceeded(undefined);
+      }}
+    />,
+  );
+  fireEvent.change(screen.getByLabelText("Fiskedato"), { target: { value: "2026-08-30" } });
+  await user.click(screen.getByRole("radio", { name: "Nullfangst" }));
+  await user.click(screen.getByRole("button", { name: "Registrer rapporteringsdøgn" }));
+
+  expect(saved).toHaveLength(1);
+  expect(saved[0]).toMatchObject({
+    productId: product.id,
+    seasonPermitDocumentId: seasonPermit.id,
+    outcome: "no-catch",
+  });
+  expect(screen.getByRole("status").textContent).toContain("nullfangst");
 });
 
 test("produktregisteret dekker alle simulerte tilgjengelighetssituasjoner", () => {

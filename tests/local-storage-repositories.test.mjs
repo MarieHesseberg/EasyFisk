@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository.ts";
 import { createLocalStoragePreferencesRepository } from "../data/local-storage/create-local-storage-preferences-repository.ts";
+import { createLocalStoragePermitReportingRepository } from "../data/local-storage/create-local-storage-permit-reporting-repository.ts";
 
 function createStorage() {
   const values = new Map();
@@ -25,6 +26,27 @@ const catchRecord = {
   violation: false,
   late: false,
 };
+
+test("rapporteringsdøgn lagres separat og overskrives med senere fangststatus", () => {
+  const storage = createStorage();
+  const repository = createLocalStoragePermitReportingRepository(storage);
+  const record = {
+    id: "reporting-day-holmegard-2026-08-20",
+    productId: "zone-2-holmegard-reporting",
+    zoneId: 2,
+    areaName: "Holmegård",
+    fishingDate: "2026-08-20",
+    startsAt: "2026-08-20T18:00",
+    endsAt: "2026-08-21T17:59",
+    seasonPermitDocumentId: "season-holmegard",
+    outcome: "pending",
+    updatedAt: 1,
+  };
+
+  assert.equal(repository.save(record).ok, true);
+  assert.equal(repository.save({ ...record, outcome: "no-catch", updatedAt: 2 }).ok, true);
+  assert.deepEqual(repository.list().value, [{ ...record, outcome: "no-catch", updatedAt: 2 }]);
+});
 
 test("localStorage-adapter beholder fangst og korrigering mellom instanser", () => {
   const storage = createStorage();

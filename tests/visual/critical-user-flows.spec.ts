@@ -85,6 +85,19 @@ test("fiskekortbutikken har en egen fane i hovednavigasjonen", async ({ page }) 
   );
 });
 
+test("rapporteringskort krever sesongkort og åpner ikke testbetaling", async ({ page }) => {
+  await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
+  await page.getByRole("button", { name: "Sone 2" }).click();
+  await page.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
+  await page.getByRole("button", { name: "Velg rapporteringskort" }).click();
+
+  const reporting = page.getByRole("region", { name: "Registrer rapporteringsdøgn" });
+  await expect(reporting).toBeVisible();
+  await expect(reporting.getByRole("alert")).toContainText("Gyldig sesongkort mangler");
+  await expect(page.getByText(/Testbetaling/)).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Registrer rapporteringsdøgn" })).toBeDisabled();
+});
+
 test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ page }) => {
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Fiskekort og kjøp/ }).click();

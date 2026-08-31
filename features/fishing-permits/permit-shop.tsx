@@ -5,7 +5,10 @@ import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
 import type { ZoneId } from "@/domain/zones/zone";
 import { useDocuments } from "@/features/documents/use-documents";
 import { PermitCheckout } from "./permit-checkout";
+import { PermitReportingRegistration } from "./permit-reporting-registration";
 import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
+import { usePermitReportingDays } from "./use-permit-reporting-days";
+import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 
@@ -21,6 +24,7 @@ export function PermitShop({
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [resetMessage, setResetMessage] = useState("");
   const documents = useDocuments();
+  const reportingDays = usePermitReportingDays();
   const zoneProducts = permitCatalogRepository.listProductsByZone(selectedZone);
   const areas = Array.from(new Set(zoneProducts.map((product) => product.areaName)));
   const products =
@@ -46,6 +50,15 @@ export function PermitShop({
   }
 
   if (selectedProduct) {
+    if (selectedProduct.action === "register-reporting-day")
+      return (
+        <PermitReportingRegistration
+          product={selectedProduct}
+          documents={documents.documents}
+          back={() => setSelectedProductId(null)}
+          save={reportingDays.save}
+        />
+      );
     return (
       <PermitCheckout
         product={selectedProduct}
@@ -136,6 +149,18 @@ export function PermitShop({
           {resetMessage}
         </p>
       )}
+      {reportingDays.records.length > 0 && (
+        <section className="permit-reporting-summary" aria-labelledby="reporting-days-title">
+          <h3 id="reporting-days-title">Registrerte rapporteringsdøgn</h3>
+          {reportingDays.records.map((record) => (
+            <p key={record.id}>
+              <b>{record.areaName}</b> · {record.fishingDate} ·{" "}
+              {permitReportingOutcomeLabels[record.outcome]}
+            </p>
+          ))}
+        </section>
+      )}
+      {reportingDays.error && <p role="alert">{reportingDays.error}</p>}
       <p className="permit-shop-disclaimer">
         Produktdata kontrollert 31.08.2026. Pris, kapasitet og tilgjengelighet må kontrolleres før
         et virkelig kjøp.
