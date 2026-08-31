@@ -57,6 +57,20 @@ export function parseCoFishers(value: string) {
     .map((name) => name.trim())
     .filter(Boolean);
 }
+export function getPermitPriceSummary(
+  product: PrototypePermitProduct,
+  form: Pick<PermitCheckoutForm, "coFishersText">,
+) {
+  const basePriceNok = product.price.amountNok ?? 0;
+  const administrationFeeNok = 0;
+  return {
+    basePriceNok,
+    administrationFeeNok,
+    permitQuantity: 1,
+    participantCount: parseCoFishers(form.coFishersText).length + 1,
+    totalNok: basePriceNok + administrationFeeNok,
+  };
+}
 export function validatePermitBuyer(form: PermitCheckoutForm) {
   if (form.fullName.trim().length < 3) return "Oppgi fullt navn på kortinnehaveren.";
   const birthDate = Date.parse(`${form.birthDate}T12:00:00`);

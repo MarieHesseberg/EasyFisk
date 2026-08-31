@@ -129,8 +129,14 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
   await completePermitCheckoutDetails(shop, true);
+  const reviewSummary = shop.locator(".permit-order-summary");
+  await expect(reviewSummary).toContainText("Grunnpris2400 kr");
+  await expect(reviewSummary).toContainText("Administrasjonsgebyr0 kr");
+  await expect(reviewSummary).toContainText("1 kort · 2 deltakere");
+  await expect(reviewSummary).toContainText("Totalt beløp2400 kr");
   await shop.getByRole("button", { name: "Gå til testbetaling" }).click();
   await expect(shop.getByText("Ingen kortopplysninger registreres")).toBeVisible();
+  await expect(shop.getByText("Ingen ekte betaling gjennomføres.")).toBeVisible();
   await shop.getByRole("button", { name: "Betal 2400 kr" }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
   await expect(shop.getByRole("status")).toContainText("Sone 2 · Fuskeland");
@@ -138,12 +144,21 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(shop.getByRole("status")).toContainText("2400 kr");
   await expect(shop.getByRole("button", { name: "Åpne fiskekort" })).toBeVisible();
   await expect(shop.getByRole("button", { name: "Tilbake til hjem" })).toBeVisible();
+  await expect(shop.getByRole("button", { name: "Registrer fiskeravgift" })).toBeVisible();
+  await expect(shop.getByRole("button", { name: "Registrer desinfisering" })).toBeVisible();
+  await shop.getByRole("button", { name: "Registrer fiskeravgift" }).click();
+  const feeDialog = page.getByRole("dialog", { name: "Statlig fiskeravgift" });
+  await expect(feeDialog).toBeVisible();
+  await feeDialog.getByRole("button", { name: /Tilbake/ }).click();
   await shop.getByRole("button", { name: "Åpne fiskekort" }).click();
   await expect(page.getByRole("dialog", { name: "Mine fiskekort" })).toBeVisible();
 
   await page.reload();
-  await expect(page.getByText(/Sone 2 · Fuskeland/)).toBeVisible();
-  await expect(page.getByText("Ingen registrert – legg til dokumentasjon")).toHaveCount(2);
+  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
+  const storedPermits = page.getByRole("dialog", { name: "Mine fiskekort" });
+  await expect(storedPermits).toContainText("Fuskeland");
+  await expect(storedPermits).toContainText("Gruppekort");
+  await storedPermits.getByRole("button", { name: /Tilbake/ }).click();
 
   await page.getByRole("button", { name: "Kart" }).click();
   await page.getByRole("button", { name: /Vis Sone 1/ }).click();
@@ -151,11 +166,6 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await page.getByRole("button", { name: /Vis Sone 4/ }).click();
   await expect(page.getByRole("heading", { name: /Sone 4/ })).toBeVisible();
   await page.getByRole("button", { name: "Hjem" }).click();
-
-  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
-  const permits = page.getByRole("dialog", { name: "Mine fiskekort" });
-  await expect(permits).toContainText("Fuskeland");
-  await expect(permits).toContainText("Gruppekort");
 });
 
 test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async ({ page }) => {

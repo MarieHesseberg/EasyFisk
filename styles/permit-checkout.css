@@ -204,3 +204,35 @@
 .permit-checkout-date-summary small {
   color: var(--color-text-muted);
 }
+.permit-purchase-requirement-note,
+.permit-no-real-payment {
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+  font-weight: 700;
+}
+.permit-no-real-payment {
+  text-align: center;
+}
+.permit-price-total {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.permit-price-total dd {
+  font-size: 18px;
+}
+.permit-missing-documents {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+  text-align: left;
+}
+.permit-missing-documents h4,
+.permit-missing-documents p {
+  margin: 0;
+}

@@ -1,6 +1,7 @@
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
 import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
+import { getPermitPriceSummary } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitAvailability } from "@/domain/fishing-permits/prototype-permit-product";
@@ -129,6 +130,12 @@ export function PermitRequirementsStep({
           </span>
         )}
       </div>
+      {(!readiness.fee || !readiness.disinfection) && (
+        <p className="permit-purchase-requirement-note">
+          Du kan kjøpe kortet nå, men kan ikke starte fiske før fiskeravgift og desinfisering er
+          gyldig.
+        </p>
+      )}
       <label className="permit-consent">
         <input
           type="checkbox"
@@ -173,6 +180,7 @@ export function PermitReviewStep({
   next: () => void;
 }) {
   const validity = calculatePermitValidity(product, selectedDate);
+  const price = getPermitPriceSummary(product, form);
   return (
     <div className="permit-checkout-step">
       <h3>Kontroller bestillingen</h3>
@@ -195,12 +203,7 @@ export function PermitReviewStep({
           <dt>Kortholder</dt>
           <dd>{form.fullName}</dd>
         </div>
-        <div>
-          <dt>Pris</dt>
-          <dd>
-            {product.price.amountNok === null ? "Ikke oppgitt" : `${product.price.amountNok} kr`}
-          </dd>
-        </div>
+        <PriceSummaryRows price={price} />
       </dl>
       <label className="permit-consent">
         <input
@@ -224,15 +227,18 @@ export function PermitReviewStep({
 
 export function PermitPaymentStep({
   product,
+  form,
   back,
   submit,
   isSubmitting,
 }: {
   product: PrototypePermitProduct;
+  form: PermitCheckoutForm;
   back: () => void;
   submit: () => void;
   isSubmitting: boolean;
 }) {
+  const price = getPermitPriceSummary(product, form);
   return (
     <div className="permit-checkout-step permit-payment-step">
       <small>SIKKER TESTBETALING</small>
@@ -246,17 +252,15 @@ export function PermitPaymentStep({
           <dt>Betalingsmåte</dt>
           <dd>Testkort ···· 4242</dd>
         </div>
-        <div>
-          <dt>Beløp</dt>
-          <dd>{product.price.amountNok} kr</dd>
-        </div>
+        <PriceSummaryRows price={price} />
       </dl>
+      <p className="permit-no-real-payment">Ingen ekte betaling gjennomføres.</p>
       <div className="permit-checkout-actions">
         <button className="secondary" type="button" disabled={isSubmitting} onClick={back}>
           Tilbake
         </button>
         <button className="primary" type="button" disabled={isSubmitting} onClick={submit}>
-          {isSubmitting ? "Behandler testbetaling …" : `Betal ${product.price.amountNok} kr`}
+          {isSubmitting ? "Behandler testbetaling …" : `Betal ${price.totalNok} kr`}
         </button>
       </div>
     </div>
@@ -269,12 +273,18 @@ export function PermitConfirmationStep({
   purchase,
   openPermits,
   goHome,
+  readiness,
+  registerFee,
+  registerDisinfection,
 }: {
   product: PrototypePermitProduct;
   receipt: FishingDocument;
   purchase: PermitPurchase;
   openPermits: () => void;
   goHome: () => void;
+  readiness: { fee: boolean; disinfection: boolean };
+  registerFee?: () => void;
+  registerDisinfection?: () => void;
 }) {
   return (
     <div className="permit-checkout-step permit-confirmation" role="status">
@@ -325,6 +335,22 @@ export function PermitConfirmationStep({
           <dd>{purchase.issuer}</dd>
         </div>
       </dl>
+      {(!readiness.fee || !readiness.disinfection) && (
+        <section className="permit-missing-documents" aria-labelledby="missing-documents-title">
+          <h4 id="missing-documents-title">Fullfør kravene før du fisker</h4>
+          <p>Fiskekortet er kjøpt, men fiske kan ikke startes før dokumentene er gyldige.</p>
+          {!readiness.fee && registerFee && (
+            <button className="secondary" type="button" onClick={registerFee}>
+              Registrer fiskeravgift
+            </button>
+          )}
+          {!readiness.disinfection && registerDisinfection && (
+            <button className="secondary" type="button" onClick={registerDisinfection}>
+              Registrer desinfisering
+            </button>
+          )}
+        </section>
+      )}
       <div className="permit-confirmation-actions">
         <button className="primary" type="button" onClick={openPermits}>
           Åpne fiskekort
@@ -334,5 +360,31 @@ export function PermitConfirmationStep({
         </button>
       </div>
     </div>
+  );
+}
+
+function PriceSummaryRows({ price }: { price: ReturnType<typeof getPermitPriceSummary> }) {
+  return (
+    <>
+      <div>
+        <dt>Grunnpris</dt>
+        <dd>{price.basePriceNok} kr</dd>
+      </div>
+      <div>
+        <dt>Administrasjonsgebyr</dt>
+        <dd>{price.administrationFeeNok === 0 ? "0 kr" : `${price.administrationFeeNok} kr`}</dd>
+      </div>
+      <div>
+        <dt>Omfang</dt>
+        <dd>
+          {price.permitQuantity} kort · {price.participantCount}{" "}
+          {price.participantCount === 1 ? "deltaker" : "deltakere"}
+        </dd>
+      </div>
+      <div className="permit-price-total">
+        <dt>Totalt beløp</dt>
+        <dd>{price.totalNok} kr</dd>
+      </div>
+    </>
   );
 }

@@ -25,12 +25,16 @@ export function PermitShop({
   onOpenPermits,
   onGoHome,
   paymentOutcome = "approved",
+  onRegisterFee,
+  onRegisterDisinfection,
 }: {
   initialZone?: ZoneId;
   onPermitPurchased?: (zoneId: ZoneId) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
   paymentOutcome?: PrototypePaymentOutcome;
+  onRegisterFee?: () => void;
+  onRegisterDisinfection?: () => void;
 }) {
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const [selectedArea, setSelectedArea] = useState("all");
@@ -103,6 +107,8 @@ export function PermitShop({
         onGoHome={onGoHome}
         paymentOutcome={paymentOutcome}
         initialSelectedDate={selectedDate}
+        onRegisterFee={onRegisterFee}
+        onRegisterDisinfection={onRegisterDisinfection}
       />
     );
   }

@@ -9,12 +9,16 @@ export function PermitShopScreen({
   onOpenPermits,
   onGoHome,
   paymentOutcome,
+  onRegisterFee,
+  onRegisterDisinfection,
 }: {
   initialZone: ZoneId;
   onPermitPurchased: (zoneId: ZoneId) => void;
   onOpenPermits: () => void;
   onGoHome: () => void;
   paymentOutcome: PrototypePaymentOutcome;
+  onRegisterFee: () => void;
+  onRegisterDisinfection: () => void;
 }) {
   return (
     <div className="screen permit-shop-screen">
@@ -25,6 +29,8 @@ export function PermitShopScreen({
         onOpenPermits={onOpenPermits}
         onGoHome={onGoHome}
         paymentOutcome={paymentOutcome}
+        onRegisterFee={onRegisterFee}
+        onRegisterDisinfection={onRegisterDisinfection}
       />
     </div>
   );

@@ -13,6 +13,7 @@ import {
   type PrototypePaymentOutcome,
   permitTermsVersion,
   prototypePermitIssuer,
+  getPermitPriceSummary,
 } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
@@ -101,6 +102,7 @@ export function usePermitCheckoutController({
     const purchaseId = `permit-purchase-${crypto.randomUUID()}`;
     const orderNumber = `EF-${String(now).slice(-8)}`;
     const paymentReference = `EF-TEST-${now}`;
+    const price = getPermitPriceSummary(product, form);
     const basePurchase: PermitPurchase = {
       id: purchaseId,
       orderNumber,
@@ -112,7 +114,7 @@ export function usePermitCheckoutController({
         phone: form.phone.trim(),
       },
       coFishers: parseCoFishers(form.coFishersText),
-      priceNok: product.price.amountNok,
+      priceNok: price.totalNok,
       fishingDate: selectedDate,
       acceptedRulesAt: now,
       acceptedTermsAt: now,

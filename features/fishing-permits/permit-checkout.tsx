@@ -31,6 +31,8 @@ export function PermitCheckout({
   onGoHome,
   paymentOutcome = "approved",
   initialSelectedDate,
+  onRegisterFee,
+  onRegisterDisinfection,
 }: {
   product: PrototypePermitProduct;
   documents?: FishingDocument[];
@@ -42,6 +44,8 @@ export function PermitCheckout({
   onGoHome?: () => void;
   paymentOutcome?: PrototypePaymentOutcome;
   initialSelectedDate?: string;
+  onRegisterFee?: () => void;
+  onRegisterDisinfection?: () => void;
 }) {
   const checkout = usePermitCheckoutController({
     product,
@@ -127,6 +131,7 @@ export function PermitCheckout({
       {checkout.step === "payment" && (
         <PermitPaymentStep
           product={product}
+          form={checkout.form}
           back={() => checkout.backTo("review")}
           submit={() => void checkout.submit()}
           isSubmitting={checkout.isSubmitting}
@@ -139,6 +144,9 @@ export function PermitCheckout({
           purchase={checkout.receipt.purchase}
           openPermits={onOpenPermits ?? back}
           goHome={onGoHome ?? back}
+          readiness={{ fee: readiness.fee, disinfection: readiness.disinfection }}
+          registerFee={onRegisterFee}
+          registerDisinfection={onRegisterDisinfection}
         />
       )}
       {checkout.error && (

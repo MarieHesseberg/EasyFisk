@@ -107,6 +107,8 @@ export function EasyFiskApp() {
             }}
             onOpenPermits={() => actions.openDetail("permits")}
             onGoHome={() => actions.navigate("home")}
+            onRegisterFee={() => actions.openDetail("fee")}
+            onRegisterDisinfection={() => actions.openDetail("disinfection")}
           />
         )}{" "}
         {screen === "rules" && (
