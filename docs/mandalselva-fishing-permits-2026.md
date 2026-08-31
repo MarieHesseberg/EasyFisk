@@ -154,20 +154,22 @@ Hvert produkt bør senere registreres med:
 - krav om rapporteringskort eller fangstrapport
 - kildekommentar og verifiseringsgrad
 
-## Valgt register for første kartprototype
+## Valgt register for kartprototypen
 
-Kartprototypen prioriterer Holmegård og viser følgende daterte produktutvalg:
+Kart- og butikkprototypen viser et datert utvalg av reelle salgsområder fra alle fire hovedsoner:
 
-- Sone 1: Båtkort for hele hovedsonen, inntil to stenger fra båt.
-- Sone 2, Holmegård: dagskort, to kort per fiskedøgn.
-- Sone 2, Holmegård: sesongkort, 15 kort totalt.
-- Sone 2, Holmegård: rapporteringskort for sesongkort som tilknyttet registrering, ikke kjøp.
-- Sone 3: døgnkort for hele hovedsonen, offentlig oppgitt pris 455 kr.
-- Sone 4: døgnkort for Lakseosen, to kort per døgn og offentlig oppgitt pris 600 kr.
+- Sone 1: Piren døgnkort, Sandnes døgnkort og båtkort for hele hovedsonen.
+- Sone 2: Bjørkenes og Fossefjellene døgnkort, Fuskeland gruppekort og alle kartlagte
+  Holmegård-produkter.
+- Sone 3: døgnkort, ukekort og sesongkort for hele hovedsonen, med offentlig oppgitte priser på
+  henholdsvis 455, 2 280 og 7 980 kr.
+- Sone 4: døgnkort for Lakseosen og Klevlandsfossen. Lakseosen har offentlig oppgitt pris på
+  600 kr.
 
-Holmegård-priser og sone 1-pris vises som «Pris ikke oppgitt». Utvalget representerer alle fire
-hovedsoner, en åpen hovedsone, begrensede delsoner, båtkort, døgnkort, sesongkort og obligatorisk
-rapporteringskort.
+Fuskeland gruppekort har offentlig oppgitt pris på 2 400 kr. For produkter der den offentlige
+Inatur-siden ikke viser en bestemt pris, viser prototypen «Pris ikke offentliggjort». Kapasitet brukes
+bare når den er uttrykkelig oppgitt i kilden. Ledighet og utsolgtstatus er fortsatt simulerte
+prototypesituasjoner og skal ikke tolkes som sanntidsdata.
 
 ## Uavklarte opplysninger før prototypedata kan ferdigstilles
 

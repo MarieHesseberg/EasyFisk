@@ -366,6 +366,33 @@ test("produktregisteret dekker alle simulerte tilgjengelighetssituasjoner", () =
   );
 });
 
+test("produktregisteret dekker alle soner og bruker dokumenterte Inatur-priser", () => {
+  const products = permitCatalogRepository.listProducts();
+  const productsPerZone = new Map(
+    [1, 2, 3, 4].map((zoneId) => [
+      zoneId,
+      products.filter((product) => product.zoneId === zoneId).length,
+    ]),
+  );
+
+  expect(productsPerZone).toEqual(
+    new Map([
+      [1, 3],
+      [2, 6],
+      [3, 3],
+      [4, 2],
+    ]),
+  );
+  expect(permitCatalogRepository.findProduct("zone-2-fuskeland-group")?.price.amountNok).toBe(2400);
+  expect(permitCatalogRepository.findProduct("zone-3-day")?.price.amountNok).toBe(455);
+  expect(permitCatalogRepository.findProduct("zone-3-week")?.price.amountNok).toBe(2280);
+  expect(permitCatalogRepository.findProduct("zone-3-season")?.price.amountNok).toBe(7980);
+  expect(permitCatalogRepository.findProduct("zone-4-lakseosen-day")?.price.amountNok).toBe(600);
+  expect(permitCatalogRepository.findProduct("zone-1-piren-day")?.price.status).toBe(
+    "not-published",
+  );
+});
+
 test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   const product = permitCatalogRepository.findProduct("zone-3-day");
   if (!product) throw new Error("Testprodukt mangler");
