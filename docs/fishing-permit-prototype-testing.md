@@ -14,7 +14,11 @@ lokal sammenheng i appen, ikke sanntidsdata hos en ekstern salgsaktør.
 | Produktvalg     | Døgnkort, sesongkort og gruppekort finnes, og produkter kan filtreres på sone og salgsområde.             |
 | Tilgjengelighet | Ledig, få igjen, utsolgt og ikke i salg håndteres uten å fremstilles som sanntidsdata.                    |
 | Dato            | Valgt fiskedato påvirker produktstatus og gyldigheten til et kjøpt testkort.                              |
+| Kjøper          | Fullt navn, fødselsdato, e-post og telefon valideres før brukeren kan fortsette.                          |
+| Krav            | Fiskeregler og testvilkår må godtas. Gruppekort krever minst én navngitt medfisker.                       |
+| Kontroll        | Område, gyldighet, kortholder og pris vises samlet før testbetalingen bekreftes.                          |
 | Testbetaling    | Godkjent, avbrutt og feilet betaling har egne utfall. Bare godkjent betaling oppretter kort.              |
+| Kvittering      | Godkjent testkjøp viser og lagrer en egen betalingsreferanse og kjøpsopplysningene.                       |
 | Sammenheng      | Testkjøpet vises i «Mine fiskekort», oppdaterer dokumentstatus og begrenser sonevalget.                   |
 | Lokal lagring   | Et kjøpt testkort overlever oppdatering av siden og kan fjernes ved nullstilling.                         |
 | Mobil           | Kritiske flyter kjøres på iPhone- og Android-bredde med scroll, fokus og Escape-lukking.                  |

@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 async function resetApp(page: Page) {
   await page.goto("/");
@@ -45,6 +45,19 @@ async function completeCatchReport(page: Page) {
   await dialog.getByRole("button", { name: "Send fangstrapport" }).click();
   await expect(dialog.getByRole("heading", { name: "Fangstrapporten er sendt" })).toBeVisible();
   return dialog;
+}
+
+async function completePermitCheckoutDetails(shop: Locator, group = false) {
+  await shop.getByLabel("Fullt navn").fill("Marie Hesseberg");
+  await shop.getByLabel("Fødselsdato").fill("1990-05-12");
+  await shop.getByLabel("E-post").fill("marie@example.no");
+  await shop.getByLabel("Telefon").fill("98765432");
+  await shop.getByRole("button", { name: "Neste · krav og deltakere" }).click();
+  if (group) await shop.getByLabel(/Medfiskere/).fill("Ola Nordmann");
+  await shop.getByLabel(/Jeg har lest og forstått fiskereglene/).check();
+  await shop.getByLabel(/Jeg godtar vilkårene/).check();
+  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
+  await shop.getByLabel(/Jeg bekrefter at opplysningene er riktige/).check();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -105,10 +118,11 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await shop.getByRole("button", { name: "Sone 2" }).click();
   await shop.getByLabel("Delsone eller salgsområde").selectOption("Fuskeland");
   await shop.getByRole("button", { name: "Velg fiskekort" }).click();
-  await expect(shop.getByText("Testbetaling – dette er en prototype.")).toBeVisible();
-  await shop.getByLabel("Testdato for fiskekortet").fill("2026-08-30");
+  await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
+  await shop.getByLabel("Fiskedato").fill("2026-08-30");
+  await completePermitCheckoutDetails(shop, true);
   await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
-  await expect(shop.getByRole("status")).toContainText("Betaling godkjent");
+  await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
 
   await page.reload();
   await expect(page.getByText(/Sone 2 · Fuskeland/)).toBeVisible();
@@ -132,7 +146,8 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
 
   const dayPermit = shop.locator("article").filter({ hasText: "Holmegård dagskort" });
   await dayPermit.getByRole("button", { name: "Velg fiskekort" }).click();
-  await shop.getByLabel("Testdato for fiskekortet").fill("2026-08-20");
+  await shop.getByLabel("Fiskedato").fill("2026-08-20");
+  await completePermitCheckoutDetails(shop);
   await shop.getByRole("radio", { name: "Betaling avbrutt" }).check();
   await shop.getByRole("button", { name: "Utfør testbetaling" }).click();
   await expect(shop.getByRole("alert")).toContainText("Betalingen ble avbrutt");

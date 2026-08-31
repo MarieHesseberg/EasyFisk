@@ -110,7 +110,6 @@ export function EasyFiskApp() {
             initialZone={zone}
             onPermitPurchased={(purchasedZone) => {
               actions.setZone(purchasedZone);
-              actions.navigate("home");
             }}
           />
         )}{" "}

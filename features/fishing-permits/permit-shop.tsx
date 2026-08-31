@@ -62,6 +62,7 @@ export function PermitShop({
     return (
       <PermitCheckout
         product={selectedProduct}
+        documents={documents.documents}
         back={() => setSelectedProductId(null)}
         save={documents.save}
         onPurchased={onPermitPurchased}

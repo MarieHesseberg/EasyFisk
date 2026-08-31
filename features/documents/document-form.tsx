@@ -46,6 +46,7 @@ export function DocumentForm({
         attachment,
         attachmentName,
         updatedAt: Date.now(),
+        purchase: initial?.purchase,
       });
       if (!result.ok) setError(result.error);
     } catch {

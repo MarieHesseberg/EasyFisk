@@ -39,6 +39,18 @@ import { ZoneStep } from "../features/fishing-session/fishing-flow/steps/zone-st
 
 afterEach(cleanup);
 
+async function completePermitCheckoutDetails(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText("Fullt navn"), "Marie Hesseberg");
+  await user.type(screen.getByLabelText("Fødselsdato"), "1990-05-12");
+  await user.type(screen.getByLabelText("E-post"), "marie@example.no");
+  await user.type(screen.getByLabelText("Telefon"), "98765432");
+  await user.click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
+  await user.click(screen.getByLabelText(/Jeg har lest og forstått fiskereglene/));
+  await user.click(screen.getByLabelText(/Jeg godtar vilkårene/));
+  await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
+  await user.click(screen.getByLabelText(/Jeg bekrefter at opplysningene er riktige/));
+}
+
 test("personlig statistikk viser lokalt beregnet historikk og kvoter", () => {
   const now = Date.parse("2026-07-10T12:00:00+02:00");
   const catches = [
@@ -369,13 +381,17 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
     />,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "Utfør testbetaling" }));
+  const user = userEvent.setup();
+  await completePermitCheckoutDetails(user);
+  await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
 
   expect(saved).toHaveLength(1);
   expect(isFishingDocument(saved[0])).toBe(true);
+  expect(saved[0].purchase?.buyer.fullName).toBe("Marie Hesseberg");
+  expect(saved[0].purchase?.paymentReference).toMatch(/^EF-TEST-/);
   expect(getDocumentReadiness(saved).valid.permit).toBe(true);
-  expect(screen.getByRole("status").textContent).toContain("Betaling godkjent");
-  expect(screen.getByText(/overlever refresh/)).toBeTruthy();
+  expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
+  expect(screen.getByText(/Ingen penger er trukket/)).toBeTruthy();
 });
 
 test("valgt testdato kan lage et utløpt kort for riktig sone", () => {
@@ -426,6 +442,8 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
     />,
   );
 
+  await completePermitCheckoutDetails(user);
+
   await user.click(screen.getByRole("radio", { name: "Betaling avbrutt" }));
   await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
   expect(screen.getByRole("alert").textContent).toContain("Betalingen ble avbrutt");
@@ -434,6 +452,22 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
   expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
   expect(saves).toBe(0);
+});
+
+test("kjøpsreisen stopper når nødvendige kjøperopplysninger mangler", async () => {
+  const product = permitCatalogRepository.findProduct("zone-3-day");
+  if (!product) throw new Error("Testprodukt mangler");
+  render(
+    <PermitCheckout
+      product={product}
+      back={() => undefined}
+      save={async () => operationSucceeded(undefined)}
+    />,
+  );
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
+  expect(screen.getByRole("alert").textContent).toContain("Oppgi fullt navn");
+  expect(screen.getByRole("heading", { name: "Fiskedato og kortinnehaver" })).toBeTruthy();
 });
 
 test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
