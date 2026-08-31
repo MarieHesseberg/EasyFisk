@@ -1,0 +1,34 @@
+.permit-contact-only-notice {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-control);
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+.permit-seller-contact {
+  display: grid;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border);
+}
+.permit-seller-contact > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.permit-seller-contact a {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-control);
+  color: var(--color-primary);
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+.permit-seller-contact small {
+  color: var(--color-text-muted);
+}

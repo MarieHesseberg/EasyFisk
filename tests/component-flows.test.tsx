@@ -291,7 +291,7 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
   const product = screen.getByRole("heading", { name: "Piren døgnkort" }).closest("article");
   if (!product) throw new Error("Produktkort mangler");
 
-  expect(product.textContent).toContain("Pris må bekreftes hos selger");
+  expect(product.textContent).toContain("Kontakt Karl Gjermund Damli for pris og kjøp");
   expect(product.querySelector("a")?.textContent).toContain("Se produktinformasjon");
   const detailButton = product.querySelector("button");
   if (!detailButton) throw new Error("Knapp for produktdetaljer mangler");
@@ -299,9 +299,10 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
   expect(screen.getByRole("heading", { name: "Piren døgnkort" })).toBeTruthy();
   expect(screen.getByText("Veiledende sonekart · fysisk oppmerking gjelder")).toBeTruthy();
   expect(screen.getByText("Pris må bekreftes hos selger")).toBeTruthy();
-  expect(
-    (screen.getByRole("button", { name: "Fortsett til kjøp" }) as HTMLButtonElement).disabled,
-  ).toBe(true);
+  expect(screen.getByText("Pris er ikke offentliggjort")).toBeTruthy();
+  expect(screen.getByText("Karl Gjermund Damli")).toBeTruthy();
+  expect(screen.getByRole("link", { name: /Ring \+47 901 44 337/ })).toBeTruthy();
+  expect(screen.queryByRole("button", { name: "Fortsett til kjøp" })).toBeNull();
   expect(screen.queryByText("Fiskedato og kortinnehaver")).toBeNull();
 });
 
@@ -418,7 +419,7 @@ test("produktregisteret dekker alle soner og bruker dokumenterte Inatur-priser",
   expect(productsPerZone).toEqual(
     new Map([
       [1, 3],
-      [2, 6],
+      [2, 9],
       [3, 3],
       [4, 2],
     ]),
@@ -475,7 +476,7 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   expect(purchases.at(-1)?.buyer.fullName).toBe("Marie Hesseberg");
   expect(purchases.at(-1)?.paymentReference).toMatch(/^EF-TEST-/);
   expect(purchases.at(-1)?.status).toBe("completed");
-  expect(getDocumentReadiness(saved).valid.permit).toBe(true);
+  expect(getDocumentReadiness(saved, Date.parse("2026-08-31T12:00:00"), 3).valid.permit).toBe(true);
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
   expect(screen.getByText(/Ingen penger er trukket/)).toBeTruthy();
   await user.click(screen.getByRole("button", { name: "Åpne fiskekort" }));

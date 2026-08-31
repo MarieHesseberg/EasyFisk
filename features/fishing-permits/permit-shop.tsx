@@ -162,7 +162,9 @@ export function PermitShop({
                 : `${product.price.amountNok} kr`}
             </b>
             {!canPurchasePrototypePermit(product) && (
-              <span className="permit-shop-price-note">Pris må bekreftes hos selger.</span>
+              <span className="permit-shop-price-note">
+                Kontakt {product.seller.contactName} for pris og kjøp · {product.seller.phone}
+              </span>
             )}
             <strong className="permit-availability available">
               Tilgjengelighet kontrolleres for valgt dato
@@ -194,7 +196,7 @@ export function PermitShop({
                   ? "Velg rapporteringskort"
                   : canPurchasePrototypePermit(product)
                     ? "Se fiskekort"
-                    : "Se produktinformasjon"}
+                    : "Se kontaktinformasjon"}
               </button>
               <a href={product.source.url} target="_blank" rel="noreferrer">
                 Se produktinformasjon ↗
@@ -226,7 +228,7 @@ export function PermitShop({
       )}
       {reportingDays.error && <p role="alert">{reportingDays.error}</p>}
       <p className="permit-shop-disclaimer">
-        Produktdata kontrollert 31.08.2026. Pris, kapasitet og tilgjengelighet må kontrolleres før
+        Produktdata kontrollert 01.09.2026. Pris, kapasitet og tilgjengelighet må kontrolleres før
         et virkelig kjøp.
       </p>
     </section>

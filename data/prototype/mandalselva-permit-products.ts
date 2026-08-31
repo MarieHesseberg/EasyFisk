@@ -1,5 +1,33 @@
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
-const sourceCheckedAt = "2026-08-31";
+const sourceCheckedAt = "2026-09-01";
+
+const elveeigarlagSeller = {
+  organization: "Mandalselva Elveeigarlag",
+  contactName: "Karl Gjermund Damli",
+  phone: "+47 901 44 337",
+  email: "kgjd@online.no",
+} as const;
+
+const furuholmenSeller = {
+  organization: "Furuholmen",
+  contactName: "Karl Gjermund Damli",
+  phone: "+47 901 44 337",
+  email: "kgjd@online.no",
+} as const;
+
+const fuskelandSeller = {
+  organization: "Mandalselva Fuskeland",
+  contactName: "Oddvar Kvåle",
+  phone: "+47 911 44 292",
+  email: "oddvar.kvale1@vabb.no",
+} as const;
+
+const fossefjelleneSeller = {
+  organization: "Fossefjellene Laksefiske",
+  contactName: "Kirstine Fuskeland",
+  phone: "+47 971 40 120",
+  email: "kirstinefusk@gmail.com",
+} as const;
 
 const commonRequirements = {
   requiresNationalFishingFee: true,
@@ -27,6 +55,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/644b64237e04bc6277a7190e"),
+    seller: elveeigarlagSeller,
     note: "Reelt salgsområde i nedre del av sone 1. Offentlig produktside oppgir ikke pris.",
   },
   {
@@ -42,6 +71,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/644b74ce61797a7f1faf333a"),
+    seller: elveeigarlagSeller,
     note: "Reelt salgsområde i sone 1. Tilgjengeligheten i prototypen er simulert.",
   },
   {
@@ -61,6 +91,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/646eff4c4e534d1b1e53baaf"),
+    seller: elveeigarlagSeller,
     note: "Båtleie inngår ikke. Kortet gjelder båtfiske i hele hovedsonen.",
   },
   {
@@ -76,6 +107,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62016b0a3bfa4c2e1e2fa75f"),
+    seller: elveeigarlagSeller,
     note: "Inatur oppgir fire tilgjengelige døgnkort per fiskedøgn, men ingen offentlig pris.",
   },
   {
@@ -91,7 +123,60 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/6203ca9c6f3607461547101b"),
+    seller: fossefjelleneSeller,
     note: "Gjelder Fossefjellene. Fossefjellene Syd er et eget produkt med to kort per døgn.",
+  },
+  {
+    id: "zone-2-furuholmen-opening-day",
+    zoneId: 2,
+    areaName: "Furuholmen · Øya · Østre Fødnebø",
+    title: "Furuholmen 1. juni-kort",
+    type: "day",
+    action: "purchase",
+    availability: { status: "not-on-sale", label: "Kontakt selger", remainingUnits: null },
+    validity: { label: "1. juni kl. 00.00–17.59", startsAt: "00:00", endsAt: "17:59" },
+    capacity: { label: "Del av fem dagskort per døgn", permitsPerFishingDay: 5 },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/61fd291caa826b7f6d5e2e10"),
+    seller: furuholmenSeller,
+    note: "Eget kort for første del av åpningsdøgnet. Pris må bekreftes hos selger.",
+  },
+  {
+    id: "zone-2-furuholmen-day",
+    zoneId: 2,
+    areaName: "Furuholmen · Øya · Østre Fødnebø",
+    title: "Furuholmen dagskort",
+    type: "day",
+    action: "purchase",
+    availability: { status: "not-on-sale", label: "Kontakt selger", remainingUnits: null },
+    validity: { label: "Kl. 18.00–17.59 neste dag", startsAt: "18:00", endsAt: "17:59" },
+    capacity: { label: "5 dagskort per fiskedøgn", permitsPerFishingDay: 5 },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/61fd291caa826b7f6d5e2e10"),
+    seller: furuholmenSeller,
+    note: "Gjelder de tre delstrekningene Øya, Østre Fødnebø og Furuholmen.",
+  },
+  {
+    id: "zone-2-furuholmen-season",
+    zoneId: 2,
+    areaName: "Furuholmen · Øya · Østre Fødnebø",
+    title: "Furuholmen sesongkort",
+    type: "season",
+    action: "purchase",
+    availability: { status: "not-on-sale", label: "Kontakt selger", remainingUnits: null },
+    validity: {
+      label: "1. juni–31. august 2026",
+      seasonStartsOn: "2026-06-01",
+      seasonEndsOn: "2026-08-31",
+    },
+    capacity: { label: "Kapasitet må bekreftes hos selger" },
+    price: { amountNok: null, status: "not-published" },
+    requirements: commonRequirements,
+    source: source("https://www.inatur.no/laksefiske/61fd291caa826b7f6d5e2e10"),
+    seller: furuholmenSeller,
+    note: "Sesongkort er oppført på salgssiden, men pris og kapasitet er ikke offentliggjort.",
   },
   {
     id: "zone-2-fuskeland-group",
@@ -109,6 +194,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: 2400, status: "verified" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/6203ad0b8e25f75afc55bf5f"),
+    seller: fuskelandSeller,
     note: "Gruppekortet gjelder navngitte fiskere i de valgte Fuskeland-delsonene.",
   },
   {
@@ -124,6 +210,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f"),
+    seller: elveeigarlagSeller,
     note: "Enkel hytte og gapahuk/grillhytte ved elvebredden inngår.",
   },
   {
@@ -143,6 +230,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62051fcd3b1344382b2d6c1f"),
+    seller: elveeigarlagSeller,
     note: "Krever eget rapporteringskort for hvert fiskedøgn.",
   },
   {
@@ -158,6 +246,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: { ...commonRequirements, requiresSeasonPermit: true },
     source: source("https://lakseelver.no/nb/elver/mandalselva/about"),
+    seller: elveeigarlagSeller,
     note: "Obligatorisk døgnregistrering, ikke et separat fiskekortkjøp.",
   },
   {
@@ -173,6 +262,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: 455, status: "verified" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62079e1029f7c11a486f170d"),
+    seller: elveeigarlagSeller,
     note: "Ett kort dekker hele hovedsonen.",
   },
   {
@@ -188,6 +278,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: 2280, status: "verified" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62079e1029f7c11a486f170d"),
+    seller: elveeigarlagSeller,
     note: "Inatur oppgir 2 280 kr som oppdatert pris for ukekort i 2026.",
   },
   {
@@ -207,6 +298,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: 7980, status: "verified" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/62079e1029f7c11a486f170d"),
+    seller: elveeigarlagSeller,
     note: "Inatur oppgir 7 980 kr som oppdatert pris for sesongkort i 2026.",
   },
   {
@@ -226,6 +318,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: 600, status: "verified" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/65c9d61268b6ab0e73b36b69"),
+    seller: elveeigarlagSeller,
     note: "Kortet gjelder den navngitte delsonen ved utløpet av Manflåvann.",
   },
   {
@@ -241,6 +334,7 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     price: { amountNok: null, status: "not-published" },
     requirements: commonRequirements,
     source: source("https://www.inatur.no/laksefiske/6207a7f86472570ca032b89b"),
+    seller: elveeigarlagSeller,
     note: "Reelt begrenset salgsområde i nedre sone 4. Offentlig produktside oppgir ikke pris.",
   },
 ];

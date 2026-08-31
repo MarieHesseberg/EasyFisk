@@ -22,6 +22,7 @@ import { createTestPermitDocument } from "./create-test-permit-document";
 import {
   canSelectPrototypePermit,
   getPrototypePermitAvailability,
+  getPrototypePermitDateRange,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
 export type CheckoutStep = "buyer" | "requirements" | "review" | "payment" | "confirmation";
@@ -46,7 +47,14 @@ export function usePermitCheckoutController({
   initialSelectedDate?: string;
 }) {
   const [step, setStep] = useState<CheckoutStep>("buyer");
-  const [selectedDate] = useState(initialSelectedDate ?? todayInNorway());
+  const [selectedDate] = useState(() => {
+    if (initialSelectedDate) return initialSelectedDate;
+    const today = todayInNorway();
+    const range = getPrototypePermitDateRange(product);
+    if (product.type === "season" || today < range.startsOn) return range.startsOn;
+    if (today > range.endsOn) return range.endsOn;
+    return today;
+  });
   const [form, setForm] = useState<PermitCheckoutForm>(emptyPermitCheckoutForm);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);

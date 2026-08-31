@@ -51,6 +51,13 @@ export type PrototypePermitSource = {
   status: "verified-public-source";
 };
 
+export type PrototypePermitSeller = {
+  organization: string;
+  contactName: string;
+  phone: string;
+  email: string;
+};
+
 export type PrototypePermitProductDetails = {
   ageRule: string;
   equipmentAndFacilities: readonly string[];
@@ -70,6 +77,7 @@ export type PrototypePermitProduct = {
   price: PrototypePermitPrice;
   requirements: PrototypePermitRequirements;
   source: PrototypePermitSource;
+  seller: PrototypePermitSeller;
   note: string;
 };
 

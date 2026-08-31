@@ -1,6 +1,6 @@
 # Kartlegging av fiskekort i Mandalselva 2026
 
-Kontrollert: 30. august 2026
+Kontrollert: 1. september 2026
 
 Dette dokumentet er researchgrunnlaget for en framtidig salgsprototype i EasyFisk. Inatur er kun
 brukt som offentlig informasjonskilde. Dokumentet beskriver ikke en integrasjon, og verdiene er
@@ -50,8 +50,17 @@ inneholder derfor bare pris når den står eksplisitt i offentlig sidetekst:
 - Den generelle beskrivelsen av sone 2 oppgir et spenn på 100–400 kr per døgn, men dette er ikke en
   verifisert produktpris og skal ikke fordeles på enkeltsoner.
 
-Alle øvrige priser merkes `ikke offentlig bekreftet`. De må kontrolleres på nytt før prototypedata
-opprettes, og prototypen skal vise «eksempel basert på priser kontrollert [dato]».
+Alle øvrige priser merkes `ikke offentlig bekreftet`. De kan ikke kjøpes i prototypen. Produktsiden
+viser i stedet telefon og e-post til selgeren som er oppført på den aktuelle Inatur-siden.
+
+## Kontrollerte selgerkontakter
+
+- Mandalselva Elveeigarlag / de fleste fellesproduktene: Karl Gjermund Damli,
+  +47 901 44 337, kgjd@online.no.
+- Fuskeland: Oddvar Kvåle, +47 911 44 292, oddvar.kvale1@vabb.no.
+- Fossefjellene: Kirstine Fuskeland, +47 971 40 120, kirstinefusk@gmail.com.
+
+Kontaktene er hentet fra de offentlige Inatur-sidene og kontrollert 1. september 2026.
 
 ## Sone 1 – salgsflater
 

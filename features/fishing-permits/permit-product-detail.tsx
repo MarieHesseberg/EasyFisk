@@ -9,6 +9,7 @@ import { getPrototypePermitProductDetails } from "@/data/prototype/mandalselva-p
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { findQualifyingSeasonPermitForProduct } from "@/domain/fishing-permits/permit-reporting-day";
 import { PermitSalesCalendar } from "./permit-sales-calendar";
+import { PermitSellerContact } from "./permit-seller-contact";
 
 const typeLabels = {
   day: "Døgnkort",
@@ -69,7 +70,15 @@ export function PermitProductDetail({
         <small>Veiledende sonekart · fysisk oppmerking gjelder</small>
       </div>
 
-      {product.type === "season" ? (
+      {!canPurchasePrototypePermit(product) && product.action === "purchase" ? (
+        <div className="permit-contact-only-notice">
+          <b>Pris er ikke offentliggjort</b>
+          <span>
+            Dette kortet kan ikke kjøpes i EasyFisk-prototypen. Kontakt selger for pris,
+            tilgjengelighet og kjøp.
+          </span>
+        </div>
+      ) : product.type === "season" ? (
         <div className="permit-season-period">
           <b>Sesongkortets gyldighet</b>
           <span>
@@ -148,6 +157,7 @@ export function PermitProductDetail({
         <p>{details.reportingRule}</p>
       </section>
       <p className="permit-product-note">{product.note}</p>
+      <PermitSellerContact seller={product.seller} />
       <a
         className="permit-product-source"
         href={product.source.url}
@@ -157,14 +167,18 @@ export function PermitProductDetail({
         Se original produktkilde hos Inatur ↗
       </a>
 
-      {!canPurchasePrototypePermit(product) && product.action === "purchase" && (
-        <p className="permit-shop-price-note">Kjøp er deaktivert frem til prisen er bekreftet.</p>
+      {(canPurchasePrototypePermit(product) || product.action === "register-reporting-day") && (
+        <button
+          className="primary"
+          type="button"
+          disabled={!canContinue}
+          onClick={continueToProduct}
+        >
+          {product.action === "register-reporting-day"
+            ? "Fortsett til døgnregistrering"
+            : "Fortsett til kjøp"}
+        </button>
       )}
-      <button className="primary" type="button" disabled={!canContinue} onClick={continueToProduct}>
-        {product.action === "register-reporting-day"
-          ? "Fortsett til døgnregistrering"
-          : "Fortsett til kjøp"}
-      </button>
     </section>
   );
 }
