@@ -2,6 +2,7 @@ import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
 import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
+import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import type { PaymentOutcome } from "./use-permit-checkout-controller";
 
 type UpdateForm = <Key extends keyof PermitCheckoutForm>(
@@ -239,11 +240,13 @@ export function PermitReviewStep({
 export function PermitConfirmationStep({
   product,
   receipt,
+  purchase,
   openPermits,
   goHome,
 }: {
   product: PrototypePermitProduct;
   receipt: FishingDocument;
+  purchase: PermitPurchase;
   openPermits: () => void;
   goHome: () => void;
 }) {
@@ -272,8 +275,12 @@ export function PermitConfirmationStep({
           </dd>
         </div>
         <div>
-          <dt>Betalingsreferanse</dt>
-          <dd>{receipt.purchase?.paymentReference}</dd>
+          <dt>Bestillingsnummer</dt>
+          <dd>{purchase.orderNumber}</dd>
+        </div>
+        <div>
+          <dt>Testreferanse</dt>
+          <dd>{purchase.paymentReference}</dd>
         </div>
         <div>
           <dt>Gyldig fra</dt>
@@ -285,11 +292,11 @@ export function PermitConfirmationStep({
         </div>
         <div>
           <dt>Pris</dt>
-          <dd>
-            {receipt.purchase?.priceNok === null
-              ? "Ikke oppgitt"
-              : `${receipt.purchase?.priceNok} kr`}
-          </dd>
+          <dd>{purchase.priceNok === null ? "Ikke oppgitt" : `${purchase.priceNok} kr`}</dd>
+        </div>
+        <div>
+          <dt>Utsteder</dt>
+          <dd>{purchase.issuer}</dd>
         </div>
       </dl>
       <div className="permit-confirmation-actions">

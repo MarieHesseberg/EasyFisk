@@ -1,7 +1,7 @@
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
-import type { PermitPurchaseMetadata } from "@/domain/fishing-permits/permit-purchase";
+import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 
 export const testPurchaseDocumentPrefix = "test-purchase-permit-";
 
@@ -18,7 +18,7 @@ export function createTestPermitDocument(
   product: PrototypePermitProduct,
   selectedDate: string,
   now = Date.now(),
-  purchase?: PermitPurchaseMetadata,
+  purchase?: Pick<PermitPurchase, "id" | "buyer">,
 ): FishingDocument {
   const { startsAt, endsAt } = calculatePermitValidity(product, selectedDate);
   return {
@@ -34,6 +34,6 @@ export function createTestPermitDocument(
       startsAt,
       endsAt,
     },
-    purchase,
+    purchaseId: purchase?.id,
   };
 }

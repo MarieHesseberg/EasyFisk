@@ -19,6 +19,7 @@ lokal sammenheng i appen, ikke sanntidsdata hos en ekstern salgsaktør.
 | Kontroll        | Område, gyldighet, kortholder og pris vises samlet før testbetalingen bekreftes.                          |
 | Testbetaling    | Godkjent, avbrutt og feilet betaling har egne utfall. Bare godkjent betaling oppretter kort.              |
 | Kvittering      | Godkjent testkjøp viser og lagrer en egen betalingsreferanse og kjøpsopplysningene.                       |
+| Kjøpshistorikk  | Bestillingen lagres separat fra fiskekortet med status, pris, vilkårsversjon og utsteder.                 |
 | Sammenheng      | Testkjøpet vises i «Mine fiskekort», oppdaterer dokumentstatus og begrenser sonevalget.                   |
 | Lokal lagring   | Et kjøpt testkort overlever oppdatering av siden og kan fjernes ved nullstilling.                         |
 | Mobil           | Kritiske flyter kjøres på iPhone- og Android-bredde med scroll, fokus og Escape-lukking.                  |

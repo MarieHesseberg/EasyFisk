@@ -36,6 +36,7 @@ import { operationSucceeded } from "../domain/shared/operation-result";
 import { isFishingDocument } from "../domain/documents/validate-document";
 import { getDocumentReadiness } from "../domain/documents/get-document-readiness";
 import { ZoneStep } from "../features/fishing-session/fishing-flow/steps/zone-step";
+import type { PermitPurchase } from "../domain/fishing-permits/permit-purchase";
 
 afterEach(cleanup);
 
@@ -369,6 +370,7 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   const product = permitCatalogRepository.findProduct("zone-3-day");
   if (!product) throw new Error("Testprodukt mangler");
   const saved = [] as ReturnType<typeof createTestPermitDocument>[];
+  const purchases: PermitPurchase[] = [];
   let openedPermits = false;
   let returnedHome = false;
 
@@ -378,6 +380,10 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
       back={() => undefined}
       save={async (document) => {
         saved.push(document);
+        return operationSucceeded(undefined);
+      }}
+      savePurchase={(purchase) => {
+        purchases.push(purchase);
         return operationSucceeded(undefined);
       }}
       onOpenPermits={() => {
@@ -395,8 +401,10 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
 
   expect(saved).toHaveLength(1);
   expect(isFishingDocument(saved[0])).toBe(true);
-  expect(saved[0].purchase?.buyer.fullName).toBe("Marie Hesseberg");
-  expect(saved[0].purchase?.paymentReference).toMatch(/^EF-TEST-/);
+  expect(saved[0].purchaseId).toBe(purchases.at(-1)?.id);
+  expect(purchases.at(-1)?.buyer.fullName).toBe("Marie Hesseberg");
+  expect(purchases.at(-1)?.paymentReference).toMatch(/^EF-TEST-/);
+  expect(purchases.at(-1)?.status).toBe("completed");
   expect(getDocumentReadiness(saved).valid.permit).toBe(true);
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
   expect(screen.getByText(/Ingen penger er trukket/)).toBeTruthy();
@@ -441,6 +449,7 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   const product = permitCatalogRepository.findProduct("zone-3-day");
   if (!product) throw new Error("Testprodukt mangler");
   let saves = 0;
+  const purchaseStatuses: string[] = [];
   const user = userEvent.setup();
 
   render(
@@ -449,6 +458,10 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
       back={() => undefined}
       save={async () => {
         saves += 1;
+        return operationSucceeded(undefined);
+      }}
+      savePurchase={(purchase) => {
+        purchaseStatuses.push(purchase.status);
         return operationSucceeded(undefined);
       }}
     />,
@@ -464,6 +477,7 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   await user.click(screen.getByRole("button", { name: "Utfør testbetaling" }));
   expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
   expect(saves).toBe(0);
+  expect(purchaseStatuses).toEqual(["cancelled", "failed"]);
 });
 
 test("kjøpsreisen stopper når nødvendige kjøperopplysninger mangler", async () => {
@@ -474,6 +488,7 @@ test("kjøpsreisen stopper når nødvendige kjøperopplysninger mangler", async 
       product={product}
       back={() => undefined}
       save={async () => operationSucceeded(undefined)}
+      savePurchase={() => operationSucceeded(undefined)}
     />,
   );
 

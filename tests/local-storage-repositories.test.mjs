@@ -4,6 +4,7 @@ import test from "node:test";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository.ts";
 import { createLocalStoragePreferencesRepository } from "../data/local-storage/create-local-storage-preferences-repository.ts";
 import { createLocalStoragePermitReportingRepository } from "../data/local-storage/create-local-storage-permit-reporting-repository.ts";
+import { createLocalStoragePermitPurchaseRepository } from "../data/local-storage/create-local-storage-permit-purchase-repository.ts";
 
 function createStorage() {
   const values = new Map();
@@ -26,6 +27,37 @@ const catchRecord = {
   violation: false,
   late: false,
 };
+
+test("fiskekortkjøp lagres separat fra det utstedte dokumentet", () => {
+  const storage = createStorage();
+  const repository = createLocalStoragePermitPurchaseRepository(storage);
+  const purchase = {
+    id: "permit-purchase-1",
+    orderNumber: "EF-123",
+    productId: "zone-2-fuskeland-group",
+    documentId: "test-purchase-permit-1",
+    buyer: {
+      fullName: "Marie Hesseberg",
+      birthDate: "1990-05-12",
+      email: "marie@example.no",
+      phone: "98765432",
+    },
+    coFishers: ["Ola Nordmann"],
+    fishingDate: "2026-08-30",
+    priceNok: 2400,
+    status: "completed",
+    createdAt: 1,
+    paidAt: 2,
+    completedAt: 3,
+    termsVersion: "easyfisk-prototype-2026-08-31",
+    acceptedRulesAt: 1,
+    acceptedTermsAt: 1,
+    paymentReference: "EF-TEST-1",
+    issuer: "EasyFisk testbutikk",
+  };
+  assert.equal(repository.save(purchase).ok, true);
+  assert.deepEqual(createLocalStoragePermitPurchaseRepository(storage).list().value, [purchase]);
+});
 
 test("rapporteringsdøgn lagres separat og overskrives med senere fangststatus", () => {
   const storage = createStorage();

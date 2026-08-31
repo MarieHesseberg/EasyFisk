@@ -44,26 +44,6 @@ export function DocumentCard({
             </div>
           ))}
       </dl>
-      {document.purchase && (
-        <dl aria-label="Opplysninger fra testkjøpet">
-          <div>
-            <dt>Testbetaling</dt>
-            <dd>{document.purchase.paymentReference}</dd>
-          </div>
-          <div>
-            <dt>Kontakt</dt>
-            <dd>
-              {document.purchase.buyer.email} · {document.purchase.buyer.phone}
-            </dd>
-          </div>
-          {document.purchase.coFishers.length > 0 && (
-            <div>
-              <dt>Medfiskere</dt>
-              <dd>{document.purchase.coFishers.join(", ")}</dd>
-            </div>
-          )}
-        </dl>
-      )}
       {document.kind === "disinfection" && document.values.otherRiverAt && (
         <p role="status">Besøk i annet vassdrag er registrert. Utstyret må desinfiseres på nytt.</p>
       )}

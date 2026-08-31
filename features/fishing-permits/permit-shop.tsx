@@ -8,6 +8,7 @@ import { PermitCheckout } from "./permit-checkout";
 import { PermitReportingRegistration } from "./permit-reporting-registration";
 import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
 import { usePermitReportingDays } from "./use-permit-reporting-days";
+import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
@@ -29,6 +30,7 @@ export function PermitShop({
   const [resetMessage, setResetMessage] = useState("");
   const documents = useDocuments();
   const reportingDays = usePermitReportingDays();
+  const purchases = usePermitPurchases();
   const zoneProducts = permitCatalogRepository.listProductsByZone(selectedZone);
   const areas = Array.from(new Set(zoneProducts.map((product) => product.areaName)));
   const products =
@@ -50,6 +52,11 @@ export function PermitShop({
         return;
       }
     }
+    const purchaseResult = purchases.clear();
+    if (!purchaseResult.ok) {
+      setResetMessage(purchaseResult.error);
+      return;
+    }
     setResetMessage("Alle testkjøpte fiskekort er fjernet fra denne enheten.");
   }
 
@@ -69,6 +76,7 @@ export function PermitShop({
         documents={documents.documents}
         back={() => setSelectedProductId(null)}
         save={documents.save}
+        savePurchase={purchases.save}
         onPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}
         onGoHome={onGoHome}

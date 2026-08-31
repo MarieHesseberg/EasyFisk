@@ -9,6 +9,9 @@ import {
   validatePermitBuyer,
   validatePermitParticipants,
   type PermitCheckoutForm,
+  type PermitPurchase,
+  permitTermsVersion,
+  prototypePermitIssuer,
 } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
@@ -24,10 +27,12 @@ function todayInNorway() {
 export function usePermitCheckoutController({
   product,
   save,
+  savePurchase,
   onPurchased,
 }: {
   product: PrototypePermitProduct;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
+  savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
 }) {
   const [step, setStep] = useState<CheckoutStep>("buyer");
@@ -36,7 +41,10 @@ export function usePermitCheckoutController({
   const [outcome, setOutcome] = useState<PaymentOutcome>("approved");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [receipt, setReceipt] = useState<FishingDocument | null>(null);
+  const [receipt, setReceipt] = useState<{
+    document: FishingDocument;
+    purchase: PermitPurchase;
+  } | null>(null);
 
   function updateForm<Key extends keyof PermitCheckoutForm>(
     key: Key,
@@ -67,13 +75,14 @@ export function usePermitCheckoutController({
 
   async function submit() {
     if (!form.confirmsDetails) return setError("Bekreft at opplysningene er riktige.");
-    if (outcome === "cancelled") return setError("Betalingen ble avbrutt. Ingen kort ble lagret.");
-    if (outcome === "failed") return setError("Testbetalingen feilet. Ingen kort ble lagret.");
-
     setIsSubmitting(true);
     const now = Date.now();
+    const purchaseId = `permit-purchase-${crypto.randomUUID()}`;
+    const orderNumber = `EF-${String(now).slice(-8)}`;
     const paymentReference = `EF-TEST-${now}`;
-    const document = createTestPermitDocument(product, selectedDate, now, {
+    const basePurchase: PermitPurchase = {
+      id: purchaseId,
+      orderNumber,
       productId: product.id,
       buyer: {
         fullName: form.fullName.trim(),
@@ -86,12 +95,53 @@ export function usePermitCheckoutController({
       fishingDate: selectedDate,
       acceptedRulesAt: now,
       acceptedTermsAt: now,
+      createdAt: now,
+      status: outcome === "approved" ? "payment-approved" : outcome,
+      termsVersion: permitTermsVersion,
+      issuer: prototypePermitIssuer,
+    };
+    if (outcome !== "approved") {
+      const purchase: PermitPurchase = {
+        ...basePurchase,
+        status: outcome,
+        ...(outcome === "cancelled" ? { cancelledAt: now } : {}),
+      };
+      const stored = savePurchase(purchase);
+      setIsSubmitting(false);
+      if (!stored.ok) return setError(stored.error);
+      return setError(
+        outcome === "cancelled"
+          ? "Betalingen ble avbrutt. Bestillingen er registrert, men ingen kort ble utstedt."
+          : "Testbetalingen feilet. Bestillingen er registrert, men ingen kort ble utstedt.",
+      );
+    }
+    const approvedPurchase: PermitPurchase = {
+      ...basePurchase,
+      status: "payment-approved",
+      paidAt: now,
       paymentReference,
-    });
+    };
+    const purchaseStored = savePurchase(approvedPurchase);
+    if (!purchaseStored.ok) {
+      setIsSubmitting(false);
+      return setError(purchaseStored.error);
+    }
+    const document = createTestPermitDocument(product, selectedDate, now, approvedPurchase);
     const result = await save(document);
     setIsSubmitting(false);
-    if (!result.ok) return setError(result.error);
-    setReceipt(document);
+    if (!result.ok) {
+      savePurchase({ ...approvedPurchase, status: "issuance-failed" });
+      return setError(result.error);
+    }
+    const completedPurchase: PermitPurchase = {
+      ...approvedPurchase,
+      status: "completed",
+      documentId: document.id,
+      completedAt: Date.now(),
+    };
+    const completed = savePurchase(completedPurchase);
+    if (!completed.ok) return setError(completed.error);
+    setReceipt({ document, purchase: completedPurchase });
     setError("");
     setStep("confirmation");
     onPurchased?.(product.zoneId);

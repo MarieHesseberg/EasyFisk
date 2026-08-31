@@ -5,6 +5,7 @@ import { getDocumentReadiness } from "@/domain/documents/get-document-readiness"
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
+import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import {
   PermitBuyerStep,
   PermitConfirmationStep,
@@ -20,6 +21,7 @@ export function PermitCheckout({
   documents = [],
   back,
   save,
+  savePurchase,
   onPurchased,
   onOpenPermits,
   onGoHome,
@@ -28,11 +30,12 @@ export function PermitCheckout({
   documents?: FishingDocument[];
   back: () => void;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
+  savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
 }) {
-  const checkout = usePermitCheckoutController({ product, save, onPurchased });
+  const checkout = usePermitCheckoutController({ product, save, savePurchase, onPurchased });
   let validity = null;
   try {
     validity = calculatePermitValidity(product, checkout.selectedDate);
@@ -111,7 +114,8 @@ export function PermitCheckout({
       {checkout.step === "confirmation" && checkout.receipt && (
         <PermitConfirmationStep
           product={product}
-          receipt={checkout.receipt}
+          receipt={checkout.receipt.document}
+          purchase={checkout.receipt.purchase}
           openPermits={onOpenPermits ?? back}
           goHome={onGoHome ?? back}
         />

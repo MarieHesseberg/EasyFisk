@@ -1,5 +1,3 @@
-import type { PermitPurchaseMetadata } from "../fishing-permits/permit-purchase.ts";
-
 export type DocumentKind = "permit" | "disinfection" | "fee";
 
 export type DocumentField =
@@ -26,7 +24,7 @@ export interface FishingDocument {
   updatedAt: number;
   attachment?: Blob;
   attachmentName?: string;
-  purchase?: PermitPurchaseMetadata;
+  purchaseId?: string;
 }
 
 export const documentTitles: Record<DocumentKind, string> = {

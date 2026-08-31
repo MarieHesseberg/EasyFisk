@@ -6,7 +6,6 @@ import {
   type DocumentValues,
   type FishingDocument,
 } from "./fishing-document.ts";
-import { isPermitPurchaseMetadata } from "../fishing-permits/permit-purchase.ts";
 
 export function validateDocument(kind: DocumentKind, values: DocumentValues): string | undefined {
   for (const field of documentFields[kind]) {
@@ -67,7 +66,7 @@ export function isFishingDocument(value: unknown): value is FishingDocument {
     !["permit", "disinfection", "fee"].includes(String(record.kind))
   )
     return false;
-  if (record.purchase !== undefined && !isPermitPurchaseMetadata(record.purchase)) return false;
+  if (record.purchaseId !== undefined && typeof record.purchaseId !== "string") return false;
   if (
     typeof record.updatedAt !== "number" ||
     !Number.isFinite(record.updatedAt) ||
