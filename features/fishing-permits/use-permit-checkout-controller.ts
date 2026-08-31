@@ -14,6 +14,7 @@ import {
   prototypePermitIssuer,
 } from "@/domain/fishing-permits/permit-purchase";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
+import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
 import { createTestPermitDocument } from "./create-test-permit-document";
 import {
@@ -59,6 +60,8 @@ export function usePermitCheckoutController({
   }
 
   function continueFromBuyer() {
+    if (!canPurchasePrototypePermit(product))
+      return setError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
     const buyerError = validatePermitBuyer(form);
     if (buyerError) return setError(buyerError);
     try {
@@ -80,6 +83,8 @@ export function usePermitCheckoutController({
   }
 
   async function submit() {
+    if (!canPurchasePrototypePermit(product))
+      return setError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
     if (!form.confirmsDetails) return setError("Bekreft at opplysningene er riktige.");
     const availability = getPrototypePermitAvailability(product, selectedDate);
     if (!canSelectPrototypePermit(availability)) return setError(availability.label);

@@ -10,6 +10,7 @@ import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
 import { usePermitReportingDays } from "./use-permit-reporting-days";
 import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
+import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 
@@ -132,6 +133,9 @@ export function PermitShop({
                 ? "Pris ikke offentliggjort"
                 : `${product.price.amountNok} kr`}
             </b>
+            {!canPurchasePrototypePermit(product) && (
+              <span className="permit-shop-price-note">Pris må bekreftes hos selger.</span>
+            )}
             <strong className="permit-availability available">
               Tilgjengelighet kontrolleres for valgt dato
             </strong>
@@ -142,12 +146,17 @@ export function PermitShop({
               <button
                 className="primary"
                 type="button"
+                disabled={!canPurchasePrototypePermit(product)}
                 onClick={() => setSelectedProductId(product.id)}
               >
-                {product.action === "purchase" ? "Velg fiskekort" : "Velg rapporteringskort"}
+                {product.action === "register-reporting-day"
+                  ? "Velg rapporteringskort"
+                  : canPurchasePrototypePermit(product)
+                    ? "Velg fiskekort"
+                    : "Kjøp ikke tilgjengelig"}
               </button>
               <a href={product.source.url} target="_blank" rel="noreferrer">
-                Kontroller produktkilden ↗
+                Se produktinformasjon ↗
               </a>
             </div>
           </article>

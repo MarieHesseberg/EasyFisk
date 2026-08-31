@@ -285,6 +285,38 @@ test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", a
   expect(screen.getByRole("heading", { name: "Lakseosen døgnkort" })).toBeTruthy();
 });
 
+test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyten", async () => {
+  render(<PermitShop initialZone={1} />);
+
+  const product = screen.getByRole("heading", { name: "Piren døgnkort" }).closest("article");
+  if (!product) throw new Error("Produktkort mangler");
+
+  expect(product.textContent).toContain("Pris må bekreftes hos selger");
+  expect((product.querySelector("button") as HTMLButtonElement | null)?.disabled).toBe(true);
+  expect(product.querySelector("a")?.textContent).toContain("Se produktinformasjon");
+  expect(screen.queryByText("Fiskedato og kortinnehaver")).toBeNull();
+});
+
+test("kjøpskontrolleren avviser produkter uten dokumentert pris", async () => {
+  const product = permitCatalogRepository.findProduct("zone-1-piren-day");
+  if (!product) throw new Error("Testprodukt mangler");
+
+  render(
+    <PermitCheckout
+      product={product}
+      back={() => undefined}
+      save={() => Promise.resolve(operationSucceeded(undefined))}
+      savePurchase={() => operationSucceeded(undefined)}
+    />,
+  );
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
+  expect(screen.getByRole("alert").textContent).toContain(
+    "kan ikke kjøpes før prisen er bekreftet",
+  );
+  expect(screen.queryByRole("heading", { name: "Deltakere og fiskekrav" })).toBeNull();
+});
+
 test("produktregisteret har døgnkort, sesongkort og gruppekort", () => {
   const types = new Set(permitCatalogRepository.listProducts().map((product) => product.type));
   expect(types.has("day")).toBe(true);

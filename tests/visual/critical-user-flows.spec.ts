@@ -150,17 +150,15 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
 test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async ({ page }) => {
   await page.getByRole("button", { name: "Kjøp fiskekort" }).click();
   const shop = page.getByRole("dialog", { name: "Fiskekort og kjøp" });
-  await shop.getByRole("button", { name: "Sone 2" }).click();
-  await shop.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
 
-  const soldOut = shop.locator("article").filter({ hasText: "Holmegård sesongkort" });
+  const soldOut = shop.locator("article").filter({ hasText: "Sone 3 sesongkort" });
   await soldOut.getByRole("button", { name: "Velg fiskekort" }).click();
-  await shop.getByLabel("Fiskedato").fill("2026-08-23");
+  await shop.getByLabel("Fiskedato").fill("2026-08-24");
   await expect(shop.getByText("Utsolgt denne datoen")).toBeVisible();
   await expect(shop.getByRole("button", { name: "Neste · krav og deltakere" })).toBeDisabled();
   await shop.getByRole("button", { name: /Tilbake til fiskekort/ }).click();
 
-  const dayPermit = shop.locator("article").filter({ hasText: "Holmegård dagskort" });
+  const dayPermit = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
   await dayPermit.getByRole("button", { name: "Velg fiskekort" }).click();
   await shop.getByLabel("Fiskedato").fill("2026-08-20");
   await completePermitCheckoutDetails(shop);
@@ -182,8 +180,6 @@ for (const viewport of [
     await page.getByRole("button", { name: "Kjøp fiskekort" }).click();
     const shop = page.getByRole("dialog", { name: "Fiskekort og kjøp" });
     await expect(shop.getByRole("button", { name: "Tilbake" })).toBeFocused();
-    await shop.getByRole("button", { name: "Sone 2" }).click();
-    await shop.getByLabel("Delsone eller salgsområde").selectOption("Holmegård");
     await shop.getByRole("button", { name: "Velg fiskekort" }).first().scrollIntoViewIfNeeded();
     await expect(shop.getByRole("button", { name: "Velg fiskekort" }).first()).toBeInViewport();
     await page.keyboard.press("Escape");

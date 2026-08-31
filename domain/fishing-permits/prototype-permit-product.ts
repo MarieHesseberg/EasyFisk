@@ -66,3 +66,10 @@ export type PrototypePermitProduct = {
   source: PrototypePermitSource;
   note: string;
 };
+
+export function canPurchasePrototypePermit(product: PrototypePermitProduct) {
+  return (
+    product.action !== "purchase" ||
+    (product.price.status === "verified" && product.price.amountNok !== null)
+  );
+}
