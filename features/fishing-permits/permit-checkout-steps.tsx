@@ -239,16 +239,18 @@ export function PermitReviewStep({
 export function PermitConfirmationStep({
   product,
   receipt,
-  done,
+  openPermits,
+  goHome,
 }: {
   product: PrototypePermitProduct;
   receipt: FishingDocument;
-  done: () => void;
+  openPermits: () => void;
+  goHome: () => void;
 }) {
   return (
     <div className="permit-checkout-step permit-confirmation" role="status">
       <span className="permit-confirmation-icon">✓</span>
-      <small>Testkjøpet er fullført</small>
+      <small>Testbetaling godkjent · kjøpet er fullført</small>
       <h3>Fiskekortet er lagret</h3>
       <p>
         Ingen penger er trukket. Kortet ligger nå under Mine fiskekort og brukes av
@@ -264,6 +266,12 @@ export function PermitConfirmationStep({
           <dd>{receipt.values.holder}</dd>
         </div>
         <div>
+          <dt>Sone og delsone</dt>
+          <dd>
+            Sone {product.zoneId} · {product.areaName}
+          </dd>
+        </div>
+        <div>
           <dt>Betalingsreferanse</dt>
           <dd>{receipt.purchase?.paymentReference}</dd>
         </div>
@@ -275,10 +283,23 @@ export function PermitConfirmationStep({
           <dt>Gyldig til</dt>
           <dd>{receipt.values.endsAt?.replace("T", " ")}</dd>
         </div>
+        <div>
+          <dt>Pris</dt>
+          <dd>
+            {receipt.purchase?.priceNok === null
+              ? "Ikke oppgitt"
+              : `${receipt.purchase?.priceNok} kr`}
+          </dd>
+        </div>
       </dl>
-      <button className="primary" type="button" onClick={done}>
-        Tilbake til fiskekort
-      </button>
+      <div className="permit-confirmation-actions">
+        <button className="primary" type="button" onClick={openPermits}>
+          Åpne fiskekort
+        </button>
+        <button className="secondary" type="button" onClick={goHome}>
+          Tilbake til hjem
+        </button>
+      </div>
     </div>
   );
 }

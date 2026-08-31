@@ -369,6 +369,8 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   const product = permitCatalogRepository.findProduct("zone-3-day");
   if (!product) throw new Error("Testprodukt mangler");
   const saved = [] as ReturnType<typeof createTestPermitDocument>[];
+  let openedPermits = false;
+  let returnedHome = false;
 
   render(
     <PermitCheckout
@@ -377,6 +379,12 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
       save={async (document) => {
         saved.push(document);
         return operationSucceeded(undefined);
+      }}
+      onOpenPermits={() => {
+        openedPermits = true;
+      }}
+      onGoHome={() => {
+        returnedHome = true;
       }}
     />,
   );
@@ -392,6 +400,10 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   expect(getDocumentReadiness(saved).valid.permit).toBe(true);
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
   expect(screen.getByText(/Ingen penger er trukket/)).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Åpne fiskekort" }));
+  await user.click(screen.getByRole("button", { name: "Tilbake til hjem" }));
+  expect(openedPermits).toBe(true);
+  expect(returnedHome).toBe(true);
 });
 
 test("valgt testdato kan lage et utløpt kort for riktig sone", () => {

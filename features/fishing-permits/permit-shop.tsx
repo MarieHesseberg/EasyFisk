@@ -15,9 +15,13 @@ const zones: readonly ZoneId[] = [1, 2, 3, 4];
 export function PermitShop({
   initialZone = 3,
   onPermitPurchased,
+  onOpenPermits,
+  onGoHome,
 }: {
   initialZone?: ZoneId;
   onPermitPurchased?: (zoneId: ZoneId) => void;
+  onOpenPermits?: () => void;
+  onGoHome?: () => void;
 }) {
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const [selectedArea, setSelectedArea] = useState("all");
@@ -66,6 +70,8 @@ export function PermitShop({
         back={() => setSelectedProductId(null)}
         save={documents.save}
         onPurchased={onPermitPurchased}
+        onOpenPermits={onOpenPermits}
+        onGoHome={onGoHome}
       />
     );
   }

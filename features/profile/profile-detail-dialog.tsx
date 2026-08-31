@@ -14,6 +14,8 @@ export function ProfileDetailDialog({
   openPermitShop,
   selectedZone,
   onPermitPurchased,
+  onOpenPermits,
+  onGoHome,
 }: {
   destination: DetailDestination;
   close: () => void;
@@ -21,6 +23,8 @@ export function ProfileDetailDialog({
   openPermitShop?: () => void;
   selectedZone?: ZoneId;
   onPermitPurchased?: (zoneId: ZoneId) => void;
+  onOpenPermits?: () => void;
+  onGoHome?: () => void;
 }) {
   const dialogRef = useDialogAccessibility(close);
   const title = detailTitles[destination];
@@ -48,6 +52,8 @@ export function ProfileDetailDialog({
             openPermitShop={openPermitShop}
             selectedZone={selectedZone}
             onPermitPurchased={onPermitPurchased}
+            onOpenPermits={onOpenPermits}
+            onGoHome={onGoHome}
           />
         )}
       </div>

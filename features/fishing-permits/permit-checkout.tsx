@@ -21,12 +21,16 @@ export function PermitCheckout({
   back,
   save,
   onPurchased,
+  onOpenPermits,
+  onGoHome,
 }: {
   product: PrototypePermitProduct;
   documents?: FishingDocument[];
   back: () => void;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
+  onOpenPermits?: () => void;
+  onGoHome?: () => void;
 }) {
   const checkout = usePermitCheckoutController({ product, save, onPurchased });
   let validity = null;
@@ -105,7 +109,12 @@ export function PermitCheckout({
         />
       )}
       {checkout.step === "confirmation" && checkout.receipt && (
-        <PermitConfirmationStep product={product} receipt={checkout.receipt} done={back} />
+        <PermitConfirmationStep
+          product={product}
+          receipt={checkout.receipt}
+          openPermits={onOpenPermits ?? back}
+          goHome={onGoHome ?? back}
+        />
       )}
       {checkout.error && (
         <p className="permit-payment-result error" role="alert">

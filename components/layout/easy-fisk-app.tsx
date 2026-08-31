@@ -111,6 +111,8 @@ export function EasyFiskApp() {
             onPermitPurchased={(purchasedZone) => {
               actions.setZone(purchasedZone);
             }}
+            onOpenPermits={() => actions.openDetail("permits")}
+            onGoHome={() => actions.navigate("home")}
           />
         )}{" "}
         {screen === "rules" && (
@@ -199,6 +201,11 @@ export function EasyFiskApp() {
             openPermitShop={() => actions.openDetail("permit-shop")}
             selectedZone={zone}
             onPermitPurchased={actions.setZone}
+            onOpenPermits={() => actions.openDetail("permits")}
+            onGoHome={() => {
+              actions.closeDetail();
+              actions.navigate("home");
+            }}
           />
         )}
         <ScrollIndicator />

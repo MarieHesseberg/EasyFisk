@@ -176,6 +176,10 @@
 .permit-confirmation .permit-order-summary {
   text-align: left;
 }
+.permit-confirmation-actions {
+  display: grid;
+  gap: var(--space-3);
+}
 .permit-payment-result.success {
   border-color: var(--color-primary);
   background: var(--color-primary-soft);
