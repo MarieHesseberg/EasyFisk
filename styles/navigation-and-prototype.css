@@ -7,7 +7,7 @@
   background: var(--color-surface-warm);
   border-top: 1px solid var(--color-border);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   padding: 9px 8px 15px;
   z-index: var(--layer-navigation);
 }

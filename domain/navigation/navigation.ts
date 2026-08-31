@@ -1,4 +1,4 @@
-export type Screen = "home" | "map" | "rules" | "stats" | "more";
+export type Screen = "home" | "map" | "permits" | "rules" | "stats" | "more";
 
 export type DetailDestination =
   | "permits"

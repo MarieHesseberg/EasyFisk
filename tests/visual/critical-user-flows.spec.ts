@@ -75,6 +75,16 @@ test("fiskekortbutikken åpnes fra hjem, kart, Mer og Mine fiskekort", async ({ 
   await expect(page.getByRole("dialog", { name: "Fiskekort og kjøp" })).toBeVisible();
 });
 
+test("fiskekortbutikken har en egen fane i hovednavigasjonen", async ({ page }) => {
+  await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Kjøp fiskekort" })).toBeVisible();
+  await expect(page.getByLabel("Fiskekortbutikk")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fiskekort", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+});
+
 test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ page }) => {
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Fiskekort og kjøp/ }).click();
@@ -90,7 +100,7 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(page.getByText(/Sone 2 · Fuskeland/)).toBeVisible();
   await expect(page.getByText("Ingen registrert – legg til dokumentasjon")).toHaveCount(2);
 
-  await page.getByRole("button", { name: /Fiskekort/ }).click();
+  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
   const permits = page.getByRole("dialog", { name: "Mine fiskekort" });
   await expect(permits).toContainText("Fuskeland");
   await expect(permits).toContainText("Gruppekort");
@@ -158,7 +168,7 @@ test("fiskekort kan registreres lokalt med originalvedlegg og beholdes etter ref
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 664 });
-  await page.getByRole("button", { name: /Fiskekort/ }).click();
+  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
   const dialog = page.getByRole("dialog", { name: "Mine fiskekort" });
   await dialog.getByRole("button", { name: "Registrer fiskekort" }).click();
   await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
@@ -177,7 +187,7 @@ test("fiskekort kan registreres lokalt med originalvedlegg og beholdes etter ref
   await expect(dialog.getByText("Egenregistrert · ikke eksternt verifisert")).toBeVisible();
   await expect(dialog.getByRole("link", { name: /fiskekort.pdf/ })).toBeVisible();
   await page.reload();
-  await page.getByRole("button", { name: /Fiskekort/ }).click();
+  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
   await expect(
     page
       .getByRole("dialog", { name: "Mine fiskekort" })

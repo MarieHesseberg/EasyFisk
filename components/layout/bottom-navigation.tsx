@@ -4,6 +4,7 @@ import type { Screen } from "@/domain/navigation/navigation";
 const destinations = [
   ["home", "Hjem", "home"],
   ["map", "Kart", "map"],
+  ["permits", "Fiskekort", "ticket"],
   ["rules", "Regler", "book"],
   ["more", "Mer", "more"],
 ] as const;

@@ -13,6 +13,7 @@ import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
 import { HomeScreen } from "@/features/home/home-screen";
 import { MapScreen } from "@/features/map/map-screen";
+import { PermitShopScreen } from "@/features/fishing-permits/permit-shop-screen";
 import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 import { ProfileScreen } from "@/features/profile/profile-screen";
 import { RulesScreen } from "@/features/rules/rules-screen";
@@ -102,6 +103,15 @@ export function EasyFiskApp() {
             setSelected={actions.setZone}
             onUseZone={actions.useZone}
             onBuyPermit={() => actions.openDetail("permit-shop")}
+          />
+        )}{" "}
+        {screen === "permits" && (
+          <PermitShopScreen
+            initialZone={zone}
+            onPermitPurchased={(purchasedZone) => {
+              actions.setZone(purchasedZone);
+              actions.navigate("home");
+            }}
           />
         )}{" "}
         {screen === "rules" && (

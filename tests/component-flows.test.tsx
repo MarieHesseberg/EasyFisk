@@ -171,6 +171,7 @@ test("hovednavigasjonen markerer valgt side og sender navigasjonshandling", asyn
   );
   expect(screen.getByRole("button", { name: /Hjem/ }).getAttribute("aria-current")).toBe("page");
   expect(screen.queryByRole("button", { name: /Statistikk/ })).toBeNull();
+  expect(screen.getByRole("button", { name: /Fiskekort/ })).toBeTruthy();
   await userEvent.setup().click(screen.getByRole("button", { name: /Kart/ }));
   expect(destination).toBe("map");
 });
