@@ -6,14 +6,14 @@
   --color-text: var(--palette-blue-900);
   --color-text-muted: var(--palette-blue-900);
   --color-primary: var(--palette-blue-900);
-  --color-primary-accent: var(--palette-blue-500);
+  --color-primary-accent: var(--palette-blue-900);
   --color-primary-dark: var(--palette-blue-900);
-  --color-primary-soft: var(--palette-blue-050);
-  --color-primary-surface: var(--palette-blue-200);
+  --color-primary-soft: var(--palette-blue-200);
+  --color-primary-surface: var(--palette-blue-050);
   --color-primary-surface-strong: var(--palette-blue-200);
   --color-surface: var(--palette-blue-050);
-  --color-background: var(--palette-blue-050);
-  --color-border: var(--palette-blue-200);
+  --color-background: var(--palette-blue-200);
+  --color-border: var(--palette-blue-500);
   --color-border-subtle: var(--palette-blue-200);
   --color-border-faint: var(--palette-blue-200);
   --color-success: var(--palette-blue-500);
@@ -48,10 +48,10 @@
   --color-danger-surface-light: color-mix(in srgb, #b3261e 10%, var(--palette-blue-050));
   --color-shadow: #0d47a130;
   --color-text-shadow-subtle: #0d47a10b;
-  --color-border-control: var(--palette-blue-200);
-  --color-border-input: var(--palette-blue-200);
-  --color-border-field: var(--palette-blue-200);
-  --color-border-strong: var(--palette-blue-500);
+  --color-border-control: var(--palette-blue-500);
+  --color-border-input: var(--palette-blue-500);
+  --color-border-field: var(--palette-blue-500);
+  --color-border-strong: var(--palette-blue-900);
   --color-info-surface: var(--palette-blue-050);
   --color-info-surface-muted: var(--palette-blue-050);
   --color-info-surface-strong: var(--palette-blue-200);
@@ -107,7 +107,7 @@ button {
 }
 body {
   margin: 0;
-  background: var(--color-primary-soft);
+  background: var(--color-background);
   color: var(--color-text);
   font-family: Arial, sans-serif;
 }
@@ -138,6 +138,7 @@ body {
   overflow-y: auto;
   padding: 0 var(--space-page-inline) var(--space-navigation-bottom);
   scrollbar-width: none;
+  background: var(--color-background);
 }
 .screen::-webkit-scrollbar {
   display: none;

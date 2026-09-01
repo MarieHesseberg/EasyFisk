@@ -43,6 +43,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   overflow-wrap: anywhere;
+  box-shadow: var(--shadow-small);
 }
 .document-card dl > div {
   margin-block: var(--space-4);
@@ -60,8 +61,10 @@
 }
 .document-overview {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   padding-inline: var(--space-5);
+  box-shadow: var(--shadow-card);
 }
 .document-overview > button {
   display: flex;

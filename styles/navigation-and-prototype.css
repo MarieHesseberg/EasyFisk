@@ -5,7 +5,8 @@
   right: 0;
   height: 83px;
   background: var(--color-surface-warm);
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-border);
+  box-shadow: 0 -6px 18px var(--color-primary-shadow);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   padding: 9px 8px 15px;
