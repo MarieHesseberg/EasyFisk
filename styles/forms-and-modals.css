@@ -1,7 +1,7 @@
 .modal-bg {
   position: absolute;
   inset: 0;
-  background: #0d47a177;
+  background: #123b5d77;
   z-index: var(--layer-dialog);
   display: flex;
   align-items: flex-end;

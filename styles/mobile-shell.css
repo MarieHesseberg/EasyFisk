@@ -146,9 +146,9 @@
   left: 50%;
   top: 0;
   height: 100%;
-  border-left: 3px dashed #b3261e;
+  border-left: 3px dashed #b64b43;
   z-index: 2;
 }
 .mini-map.border-hit i {
-  box-shadow: 0 0 0 7px #f9a82535;
+  box-shadow: 0 0 0 7px #c58b2b35;
 }

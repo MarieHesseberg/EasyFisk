@@ -108,8 +108,8 @@ export function InteractiveMandalselvaMap({
       userMarkerRef.current = leaflet
         .circleMarker(userPosition, {
           radius: 8,
-          color: "#e3f2fd",
-          fillColor: "#b3261e",
+          color: "#ffffff",
+          fillColor: "#b64b43",
           fillOpacity: 1,
           weight: 3,
         })

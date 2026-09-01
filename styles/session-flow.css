@@ -1,7 +1,7 @@
 .flow-overlay {
   position: absolute;
   inset: 0;
-  background: #0d47a188;
+  background: #123b5d88;
   z-index: var(--layer-session-flow);
   display: flex;
   align-items: flex-end;
@@ -12,7 +12,7 @@
   overflow: auto;
   background: var(--color-background);
   border-radius: 28px 28px 0 0;
-  box-shadow: 0 -12px 40px #0d47a133;
+  box-shadow: 0 -12px 40px #123b5d33;
 }
 .flow-top {
   position: sticky;

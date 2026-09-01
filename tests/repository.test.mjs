@@ -252,14 +252,15 @@ test("grensesnittet bruker bare den godkjente blåpaletten og semantiske varself
       .toLowerCase()
       .match(/#[0-9a-f]{6}(?:[0-9a-f]{2})?/g) ?? [];
   const approvedBases = [
-    "#e3f2fd",
-    "#90caf9",
-    "#2196f3",
-    "#0d47a1",
-    "#f5efe7",
-    "#d8c4b6",
-    "#b3261e",
-    "#f9a825",
+    "#eaf4f8",
+    "#b8dceb",
+    "#2c7da0",
+    "#1b5e7a",
+    "#123b5d",
+    "#f7f3ec",
+    "#ffffff",
+    "#b64b43",
+    "#c58b2b",
   ];
   const unapproved = [
     ...new Set(colors.filter((color) => !approvedBases.some((base) => color.startsWith(base)))),
