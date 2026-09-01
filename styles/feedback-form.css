@@ -15,7 +15,7 @@
   display: grid;
   place-items: center;
   background: var(--color-border-field);
-  color: #6c7d8d;
+  color: var(--color-text-muted);
   font-size: 9px;
   font-weight: bold;
 }
@@ -32,8 +32,8 @@
   display: flex;
   gap: var(--space-4);
   background: var(--color-warning-surface);
-  color: #6d5215;
-  border: 1px solid #e6cc82;
+  color: var(--color-warning-text);
+  border: 1px solid var(--color-warning-border);
   border-radius: var(--radius-content);
   padding: 12px;
 }
@@ -70,7 +70,7 @@
   border: 1px solid var(--color-border-control);
   border-radius: var(--radius-compact);
   background: var(--color-surface);
-  color: #324b43;
+  color: var(--color-primary-dark);
   text-align: left;
   padding: 9px;
   font-size: 8px;
@@ -101,7 +101,7 @@
 .character-count {
   text-align: right;
   font-size: 8px;
-  color: #728294;
+  color: var(--color-text-muted);
   margin-top: -8px;
 }
 .feedback-upload {
@@ -109,7 +109,7 @@
   display: flex !important;
   align-items: center;
   gap: var(--space-4);
-  border: 1px dashed #a7bacb;
+  border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
   padding: 12px;

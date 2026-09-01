@@ -236,6 +236,29 @@ test("delte farger bruker semantiske designtokens", async () => {
   }
 });
 
+test("grensesnittet bruker bare den godkjente blåpaletten og semantiske varselfarger", async () => {
+  const entries = await readdir(new URL("../styles/", import.meta.url), { withFileTypes: true });
+  const sources = await Promise.all([
+    ...entries
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".css"))
+      .map((entry) => readFile(new URL(`../styles/${entry.name}`, import.meta.url), "utf8")),
+    readFile(new URL("../data/map/mandalselva-zone-boundaries.ts", import.meta.url), "utf8"),
+    readFile(new URL("../data/mock/fishing-zones.ts", import.meta.url), "utf8"),
+    readFile(new URL("../features/map/interactive-mandalselva-map.tsx", import.meta.url), "utf8"),
+  ]);
+  const colors =
+    sources
+      .join("\n")
+      .toLowerCase()
+      .match(/#[0-9a-f]{6}(?:[0-9a-f]{2})?/g) ?? [];
+  const approvedBases = ["#e3f2fd", "#90caf9", "#2196f3", "#0d47a1", "#b3261e", "#f9a825"];
+  const unapproved = [
+    ...new Set(colors.filter((color) => !approvedBases.some((base) => color.startsWith(base)))),
+  ];
+
+  assert.deepEqual(unapproved, []);
+});
+
 test("dialoger har tilgjengelig fokusbehandling", async () => {
   const hook = await readFile(
     new URL("../hooks/use-dialog-accessibility.ts", import.meta.url),

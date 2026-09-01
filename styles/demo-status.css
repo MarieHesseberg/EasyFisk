@@ -19,7 +19,7 @@
   border: 1px solid var(--color-surface);
   border-radius: var(--radius-compact);
   padding: 10px 12px;
-  color: #3e5870;
+  color: var(--color-text-muted);
   font-size: 12px;
   line-height: 1.35;
 }

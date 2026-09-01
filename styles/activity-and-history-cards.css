@@ -8,7 +8,7 @@
   font-weight: bold;
 }
 .segmented {
-  background: #e5ebf1;
+  background: var(--color-primary-surface);
   border-radius: var(--radius-medium);
   padding: 3px;
   display: grid;
@@ -39,7 +39,7 @@
   display: inline-block;
   width: 8px;
   height: 8px;
-  background: #9cc8ee;
+  background: var(--palette-blue-200);
   border-radius: var(--radius-round);
   margin-right: 7px;
 }

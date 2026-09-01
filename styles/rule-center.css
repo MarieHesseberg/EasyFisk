@@ -27,22 +27,22 @@
 .rule-version small {
   font-size: 7px;
   letter-spacing: 1.2px;
-  color: #c2d8e9;
+  color: var(--palette-blue-050);
 }
 .rule-version b {
   font-size: 11px;
 }
 .rule-version p {
   font-size: 8px;
-  color: #b8cddd;
+  color: var(--palette-blue-200);
   margin: 0;
 }
 .season-alert {
   display: flex;
   gap: var(--space-4);
   background: var(--color-warning-surface-pale);
-  color: #6b5316;
-  border: 1px solid #e6ce8a;
+  color: var(--color-warning-text);
+  border: 1px solid var(--color-warning-border);
   border-radius: var(--radius-content);
   padding: 12px;
 }
@@ -59,12 +59,12 @@
 }
 .rule-center article {
   background: var(--color-surface);
-  border: 1px solid #e0e8ef;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-content);
   overflow: hidden;
 }
 .rule-center article.open {
-  border-color: #a6c6e0;
+  border-color: var(--color-border-strong);
   box-shadow: 0 4px 14px var(--color-text-shadow-subtle);
 }
 .rule-center article > button {
@@ -103,7 +103,7 @@
 }
 .rule-center article > button i {
   font: normal 18px Arial;
-  color: #517890;
+  color: var(--color-text-muted);
 }
 .rule-body {
   border-top: 1px solid var(--color-border-faint);
@@ -115,7 +115,7 @@
   font-size: 9px;
   line-height: 1.45;
   margin: 9px 0;
-  color: #405b73;
+  color: var(--color-text-muted);
 }
 .rule-body svg {
   flex: none;
@@ -135,7 +135,7 @@
 }
 .rule-sources a {
   display: block;
-  color: #276faf;
+  color: var(--color-primary-dark);
   font-size: 8px;
   line-height: 1.4;
   margin: 5px 0;

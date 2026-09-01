@@ -13,7 +13,7 @@
 .avatar {
   width: 49px;
   height: 49px;
-  background: #e8f0f7;
+  background: var(--color-primary-surface);
   color: var(--color-primary);
   border-radius: var(--radius-round);
   display: grid;
@@ -74,5 +74,5 @@
 .version {
   text-align: center;
   font-size: 9px;
-  color: #9ba9b6;
+  color: var(--color-text-muted);
 }

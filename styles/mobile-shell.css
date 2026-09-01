@@ -18,7 +18,7 @@
 .demo-intro {
   font-size: 13px;
   line-height: 1.5;
-  color: #5f6e7d;
+  color: var(--color-text-muted);
   margin: 8px 0 18px;
 }
 .demo-select-label {
@@ -26,13 +26,13 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #4c6479;
+  color: var(--color-text-muted);
   margin-bottom: 7px;
   text-transform: uppercase;
 }
 .demo-select {
   width: 100%;
-  border: 1px solid #c8d4df;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-primary-dark);
@@ -58,18 +58,18 @@
   line-height: 1.4;
 }
 .demo-result.ok {
-  background: #eef7fd;
-  border-color: #bbd9f1;
+  background: var(--color-primary-surface);
+  border-color: var(--color-border);
   color: var(--color-primary);
 }
 .demo-result.warning {
   background: var(--color-warning-background-soft);
-  border-color: #e7c870;
-  color: #725711;
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-text);
 }
 .demo-result.blocked {
   background: var(--color-danger-surface-soft);
-  border-color: #e5b3aa;
+  border-color: var(--color-danger);
   color: var(--color-danger);
 }
 .demo-start {
@@ -83,7 +83,7 @@
 }
 .feature-divider {
   height: 1px;
-  background: #d9e2eb;
+  background: var(--palette-blue-200);
   margin: 22px 0;
 }
 .scenario-banner {
@@ -102,18 +102,18 @@
   font-size: 12px;
 }
 .scenario-banner.ok {
-  background: #eff7fd;
-  border-color: #b9d7f0;
+  background: var(--color-primary-surface);
+  border-color: var(--color-border);
   color: var(--color-primary);
 }
 .scenario-banner.warning {
   background: var(--color-warning-background);
   border-color: var(--color-warning-border);
-  color: #72550b;
+  color: var(--color-warning-text);
 }
 .scenario-banner.blocked {
   background: var(--color-danger-surface-soft);
-  border-color: #e2aaa0;
+  border-color: var(--color-danger);
   color: var(--color-danger);
 }
 .flow-checks .check-row.error span {
@@ -146,9 +146,9 @@
   left: 50%;
   top: 0;
   height: 100%;
-  border-left: 3px dashed rgba(179, 89, 46, 0.65);
+  border-left: 3px dashed #b3261e;
   z-index: 2;
 }
 .mini-map.border-hit i {
-  box-shadow: 0 0 0 7px rgba(205, 140, 47, 0.25);
+  box-shadow: 0 0 0 7px #f9a82535;
 }

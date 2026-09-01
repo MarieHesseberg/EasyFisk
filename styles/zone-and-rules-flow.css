@@ -7,7 +7,7 @@
 .mini-map {
   height: 105px;
   border-radius: var(--radius-medium);
-  background: linear-gradient(135deg, #e2eaf3, #c7d9e9);
+  background: linear-gradient(135deg, var(--palette-blue-050), var(--palette-blue-200));
   position: relative;
   display: grid;
   place-items: center;
@@ -19,7 +19,7 @@
   position: absolute;
   width: 180px;
   height: 18px;
-  background: #9bbeca;
+  background: var(--palette-blue-200);
   border-radius: var(--radius-round);
   transform: rotate(-18deg);
 }
@@ -38,7 +38,7 @@
   width: 11px;
   height: 11px;
   border: 3px solid var(--color-surface);
-  background: #e57b60;
+  background: var(--color-danger);
   border-radius: var(--radius-round);
   margin-top: 30px;
 }
@@ -92,7 +92,7 @@
   accent-color: var(--color-primary);
 }
 .start-final {
-  background: #1e5686;
+  background: var(--palette-blue-900);
 }
 .stop-summary {
   display: grid;

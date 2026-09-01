@@ -3,11 +3,11 @@
   align-items: flex-start;
   gap: 9px;
   background: var(--color-danger-surface-light);
-  border: 1px solid #dfaaa0;
+  border: 1px solid var(--color-danger);
   border-radius: var(--radius-medium);
   padding: 12px !important;
   margin: 12px 0;
-  color: #7f3026;
+  color: var(--color-danger-text);
 }
 .violation-confirm input {
   margin-top: 2px;
@@ -29,13 +29,13 @@
   background: var(--color-danger);
 }
 .danger-submit:disabled {
-  background: #c9b2ad;
-  color: #f4eae8;
+  background: var(--color-danger);
+  color: var(--palette-blue-050);
   cursor: not-allowed;
 }
 .violation-sent {
   background: var(--color-danger-surface-soft);
-  border: 1px solid #e1aaa0;
+  border: 1px solid var(--color-danger);
   color: var(--color-danger-dark);
   border-radius: var(--radius-medium);
   padding: 12px;

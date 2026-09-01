@@ -12,7 +12,7 @@
   width: 38px;
   height: 4px;
   border-radius: 3px;
-  background: #c7d0d9;
+  background: var(--palette-blue-200);
   margin: 0 auto 15px;
 }
 .zone-title {
@@ -59,7 +59,7 @@
   font-size: 11px;
 }
 .zone-note {
-  background: #ecf2f8;
+  background: var(--color-primary-surface);
   border-radius: var(--radius-medium);
   padding: var(--space-4);
   font-size: 10px;

@@ -1,7 +1,7 @@
 .flow-overlay {
   position: absolute;
   inset: 0;
-  background: #102c4688;
+  background: #0d47a188;
   z-index: var(--layer-session-flow);
   display: flex;
   align-items: flex-end;
@@ -12,7 +12,7 @@
   overflow: auto;
   background: var(--color-background);
   border-radius: 28px 28px 0 0;
-  box-shadow: 0 -12px 40px #102c4633;
+  box-shadow: 0 -12px 40px #0d47a133;
 }
 .flow-top {
   position: sticky;
@@ -103,7 +103,7 @@
   display: grid;
   place-items: center;
   border-radius: var(--radius-round);
-  background: #e3f0fb;
+  background: var(--color-primary-surface);
   color: var(--color-primary);
 }
 .flow-checks p {

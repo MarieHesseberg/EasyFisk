@@ -33,7 +33,7 @@
 .detail-alert p {
   font-size: 9px;
   margin: 0;
-  color: #5c7288;
+  color: var(--color-text-muted);
 }
 .detail-data,
 .detail-list,
@@ -92,7 +92,7 @@
   line-height: 1.4;
 }
 .detail-alert {
-  background: #e5eff8;
+  background: var(--color-primary-surface);
   color: var(--color-primary);
 }
 .detail-lead {

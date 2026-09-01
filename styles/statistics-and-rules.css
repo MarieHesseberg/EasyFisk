@@ -10,7 +10,7 @@
 .stats-tabs button {
   border: 0;
   background: transparent;
-  color: #64788b;
+  color: var(--color-text-muted);
   border-radius: var(--radius-compact);
   padding: 10px 7px;
   font-size: 10px;
@@ -39,11 +39,11 @@
 }
 .personal-rules.ready {
   background: var(--color-primary-surface);
-  border: 1px solid #cfddeb;
+  border: 1px solid var(--color-border);
 }
 .personal-rules.missing {
   background: var(--color-warning-surface-light);
-  border: 1px solid #ead4aa;
+  border: 1px solid var(--color-warning-border);
 }
 .personal-rules-title {
   display: flex;
@@ -64,7 +64,7 @@
   font-size: 9px;
   letter-spacing: 1.35px;
   font-weight: 800;
-  color: #667b8f;
+  color: var(--color-text-muted);
 }
 .personal-rules-title h2,
 .general-rules-heading h2 {
@@ -116,7 +116,7 @@
   gap: var(--space-5);
   padding: 10px 0;
   margin: 0;
-  border-bottom: 1px solid #e8eff5;
+  border-bottom: 1px solid var(--color-border-subtle);
   font-size: 11px;
 }
 .personal-rule-list p:last-child {
@@ -124,11 +124,11 @@
 }
 .personal-rule-list span {
   text-align: right;
-  color: #566d82;
+  color: var(--color-text-muted);
 }
 .zone-note-text {
   display: block;
-  color: #5a7188;
+  color: var(--color-text-muted);
   line-height: 1.45;
   margin-top: 12px;
 }

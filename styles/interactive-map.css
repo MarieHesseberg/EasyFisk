@@ -8,7 +8,7 @@
   width: 100%;
   height: min(68dvh, 620px);
   min-height: 470px;
-  background: #dce7d2;
+  background: var(--palette-blue-200);
   z-index: 1;
 }
 

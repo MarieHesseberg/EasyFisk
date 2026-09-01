@@ -52,7 +52,7 @@
   margin-top: 18px;
 }
 .stop-button {
-  color: #8b3d2b;
+  color: var(--color-danger-text);
 }
 
 .home-past-session-button {
@@ -185,7 +185,7 @@
 }
 .info-card {
   margin-top: 18px;
-  background: #f0e7d8;
+  background: var(--color-warning-surface);
   border-radius: 19px;
   padding: 18px;
 }

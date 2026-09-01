@@ -15,7 +15,7 @@
   position: relative;
   border: 0;
   background: none;
-  color: #8291a0;
+  color: var(--color-text-muted);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +50,7 @@
 .prototype-note > p {
   font-size: 17px;
   line-height: 1.7;
-  color: #526c84;
+  color: var(--color-text-muted);
 }
 .principle {
   border-left: 3px solid var(--color-primary);
@@ -60,9 +60,9 @@
 .principle p {
   font-size: 13px;
   line-height: 1.6;
-  color: #587069;
+  color: var(--color-text-muted);
 }
 .prototype-note > small {
   font-size: 11px;
-  color: #72869a;
+  color: var(--color-text-muted);
 }

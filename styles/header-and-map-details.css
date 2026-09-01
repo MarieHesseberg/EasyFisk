@@ -29,10 +29,10 @@
   align-items: center;
   gap: var(--space-3);
   font-size: 9px;
-  border-top: 1px solid #e9eff5;
+  border-top: 1px solid var(--color-border-subtle);
   padding: 9px 0;
   margin: 0;
-  color: #4f687f;
+  color: var(--color-text-muted);
 }
 .map-location-status {
   position: absolute;
@@ -50,7 +50,7 @@
 .control-code {
   text-align: center;
   background: var(--color-surface);
-  border: 2px dashed #9fb5c8;
+  border: 2px dashed var(--color-border-strong);
   border-radius: var(--radius-card-large);
   padding: 18px;
   font: 800 21px Arial;

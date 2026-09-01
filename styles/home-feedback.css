@@ -3,9 +3,9 @@
   display: flex;
   align-items: center;
   gap: 11px;
-  border: 1px solid #e3c275;
+  border: 1px solid var(--color-warning-border);
   background: var(--color-warning-surface);
-  color: #6f5418;
+  color: var(--color-warning-text);
   border-radius: var(--radius-large);
   padding: var(--space-6);
   margin-top: var(--space-6);
@@ -34,13 +34,13 @@
 }
 .home-feedback-card b {
   font: 700 15px Georgia;
-  color: #4f3b0d;
+  color: var(--color-warning-text);
 }
 .home-feedback-card p {
   font-size: 9px;
   line-height: 1.35;
   margin: 0;
-  color: #785d20;
+  color: var(--color-warning-text);
 }
 .more-feedback-card {
   margin-top: var(--space-6);
@@ -64,7 +64,7 @@
 }
 .more-feedback-card small,
 .more-feedback-card p {
-  color: #d8e7f3;
+  color: var(--palette-blue-050);
 }
 .more-feedback-card h3 {
   font: 700 20px Georgia;
