@@ -8,6 +8,12 @@ import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
 import type { ZoneId } from "@/domain/zones/zone";
 import { formatPrototypePermitPrice } from "@/domain/fishing-permits/prototype-permit-product";
 import { useUserLocation } from "@/features/map/hooks/use-user-location";
+import { InteractiveMandalselvaMap } from "@/features/map/interactive-mandalselva-map";
+import { useState } from "react";
+import {
+  findMandalselvaZoneAtPosition,
+  type MapCoordinate,
+} from "@/data/map/mandalselva-zone-boundaries";
 
 const zones = fishingContentRepository.getZones();
 
@@ -24,109 +30,27 @@ export function MapScreen({
 }) {
   const z = fishingContentRepository.findZone(selected) ?? zones[0];
   const permitProducts = permitCatalogRepository.listProductsByZone(z.id);
-  const suggestedZoneId = fishingContentRepository.getSuggestedZoneId();
-  const suggestedZoneName =
-    fishingContentRepository.findZone(suggestedZoneId)?.name.split(" · ")[0] ??
-    `Sone ${suggestedZoneId}`;
-  const location = useUserLocation(() => setSelected(suggestedZoneId), suggestedZoneName);
+  const [userPosition, setUserPosition] = useState<MapCoordinate | null>(null);
+  const location = useUserLocation((position) => {
+    setUserPosition(position);
+    const locatedZone = findMandalselvaZoneAtPosition(position);
+    if (!locatedZone) return "Posisjon funnet utenfor de registrerte hovedsonene.";
+    setSelected(locatedZone);
+    return `Posisjon funnet · sone ${locatedZone}`;
+  });
   return (
     <div className="screen map-screen">
       <ScreenHeader title="Fiskesoner" eyebrow="MANDALSELVA · VEILEDENDE KART" />
-      <div className="map-canvas">
-        <svg className="river" viewBox="0 0 400 560" aria-hidden="true">
-          <path
-            className="map-land"
-            d="M52 550L57 495 85 452 92 400 125 352 133 294 183 240 194 184 231 133 239 76 272 6 383 0 386 560Z"
-          />
-          <path
-            className="river-tributary"
-            d="M238 82L284 66M190 184L147 157M132 296L84 280M94 400L44 381"
-          />
-          <path
-            className="river-base"
-            d="M267 0C250 32 266 52 241 79C218 104 246 125 218 151C188 178 210 201 177 226C144 251 165 274 136 301C109 326 126 350 105 374C82 399 104 421 77 446C53 469 76 493 52 515C38 528 35 545 31 565"
-          />
-          <path
-            className="river-water"
-            d="M267 0C250 32 266 52 241 79C218 104 246 125 218 151C188 178 210 201 177 226C144 251 165 274 136 301C109 326 126 350 105 374C82 399 104 421 77 446C53 469 76 493 52 515C38 528 35 545 31 565"
-          />
-          <g className="zone-boundaries">
-            <path d="M16 438H382" />
-            <path d="M16 315H382" />
-            <path d="M16 202H382" />
-          </g>
-          <g className="map-place-dots">
-            <circle cx="30" cy="532" r="4" />
-            <circle cx="73" cy="432" r="4" />
-            <circle cx="101" cy="365" r="4" />
-            <circle cx="128" cy="306" r="4" />
-            <circle cx="174" cy="221" r="4" />
-            <circle cx="220" cy="142" r="4" />
-            <circle cx="254" cy="57" r="4" />
-          </g>
-          <g className="map-place-names">
-            <text x="43" y="537">
-              MANDAL
-            </text>
-            <text x="84" y="437">
-              HOLUM
-            </text>
-            <text x="112" y="370">
-              ØYSLEBØ
-            </text>
-            <text x="140" y="311">
-              MARNARDAL
-            </text>
-            <text x="186" y="226">
-              LAUDAL
-            </text>
-            <text x="232" y="147">
-              MANFLÅ
-            </text>
-            <text x="266" y="62">
-              BJELLAND
-            </text>
-          </g>
-          <g className="map-zone-names">
-            <text x="306" y="502">
-              SONE 1
-            </text>
-            <text x="306" y="381">
-              SONE 2
-            </text>
-            <text x="306" y="268">
-              SONE 3
-            </text>
-            <text x="306" y="94">
-              SONE 4
-            </text>
-          </g>
-          <text className="no-fishing-label" x="223" y="190">
-            FISKE FORBUDT
-          </text>
-        </svg>
-        {zones.map((x, i) => (
-          <button
-            aria-label={"Vis " + x.name}
-            aria-pressed={selected === x.id}
-            key={x.id}
-            onClick={() => setSelected(x.id)}
-            className={"zone-pin z" + (i + 1) + (selected === x.id ? " selected" : "")}
-          >
-            <span>{x.id}</span>
-          </button>
-        ))}
-        <button
-          className="locate"
-          aria-label="Finn min posisjon"
-          onClick={location.locate}
-          disabled={location.isLoading}
-        >
-          <Icon name="pin" />
+      <InteractiveMandalselvaMap
+        zones={zones}
+        selected={selected}
+        setSelected={setSelected}
+        userPosition={userPosition}
+      />
+      <div className="map-location-controls">
+        <button className="secondary" onClick={location.locate} disabled={location.isLoading}>
+          <Icon name="pin" /> {location.isLoading ? "Henter posisjon …" : "Vis min posisjon"}
         </button>
-        <div className="map-legend">
-          <span /> Valgt hovedsone <i /> Din posisjon
-        </div>
         {location.message && (
           <div className="map-location-status" role="status">
             {location.message}

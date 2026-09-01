@@ -161,10 +161,18 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await storedPermits.getByRole("button", { name: /Tilbake/ }).click();
 
   await page.getByRole("button", { name: "Kart" }).click();
-  await page.getByRole("button", { name: /Vis Sone 1/ }).click();
-  await expect(page.getByRole("heading", { name: /Sone 1/ })).toBeVisible();
-  await page.getByRole("button", { name: /Vis Sone 4/ }).click();
-  await expect(page.getByRole("heading", { name: /Sone 4/ })).toBeVisible();
+  await page.getByRole("button", { name: "Sone 1", exact: true }).click();
+  await expect(
+    page
+      .getByRole("region", { name: "Interaktivt kart over Mandalselva" })
+      .getByRole("heading", { name: /Sone 1/ }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Sone 4", exact: true }).click();
+  await expect(
+    page
+      .getByRole("region", { name: "Interaktivt kart over Mandalselva" })
+      .getByRole("heading", { name: /Sone 4/ }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Hjem" }).click();
 });
 

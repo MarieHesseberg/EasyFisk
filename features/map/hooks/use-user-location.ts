@@ -17,8 +17,11 @@ const messages: Omit<Record<LocationState, string>, "success"> = {
   timeout: "Posisjonshentingen tok for lang tid. Prøv igjen eller velg sone manuelt.",
 };
 
-export function useUserLocation(onSuccess: () => void, suggestedZoneName: string) {
+export function useUserLocation(
+  onSuccess: (position: [latitude: number, longitude: number]) => string | undefined,
+) {
   const [state, setState] = useState<LocationState>("idle");
+  const [successMessage, setSuccessMessage] = useState("Posisjon funnet.");
   function locate() {
     if (!navigator.geolocation) {
       setState("unavailable");
@@ -26,8 +29,10 @@ export function useUserLocation(onSuccess: () => void, suggestedZoneName: string
     }
     setState("loading");
     navigator.geolocation.getCurrentPosition(
-      () => {
-        onSuccess();
+      (position) => {
+        setSuccessMessage(
+          onSuccess([position.coords.latitude, position.coords.longitude]) ?? "Posisjon funnet.",
+        );
         setState("success");
       },
       (error) => {
@@ -42,7 +47,6 @@ export function useUserLocation(onSuccess: () => void, suggestedZoneName: string
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 60_000 },
     );
   }
-  const message =
-    state === "success" ? `Posisjon funnet · foreslått ${suggestedZoneName}` : messages[state];
+  const message = state === "success" ? successMessage : messages[state];
   return { isLoading: state === "loading", locate, message, state };
 }

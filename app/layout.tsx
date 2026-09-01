@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import "leaflet/dist/leaflet.css";
 import "@/styles/foundations.css";
 import "@/styles/home-overview.css";
 import "@/styles/navigation-and-prototype.css";
 import "@/styles/map.css";
+import "@/styles/interactive-map.css";
 import "@/styles/map-permits.css";
 import "@/styles/permit-shop.css";
 import "@/styles/permit-product-detail.css";

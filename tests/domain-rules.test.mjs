@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { findMandalselvaZoneAtPosition } from "../data/map/mandalselva-zone-boundaries.ts";
 
 import { isReportLate, reportingDeadlineMs } from "../domain/catches/reporting-deadline.ts";
 import { parseMeasurement, validateCatch } from "../domain/catches/validate-catch.ts";
@@ -399,4 +400,12 @@ test("statuskontroll gir visningstilstand og riktig løsning", () => {
   assert.equal(getStatusResolution("wrongZone"), "permits");
   assert.equal(getStatusResolution("otherRiver"), "disinfection");
   assert.equal(getStatusResolution("closed"), "notifications");
+});
+
+test("kartkoordinater kobles til riktig hovedsone", () => {
+  assert.equal(findMandalselvaZoneAtPosition([58.03, 7.47]), 1);
+  assert.equal(findMandalselvaZoneAtPosition([58.1, 7.53]), 2);
+  assert.equal(findMandalselvaZoneAtPosition([58.155, 7.551]), 3);
+  assert.equal(findMandalselvaZoneAtPosition([58.38, 7.53]), 4);
+  assert.equal(findMandalselvaZoneAtPosition([59, 8]), undefined);
 });

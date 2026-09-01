@@ -130,7 +130,13 @@ test("interaktive valg har tilgjengelig valgt tilstand", async () => {
   const [navigation, map, statistics, rules, sessionStep, catchStep, formError] = await Promise.all(
     [
       readFile(new URL("../components/layout/bottom-navigation.tsx", import.meta.url), "utf8"),
-      readFile(new URL("../features/map/map-screen.tsx", import.meta.url), "utf8"),
+      Promise.all([
+        readFile(new URL("../features/map/map-screen.tsx", import.meta.url), "utf8"),
+        readFile(
+          new URL("../features/map/interactive-mandalselva-map.tsx", import.meta.url),
+          "utf8",
+        ),
+      ]).then((files) => files.join("\n")),
       readFile(new URL("../features/statistics/statistics-screen.tsx", import.meta.url), "utf8"),
       readFile(
         new URL("../features/fishing-session/fishing-flow/steps/rules-step.tsx", import.meta.url),
@@ -160,10 +166,11 @@ test("interaktive valg har tilgjengelig valgt tilstand", async () => {
 });
 
 test("kartknapper har minst 44 piksler berøringsflate", async () => {
-  const styles = await readFile(new URL("../styles/map.css", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../styles/interactive-map.css", import.meta.url), "utf8");
 
-  assert.match(styles, /\.zone-pin\s*\{[^}]*width:\s*44px/s);
-  assert.match(styles, /\.zone-pin\s*\{[^}]*height:\s*44px/s);
+  assert.match(styles, /\.map-zone-switcher button\s*\{[^}]*min-height:\s*44px/s);
+  assert.match(styles, /\.map-zone-popup-close\s*\{[^}]*width:\s*44px/s);
+  assert.match(styles, /\.map-zone-popup-close\s*\{[^}]*height:\s*44px/s);
 });
 
 test("stilsystemet bruker egne tokens uten ubrukt Tailwind", async () => {

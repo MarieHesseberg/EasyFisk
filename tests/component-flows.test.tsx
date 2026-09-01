@@ -232,7 +232,7 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
       onBuyPermit={() => undefined}
     />,
   );
-  await userEvent.setup().click(screen.getByRole("button", { name: "Finn min posisjon" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Vis min posisjon" }));
   expect((await screen.findByRole("status")).textContent).toContain("Posisjonstilgang ble avslått");
 });
 
