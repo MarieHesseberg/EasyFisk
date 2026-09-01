@@ -38,7 +38,19 @@ import "@/styles/scroll-indicator.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",
-  description: "En interaktiv prototype for EasyFisk i Mandalselva.",
+  description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+  openGraph: {
+    title: "EasyFisk",
+    description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+    type: "website",
+    locale: "nb_NO",
+    siteName: "EasyFisk",
+  },
+  twitter: {
+    card: "summary",
+    title: "EasyFisk",
+    description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+  },
   other: {
     "codex-preview": "development",
   },
