@@ -21,3 +21,20 @@ for (const viewport of viewports) {
     });
   });
 }
+
+test("språkvalget følger brukeren mellom faner og etter refresh", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "EN", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Your fishing overview" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Permits", exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Permits", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Buy fishing permit" })).toBeVisible();
+  await expect(page.getByText("Choose main zone")).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Your fishing overview" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+});

@@ -1,0 +1,45 @@
+.language-switcher {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-small);
+}
+
+.language-switcher button {
+  min-width: 2.35rem;
+  min-height: 2rem;
+  padding: 0 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font:
+    800 0.72rem/1 Arial,
+    sans-serif;
+  letter-spacing: 0.06em;
+}
+
+.language-switcher button[aria-pressed="true"] {
+  background: var(--color-primary-dark);
+  color: var(--color-surface);
+}
+
+.language-switcher button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.app-header > p {
+  margin-right: 6.75rem;
+}
+
+.app-header > .round-btn {
+  right: 6.4rem;
+}

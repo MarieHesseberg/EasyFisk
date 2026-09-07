@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { appContentRepository } from "@/data/repositories/app-content";
+import { LanguageSwitcher } from "@/components/localization/language-switcher";
 
 const { headerAlerts } = appContentRepository.getContent();
 
@@ -16,6 +17,7 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
         </span>
         <span className="wordmark">easyfisk</span>
       </div>
+      <LanguageSwitcher />
       {eyebrow ? (
         <p>{eyebrow}</p>
       ) : (

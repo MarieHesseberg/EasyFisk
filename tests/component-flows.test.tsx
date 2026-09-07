@@ -37,6 +37,8 @@ import { isFishingDocument } from "../domain/documents/validate-document";
 import { getDocumentReadiness } from "../domain/documents/get-document-readiness";
 import { ZoneStep } from "../features/fishing-session/fishing-flow/steps/zone-step";
 import type { PermitPurchase } from "../domain/fishing-permits/permit-purchase";
+import { LanguageProvider } from "../components/localization/language-provider";
+import { LanguageSwitcher } from "../components/localization/language-switcher";
 
 afterEach(cleanup);
 
@@ -196,6 +198,25 @@ test("hovednavigasjonen markerer valgt side og sender navigasjonshandling", asyn
   expect(screen.getByRole("button", { name: /Fiskekort/ })).toBeTruthy();
   await userEvent.setup().click(screen.getByRole("button", { name: /Kart/ }));
   expect(destination).toBe("map");
+});
+
+test("språkvelgeren oversetter navigasjonen og husker engelsk", async () => {
+  window.localStorage.removeItem("easyfisk-language");
+  render(
+    <LanguageProvider>
+      <LanguageSwitcher />
+      <BottomNavigation activeScreen="home" navigate={() => undefined} />
+    </LanguageProvider>,
+  );
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "EN" }));
+  await waitFor(() => expect(screen.getByRole("button", { name: /Home/ })).toBeTruthy());
+  expect(document.documentElement.lang).toBe("en");
+  expect(window.localStorage.getItem("easyfisk-language")).toBe("en");
+
+  await userEvent.setup().click(screen.getByRole("button", { name: "NO" }));
+  await waitFor(() => expect(screen.getByRole("button", { name: /Hjem/ })).toBeTruthy());
+  expect(document.documentElement.lang).toBe("no");
 });
 
 test("tilbakemeldingsflyten validerer, kontrollerer og sender", async () => {

@@ -37,6 +37,7 @@ import "@/styles/mobile-shell.css";
 import "@/styles/responsive.css";
 import "@/styles/documents.css";
 import "@/styles/scroll-indicator.css";
+import "@/styles/language-switcher.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",
