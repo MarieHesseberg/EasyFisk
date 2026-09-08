@@ -26,8 +26,16 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
-  await page.getByRole("button", { name: "EN", exact: true }).click();
+  await page.getByRole("button", { name: "Switch to English" }).click();
   await expect(page.getByRole("heading", { name: "Your fishing overview" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Documents missing" })).toBeVisible();
+  await expect(
+    page.getByText(
+      "Register a valid fishing permit, valid disinfection, and the national fishing fee or an exemption before you start.",
+    ),
+  ).toBeVisible();
+  await expect(page.getByText("Not registered — add documentation").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Bytt til norsk" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Permits", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Permits", exact: true }).click();

@@ -1,45 +1,44 @@
-.language-switcher {
+.app-header-actions {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 27px;
+  right: 0;
   z-index: 8;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 3px;
+  display: flex;
+  align-items: center;
+  gap: 12px !important;
+}
+
+.language-switcher {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 13px;
   border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   background: var(--color-surface);
+  color: var(--color-primary-dark);
   box-shadow: var(--shadow-small);
-}
-
-.language-switcher button {
-  min-width: 2.35rem;
-  min-height: 2rem;
-  padding: 0 0.55rem;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-text-muted);
   font:
-    800 0.72rem/1 Arial,
+    700 12px/1 Arial,
     sans-serif;
-  letter-spacing: 0.06em;
 }
 
-.language-switcher button[aria-pressed="true"] {
-  background: var(--color-primary-dark);
-  color: var(--color-surface);
+.language-switcher:hover {
+  background: var(--color-primary-soft);
 }
 
-.language-switcher button:focus-visible {
+.language-switcher:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-.app-header > p {
-  margin-right: 6.75rem;
+.app-header-actions > .round-btn {
+  position: relative;
+  inset: auto;
+  flex: 0 0 40px;
 }
 
-.app-header > .round-btn {
-  right: 6.4rem;
+.app-header > p {
+  margin-right: 7.5rem;
 }

@@ -209,12 +209,12 @@ test("språkvelgeren oversetter navigasjonen og husker engelsk", async () => {
     </LanguageProvider>,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "EN" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Switch to English" }));
   await waitFor(() => expect(screen.getByRole("button", { name: /Home/ })).toBeTruthy());
   expect(document.documentElement.lang).toBe("en");
   expect(window.localStorage.getItem("easyfisk-language")).toBe("en");
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "NO" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Bytt til norsk" }));
   await waitFor(() => expect(screen.getByRole("button", { name: /Hjem/ })).toBeTruthy());
   expect(document.documentElement.lang).toBe("no");
 });

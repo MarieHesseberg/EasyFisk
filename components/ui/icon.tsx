@@ -86,6 +86,12 @@ export function Icon({ name, size = 22 }: { name: string; size?: number }) {
         <path d="M4 20c3-6 7-9 12-12" />
       </>
     ),
+    language: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3c3 3.4 3 14.6 0 18M12 3c-3 3.4-3 14.6 0 18" />
+      </>
+    ),
   };
   return (
     <svg

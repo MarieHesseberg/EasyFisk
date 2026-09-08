@@ -17,15 +17,16 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
         </span>
         <span className="wordmark">easyfisk</span>
       </div>
-      <LanguageSwitcher />
-      {eyebrow ? (
-        <p>{eyebrow}</p>
-      ) : (
-        <button className="round-btn" aria-label="Varsler" onClick={() => setShowAlerts(true)}>
-          <Icon name="bell" size={20} />
-          <i />
-        </button>
-      )}
+      <div className="app-header-actions">
+        <LanguageSwitcher />
+        {!eyebrow && (
+          <button className="round-btn" aria-label="Varsler" onClick={() => setShowAlerts(true)}>
+            <Icon name="bell" size={20} />
+            <i />
+          </button>
+        )}
+      </div>
+      {eyebrow && <p>{eyebrow}</p>}
       <h1>{title}</h1>
       {showAlerts && (
         <div className="header-alert-panel">
