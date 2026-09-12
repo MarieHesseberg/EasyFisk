@@ -6,6 +6,7 @@ import {
   type DocumentKind,
   type DocumentValues,
   type FishingDocument,
+  type DocumentVerification,
 } from "@/domain/documents/fishing-document";
 import { attachmentError, validateDocument } from "@/domain/documents/validate-document";
 import type { OperationResult } from "@/domain/shared/operation-result";
@@ -16,14 +17,18 @@ export function DocumentForm({
   initial,
   save,
   cancel,
+  verification,
+  initialValues,
 }: {
   kind: DocumentKind;
   initial?: FishingDocument;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   cancel: () => void;
+  verification?: DocumentVerification;
+  initialValues?: DocumentValues;
 }) {
   const { language, t } = useLanguage();
-  const [values, setValues] = useState<DocumentValues>(initial?.values ?? {});
+  const [values, setValues] = useState<DocumentValues>(initial?.values ?? initialValues ?? {});
   const [attachment, setAttachment] = useState<Blob | undefined>(initial?.attachment);
   const [attachmentName, setAttachmentName] = useState(initial?.attachmentName);
   const [error, setError] = useState("");
@@ -47,6 +52,7 @@ export function DocumentForm({
         attachmentName,
         updatedAt: Date.now(),
         purchaseId: initial?.purchaseId,
+        verification: initial?.verification ?? verification ?? { method: "manual" },
       });
       if (!result.ok) setError(t(result.error));
     } catch {

@@ -246,35 +246,13 @@ test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page })
   ).toBeVisible();
 });
 
-test("fiskekort kan registreres lokalt med originalvedlegg og beholdes etter refresh", async ({
-  page,
-}) => {
+test("fiskekort kan bare opprettes gjennom kjøpsflyten", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
   const dialog = page.getByRole("dialog", { name: "Mine fiskekort" });
-  await dialog.getByRole("button", { name: "Registrer fiskekort" }).click();
-  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
-  await dialog.getByLabel("Utsteder / selger *").fill("INatur");
-  await dialog.getByLabel("Korttype *").selectOption("Døgnkort");
-  await dialog.getByLabel("Vassdrag, sone og eventuell delsone *").fill("Mandalselva · Sone 3");
-  await dialog.getByLabel("Gyldig fra (norsk tid) *").fill("2026-08-20T18:00");
-  await dialog.getByLabel("Gyldig til (norsk tid) *").fill("2026-08-21T18:00");
-  await dialog.getByLabel(/Bilde eller PDF/).setInputFiles({
-    name: "fiskekort.pdf",
-    mimeType: "application/pdf",
-    buffer: Buffer.from("%PDF-1.4 prototype"),
-  });
-  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
-  await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
-  await expect(dialog.getByText("Egenregistrert · ikke eksternt verifisert")).toBeVisible();
-  await expect(dialog.getByRole("link", { name: /fiskekort.pdf/ })).toBeVisible();
-  await page.reload();
-  await page.locator(".document-overview button").filter({ hasText: "Fiskekort" }).click();
-  await expect(
-    page
-      .getByRole("dialog", { name: "Mine fiskekort" })
-      .getByRole("heading", { name: "Kari Fisker" }),
-  ).toBeVisible();
+  await expect(dialog.getByText(/Fiskekort utstedes gjennom kjøpsflyten/)).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Registrer fiskekort" })).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "Kjøp nytt fiskekort" })).toBeVisible();
 });
 
 test("desinfisering og fiskeravgift kan registreres med relevante opplysninger", async ({
@@ -283,7 +261,7 @@ test("desinfisering og fiskeravgift kan registreres med relevante opplysninger",
   await page.setViewportSize({ width: 390, height: 664 });
   await page.getByRole("button", { name: /Desinfisering/ }).click();
   let dialog = page.getByRole("dialog", { name: "Desinfisering" });
-  await dialog.getByRole("button", { name: "Registrer desinfisering" }).click();
+  await dialog.getByRole("button", { name: "Legg til eksisterende bevis manuelt" }).click();
   await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
   await dialog
     .getByLabel("Stasjon / hvem som utførte desinfiseringen *")
@@ -303,6 +281,18 @@ test("desinfisering og fiskeravgift kan registreres med relevante opplysninger",
   await dialog.getByLabel("Betalingsdato (ikke nødvendig ved fritak)").fill("2026-05-15");
   await dialog.getByRole("button", { name: "Lagre dokument" }).click();
   await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
+});
+
+test("desinfektør kan godkjenne desinfisering direkte i appen", async ({ page }) => {
+  await page.getByRole("button", { name: /Desinfisering/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Desinfisering" });
+  await expect(dialog.getByRole("heading", { name: "Desinfektørprofil" })).toBeVisible();
+  await dialog.getByRole("button", { name: "Godkjenn desinfisering" }).click();
+  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
+  await dialog.getByLabel("Utstyr som ble desinfisert *").fill("Stang, snelle, vadere og håv");
+  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
+  await expect(dialog.getByText("Godkjent i appen av Kari Desinfektør")).toBeVisible();
+  await expect(dialog.getByText(/Godkjent desinfektør · Mandalselva Villakssenter/)).toBeVisible();
 });
 
 test("hjemskjermen viser en rulleindikator som følger siden", async ({ page }) => {

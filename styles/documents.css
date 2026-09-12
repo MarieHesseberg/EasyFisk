@@ -45,6 +45,28 @@
   overflow-wrap: anywhere;
   box-shadow: var(--shadow-small);
 }
+.document-entry-actions {
+  display: grid;
+  gap: var(--space-4);
+}
+.document-verifier-card {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background: var(--color-primary-soft);
+}
+.document-verifier-card small {
+  color: var(--color-primary);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.document-verifier-card h3 {
+  margin-block: var(--space-2);
+}
+.document-verifier-card .primary {
+  width: 100%;
+  margin-top: var(--space-4);
+}
 .document-card dl > div {
   margin-block: var(--space-4);
 }

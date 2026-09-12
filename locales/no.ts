@@ -22,6 +22,25 @@ export const no = {
     "Opplysningene over er riktige, og rapporten skal vise det som faktisk skjedde.",
   "documents.localStoragePrivacy":
     "Opplysningene og eventuelle vedlegg lagres ukryptert i denne nettleseren. Andre som bruker samme nettleserprofil kan se dem, og sletting av nettleserdata kan fjerne dem.",
+  "documents.permitsOnlyFromShop":
+    "Fiskekort utstedes gjennom kjøpsflyten i appen. Det er ikke mulig å opprette et fiskekort manuelt.",
+  "documents.disinfectorProfile": "Desinfektørprofil",
+  "documents.activeRole": "AKTIV ROLLE I PROTOTYPEN",
+  "documents.disinfectorPrototypeDescription":
+    "En godkjent desinfektør kan registrere utført behandling direkte på fiskerens profil. Identiteten må verifiseres av elveeigarlaget i en ferdig løsning.",
+  "documents.approveDisinfection": "Godkjenn desinfisering",
+  "documents.addDisinfectionManually": "Legg til eksisterende bevis manuelt",
+  "documents.disinfectorApproved": "Godkjent i appen av {name}",
+  "documents.approverRole": "Godkjenner: {role}",
+  "documents.issuedInApp": "Utstedt gjennom kjøp i EasyFisk",
+  "documents.disinfectionApprovedAndSaved":
+    "Desinfiseringen er godkjent og lagret på fiskerens profil.",
+  "documents.manualDocumentSaved":
+    "Dokumentet er lagret på denne enheten. Ikke eksternt verifisert.",
+  "documents.permitGuidance":
+    "Her vises fiskekort som er utstedt gjennom kjøpsflyten i EasyFisk. Sesongkort kan også kreve et eget rapporteringskort for hvert fiskedøgn.",
+  "documents.disinfectionGuidance":
+    "En desinfektør kan godkjenne utført behandling direkte i appen. Fiskeren kan også legge inn et eksisterende stemplet bevis manuelt. Desinfisering gjelder normalt i 20 dager, men blir ugyldig etter bruk i et annet vassdrag.",
   "feedback.emergencyWarning":
     "Ikke bruk skjemaet ved akutt fare. Kontakt politiet eller oppsynet direkte dersom situasjonen pågår nå.",
   "location.singleUse":

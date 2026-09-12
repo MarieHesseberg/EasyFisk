@@ -17,7 +17,8 @@ export function PermitsDetail({
           {t("copy.kj.p.nytt.fiskekort.9152e50")}
         </button>
       )}
-      <DocumentsPanel kind="permit" testDocument={testDocument} />
+      <p>{t("documents.permitsOnlyFromShop")}</p>
+      <DocumentsPanel kind="permit" testDocument={testDocument} allowManualRegistration={false} />
     </>
   );
 }

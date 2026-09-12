@@ -35,5 +35,6 @@ export function createTestPermitDocument(
       endsAt,
     },
     purchaseId: purchase?.id,
+    verification: { method: "permit-purchase", verifiedAt: now },
   };
 }

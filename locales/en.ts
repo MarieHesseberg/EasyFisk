@@ -24,6 +24,25 @@ export const en = {
     "The information above is correct, and the report should reflect what actually happened.",
   "documents.localStoragePrivacy":
     "The details and attachments are stored unencrypted in this browser. Others using the same browser profile can view them, and clearing browser data may remove them.",
+  "documents.permitsOnlyFromShop":
+    "Fishing permits are issued through the in-app purchase flow. A fishing permit cannot be created manually.",
+  "documents.disinfectorProfile": "Disinfector profile",
+  "documents.activeRole": "ACTIVE PROTOTYPE ROLE",
+  "documents.disinfectorPrototypeDescription":
+    "An approved disinfector can record completed treatment directly on the angler's profile. The river owners' association must verify this identity in a production solution.",
+  "documents.approveDisinfection": "Approve disinfection",
+  "documents.addDisinfectionManually": "Add an existing certificate manually",
+  "documents.disinfectorApproved": "Approved in the app by {name}",
+  "documents.approverRole": "Approver: {role}",
+  "documents.issuedInApp": "Issued through an EasyFisk purchase",
+  "documents.disinfectionApprovedAndSaved":
+    "The disinfection has been approved and saved to the angler's profile.",
+  "documents.manualDocumentSaved":
+    "The document has been saved on this device. It has not been externally verified.",
+  "documents.permitGuidance":
+    "This page shows fishing permits issued through the EasyFisk purchase flow. Season permits may also require a separate reporting permit for each fishing day.",
+  "documents.disinfectionGuidance":
+    "A disinfector can approve completed treatment directly in the app. The angler can also add an existing stamped certificate manually. Disinfection is normally valid for 20 days, but becomes invalid after use in another watercourse.",
   "feedback.emergencyWarning":
     "Do not use this form in an emergency. Contact the police or river wardens directly if the situation is ongoing.",
   "location.singleUse":

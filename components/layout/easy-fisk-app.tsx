@@ -116,7 +116,7 @@ export function EasyFiskApp() {
         {screen === "rules" && (
           <RulesScreen
             demoStatus={effectiveStatus.status}
-            onRegisterPermit={() => actions.openDetail("permits")}
+            onRegisterPermit={() => actions.openDetail("permit-shop")}
           />
         )}{" "}
         {screen === "stats" && (

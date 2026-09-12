@@ -2,12 +2,12 @@ import type { DocumentKind } from "@/domain/documents/fishing-document";
 
 export const documentGuidance: Record<DocumentKind, { text: string; url: string; link: string }> = {
   permit: {
-    text: "Kopier opplysningene fra fiskekortet. Tidsrom og område varierer mellom kortene. Sesongkort krever også egne rapporteringskort for fiskedøgn; gruppekort krever personlig rapporteringsnummer. Registreringen her kjøper eller utsteder ikke fiskekort.",
+    text: "Her vises fiskekort som er utstedt gjennom kjøpsflyten i EasyFisk. Sesongkort kan også kreve et eget rapporteringskort for hvert fiskedøgn.",
     url: "https://lakseelver.no/nb/elver/mandalselva/about",
     link: "Les Mandalselvas regler for fiskekort",
   },
   disinfection: {
-    text: "Registrer faktisk utført desinfisering fra stemplet fiskekort eller oblat. I Mandalselva gjelder den i 20 dager, med mindre du besøker et annet vassdrag. Registreringen i appen utfører eller godkjenner ikke desinfisering.",
+    text: "En desinfektør kan godkjenne utført behandling direkte i appen. Fiskeren kan også legge inn et eksisterende stemplet bevis manuelt. Desinfisering gjelder normalt i 20 dager, men blir ugyldig etter bruk i et annet vassdrag.",
     url: "https://lakseelver.no/nb/elver/mandalselva/about",
     link: "Se krav og steder for desinfisering",
   },

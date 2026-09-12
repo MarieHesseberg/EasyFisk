@@ -31,8 +31,19 @@ export function DocumentCard({
     <article className="document-card">
       <h3>{document.values.holder}</h3>
       <p className="document-status">
-        {isMock ? t("content.d31c8b0c7d5d") : t("content.211ece693265")}
+        {isMock
+          ? t("content.d31c8b0c7d5d")
+          : document.verification?.method === "disinfector-approved"
+            ? t("documents.disinfectorApproved", {
+                name: document.verification.verifierName,
+              })
+            : document.verification?.method === "permit-purchase"
+              ? t("documents.issuedInApp")
+              : t("content.211ece693265")}
       </p>
+      {document.verification?.method === "disinfector-approved" && (
+        <p>{t("documents.approverRole", { role: document.verification.verifierRole })}</p>
+      )}
       <dl>
         {documentFields[document.kind]
           .filter((field) => document.values[field.key])
@@ -63,7 +74,7 @@ export function DocumentCard({
       ) : (
         <p>{t("copy.ingen.kopi.vedlagt.ta.med.original.dokumentasjon.f0ae45e")}</p>
       )}
-      {!isMock && (
+      {!isMock && document.verification?.method !== "permit-purchase" && (
         <button className="secondary" onClick={edit}>
           {t("copy.endre.opplysninger.f0acacc")}
         </button>

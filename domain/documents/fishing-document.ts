@@ -17,6 +17,16 @@ export type DocumentField =
 
 export type DocumentValues = Partial<Record<DocumentField, string>>;
 
+export type DocumentVerification =
+  | { method: "manual" }
+  | { method: "permit-purchase"; verifiedAt: number }
+  | {
+      method: "disinfector-approved";
+      verifierName: string;
+      verifierRole: string;
+      verifiedAt: number;
+    };
+
 export interface FishingDocument {
   id: string;
   kind: DocumentKind;
@@ -25,6 +35,7 @@ export interface FishingDocument {
   attachment?: Blob;
   attachmentName?: string;
   purchaseId?: string;
+  verification?: DocumentVerification;
 }
 
 export const documentTitles: Record<DocumentKind, string> = {
