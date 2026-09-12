@@ -4,6 +4,7 @@ import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function DemoControlPanel({
   scenarios,
@@ -25,12 +26,13 @@ export function DemoControlPanel({
   setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   const { demoFeatures } = appContentRepository.getContent();
+  const { t } = useLanguage();
   return (
     <aside className="prototype-note feature-panel">
-      <span>DEMONSTRASJONSMODUS</span>
-      <h2>Prøv statusmotoren</h2>
+      <span>{t("copy.demonstrasjonsmodus.bc46805")}</span>
+      <h2>{t("copy.pr.v.statusmotoren.2bde28f")}</h2>
       <p className="demo-intro">
-        Velg en situasjon. Valget påvirker statuskontrollen og hva brukeren kan gjøre videre.
+        {t("copy.velg.en.situasjon.valget.pavirker.statuskontroll.ce64541")}
       </p>
       <StatusEngineControl
         id="desktop-demo-status"
@@ -44,18 +46,19 @@ export function DemoControlPanel({
         setPaymentOutcome={setPaymentOutcome}
       />
       <div className="feature-divider" />
-      <span>FUNKSJONER I PROTOTYPEN</span>
+      <span>{t("copy.funksjoner.i.prototypen.021b510")}</span>
       <ul>
         {demoFeatures.map((feature) => (
           <li key={feature}>
             <Icon name="check" size={16} />
-            <span>{feature}</span>
+            <span>{t(feature)}</span>
           </li>
         ))}
       </ul>
       <small>
-        Prototypen bruker realistiske {activeFishingRules.metadata.seasonYear}-regler. Kart,
-        persondata, forhold og statistikk er demonstrasjonsdata.
+        {t(
+          `Prototypen bruker realistiske ${activeFishingRules.metadata.seasonYear}-regler. Kart, persondata, forhold og statistikk er demonstrasjonsdata.`,
+        )}
       </small>
     </aside>
   );

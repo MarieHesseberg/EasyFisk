@@ -3,8 +3,10 @@ import { FormError } from "@/components/ui/form-error";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { appContentRepository } from "@/data/repositories/app-content";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
+import { useLanguage } from "@/components/localization/language-provider";
 const { feedback } = appContentRepository.getContent();
 export function FeedbackDetailsStep({ controller }: { controller: FeedbackController }) {
+  const { t } = useLanguage();
   const { category, description, hasPosition, imageError, imageName, isTouched, isValid } =
     controller.state;
   const { setCategory, setDescription, setHasPosition, selectImage, setIsTouched, setStep } =
@@ -14,15 +16,12 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
       <div className="form-intro">
         <Icon name="bell" />
         <div>
-          <b>Hva vil du melde fra om?</b>
-          <p>
-            Ikke bruk skjemaet ved akutt fare. Kontakt politiet eller oppsynet direkte dersom
-            situasjonen pågår nå.
-          </p>
+          <b>{t("copy.hva.vil.du.melde.fra.om.53af8c3")}</b>
+          <p>{t("feedback.emergencyWarning")}</p>
         </div>
       </div>
       <label>
-        Kategori <em>påkrevd</em>
+        {t("copy.kategori.b796440")} <em>{t("copy.pakrevd.3ae3b8f")}</em>
       </label>
       <div className="feedback-categories">
         {feedback.categories.map((option) => (
@@ -33,19 +32,19 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
             onClick={() => setCategory(option)}
           >
             {category === option && <Icon name="check" size={14} />}
-            <span>{option}</span>
+            <span>{t(option)}</span>
           </button>
         ))}
       </div>
       <label>
-        Beskrivelse <em>påkrevd</em>
+        {t("copy.beskrivelse.66239c1")} <em>{t("copy.pakrevd.3ae3b8f")}</em>
         <textarea
           aria-describedby={isTouched && !isValid ? "feedback-error" : undefined}
           aria-invalid={isTouched && !isValid}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           maxLength={1000}
-          placeholder="Beskriv hva du observerte, hvor og omtrent når det skjedde"
+          placeholder={t("copy.beskriv.hva.du.observerte.hvor.og.omtrent.nar.de.b564e02")}
         />
       </label>
       <div className="character-count">{description.length}/1000</div>
@@ -53,13 +52,13 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         id="feedback-error"
         message={
           isTouched && !isValid
-            ? "Velg kategori og skriv en beskrivelse på minst 10 tegn."
+            ? t("copy.velg.kategori.og.skriv.en.beskrivelse.pa.minst.1.1758154")
             : undefined
         }
       />
       <ImageUploadField
         className="feedback-upload"
-        description="Valgfritt · JPG, PNG eller bilde fra kamera"
+        description={t("copy.valgfritt.jpg.png.eller.bilde.fra.kamera.5e898db")}
         error={imageError}
         imageName={imageName}
         selectImage={selectImage}
@@ -68,8 +67,8 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         <div>
           <Icon name="pin" />
           <span>
-            <b>Legg ved posisjon</b>
-            <small>Valgfritt · brukes bare til denne meldingen</small>
+            <b>{t("copy.legg.ved.posisjon.8d430a5")}</b>
+            <small>{t("copy.valgfritt.brukes.bare.til.denne.meldingen.79ad92d")}</small>
           </span>
         </div>
         <button
@@ -77,11 +76,12 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
           aria-pressed={hasPosition}
           onClick={() => setHasPosition(!hasPosition)}
         >
-          {hasPosition ? "Lagt til" : "Legg til"}
+          {t(hasPosition ? "Lagt til" : "Legg til")}
         </button>
         {hasPosition && (
           <p>
-            <Icon name="check" size={14} /> {feedback.positionLabel} · posisjon hentet med samtykke
+            <Icon name="check" size={14} /> {t(feedback.positionLabel)} ·{" "}
+            {t("copy.posisjon.hentet.med.samtykke.e779358")}
           </p>
         )}
       </div>
@@ -92,7 +92,7 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
           if (isValid) setStep(2);
         }}
       >
-        Kontroller meldingen
+        {t("copy.kontroller.meldingen.538f52b")}
       </button>
     </>
   );

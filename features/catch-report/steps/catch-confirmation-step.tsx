@@ -1,3 +1,4 @@
+import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
@@ -8,7 +9,7 @@ import {
 } from "@/domain/quotas/get-quota-status";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { formatLongDuration } from "@/lib/time";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function CatchConfirmationStep({
   catches,
   controller,
@@ -20,6 +21,7 @@ export function CatchConfirmationStep({
   finishAfterCatch: boolean;
   onDone: () => void;
 }) {
+  const { language, t } = useLanguage();
   const { catchSize, quota, reporting } = activeFishingRules;
   const { sentCatch, validation } = controller.state;
   const quotaStatus = getQuotaStatus(catches, []);
@@ -30,64 +32,79 @@ export function CatchConfirmationStep({
     0,
     quota.killedSalmonPerDay - countKilledSalmonForDay(catches, catchDay),
   );
-
   return (
     <>
       <div className="sent-icon">
         <Icon name="check" size={32} />
       </div>
-      <small>STEG 4 AV 4 · SENDT</small>
-      <h2>Fangstrapporten er sendt</h2>
+      <small>{t("copy.steg.4.av.4.sendt.439db98")}</small>
+      <h2>{t("copy.fangstrapporten.er.sendt.3e0f255")}</h2>
       <p className="sent-lead">
         {sentCatch?.late
-          ? `Rapporten ble sendt ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))} etter fangsten og er merket som forsinket.`
-          : `Rapporten ble sendt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på ${reporting.deadlineHours} timer.`}
+          ? selectLocalized(
+              language,
+              `Rapporten ble sendt ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))} etter fangsten og er merket som forsinket.`,
+              `The report was submitted ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000), language)} after the catch and marked as late.`,
+            )
+          : selectLocalized(
+              language,
+              `Rapporten ble sendt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på ${reporting.deadlineHours} timer.`,
+              `The report was submitted ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000)), language) : "shortly"} after the catch, within the ${reporting.deadlineHours}-hour deadline.`,
+            )}
       </p>
       {sentCatch?.late && (
         <div className="violation-sent late">
-          <b>Forsinket fangstrapport</b>
-          <p>
-            Det faktiske fangsttidspunktet er beholdt, og innsendingstidspunktet er registrert
-            separat.
-          </p>
+          <b>{t("copy.forsinket.fangstrapport.e554f1f")}</b>
+          <p>{t("catch.actualTimePreserved")}</p>
         </div>
       )}
       {validation.blocked && (
         <div className="violation-sent">
-          <b>Rapportert regelavvik</b>
-          <p>
-            Fangsten er registrert som avlivet. Rapporten er merket for mulig oppfølging fordi
-            størrelsen er utenfor tillatt grense.
-          </p>
+          <b>{t("copy.rapportert.regelavvik.b49e1c8")}</b>
+          <p>{t("catch.harvestFollowUp")}</p>
         </div>
       )}
       <div className="quota-update">
-        <h3>Oppdatert kvotestatus</h3>
+        <h3>{t("copy.oppdatert.kvotestatus.be0f642")}</h3>
         <div>
-          <span>Døgnkvote</span>
+          <span>{t("copy.d.gnkvote.ec8d8b1")}</span>
           <b>
-            {dailyRemaining} av {quota.killedSalmonPerDay} gjenstår
+            {selectLocalized(
+              language,
+              `${dailyRemaining} av ${quota.killedSalmonPerDay} gjenstår`,
+              `${dailyRemaining} of ${quota.killedSalmonPerDay} remaining`,
+            )}
           </b>
         </div>
         <div>
-          <span>Sesongkvote laks</span>
+          <span>{t("copy.sesongkvote.laks.4d55979")}</span>
           <b>
-            {quotaStatus.remaining} av {quota.killedSalmonPerSeason} gjenstår
+            {selectLocalized(
+              language,
+              `${quotaStatus.remaining} av ${quota.killedSalmonPerSeason} gjenstår`,
+              `${quotaStatus.remaining} of ${quota.killedSalmonPerSeason} remaining`,
+            )}
           </b>
         </div>
       </div>
       {validation.largeSalmon && (
         <div className="large-salmon-used">
-          <b>Storlaks-unntaket er brukt</b>
-          <span>0 av {catchSize.largeSalmonAllowance} gjenstår</span>
+          <b>{t("copy.storlaks.unntaket.er.brukt.18d641e")}</b>
+          <span>
+            {selectLocalized(
+              language,
+              `0 av ${catchSize.largeSalmonAllowance} gjenstår`,
+              `0 of ${catchSize.largeSalmonAllowance} remaining`,
+            )}
+          </span>
         </div>
       )}
       <div className="report-id">
-        <small>RAPPORT-ID</small>
-        <b>{sentCatch?.id || "Oppretter rapport-ID"}</b>
+        <small>{t("copy.rapport.id.4b4e7b0")}</small>
+        <b>{sentCatch?.id || t("copy.oppretter.rapport.id.22e8a03")}</b>
       </div>
       <button className="primary" onClick={onDone}>
-        {finishAfterCatch ? "Se sammendrag for økten" : "Ferdig"}
+        {t(finishAfterCatch ? "Se sammendrag for økten" : "Ferdig")}
       </button>
     </>
   );

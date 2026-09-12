@@ -1,3 +1,4 @@
+import { selectLocalized } from "@/locales";
 import {
   canPurchasePrototypePermit,
   formatPrototypePermitPrice,
@@ -13,7 +14,7 @@ import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { findQualifyingSeasonPermitForProduct } from "@/domain/fishing-permits/permit-reporting-day";
 import { PermitSalesCalendar } from "./permit-sales-calendar";
 import { PermitSellerContact } from "./permit-seller-contact";
-
+import { useLanguage } from "@/components/localization/language-provider";
 const typeLabels = {
   day: "Døgnkort",
   week: "Ukekort",
@@ -22,7 +23,6 @@ const typeLabels = {
   group: "Gruppekort",
   reporting: "Rapporteringskort",
 } as const;
-
 export function PermitProductDetail({
   product,
   selectedDate,
@@ -38,7 +38,8 @@ export function PermitProductDetail({
   continueToProduct: () => void;
   documents: FishingDocument[];
 }) {
-  const availability = getPrototypePermitAvailability(product, selectedDate);
+  const { language, t } = useLanguage();
+  const availability = getPrototypePermitAvailability(product, selectedDate, language);
   const dateRange = getPrototypePermitDateRange(product);
   const details = getPrototypePermitProductDetails(product);
   const hasQualifyingSeasonPermit =
@@ -49,53 +50,54 @@ export function PermitProductDetail({
     (product.action === "purchase" &&
       canPurchasePrototypePermit(product) &&
       canSelectPrototypePermit(availability));
-
   return (
     <section className="permit-product-detail" aria-labelledby="permit-product-title">
       <button className="back" type="button" onClick={back}>
-        ‹ Tilbake til fiskekort
+        ‹ {selectLocalized(language, "Tilbake til fiskekort", "Back to permits")}
       </button>
-      <small>PRODUKTINFORMASJON · KONTROLLERT {product.source.checkedAt}</small>
-      <h2 id="permit-product-title">{product.title}</h2>
-      <p className="permit-product-area">{product.areaName}</p>
+      <small>
+        {selectLocalized(
+          language,
+          "PRODUKTINFORMASJON · KONTROLLERT",
+          "PRODUCT INFORMATION · VERIFIED",
+        )}{" "}
+        {product.source.checkedAt}
+      </small>
+      <h2 id="permit-product-title">{t(product.title)}</h2>
+      <p className="permit-product-area">{t(product.areaName)}</p>
 
       <div
         className="permit-product-map"
         role="img"
-        aria-label={`Veiledende kartmarkering av sone ${product.zoneId}`}
+        aria-label={t("permit.mapLabel", { zone: product.zoneId })}
       >
         <span>Mandalselva</span>
         {[4, 3, 2, 1].map((zoneId) => (
           <i key={zoneId} className={zoneId === product.zoneId ? "selected" : ""}>
-            Sone {zoneId}
+            {selectLocalized(language, "Sone", "Zone")} {zoneId}
           </i>
         ))}
-        <small>Veiledende sonekart · fysisk oppmerking gjelder</small>
+        <small>{t("copy.veiledende.sonekart.fysisk.oppmerking.gjelder.9760693")}</small>
       </div>
 
       {!canPurchasePrototypePermit(product) && product.action === "purchase" ? (
         <div className="permit-contact-only-notice">
-          <b>Kjøp via selger</b>
-          <span>
-            Dette kortet kan ikke kjøpes i EasyFisk-prototypen. Kontakt selger for pris,
-            tilgjengelighet og kjøp.
-          </span>
+          <b>{t("copy.kj.p.via.selger.7d798ff")}</b>
+          <span>{t("copy.dette.kortet.kan.ikke.kj.pes.i.easyfisk.prototyp.c0afee1")}</span>
         </div>
       ) : product.type === "season" ? (
         <div className="permit-season-period">
-          <b>Sesongkortets gyldighet</b>
+          <b>{t("copy.sesongkortets.gyldighet.8ef20e1")}</b>
           <span>
             {dateRange.startsOn.split("-").reverse().join(".")}–
             {dateRange.endsOn.split("-").reverse().join(".")}
           </span>
-          <small>Datoene settes automatisk for hele sesongen.</small>
+          <small>{t("copy.datoene.settes.automatisk.for.hele.sesongen.b2a2fd4")}</small>
         </div>
       ) : product.action === "register-reporting-day" && !hasQualifyingSeasonPermit ? (
         <div className="permit-calendar-blocked" role="status">
-          <b>Sesongkort må registreres først</b>
-          <span>
-            Datokalenderen åpnes når et gyldig sesongkort for {product.areaName} er funnet.
-          </span>
+          <b>{t("copy.sesongkort.ma.registreres.f.rst.7749e94")}</b>
+          <span>{t("permit.seasonRequired", { area: t(product.areaName) })}</span>
         </div>
       ) : (
         <>
@@ -105,57 +107,67 @@ export function PermitProductDetail({
             setSelectedDate={setSelectedDate}
           />
           <strong className={`permit-availability ${availability.status}`} aria-live="polite">
-            {availability.label}
+            {t(availability.label)}
           </strong>
-          <p className="permit-fishing-day-time">Fiskedøgnet: {product.validity.label}</p>
+          <p className="permit-fishing-day-time">
+            {selectLocalized(language, "Fiskedøgnet", "Fishing day")}: {t(product.validity.label)}
+          </p>
         </>
       )}
 
       <dl className="permit-product-facts">
         <div>
-          <dt>Korttype</dt>
-          <dd>{typeLabels[product.type]}</dd>
+          <dt>{t("copy.korttype.599665c")}</dt>
+          <dd>{t(typeLabels[product.type])}</dd>
         </div>
         <div>
-          <dt>Fiskedøgn og gyldighet</dt>
-          <dd>{product.validity.label}</dd>
+          <dt>{t("copy.fisked.gn.og.gyldighet.d9b66e0")}</dt>
+          <dd>{t(product.validity.label)}</dd>
         </div>
         <div>
-          <dt>Pris</dt>
-          <dd>{formatPrototypePermitPrice(product)}</dd>
+          <dt>{t("copy.pris.b97114e")}</dt>
+          <dd>{formatPrototypePermitPrice(product, language)}</dd>
         </div>
         <div>
-          <dt>Fiskere, kort og stenger</dt>
-          <dd>{product.capacity.label}</dd>
+          <dt>{t("copy.fiskere.kort.og.stenger.8d03af3")}</dt>
+          <dd>{t(product.capacity.label)}</dd>
         </div>
         <div>
-          <dt>Aldersregler</dt>
-          <dd>{details.ageRule}</dd>
+          <dt>{t("copy.aldersregler.e99e0e1")}</dt>
+          <dd>{t(details.ageRule)}</dd>
         </div>
       </dl>
 
       <section>
-        <h3>Utstyr og fasiliteter</h3>
+        <h3>{t("copy.utstyr.og.fasiliteter.3d58dcc")}</h3>
         <ul>
           {details.equipmentAndFacilities.map((detail) => (
-            <li key={detail}>{detail}</li>
+            <li key={detail}>{t(detail)}</li>
           ))}
         </ul>
       </section>
       <section>
-        <h3>Krav før fiske</h3>
+        <h3>{t("copy.krav.f.r.fiske.a190cd4")}</h3>
         <ul>
-          {product.requirements.requiresNationalFishingFee && <li>Gyldig statlig fiskeravgift</li>}
-          {product.requirements.requiresDisinfection && <li>Gyldig desinfiseringsbevis</li>}
-          {product.requirements.requiresRuleAcceptance && <li>Fiskereglene må leses og godtas</li>}
-          {product.requirements.requiresSeasonPermit && <li>Gyldig sesongkort for samme område</li>}
+          {product.requirements.requiresNationalFishingFee && (
+            <li>{t("copy.gyldig.statlig.fiskeravgift.a9319d6")}</li>
+          )}
+          {product.requirements.requiresDisinfection && (
+            <li>{t("copy.gyldig.desinfiseringsbevis.1dc1fdc")}</li>
+          )}
+          {product.requirements.requiresRuleAcceptance && (
+            <li>{t("copy.fiskereglene.ma.leses.og.godtas.06b181f")}</li>
+          )}
+          {product.requirements.requiresSeasonPermit && (
+            <li>{t("copy.gyldig.sesongkort.for.samme.omrade.1aa3171")}</li>
+          )}
         </ul>
       </section>
       <section>
-        <h3>Fangst og rapportering</h3>
-        <p>{details.reportingRule}</p>
+        <h3>{t("copy.fangst.og.rapportering.f07042e")}</h3>
+        <p>{t(details.reportingRule)}</p>
       </section>
-      <p className="permit-product-note">{product.note}</p>
+      <p className="permit-product-note">{t(product.note)}</p>
       <PermitSellerContact seller={product.seller} />
       <a
         className="permit-product-source"
@@ -163,7 +175,7 @@ export function PermitProductDetail({
         target="_blank"
         rel="noreferrer"
       >
-        Se original produktkilde hos Inatur ↗
+        {t("copy.se.original.produktkilde.hos.inatur.4b67735")}
       </a>
 
       {(canPurchasePrototypePermit(product) || product.action === "register-reporting-day") && (
@@ -174,8 +186,8 @@ export function PermitProductDetail({
           onClick={continueToProduct}
         >
           {product.action === "register-reporting-day"
-            ? "Fortsett til døgnregistrering"
-            : "Fortsett til kjøp"}
+            ? t("content.2c819362c354")
+            : t("content.13a2aa100b4d")}
         </button>
       )}
     </section>

@@ -1,5 +1,7 @@
+import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
 import { formatClock, formatDuration } from "@/lib/time";
+import { useLanguage } from "@/components/localization/language-provider";
 export function ActiveSessionCard({
   activeZone,
   elapsed,
@@ -15,25 +17,32 @@ export function ActiveSessionCard({
   showRules: () => void;
   stop: () => void;
 }) {
+  const { language, t } = useLanguage();
   return (
     <section className="active-session">
       <span className="pulse" />
-      <small>AKTIV FISKEØKT</small>
-      <h2>{activeZone}</h2>
+      <small>{t("copy.aktiv.fiske.kt.316984d")}</small>
+      <h2>{t(activeZone)}</h2>
       <div className="big-time">{formatDuration(elapsed)}</div>
-      <p>Startet i dag kl. {formatClock(startTime)} · GPS-sone bekreftet</p>
+      <p>
+        {selectLocalized(
+          language,
+          `Startet i dag kl. ${formatClock(startTime, language)} · GPS-sone bekreftet`,
+          `Started today at ${formatClock(startTime, language)} · GPS zone confirmed`,
+        )}
+      </p>
       <div className="session-actions">
         <button onClick={registerCatch}>
           <Icon name="fish" />
-          Registrer fangst
+          {t("copy.registrer.fangst.7ecfe4d")}
         </button>
         <button onClick={showRules}>
           <Icon name="map" />
-          Sone og regler
+          {t("copy.sone.og.regler.44d7d17")}
         </button>
       </div>
       <button className="outline-danger" onClick={stop}>
-        Stopp · bekreft fangst eller nullfangst
+        {t("copy.stopp.bekreft.fangst.eller.nullfangst.daab96b")}
       </button>
     </section>
   );

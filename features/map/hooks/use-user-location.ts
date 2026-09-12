@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/components/localization/language-provider";
 
 type LocationState =
   | "idle"
@@ -9,19 +10,20 @@ type LocationState =
   | "permission-denied"
   | "unavailable"
   | "timeout";
-const messages: Omit<Record<LocationState, string>, "success"> = {
+const messageKeys: Omit<Record<LocationState, string>, "success"> = {
   idle: "",
-  loading: "Henter posisjon …",
-  "permission-denied": "Posisjonstilgang ble avslått. Velg sone manuelt.",
-  unavailable: "Posisjon er ikke tilgjengelig. Velg sone manuelt.",
-  timeout: "Posisjonshentingen tok for lang tid. Prøv igjen eller velg sone manuelt.",
+  loading: "location.loading",
+  "permission-denied": "location.permissionDenied",
+  unavailable: "location.unavailable",
+  timeout: "location.timeout",
 };
 
 export function useUserLocation(
   onSuccess: (position: [latitude: number, longitude: number]) => string | undefined,
 ) {
+  const { t } = useLanguage();
   const [state, setState] = useState<LocationState>("idle");
-  const [successMessage, setSuccessMessage] = useState("Posisjon funnet.");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   function locate() {
     if (!navigator.geolocation) {
       setState("unavailable");
@@ -30,9 +32,7 @@ export function useUserLocation(
     setState("loading");
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setSuccessMessage(
-          onSuccess([position.coords.latitude, position.coords.longitude]) ?? "Posisjon funnet.",
-        );
+        setSuccessMessage(onSuccess([position.coords.latitude, position.coords.longitude]) ?? null);
         setState("success");
       },
       (error) => {
@@ -47,6 +47,7 @@ export function useUserLocation(
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 60_000 },
     );
   }
-  const message = state === "success" ? successMessage : messages[state];
+  const message =
+    state === "success" ? (successMessage ?? t("location.found")) : t(messageKeys[state]);
   return { isLoading: state === "loading", locate, message, state };
 }

@@ -1,4 +1,5 @@
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
+import { t, translateContent, type AppLanguage } from "../../locales/index.ts";
 import type {
   PrototypePermitAvailability,
   PrototypePermitProduct,
@@ -32,6 +33,36 @@ export function getPrototypePermitDateRange(product: PrototypePermitProduct) {
 
 /** Lager stabil, simulert tilgjengelighet for ett produkt og én fiskedato. */
 export function getPrototypePermitAvailability(
+  product: PrototypePermitProduct,
+  fishingDate: string,
+  language: AppLanguage = "no",
+): PrototypePermitAvailability {
+  const result = getAvailability(product, fishingDate);
+  if (language === "no") return result;
+  const season = getPrototypePermitDateRange(product);
+  let label = translateContent(language, result.label);
+  if (isCalendarDate(fishingDate)) {
+    if (fishingDate.slice(0, 4) > season.endsOn.slice(0, 4))
+      label = t(language, "permit.salesNotOpen", { year: fishingDate.slice(0, 4) });
+    else if (fishingDate < season.startsOn)
+      label = t(language, "permit.seasonStarts", {
+        date: season.startsOn.split("-").reverse().join("."),
+      });
+    else if (fishingDate > season.endsOn)
+      label = t(language, "permit.seasonEnded", {
+        date: season.endsOn.split("-").reverse().join("."),
+      });
+    else if (result.remainingUnits && result.remainingUnits > 0)
+      label = t(
+        language,
+        result.remainingUnits === 1 ? "permit.oneRemaining" : "permit.remaining",
+        { count: result.remainingUnits },
+      );
+  }
+  return { ...result, label };
+}
+
+function getAvailability(
   product: PrototypePermitProduct,
   fishingDate: string,
 ): PrototypePermitAvailability {

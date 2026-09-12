@@ -1,5 +1,5 @@
 import type { CatchImageRepository } from "@/data/contracts/catch-image-repository";
-import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
+import { operationSucceeded, technicalOperationFailed } from "@/domain/shared/operation-result";
 import { logger } from "@/lib/logger";
 
 const databaseName = "easyfisk-catch-images";
@@ -39,11 +39,11 @@ export function createBrowserCatchImageRepository(): CatchImageRepository {
       try {
         const value: unknown = await transaction("readonly", (store) => store.get(id));
         if (value === undefined) return operationSucceeded(null);
-        if (typeof value !== "string") return operationFailed("Fangstbildet har ugyldig format.");
+        if (typeof value !== "string") return technicalOperationFailed("storage.invalid-data");
         return operationSucceeded(value);
       } catch (cause) {
         logger.error("Fangstbildet kunne ikke leses.", { cause });
-        return operationFailed("Kunne ikke lese fangstbildet på enheten.", cause);
+        return technicalOperationFailed("storage.read", cause);
       }
     },
     async save(id, imageData) {
@@ -52,7 +52,7 @@ export function createBrowserCatchImageRepository(): CatchImageRepository {
         return operationSucceeded(undefined);
       } catch (cause) {
         logger.error("Fangstbildet kunne ikke lagres.", { cause });
-        return operationFailed("Kunne ikke lagre fangstbildet på enheten.", cause);
+        return technicalOperationFailed("storage.write", cause);
       }
     },
     async remove(id) {
@@ -60,7 +60,7 @@ export function createBrowserCatchImageRepository(): CatchImageRepository {
         await transaction("readwrite", (store) => store.delete(id));
         return operationSucceeded(undefined);
       } catch (cause) {
-        return operationFailed("Kunne ikke rydde opp fangstbildet.", cause);
+        return technicalOperationFailed("storage.delete", cause);
       }
     },
   };

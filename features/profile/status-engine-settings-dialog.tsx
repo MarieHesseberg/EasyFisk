@@ -2,6 +2,7 @@ import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function StatusEngineSettingsDialog({
   close,
@@ -24,6 +25,7 @@ export function StatusEngineSettingsDialog({
   paymentOutcome: PrototypePaymentOutcome;
   setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
+  const { t } = useLanguage();
   const dialogRef = useDialogAccessibility(close);
 
   return (
@@ -36,15 +38,11 @@ export function StatusEngineSettingsDialog({
       tabIndex={-1}
     >
       <button className="back" onClick={close}>
-        ‹ Tilbake
+        ‹ {t("copy.tilbake.4fb8dc1")}
       </button>
-      <small>PROTOTYPEINNSTILLING</small>
-      <h2 id="status-engine-title">Statusmotor</h2>
-      <p className="detail-lead">
-        Velg situasjonen prototypen skal bruke. Statusen påvirker kontrollene på hjemskjermen og om
-        en fiskeøkt kan startes. Valget overstyrer lokalt registrerte dokumenter mens situasjonen
-        testes; dokumentene slettes ikke.
-      </p>
+      <small>{t("copy.prototypeinnstilling.8444e8e")}</small>
+      <h2 id="status-engine-title">{t("copy.statusmotor.9cef87d")}</h2>
+      <p className="detail-lead">{t("prototype.statusScenarioExplanation")}</p>
       <section className="status-engine-settings">
         <StatusEngineControl
           id="mobile-demo-status"

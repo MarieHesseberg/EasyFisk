@@ -1,9 +1,9 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import { useEffect, useMemo, useState } from "react";
 import { documentFields } from "@/domain/documents/document-fields";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function DocumentCard({
   document,
   edit,
@@ -15,6 +15,7 @@ export function DocumentCard({
   remove?: () => Promise<void>;
   isMock?: boolean;
 }) {
+  const { language, t } = useLanguage();
   const url = useMemo(
     () => (document.attachment ? URL.createObjectURL(document.attachment) : ""),
     [document.attachment],
@@ -30,38 +31,46 @@ export function DocumentCard({
     <article className="document-card">
       <h3>{document.values.holder}</h3>
       <p className="document-status">
-        {isMock
-          ? "Testdata · ikke et virkelig dokument"
-          : "Egenregistrert · ikke eksternt verifisert"}
+        {isMock ? t("content.d31c8b0c7d5d") : t("content.211ece693265")}
       </p>
       <dl>
         {documentFields[document.kind]
           .filter((field) => document.values[field.key])
           .map((field) => (
             <div key={field.key}>
-              <dt>{field.label}</dt>
-              <dd>{document.values[field.key]?.replace("T", " kl. ")}</dd>
+              <dt>{t(field.label)}</dt>
+              <dd>
+                {field.type === "datetime-local"
+                  ? document.values[field.key]?.replace(
+                      "T",
+                      selectLocalized(language, " kl. ", " at "),
+                    )
+                  : field.options
+                    ? t(document.values[field.key] ?? "")
+                    : document.values[field.key]}
+              </dd>
             </div>
           ))}
       </dl>
       {document.kind === "disinfection" && document.values.otherRiverAt && (
-        <p role="status">Besøk i annet vassdrag er registrert. Utstyret må desinfiseres på nytt.</p>
+        <p role="status">{t("copy.bes.k.i.annet.vassdrag.er.registrert.utstyret.ma.91f572d")}</p>
       )}
       {url ? (
         <a href={url} download={document.attachmentName}>
-          Last ned originalvedlegg: {document.attachmentName}
+          {selectLocalized(language, "Last ned originalvedlegg", "Download original attachment")}:{" "}
+          {document.attachmentName}
         </a>
       ) : (
-        <p>Ingen kopi vedlagt. Ta med original dokumentasjon.</p>
+        <p>{t("copy.ingen.kopi.vedlagt.ta.med.original.dokumentasjon.f0ae45e")}</p>
       )}
       {!isMock && (
         <button className="secondary" onClick={edit}>
-          Endre opplysninger
+          {t("copy.endre.opplysninger.f0acacc")}
         </button>
       )}
       {!isMock && confirm ? (
         <div>
-          <p>Slette denne lokale kopien? Originalen hos utsteder endres ikke.</p>
+          <p>{t("copy.slette.denne.lokale.kopien.originalen.hos.utsted.b1f3850")}</p>
           <button
             disabled={busy}
             onClick={async () => {
@@ -71,12 +80,12 @@ export function DocumentCard({
               setConfirm(false);
             }}
           >
-            Ja, slett lokal kopi
+            {t("copy.ja.slett.lokal.kopi.d513a8a")}
           </button>
-          <button onClick={() => setConfirm(false)}>Behold</button>
+          <button onClick={() => setConfirm(false)}>{t("copy.behold.e8381c0")}</button>
         </div>
       ) : !isMock ? (
-        <button onClick={() => setConfirm(true)}>Slett lokal kopi</button>
+        <button onClick={() => setConfirm(true)}>{t("copy.slett.lokal.kopi.a720013")}</button>
       ) : null}
     </article>
   );

@@ -1,16 +1,18 @@
 import { Icon } from "@/components/ui/icon";
 import { catchOutcomeOptions, fishSpeciesOptions } from "@/domain/catches/catch";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function CatchSelectionStep({ controller }: { controller: CatchReportController }) {
+  const { t } = useLanguage();
   const { result, species } = controller.state;
   const { setResult, setSpecies, setStep } = controller.actions;
 
   return (
     <>
-      <small>STEG 1 AV 4 · FANGST</small>
-      <h2>Hva fikk du?</h2>
-      <label>Art</label>
+      <small>{t("copy.steg.1.av.4.fangst.e168eda")}</small>
+      <h2>{t("copy.hva.fikk.du.3d08098")}</h2>
+      <label>{t("copy.art.308e17d")}</label>
       <div className="choice">
         {fishSpeciesOptions.map((option) => (
           <button
@@ -19,11 +21,11 @@ export function CatchSelectionStep({ controller }: { controller: CatchReportCont
             className={species === option ? "selected" : ""}
             onClick={() => setSpecies(option)}
           >
-            {option}
+            {t(option)}
           </button>
         ))}
       </div>
-      <label>Resultat</label>
+      <label>{t("copy.resultat.c9f6c1d")}</label>
       <div className="choice two">
         {catchOutcomeOptions.map((option) => (
           <button
@@ -32,21 +34,21 @@ export function CatchSelectionStep({ controller }: { controller: CatchReportCont
             className={result === option ? "selected" : ""}
             onClick={() => setResult(option)}
           >
-            {option}
+            {t(option)}
           </button>
         ))}
       </div>
       <div className="selection-recap">
         <Icon name="check" size={17} />
         <span>
-          Valgt:{" "}
+          {t("copy.valgt.eccccc1")}{" "}
           <b>
-            {species.toLowerCase()} · {result.toLowerCase()}
+            {t(species).toLowerCase()} · {t(result).toLowerCase()}
           </b>
         </span>
       </div>
       <button className="primary mobile-fixed-action" onClick={() => setStep(2)}>
-        Neste · størrelse
+        {t("copy.neste.st.rrelse.382f764")}
       </button>
     </>
   );

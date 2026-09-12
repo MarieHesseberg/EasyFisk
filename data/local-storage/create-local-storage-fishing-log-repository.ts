@@ -1,6 +1,9 @@
 import type { KeyValueStorage } from "../contracts/key-value-storage";
 import type { FishingLogRepository } from "../contracts/fishing-log-repository";
-import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
+import {
+  operationSucceeded,
+  technicalOperationFailed,
+} from "../../domain/shared/operation-result.ts";
 import { parseStoredFishingLog, type StoredFishingLog } from "./parse-persisted-data.ts";
 
 const defaultStorageKey = "easyfisk:fishing-log:v1";
@@ -31,7 +34,7 @@ export function createLocalStorageFishingLogRepository(
       storage.setItem(key, JSON.stringify(change(readLog(storage, key))));
       return operationSucceeded(undefined);
     } catch (cause) {
-      return operationFailed("Kunne ikke lagre fiskedata på enheten.", cause);
+      return technicalOperationFailed("storage.write", cause);
     }
   };
 

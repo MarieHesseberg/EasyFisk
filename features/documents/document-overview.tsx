@@ -1,5 +1,5 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import {
   documentTitles,
   type DocumentKind,
@@ -9,7 +9,7 @@ import type { DetailDestination } from "@/domain/navigation/navigation";
 import { useDocuments } from "./use-documents";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
-
+import { useLanguage } from "@/components/localization/language-provider";
 const destinations: Record<DocumentKind, DetailDestination> = {
   permit: "permits",
   disinfection: "disinfection",
@@ -21,20 +21,22 @@ const mockSummaries: Record<DocumentKind, string> = {
   disinfection: "Testdata · attest registrert i dag · gyldig i 20 dager",
   fee: "Testdata · fiskeravgift betalt for 2026",
 };
-
-function documentSummary(kind: DocumentKind, documents: FishingDocument[]) {
+function documentSummary(kind: DocumentKind, documents: FishingDocument[], language: "no" | "en") {
   const document = documents
     .filter((entry) => entry.kind === kind)
     .sort((left, right) => (right.values.endsAt ?? "").localeCompare(left.values.endsAt ?? ""))[0];
   if (kind !== "permit" || !document) return undefined;
-  const validUntil = new Intl.DateTimeFormat("nb-NO", {
+  const validUntil = new Intl.DateTimeFormat(selectLocalized(language, "nb-NO", "en-GB"), {
     dateStyle: "short",
     timeStyle: "short",
     timeZone: "Europe/Oslo",
   }).format(new Date(document.values.endsAt ?? ""));
-  return `${document.values.area} · gyldig til ${validUntil}`;
+  return selectLocalized(
+    language,
+    `${document.values.area} · gyldig til ${validUntil}`,
+    `${document.values.area} · valid until ${validUntil}`,
+  );
 }
-
 export function DocumentOverview({
   open,
   testReadiness,
@@ -42,34 +44,44 @@ export function DocumentOverview({
   open: (destination: DetailDestination) => void;
   testReadiness?: DocumentReadiness;
 }) {
+  const { language, t } = useLanguage();
   const { documents, loading, error } = useDocuments();
   const actualReadiness = getDocumentReadiness(documents);
   return (
     <div className="document-overview">
-      {error && <p role="alert">{error}</p>}
+      {error && <p role="alert">{t(error)}</p>}
       {kinds.map((kind) => {
         const count = documents.filter((document) => document.kind === kind).length;
-        const summary = documentSummary(kind, documents);
+        const summary = documentSummary(kind, documents, language);
         const isTestData = testReadiness !== undefined && !actualReadiness.valid[kind];
         const isValid = isTestData ? testReadiness.valid[kind] : actualReadiness.valid[kind];
         return (
           <button key={kind} onClick={() => open(destinations[kind])}>
             <span>
-              <b>{documentTitles[kind]}</b>
+              <b>{t(documentTitles[kind])}</b>
               <small>
                 {isTestData
                   ? isValid
-                    ? mockSummaries[kind]
-                    : "Testdata · mangler eller er ikke gyldig"
+                    ? t(mockSummaries[kind])
+                    : t("content.bf8faf47403a")
                   : loading
-                    ? "Henter …"
+                    ? t("content.406e73d3b7a5")
                     : error
-                      ? "Kunne ikke lese lagring"
+                      ? t("content.abb94ff6057f")
                       : count
                         ? actualReadiness.valid[kind]
-                          ? (summary ?? `${count} registrert · gyldig tidsrom · ikke verifisert`)
-                          : `${count} registrert · utløpt eller må fornyes`
-                        : "Ingen registrert – legg til dokumentasjon"}
+                          ? (summary ??
+                            selectLocalized(
+                              language,
+                              `${count} registrert · gyldig tidsrom · ikke verifisert`,
+                              `${count} registered · valid period · not verified`,
+                            ))
+                          : selectLocalized(
+                              language,
+                              `${count} registrert · utløpt eller må fornyes`,
+                              `${count} registered · expired or must be renewed`,
+                            )
+                        : t("content.6ff5ce507757")}
               </small>
             </span>
             <span aria-hidden="true">{isTestData && isValid ? "✓" : "＋"}</span>

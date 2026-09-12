@@ -15,11 +15,11 @@ export type DemoStatus =
 export type StatusLevel = "ok" | "warning" | "blocked";
 export type DemoScenario = {
   id: DemoStatus;
-  label: string;
-  title: string;
-  detail: string;
+  label: LocalizedText | string;
+  title: LocalizedText | string;
+  detail: LocalizedText | string;
   level: StatusLevel;
-  action?: string;
+  action?: LocalizedText | string;
 };
 export type RuleSectionId =
   | "documentation"
@@ -36,6 +36,7 @@ export type RuleSection = {
   id: RuleSectionId;
   icon: string;
   title: string;
-  summary: string;
-  rules: string[];
+  summary: LocalizedText | string;
+  rules: (LocalizedText | string)[];
 };
+import type { LocalizedText } from "@/domain/localization/localized-text";

@@ -13,6 +13,7 @@ import { ProfileDetailDialog } from "@/features/profile/profile-detail-dialog";
 import { StatusEngineSettingsDialog } from "@/features/profile/status-engine-settings-dialog";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { useLanguage } from "@/components/localization/language-provider";
 
 type ProfileDestination = DetailDestination | "status-engine";
 
@@ -40,17 +41,20 @@ export function ProfileScreen({
   setPaymentOutcome: (outcome: PrototypePaymentOutcome) => void;
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
+  const { t } = useLanguage();
   const { profile } = appContentRepository.getContent();
   const scenarios = fishingContentRepository.getDemoScenarios();
   const selectedScenario = findDemoStatus(demoStatus, scenarios);
   return (
     <div className="screen">
-      <ScreenHeader title="Mer" />
+      <ScreenHeader title={t("navigation.more")} />
       <button className="more-profile-card" onClick={() => setDetail("profile-privacy")}>
         <div className="avatar">{profile.initials}</div>
         <div>
-          <h2>Fiskerprofil</h2>
-          <p>Fisker-ID · {profile.fisherId}</p>
+          <h2>{t("copy.fiskerprofil.3593163")}</h2>
+          <p>
+            {t("copy.fisker.id.d632837")} · {profile.fisherId}
+          </p>
         </div>
         <Icon name="chevron" />
       </button>
@@ -60,8 +64,8 @@ export function ProfileScreen({
             <Icon name="ticket" />
           </span>
           <p>
-            <b>Fiskekort og kjøp</b>
-            <small>Utforsk kort etter sone og korttype</small>
+            <b>{t("copy.fiskekort.og.kj.p.77edfa0")}</b>
+            <small>{t("copy.utforsk.kort.etter.sone.og.korttype.af2d056")}</small>
           </p>
           <Icon name="chevron" size={18} />
         </button>
@@ -70,8 +74,8 @@ export function ProfileScreen({
             <Icon name="stats" />
           </span>
           <p>
-            <b>Statistikk og fiskehistorikk</b>
-            <small>Mandalselva og dine registrerte fiskeøkter</small>
+            <b>{t("copy.statistikk.og.fiskehistorikk.0dccf78")}</b>
+            <small>{t("copy.mandalselva.og.dine.registrerte.fiske.kter.e6af393")}</small>
           </p>
           <Icon name="chevron" size={18} />
         </button>
@@ -81,8 +85,8 @@ export function ProfileScreen({
               <Icon name={icon} />
             </span>
             <p>
-              <b>{title}</b>
-              <small>{description}</small>
+              <b>{t(title)}</b>
+              <small>{t(description)}</small>
             </p>
             <Icon name="chevron" size={18} />
           </button>
@@ -92,8 +96,8 @@ export function ProfileScreen({
             <Icon name="book" />
           </span>
           <p>
-            <b>Statlig fiskeravgift</b>
-            <small>Registrer kvittering eller fritak</small>
+            <b>{t("copy.statlig.fiskeravgift.ed960f5")}</b>
+            <small>{t("copy.registrer.kvittering.eller.fritak.6c23476")}</small>
           </p>
           <Icon name="chevron" size={18} />
         </button>
@@ -102,20 +106,20 @@ export function ProfileScreen({
             <Icon name="stats" />
           </span>
           <p>
-            <b>Statusmotor</b>
-            <small>Velg situasjon for prototypens statuskontroll</small>
+            <b>{t("copy.statusmotor.9cef87d")}</b>
+            <small>{t("copy.velg.situasjon.for.prototypens.statuskontroll.5bd6f62")}</small>
           </p>
           <Icon name="chevron" size={18} />
         </button>
       </div>
       <section className="more-feedback-card">
-        <small>TILBAKEMELDING OG OBSERVASJON</small>
-        <h3>Meld fra til elveeigarlaget</h3>
-        <p>Velg kategori, legg ved bilde og valgfri posisjon, og følg status på meldingen.</p>
-        <button onClick={() => setDetail("feedback")}>Opprett melding</button>
+        <small>{t("copy.tilbakemelding.og.observasjon.874b945")}</small>
+        <h3>{t("copy.meld.fra.til.elveeigarlaget.c011953")}</h3>
+        <p>{t("copy.velg.kategori.legg.ved.bilde.og.valgfri.posisjon.871fba0")}</p>
+        <button onClick={() => setDetail("feedback")}>{t("copy.opprett.melding.99f0597")}</button>
       </section>
       <p className="version">
-        EasyFisk prototype · innhold kontrollert{" "}
+        EasyFisk prototype · {t("copy.innhold.kontrollert.f924dee")}{" "}
         {activeFishingRules.metadata.numericSourcesCheckedLabel}
       </p>
       {detail === "status-engine" && (

@@ -11,6 +11,7 @@ import { CatchDetailsStep } from "@/features/catch-report/steps/catch-details-st
 import { CatchReviewStep } from "@/features/catch-report/steps/catch-review-step";
 import { CatchSelectionStep } from "@/features/catch-report/steps/catch-selection-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function CatchReportModal({
   activeZone,
@@ -31,6 +32,7 @@ export function CatchReportModal({
   requestedCatchTime: number;
   startTime: number | null;
 }) {
+  const { t } = useLanguage();
   const [caughtAt] = useState(() => requestedCatchTime || Date.now());
   const portalTarget = document.querySelector<HTMLElement>(".phone-app") ?? document.body;
   const controller = useCatchReportController({
@@ -55,11 +57,15 @@ export function CatchReportModal({
         className={`catch-modal catch-modal-step-${step}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Registrer fangst"
+        aria-label={t("copy.registrer.fangst.7ecfe4d")}
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
-        <button className="modal-close" aria-label="Lukk fangstrapport" onClick={onClose}>
+        <button
+          className="modal-close"
+          aria-label={t("copy.lukk.fangstrapport.ad00025")}
+          onClick={onClose}
+        >
           ×
         </button>
         <div className="sheet-handle" />

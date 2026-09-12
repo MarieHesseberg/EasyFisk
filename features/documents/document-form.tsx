@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { documentFields } from "@/domain/documents/document-fields";
 import {
@@ -10,7 +9,8 @@ import {
 } from "@/domain/documents/fishing-document";
 import { attachmentError, validateDocument } from "@/domain/documents/validate-document";
 import type { OperationResult } from "@/domain/shared/operation-result";
-
+import { useLanguage } from "@/components/localization/language-provider";
+import { localizeDocumentError } from "@/lib/localize-document-error";
 export function DocumentForm({
   kind,
   initial,
@@ -22,13 +22,13 @@ export function DocumentForm({
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   cancel: () => void;
 }) {
+  const { language, t } = useLanguage();
   const [values, setValues] = useState<DocumentValues>(initial?.values ?? {});
   const [attachment, setAttachment] = useState<Blob | undefined>(initial?.attachment);
   const [attachmentName, setAttachmentName] = useState(initial?.attachmentName);
   const [error, setError] = useState("");
   const [fileError, setFileError] = useState("");
   const [saving, setSaving] = useState(false);
-
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (saving) return;
@@ -48,26 +48,25 @@ export function DocumentForm({
         updatedAt: Date.now(),
         purchaseId: initial?.purchaseId,
       });
-      if (!result.ok) setError(result.error);
+      if (!result.ok) setError(t(result.error));
     } catch {
-      setError("Lagring mislyktes. Prøv igjen. Skjemaet er ikke tømt.");
+      setError("error.storage.write");
     } finally {
       setSaving(false);
     }
   }
-
   return (
     <form
       className="document-form"
       onSubmit={submit}
-      aria-label="Registrer dokument"
+      aria-label={t("copy.registrer.dokument.40d160f")}
       aria-busy={saving}
     >
       <fieldset disabled={saving}>
-        <legend>{initial ? "Endre registrering" : "Ny registrering"}</legend>
+        <legend>{initial ? t("content.d3b307e58e8b") : t("content.85d2c744960e")}</legend>
         {documentFields[kind].map((field) => (
           <label key={field.key}>
-            {field.label}
+            {t(field.label)}
             {field.required ? " *" : ""}
             {field.options ? (
               <select
@@ -75,9 +74,11 @@ export function DocumentForm({
                 value={values[field.key] ?? ""}
                 onChange={(event) => setValues({ ...values, [field.key]: event.target.value })}
               >
-                <option value="">Velg</option>
+                <option value="">{t("copy.velg.c8aa94e")}</option>
                 {field.options.map((option) => (
-                  <option key={option}>{option}</option>
+                  <option key={option} value={option}>
+                    {t(option)}
+                  </option>
                 ))}
               </select>
             ) : (
@@ -93,7 +94,7 @@ export function DocumentForm({
           </label>
         ))}
         <label>
-          Bilde eller PDF av originalen (valgfritt, maks 10 MB)
+          {t("copy.bilde.eller.pdf.av.originalen.valgfritt.maks.10..78250f0")}
           <input
             type="file"
             accept={documentAttachmentTypes.join(",")}
@@ -111,13 +112,12 @@ export function DocumentForm({
           />
         </label>
         <small id="document-file-help">
-          Dokumentet lagres bare i denne nettleseren. Behold originalen et annet sted. Ingen
-          automatisk kontroll eller opplasting til en tjeneste.
+          {t("copy.dokumentet.lagres.bare.i.denne.nettleseren.behol.12aaafe")}
         </small>
-        {fileError && <p role="alert">{fileError}</p>}
+        {fileError && <p role="alert">{t(fileError)}</p>}
         {attachmentName && (
           <p>
-            Vedlegg: {attachmentName}{" "}
+            {t("copy.vedlegg.2a65263")}: {attachmentName}{" "}
             <button
               type="button"
               onClick={() => {
@@ -126,20 +126,20 @@ export function DocumentForm({
                 setFileError("");
               }}
             >
-              Fjern vedlegg
+              {t("copy.fjern.vedlegg.ab8a6da")}
             </button>
           </p>
         )}
         {error && (
           <p id="document-form-error" role="alert">
-            {error}
+            {localizeDocumentError(error, language)}
           </p>
         )}
         <button className="primary" type="submit">
-          {saving ? "Lagrer …" : "Lagre dokument"}
+          {saving ? t("copy.lagrer.85686f0") : t("content.adf1599d9df7")}
         </button>
         <button className="secondary" type="button" onClick={cancel}>
-          Avbryt
+          {t("copy.avbryt.d10c9f7")}
         </button>
       </fieldset>
     </form>

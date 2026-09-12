@@ -1,7 +1,10 @@
 import type { KeyValueStorage } from "../contracts/key-value-storage.ts";
 import type { PermitPurchaseRepository } from "../contracts/permit-purchase-repository.ts";
 import { isPermitPurchase } from "../../domain/fishing-permits/permit-purchase.ts";
-import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
+import {
+  operationSucceeded,
+  technicalOperationFailed,
+} from "../../domain/shared/operation-result.ts";
 const defaultStorageKey = "easyfisk:permit-purchases:v1";
 function read(storage: KeyValueStorage, key: string) {
   const value: unknown = JSON.parse(storage.getItem(key) ?? "[]");
@@ -18,18 +21,17 @@ export function createLocalStoragePermitPurchaseRepository(
       try {
         return operationSucceeded(read(storage, key).sort((a, b) => b.createdAt - a.createdAt));
       } catch (cause) {
-        return operationFailed("Kunne ikke lese fiskekortkjøpene på enheten.", cause);
+        return technicalOperationFailed("storage.read", cause);
       }
     },
     save(purchase) {
       try {
-        if (!isPermitPurchase(purchase))
-          return operationFailed("Kjøpet inneholder ugyldige opplysninger.");
+        if (!isPermitPurchase(purchase)) return technicalOperationFailed("storage.invalid-data");
         const purchases = read(storage, key).filter((entry) => entry.id !== purchase.id);
         storage.setItem(key, JSON.stringify([purchase, ...purchases]));
         return operationSucceeded(undefined);
       } catch (cause) {
-        return operationFailed("Kunne ikke lagre fiskekortkjøpet på enheten.", cause);
+        return technicalOperationFailed("storage.write", cause);
       }
     },
     clear() {
@@ -37,7 +39,7 @@ export function createLocalStoragePermitPurchaseRepository(
         storage.setItem(key, "[]");
         return operationSucceeded(undefined);
       } catch (cause) {
-        return operationFailed("Kunne ikke nullstille fiskekortkjøpene på enheten.", cause);
+        return technicalOperationFailed("storage.clear", cause);
       }
     },
   };

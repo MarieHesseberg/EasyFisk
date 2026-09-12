@@ -1,6 +1,7 @@
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { formatClock } from "@/lib/time";
+import { useLanguage } from "@/components/localization/language-provider";
 export function CatchHistoryList({
   catches,
   selectCatch,
@@ -8,17 +9,18 @@ export function CatchHistoryList({
   catches: CatchRecord[];
   selectCatch: (record: CatchRecord) => void;
 }) {
+  const { t } = useLanguage();
   if (!catches.length) {
     return (
       <section className="catch-history-empty" aria-labelledby="catch-history-title">
         <div className="section-head">
-          <h3 id="catch-history-title">Siste fangster</h3>
+          <h3 id="catch-history-title">{t("copy.siste.fangster.cda78f3")}</h3>
         </div>
         <div className="empty-list-message">
           <Icon name="fish" />
           <p>
-            <b>Ingen fangster registrert</b>
-            <span>Fangster du rapporterer, vises her.</span>
+            <b>{t("copy.ingen.fangster.registrert.3874954")}</b>
+            <span>{t("copy.fangster.du.rapporterer.vises.her.fdb15db")}</span>
           </p>
         </div>
       </section>
@@ -27,7 +29,7 @@ export function CatchHistoryList({
   return (
     <section>
       <div className="section-head">
-        <h3>Siste fangster</h3>
+        <h3>{t("copy.siste.fangster.cda78f3")}</h3>
       </div>
       {catches
         .slice()
@@ -43,15 +45,15 @@ export function CatchHistoryList({
             </span>
             <p>
               <b>
-                {record.species} · {record.result.toLowerCase()}
+                {t(record.species)} · {t(record.result).toLowerCase()}
               </b>
               <small>
-                {record.zone} · {record.length} cm · {record.weight} kg
+                {t(record.zone)} · {record.length} cm · {record.weight} kg
               </small>
               <em>
                 {formatClock(record.caughtAt)} ·{" "}
-                {record.late ? "forsinket rapport" : "rapportert innen fristen"}
-                {record.correction ? " · rettelse meldt" : ""}
+                {t(record.late ? "forsinket rapport" : "rapportert innen fristen")}
+                {record.correction ? ` · ${t("copy.rettelse.meldt.60dd0a8")}` : ""}
               </em>
             </p>
             {record.violation ? (

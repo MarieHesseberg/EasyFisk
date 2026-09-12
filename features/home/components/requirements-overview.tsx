@@ -5,6 +5,7 @@ import type { DetailDestination } from "@/domain/navigation/navigation";
 import { statusState } from "@/domain/fishing-rules/status-checks";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function RequirementsOverview({
   demoStatus,
@@ -29,11 +30,12 @@ export function RequirementsOverview({
   openDocument: (destination: DetailDestination) => void;
   openPermitShop: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <section>
       <div className="section-head">
-        <h3>Dokumentasjon og status</h3>
-        <button onClick={openControlCard}>Mine dokumenter</button>
+        <h3>{t("copy.dokumentasjon.og.status.0fd030e")}</h3>
+        <button onClick={openControlCard}>{t("copy.mine.dokumenter.39d5623")}</button>
       </div>
       <DocumentOverview
         open={openDocument}
@@ -41,19 +43,25 @@ export function RequirementsOverview({
       />
       {!documentReadiness.valid.permit && (
         <button className="primary home-buy-permit" onClick={openPermitShop}>
-          Kjøp fiskekort
+          {t("copy.kj.p.fiskekort.d32ea04")}
         </button>
       )}
       <div className="check-grid">
         <RequirementStatusRow
           icon="fish"
-          title="Sesongkvote laks"
+          title={t("copy.sesongkvote.laks.4d55979")}
           sub={
             demoStatus === "dailyQuota"
-              ? `Døgnkvote nådd · ${quotaStatus.killedToday} avlivet · ${quotaStatus.releasedToday} gjenutsatt`
+              ? t("home.dailyQuota", {
+                  killed: quotaStatus.killedToday,
+                  released: quotaStatus.releasedToday,
+                })
               : demoStatus === "seasonQuota"
-                ? `Sesongkvote nådd · ${quotaStatus.killedThisSeason} avlivet · ${quotaStatus.releasedThisSeason} gjenutsatt`
-                : `${remainingSalmon} av ${seasonQuota} avlivet gjenstår`
+                ? t("home.seasonQuota", {
+                    killed: quotaStatus.killedThisSeason,
+                    released: quotaStatus.releasedThisSeason,
+                  })
+                : t("home.quotaRemaining", { remaining: remainingSalmon, total: seasonQuota })
           }
           quota
           state={statusState(

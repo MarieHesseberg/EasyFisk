@@ -1,5 +1,6 @@
 import { FormError } from "@/components/ui/form-error";
 import { Icon } from "@/components/ui/icon";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function ImageUploadField({
   className,
@@ -14,12 +15,13 @@ export function ImageUploadField({
   imageName: string;
   selectImage: (file?: File) => void;
 }) {
+  const { t } = useLanguage();
   return (
     <>
       <label className={className}>
         <Icon name="fish" />
         <span>
-          <b>{imageName || "Legg til bilde"}</b>
+          <b>{imageName || t("copy.legg.til.bilde.ace7cf0")}</b>
           <small>{description}</small>
         </span>
         <input
@@ -28,7 +30,7 @@ export function ImageUploadField({
           onChange={(event) => selectImage(event.target.files?.[0])}
         />
       </label>
-      <FormError message={error} />
+      <FormError message={error ? t(error) : undefined} />
     </>
   );
 }

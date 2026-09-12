@@ -11,6 +11,7 @@ import { ConfirmationStep } from "@/features/history/past-session/confirmation-s
 import { ReviewStep } from "@/features/history/past-session/review-step";
 import { SessionDetailsStep } from "@/features/history/past-session/session-details-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function PastSessionForm({
   onClose,
@@ -23,6 +24,7 @@ export function PastSessionForm({
   existingCatches: CatchRecord[];
   returnFocusRef?: RefObject<HTMLElement | null>;
 }) {
+  const { t } = useLanguage();
   const controller = usePastSessionController({ existingCatches, onSave });
   const { step } = controller.state;
   const dialogRef = useDialogAccessibility(onClose, true, returnFocusRef);
@@ -34,11 +36,15 @@ export function PastSessionForm({
           className="catch-modal past-session-modal"
           role="dialog"
           aria-modal="true"
-          aria-label="Registrer tidligere fisketur"
+          aria-label={t("copy.registrer.tidligere.fisketur.4812b12")}
           tabIndex={-1}
           onClick={(e) => e.stopPropagation()}
         >
-          <button className="modal-close" aria-label="Lukk registrering" onClick={onClose}>
+          <button
+            className="modal-close"
+            aria-label={t("copy.lukk.registrering.4400fc7")}
+            onClick={onClose}
+          >
             ×
           </button>
           <div className="steps four">

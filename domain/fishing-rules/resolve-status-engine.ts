@@ -2,6 +2,7 @@ import type { DocumentReadiness } from "../documents/get-document-readiness.ts";
 import { getStatusEngineDocumentReadiness } from "./get-status-engine-document-readiness.ts";
 import type { DemoScenario, DemoStatus } from "./rule.ts";
 import type { FishingStartQuotaStatus } from "../quotas/get-fishing-start-quota-status.ts";
+import { localized } from "../localization/localized-text.ts";
 
 const documentStatuses = new Set<DemoStatus>([
   "allMissing",
@@ -120,7 +121,21 @@ function createDocumentScenario(
         id: status,
         label,
         title: "Dokumentasjon mangler",
-        detail: `Registrer ${readiness.missingLabels.join(", ")} før du starter.`,
+        detail: localized(
+          `Registrer ${readiness.missingLabels.join(", ")} før du starter.`,
+          `Register ${new Intl.ListFormat("en-US", { style: "long", type: "conjunction" }).format(
+            (Object.keys(readiness.valid) as (keyof typeof readiness.valid)[])
+              .filter((kind) => !readiness.valid[kind])
+              .map(
+                (kind) =>
+                  ({
+                    permit: "a valid fishing permit",
+                    disinfection: "valid disinfection",
+                    fee: "the national fishing fee or an exemption",
+                  })[kind],
+              ),
+          )} before you start.`,
+        ),
         level: "blocked",
         action: "Registrer dokumentasjon",
       };

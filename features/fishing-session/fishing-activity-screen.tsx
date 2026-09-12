@@ -1,7 +1,5 @@
 "use client";
-
 import { useRef, useState } from "react";
-
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
@@ -13,7 +11,7 @@ import { ActiveSessionCard } from "@/features/fishing-session/components/active-
 import { CatchHistoryList } from "@/features/fishing-session/components/catch-history-list";
 import { SessionHistoryList } from "@/features/fishing-session/components/session-history-list";
 import { PastSessionForm } from "@/features/history/past-session-form";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function FishingActivityScreen({
   active,
   onStart,
@@ -51,15 +49,15 @@ export function FishingActivityScreen({
   embedded?: boolean;
   openPastSession?: boolean;
 }) {
+  const { t } = useLanguage();
   const [showCatchReport, setShowCatchReport] = useState(false);
   const [showPastSession, setShowPastSession] = useState(openPastSession);
   const [selectedCatch, setSelectedCatch] = useState<CatchRecord | null>(null);
   const [showAllHistory, setShowAllHistory] = useState(false);
   const pastSessionButtonRef = useRef<HTMLButtonElement>(null);
-
   return (
     <div className={embedded ? "activity-embedded" : "screen"}>
-      {!embedded && <ScreenHeader title="Min aktivitet" />}
+      {!embedded && <ScreenHeader title={t("copy.min.aktivitet.6c12773")} />}
       {active ? (
         <ActiveSessionCard
           activeZone={activeZone}
@@ -74,10 +72,10 @@ export function FishingActivityScreen({
           <span>
             <Icon name="clock" size={35} />
           </span>
-          <h2>Ingen aktiv fiskeøkt</h2>
-          <p>Start registrerer fisketid og sone. Ved stopp bekrefter du fangst eller nullfangst.</p>
+          <h2>{t("copy.ingen.aktiv.fiske.kt.c93e571")}</h2>
+          <p>{t("copy.start.registrerer.fisketid.og.sone.ved.stopp.bek.32fa5b7")}</p>
           <button className="primary" onClick={onStart}>
-            Kontroller status og start
+            {t("copy.kontroller.status.og.start.f46c2da")}
           </button>
         </section>
       )}
@@ -89,8 +87,8 @@ export function FishingActivityScreen({
       >
         <Icon name="clock" />
         <span>
-          <b>Registrer tidligere fisketur</b>
-          <small>For turer og fangster du glemte å registrere</small>
+          <b>{t("copy.registrer.tidligere.fisketur.4812b12")}</b>
+          <small>{t("copy.for.turer.og.fangster.du.glemte.a.registrere.7de9ead")}</small>
         </span>
         <Icon name="chevron" size={18} />
       </button>

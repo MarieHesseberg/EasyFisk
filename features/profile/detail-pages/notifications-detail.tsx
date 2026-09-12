@@ -5,8 +5,10 @@ import { Icon } from "@/components/ui/icon";
 import { FormError } from "@/components/ui/form-error";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function NotificationsDetail() {
+  const { t } = useLanguage();
   const [saved, setSaved] = useState(false);
   const { error, preferences, setNotification } = usePreferencesController();
   const { notificationOptions, notificationStatus } = appContentRepository.getContent().profile;
@@ -15,18 +17,18 @@ export function NotificationsDetail() {
       <div className="detail-alert">
         <Icon name="bell" />
         <div>
-          <small>PROTOTYPE UTEN LIVE-DATA</small>
-          <h3>Kontroller dagsaktuell status</h3>
-          <p>{notificationStatus}</p>
+          <small>{t("copy.prototype.uten.live.data.c75154d")}</small>
+          <h3>{t("copy.kontroller.dagsaktuell.status.34a88f1")}</h3>
+          <p>{t(notificationStatus)}</p>
         </div>
       </div>
-      <h3 className="detail-subtitle">Mine varsler</h3>
+      <h3 className="detail-subtitle">{t("copy.mine.varsler.1f8c375")}</h3>
       <div className="toggle-list">
         {notificationOptions.map(({ id, label, description }) => (
           <label key={id}>
             <span>
-              <b>{label}</b>
-              <small>{description}</small>
+              <b>{t(label)}</b>
+              <small>{t(description)}</small>
             </span>
             <input
               type="checkbox"
@@ -36,9 +38,9 @@ export function NotificationsDetail() {
           </label>
         ))}
       </div>
-      <FormError message={error} />
+      <FormError message={error ? t(error) : undefined} />
       <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
-        {saved ? "Varselinnstillinger lagret" : "Lagre varselinnstillinger"}
+        {t(saved ? "Varselinnstillinger lagret" : "Lagre varselinnstillinger")}
       </button>
     </div>
   );

@@ -1,5 +1,4 @@
 "use client";
-
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
@@ -18,11 +17,9 @@ import {
 } from "./permit-checkout-steps";
 import { usePermitCheckoutController } from "./use-permit-checkout-controller";
 import { getPrototypePermitAvailability } from "@/domain/fishing-permits/get-prototype-permit-availability";
-
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
-
+import { useLanguage } from "@/components/localization/language-provider";
 const stepNumbers = { buyer: 1, requirements: 2, review: 3, payment: 4, confirmation: 5 } as const;
-
 export function PermitCheckout({
   product,
   documents = [],
@@ -50,6 +47,7 @@ export function PermitCheckout({
   onRegisterFee?: () => void;
   onRegisterDisinfection?: () => void;
 }) {
+  const { t } = useLanguage();
   const checkout = usePermitCheckoutController({
     product,
     save,
@@ -70,15 +68,14 @@ export function PermitCheckout({
     validity ? Date.parse(validity.startsAt) : Date.parse(`${checkout.selectedDate}T12:00:00`),
     product.zoneId,
   ).valid;
-
   return (
-    <section className="permit-checkout" aria-label="Kjøp fiskekort">
+    <section className="permit-checkout" aria-label={t("copy.kj.p.fiskekort.d32ea04")}>
       {checkout.step !== "confirmation" && (
         <button className="back" type="button" onClick={back}>
-          ‹ Tilbake til fiskekort
+          {t("copy.tilbake.til.fiskekort.bcb4b52")}
         </button>
       )}
-      <ol className="permit-checkout-progress" aria-label="Fremdrift">
+      <ol className="permit-checkout-progress" aria-label={t("copy.fremdrift.feea71d")}>
         {[1, 2, 3, 4, 5].map((number) => (
           <li
             key={number}
@@ -89,14 +86,14 @@ export function PermitCheckout({
         ))}
       </ol>
       <div className="permit-test-warning">
-        <b>Testkjøp – dette er en prototype.</b>
-        <span>Ingen reservasjon eller betaling gjennomføres.</span>
+        <b>{t("copy.testkj.p.dette.er.en.prototype.d619945")}</b>
+        <span>{t("copy.ingen.reservasjon.eller.betaling.gjennomf.res.2f46e3e")}</span>
       </div>
       <article className="permit-selected-product">
-        <small>{product.areaName}</small>
-        <h2>{product.title}</h2>
+        <small>{t(product.areaName)}</small>
+        <h2>{t(product.title)}</h2>
         <b>{formatPrototypePermitPrice(product)}</b>
-        <p>{product.validity.label}</p>
+        <p>{t(product.validity.label)}</p>
       </article>
       {checkout.step === "buyer" && (
         <PermitBuyerStep
@@ -150,7 +147,7 @@ export function PermitCheckout({
       )}
       {checkout.error && (
         <p className="permit-payment-result error" role="alert">
-          {checkout.error}
+          {t(checkout.error)}
         </p>
       )}
     </section>

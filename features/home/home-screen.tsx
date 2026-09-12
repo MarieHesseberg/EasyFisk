@@ -1,3 +1,4 @@
+import { selectLocalized } from "@/locales";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { HomeSessionCard } from "@/features/home/components/home-session-card";
@@ -9,7 +10,7 @@ import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function HomeScreen({
   onStart,
   onRules,
@@ -49,9 +50,10 @@ export function HomeScreen({
 }) {
   const { riverStatus } = appContentRepository.getContent();
   const { catchSize, metadata, quota } = activeFishingRules;
+  const { language, t } = useLanguage();
   return (
     <div className="screen">
-      <ScreenHeader title="Din fiskeoversikt" />
+      <ScreenHeader title={t("copy.din.fiskeoversikt.68cb7f9")} />
       <HomeSessionCard
         active={active}
         elapsed={elapsed}
@@ -64,8 +66,8 @@ export function HomeScreen({
       <button className="home-past-session-button" onClick={onPastSession}>
         <Icon name="clock" size={20} />
         <span>
-          <b>Registrer tidligere fisketur</b>
-          <small>Etterregistrer en tur uten å starte en ny fiskeøkt</small>
+          <b>{t("copy.registrer.tidligere.fisketur.4812b12")}</b>
+          <small>{t("copy.etterregistrer.en.tur.uten.a.starte.en.ny.fiske..be70a08")}</small>
         </span>
         <Icon name="chevron" size={18} />
       </button>
@@ -86,24 +88,32 @@ export function HomeScreen({
           <Icon name="bell" />
         </span>
         <div>
-          <small>TILBAKEMELDING OG OBSERVASJON</small>
-          <b>Meld fra til elveeigarlaget</b>
-          <p>Rapporter feil, forsøpling, syk fisk eller mistenkelig fiske.</p>
+          <small>{t("copy.tilbakemelding.og.observasjon.874b945")}</small>
+          <b>{t("copy.meld.fra.til.elveeigarlaget.c011953")}</b>
+          <p>{t("copy.rapporter.feil.fors.pling.syk.fisk.eller.mistenk.f156eef")}</p>
         </div>
         <Icon name="chevron" size={18} />
       </button>
       <HomeShortcuts openMap={onMapShortcut} openRules={onRules} />
       <section className="info-card">
-        <small>REGLER OPPDATERT {metadata.versionLabel.toUpperCase()}</small>
-        <h3>{quota.killedSalmonPerDay} laks per fiskerdøgn</h3>
+        <small>
+          {selectLocalized(language, "REGLER OPPDATERT", "RULES UPDATED")}{" "}
+          {metadata.versionLabel.toUpperCase()}
+        </small>
+        <h3>
+          {quota.killedSalmonPerDay}{" "}
+          {selectLocalized(language, "laks per fiskerdøgn", "salmon per fishing day")}
+        </h3>
         <p>
-          Når én laks er avlivet, skal alt fiske stoppe til neste fiskerdøgn. Minstemålet er{" "}
-          {catchSize.minimumCm} cm. Én av sesongens {quota.killedSalmonPerSeason} avlivede laks kan
-          være opptil {catchSize.largeSalmonMaximumCm} cm. De øvrige må være under{" "}
-          {catchSize.regularSalmonMaximumCm} cm.
+          {selectLocalized(
+            language,
+            `Når én laks er avlivet, skal alt fiske stoppe til neste fiskerdøgn. Minstemålet er ${catchSize.minimumCm} cm. Én av sesongens ${quota.killedSalmonPerSeason} avlivede laks kan være opptil ${catchSize.largeSalmonMaximumCm} cm. De øvrige må være under ${catchSize.regularSalmonMaximumCm} cm.`,
+            `Once one salmon has been harvested, all fishing must stop until the next fishing day. The minimum size is ${catchSize.minimumCm} cm. One of the season's ${quota.killedSalmonPerSeason} harvested salmon may be up to ${catchSize.largeSalmonMaximumCm} cm. The others must be under ${catchSize.regularSalmonMaximumCm} cm.`,
+          )}
         </p>
         <button onClick={onRules}>
-          Se komplett regelkontroll <Icon name="chevron" size={16} />
+          {t("copy.se.komplett.regelkontroll.47003a2")}
+          <Icon name="chevron" size={16} />
         </button>
       </section>
     </div>

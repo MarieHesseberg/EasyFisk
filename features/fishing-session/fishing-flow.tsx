@@ -1,7 +1,6 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import { useState } from "react";
-
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { FlowMode, SessionRecord } from "@/domain/sessions/session";
@@ -15,7 +14,7 @@ import { StopSessionStep } from "@/features/fishing-session/fishing-flow/stop-se
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-quota-status";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function FishingFlow({
   mode,
   finish,
@@ -51,11 +50,11 @@ export function FishingFlow({
   initialZone: ZoneId;
   permittedZoneIds: readonly ZoneId[];
 }) {
+  const { language, t } = useLanguage();
   const [step, setStep] = useState(1);
   const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
   const total = mode === "start" ? 4 : 1;
   const dialogRef = useDialogAccessibility(cancel);
-
   return (
     <div className="flow-overlay">
       <div
@@ -63,19 +62,23 @@ export function FishingFlow({
         className="flow-sheet"
         role="dialog"
         aria-modal="true"
-        aria-label={
-          mode === "start" ? "Start fiske" : mode === "stop" ? "Avslutt økt" : "Økt fullført"
-        }
+        aria-label={t(
+          mode === "start" ? "Start fiske" : mode === "stop" ? "Avslutt økt" : "Økt fullført",
+        )}
         tabIndex={-1}
       >
         <div className="flow-top">
-          <button onClick={cancel} aria-label="Lukk">
+          <button onClick={cancel} aria-label={t("copy.lukk.1949e04")}>
             ×
           </button>
           <span>
-            {mode === "start" ? "START FISKE" : mode === "stop" ? "AVSLUTT ØKT" : "ØKT FULLFØRT"}
+            {t(mode === "start" ? "START FISKE" : mode === "stop" ? "AVSLUTT ØKT" : "ØKT FULLFØRT")}
           </span>
-          <em>{mode === "summary" ? "Ferdig" : `${step} av ${total}`}</em>
+          <em>
+            {mode === "summary"
+              ? t("copy.ferdig.1f6ddf8")
+              : selectLocalized(language, `${step} av ${total}`, `${step} of ${total}`)}
+          </em>
         </div>
 
         {mode === "start" && (

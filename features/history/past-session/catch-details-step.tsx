@@ -1,10 +1,12 @@
+import { selectLocalized } from "@/locales";
 import { FormError } from "@/components/ui/form-error";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { catchOutcomeOptions, fishSpeciesOptions } from "@/domain/catches/catch";
 import type { PastSessionController } from "@/features/history/hooks/use-past-session-controller";
 import { formatClock } from "@/lib/time";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function CatchDetailsStep({ controller }: { controller: PastSessionController }) {
+  const { language, t } = useLanguage();
   const {
     catchAt,
     catchValid,
@@ -34,22 +36,28 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
   } = controller.actions;
   return (
     <>
-      <small>ETTERREGISTRERING · FANGST {reports.length + 1}</small>
-      <h2>Registrer fangsten</h2>
+      <small>
+        {t("copy.etterregistrering.fangst.f4b6896")} {reports.length + 1}
+      </small>
+      <h2>{t("copy.registrer.fangsten.320a200")}</h2>
       {reports.length > 0 && (
         <div className="added-catches">
           <b>
-            {reports.length} fangst{reports.length === 1 ? "" : "er"} lagt til
+            {selectLocalized(
+              language,
+              `${reports.length} fangst${reports.length === 1 ? "" : "er"} lagt til`,
+              `${reports.length} ${reports.length === 1 ? "catch" : "catches"} added`,
+            )}
           </b>
           {reports.map((x) => (
             <span key={x.id}>
-              {x.species} · {x.result.toLowerCase()} · {formatClock(x.caughtAt)}
+              {t(x.species)} · {t(x.result).toLowerCase()} · {formatClock(x.caughtAt)}
             </span>
           ))}
         </div>
       )}
       <label>
-        Faktisk fangsttid <em>påkrevd</em>
+        {t("copy.faktisk.fangsttid.f0af7b2")} <em>{t("copy.pakrevd.3ae3b8f")}</em>
         <input
           aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
           aria-invalid={touched && !validCatchTime}
@@ -58,7 +66,7 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           onChange={(e) => setCatchAt(e.target.value)}
         />
       </label>
-      <label>Art</label>
+      <label>{t("copy.art.308e17d")}</label>
       <div className="choice">
         {fishSpeciesOptions.map((x) => (
           <button
@@ -67,11 +75,11 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
             aria-pressed={species === x}
             onClick={() => setSpecies(x)}
           >
-            {x}
+            {t(x)}
           </button>
         ))}
       </div>
-      <label>Resultat</label>
+      <label>{t("copy.resultat.c9f6c1d")}</label>
       <div className="choice two">
         {catchOutcomeOptions.map((x) => (
           <button
@@ -80,13 +88,13 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
             aria-pressed={outcome === x}
             onClick={() => setOutcome(x)}
           >
-            {x}
+            {t(x)}
           </button>
         ))}
       </div>
       <div className="input-row">
         <label>
-          Lengde <em>påkrevd</em>
+          {t("copy.lengde.970a8be")} <em>{t("copy.pakrevd.3ae3b8f")}</em>
           <input
             aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
             aria-invalid={touched && !lengthNumber}
@@ -97,7 +105,7 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
           />
         </label>
         <label>
-          Vekt <em>påkrevd</em>
+          {t("copy.vekt.f6a2623")} <em>{t("copy.pakrevd.3ae3b8f")}</em>
           <input
             aria-describedby={touched && !catchValid ? "past-catch-error" : undefined}
             aria-invalid={touched && !weightNumber}
@@ -110,36 +118,36 @@ export function CatchDetailsStep({ controller }: { controller: PastSessionContro
       </div>
       <ImageUploadField
         className="feedback-upload"
-        description="Valgfritt · lagres med fangstrapporten"
+        description={t("copy.valgfritt.lagres.med.fangstrapporten.fe3d2fe")}
         error={imageError}
         imageName={imageName}
         selectImage={selectImage}
       />
       <label>
-        Kommentar <em>valgfritt</em>
+        {t("copy.kommentar.19c85a8")} <em>{t("copy.valgfritt.4a815de")}</em>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={300}
-          placeholder="Observasjoner om fisken eller fangststedet"
+          placeholder={t("copy.observasjoner.om.fisken.eller.fangststedet.60f87d2")}
         />
       </label>
       <FormError
         id="past-catch-error"
         message={
           touched && !catchValid
-            ? "Fangsttid må være innenfor turen. Lengde og vekt må fylles ut."
+            ? t("copy.fangsttid.ma.v.re.innenfor.turen.lengde.og.vekt..5790876")
             : undefined
         }
       />
       <button className="primary" onClick={() => addCatch(true)}>
-        Legg til og kontroller turen
+        {t("copy.legg.til.og.kontroller.turen.3f05979")}
       </button>
       <button className="secondary" onClick={() => addCatch(false)}>
-        Lagre og legg til en fangst til
+        {t("copy.lagre.og.legg.til.en.fangst.til.cf79651")}
       </button>
       <button className="text-button" onClick={() => setStep(1)}>
-        Tilbake
+        {t("copy.tilbake.4fb8dc1")}
       </button>
     </>
   );

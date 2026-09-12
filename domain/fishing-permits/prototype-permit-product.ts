@@ -1,4 +1,6 @@
 import type { ZoneId } from "@/domain/zones/zone";
+import { t, type AppLanguage } from "../../locales/index.ts";
+import { formatNumber } from "../../lib/localization-format.ts";
 
 export type PrototypePermitType = "day" | "week" | "season" | "boat" | "group" | "reporting";
 
@@ -88,9 +90,14 @@ export function canPurchasePrototypePermit(product: PrototypePermitProduct) {
   );
 }
 
-export function formatPrototypePermitPrice(product: PrototypePermitProduct) {
-  if (product.action === "register-reporting-day") return "Gratis døgnregistrering";
-  if (product.price.amountNok === null) return "Pris ikke offentliggjort";
-  const price = `${product.price.amountNok.toLocaleString("nb-NO")} kr`;
-  return product.price.status === "prototype-estimate" ? `${price} · simulert` : price;
+export function formatPrototypePermitPrice(
+  product: PrototypePermitProduct,
+  language: AppLanguage = "no",
+) {
+  if (product.action === "register-reporting-day") return t(language, "permit.freeRegistration");
+  if (product.price.amountNok === null) return t(language, "permit.priceUnavailable");
+  const price = `${formatNumber(product.price.amountNok, language)} kr`;
+  return product.price.status === "prototype-estimate"
+    ? t(language, "permit.simulatedPrice", { price })
+    : price;
 }

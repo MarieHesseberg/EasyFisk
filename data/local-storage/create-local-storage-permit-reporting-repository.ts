@@ -1,7 +1,10 @@
 import type { KeyValueStorage } from "../contracts/key-value-storage.ts";
 import type { PermitReportingRepository } from "../contracts/permit-reporting-repository.ts";
 import { isPermitReportingDay } from "../../domain/fishing-permits/permit-reporting-day.ts";
-import { operationFailed, operationSucceeded } from "../../domain/shared/operation-result.ts";
+import {
+  operationSucceeded,
+  technicalOperationFailed,
+} from "../../domain/shared/operation-result.ts";
 
 const defaultStorageKey = "easyfisk:permit-reporting-days:v1";
 
@@ -21,18 +24,17 @@ export function createLocalStoragePermitReportingRepository(
       try {
         return operationSucceeded(read(storage, key).sort((a, b) => b.updatedAt - a.updatedAt));
       } catch (cause) {
-        return operationFailed("Kunne ikke lese rapporteringsdøgnene på enheten.", cause);
+        return technicalOperationFailed("storage.read", cause);
       }
     },
     save(record) {
       try {
-        if (!isPermitReportingDay(record))
-          return operationFailed("Rapporteringsdøgnet inneholder ugyldige opplysninger.");
+        if (!isPermitReportingDay(record)) return technicalOperationFailed("storage.invalid-data");
         const records = read(storage, key).filter((entry) => entry.id !== record.id);
         storage.setItem(key, JSON.stringify([record, ...records]));
         return operationSucceeded(undefined);
       } catch (cause) {
-        return operationFailed("Kunne ikke lagre rapporteringsdøgnet på enheten.", cause);
+        return technicalOperationFailed("storage.write", cause);
       }
     },
   };

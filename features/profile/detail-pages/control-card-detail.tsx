@@ -5,16 +5,15 @@ import { DocumentsPanel } from "@/features/documents/documents-panel";
 import { documentTitles, type DocumentKind } from "@/domain/documents/fishing-document";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function ControlCardDetail({ testReadiness }: { testReadiness?: DocumentReadiness }) {
+  const { t } = useLanguage();
   const [kind, setKind] = useState<DocumentKind>("permit");
   const testDocuments = fishingContentRepository.getDemoDocuments();
   return (
     <div>
-      <p>
-        Din lokale dokumentmappe. Appen utsteder ikke kontrollbevis. Ta med originalene og vis
-        dokumentasjonen fra utsteder ved kontroll.
-      </p>
+      <p>{t("documents.controlFolderNote")}</p>
       <div className="choice">
         {(["permit", "disinfection", "fee"] as const).map((value) => (
           <button
@@ -23,7 +22,7 @@ export function ControlCardDetail({ testReadiness }: { testReadiness?: DocumentR
             className={value === kind ? "selected" : ""}
             onClick={() => setKind(value)}
           >
-            {documentTitles[value]}
+            {t(documentTitles[value])}
           </button>
         ))}
       </div>

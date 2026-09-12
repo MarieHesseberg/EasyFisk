@@ -1,11 +1,12 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import { useState } from "react";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { FormError } from "@/components/ui/form-error";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function ProfilePrivacyDetail() {
+  const { language, t } = useLanguage();
   const [saved, setSaved] = useState(false);
   const { error, preferences, setPositionSuggestions, setShareAnonymousData } =
     usePreferencesController();
@@ -15,30 +16,32 @@ export function ProfilePrivacyDetail() {
       <div className="profile-detail">
         <div className="avatar">{profile.initials}</div>
         <div>
-          <h3>Fiskerprofil</h3>
-          <p>Fisker-ID {profile.fisherId}</p>
+          <h3>{t("copy.fiskerprofil.3593163")}</h3>
+          <p>
+            {t("copy.fisker.id.d632837")} {profile.fisherId}
+          </p>
         </div>
       </div>
       <div className="detail-data">
         <p>
-          <span>Navn</span>
-          <b>{profile.name}</b>
+          <span>{t("copy.navn.32dae7e")}</span>
+          <b>{t(profile.name)}</b>
         </p>
         <p>
-          <span>Telefon</span>
+          <span>{t("copy.telefon.40314f8")}</span>
           <b>{profile.maskedPhone}</b>
         </p>
         <p>
-          <span>Språk</span>
-          <b>{profile.language}</b>
+          <span>{t("copy.sprak.52ba694")}</span>
+          <b>{selectLocalized(language, profile.language, "English")}</b>
         </p>
       </div>
-      <h3 className="detail-subtitle">Personvern og samtykker</h3>
+      <h3 className="detail-subtitle">{t("copy.personvern.og.samtykker.274afdf")}</h3>
       <div className="toggle-list">
         <label>
           <span>
-            <b>Posisjon ved soneforslag</b>
-            <small>Brukes bare når du ber om å finne riktig sone</small>
+            <b>{t("copy.posisjon.ved.soneforslag.bafc7ae")}</b>
+            <small>{t("copy.brukes.bare.nar.du.ber.om.a.finne.riktig.sone.7c5cebf")}</small>
           </span>
           <input
             type="checkbox"
@@ -48,8 +51,8 @@ export function ProfilePrivacyDetail() {
         </label>
         <label>
           <span>
-            <b>Del anonymisert innsatsdata</b>
-            <small>Bidrar til statistikk uten å vise identiteten din</small>
+            <b>{t("copy.del.anonymisert.innsatsdata.473258a")}</b>
+            <small>{t("copy.bidrar.til.statistikk.uten.a.vise.identiteten.di.12ef03b")}</small>
           </span>
           <input
             type="checkbox"
@@ -58,9 +61,9 @@ export function ProfilePrivacyDetail() {
           />
         </label>
       </div>
-      <FormError message={error} />
+      <FormError message={error ? t(error) : undefined} />
       <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
-        {saved ? "Innstillingene er lagret" : "Lagre innstillinger"}
+        {t(saved ? "Innstillingene er lagret" : "Lagre innstillinger")}
       </button>
     </div>
   );

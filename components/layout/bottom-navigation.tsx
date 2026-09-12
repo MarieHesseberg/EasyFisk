@@ -1,13 +1,15 @@
 import { Icon } from "@/components/ui/icon";
 import type { Screen } from "@/domain/navigation/navigation";
+import { useLanguage } from "@/components/localization/language-provider";
+import type { TranslationKey } from "@/locales";
 
 const destinations = [
-  ["home", "Hjem", "home"],
-  ["map", "Kart", "map"],
-  ["permits", "Fiskekort", "ticket"],
-  ["rules", "Regler", "book"],
-  ["more", "Mer", "more"],
-] as const;
+  ["home", "navigation.home", "home"],
+  ["map", "navigation.map", "map"],
+  ["permits", "navigation.permits", "ticket"],
+  ["rules", "navigation.rules", "book"],
+  ["more", "navigation.more", "more"],
+] as const satisfies readonly (readonly [Screen, TranslationKey, string])[];
 
 export function BottomNavigation({
   activeScreen,
@@ -16,10 +18,11 @@ export function BottomNavigation({
   activeScreen: Screen;
   navigate: (screen: Screen) => void;
 }) {
+  const { t } = useLanguage();
   const selectedScreen = activeScreen === "stats" ? "more" : activeScreen;
   return (
-    <nav className="bottom-nav" aria-label="Hovednavigasjon">
-      {destinations.map(([id, label, icon]) => (
+    <nav className="bottom-nav" aria-label={t("navigation.label")}>
+      {destinations.map(([id, labelKey, icon]) => (
         <button
           key={id}
           onClick={() => navigate(id)}
@@ -27,7 +30,7 @@ export function BottomNavigation({
           aria-current={selectedScreen === id ? "page" : undefined}
         >
           <Icon name={icon} />
-          <span>{label}</span>
+          <span>{t(labelKey)}</span>
         </button>
       ))}
     </nav>

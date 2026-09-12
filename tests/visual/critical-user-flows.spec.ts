@@ -499,7 +499,9 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
   });
   await dialog.getByRole("button", { name: "Send fangstrapport" }).click();
 
-  await expect(dialog.getByRole("alert")).toContainText("Kunne ikke lagre fiskedata på enheten");
+  await expect(dialog.getByRole("alert")).toHaveText(
+    "Kunne ikke lagre dataene på denne enheten. Kontroller lagringsplassen og prøv igjen.",
+  );
   await expect(dialog.getByRole("heading", { name: "Rapporten er kontrollert" })).toBeVisible();
   await expect(dialog.getByText("Fangstrapporten er sendt")).toHaveCount(0);
 });

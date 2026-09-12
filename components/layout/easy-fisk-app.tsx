@@ -26,8 +26,10 @@ import {
 } from "@/domain/quotas/get-fishing-start-quota-status";
 import { getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
 import { useCurrentTime } from "@/hooks/use-current-time";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function EasyFiskApp() {
+  const { t } = useLanguage();
   const { state, actions } = useEasyFiskController();
   const { documents } = useDocuments();
   const documentCheckTime = useCurrentTime();
@@ -159,7 +161,7 @@ export function EasyFiskApp() {
         {toast && (
           <div className="toast" role="status" aria-live="polite" aria-atomic="true">
             <Icon name="check" size={18} />
-            {toast}
+            {t(toast)}
           </div>
         )}
         {flow && (

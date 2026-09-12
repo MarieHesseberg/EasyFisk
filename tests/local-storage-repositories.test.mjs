@@ -126,7 +126,7 @@ test("aktiv fiskeøkt overlever refresh og kan avsluttes", () => {
   assert.equal(createLocalStorageFishingLogRepository(storage).getActiveSession(), null);
 });
 
-test("localStorage quota-feil returneres som et forståelig resultat", () => {
+test("localStorage quota-feil returneres som en standardisert lagringsfeil", () => {
   const storage = {
     getItem: () => null,
     setItem: () => {
@@ -135,7 +135,8 @@ test("localStorage quota-feil returneres som et forståelig resultat", () => {
   };
   const result = createLocalStorageFishingLogRepository(storage).saveCatch(catchRecord);
   assert.equal(result.ok, false);
-  assert.match(result.error, /Kunne ikke lagre/);
+  assert.equal(result.code, "storage.write");
+  assert.equal(result.error, "error.storage.write");
 });
 
 test("bildedata fyller ikke localStorage, men filnavnet beholdes", () => {

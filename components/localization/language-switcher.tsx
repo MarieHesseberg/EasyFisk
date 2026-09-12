@@ -4,17 +4,18 @@ import { useLanguage } from "./language-provider";
 import { Icon } from "@/components/ui/icon";
 
 export function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
+  const isNorwegian = language === "no";
   return (
     <button
       className="language-switcher"
       type="button"
-      aria-label={language === "no" ? "Switch to English" : "Bytt til norsk"}
-      onClick={() => setLanguage(language === "no" ? "en" : "no")}
+      aria-label={t(isNorwegian ? "language.switchToEnglish" : "language.switchToNorwegian")}
+      onClick={() => setLanguage(isNorwegian ? "en" : "no")}
       translate="no"
     >
       <Icon name="language" size={17} />
-      <span>{language === "no" ? "English" : "Norsk"}</span>
+      <span>{t(isNorwegian ? "language.english" : "language.norwegian")}</span>
     </button>
   );
 }

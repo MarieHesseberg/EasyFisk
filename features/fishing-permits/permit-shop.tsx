@@ -1,5 +1,5 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import { useState } from "react";
 import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
 import type { ZoneId } from "@/domain/zones/zone";
@@ -17,11 +17,10 @@ import {
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { PermitProductDetail } from "./permit-product-detail";
 import { getPrototypePermitDateRange } from "@/domain/fishing-permits/get-prototype-permit-availability";
-
+import { useLanguage } from "@/components/localization/language-provider";
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
 const todayInNorway = () =>
   new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
-
 export function PermitShop({
   initialZone = 3,
   onPermitPurchased,
@@ -45,6 +44,7 @@ export function PermitShop({
   const [isProductActionOpen, setIsProductActionOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(todayInNorway);
   const [resetMessage, setResetMessage] = useState("");
+  const { language, t } = useLanguage();
   const documents = useDocuments();
   const reportingDays = usePermitReportingDays();
   const purchases = usePermitPurchases();
@@ -60,7 +60,6 @@ export function PermitShop({
   const testPurchases = documents.documents.filter((document) =>
     document.id.startsWith(testPurchaseDocumentPrefix),
   );
-
   async function resetTestPurchases() {
     for (const document of testPurchases) {
       const result = await documents.remove(document.id);
@@ -74,9 +73,8 @@ export function PermitShop({
       setResetMessage(purchaseResult.error);
       return;
     }
-    setResetMessage("Alle testkjøpte fiskekort er fjernet fra denne enheten.");
+    setResetMessage(t("permit.testPurchasesRemoved"));
   }
-
   if (selectedProduct) {
     if (!isProductActionOpen)
       return (
@@ -115,15 +113,11 @@ export function PermitShop({
       />
     );
   }
-
   return (
-    <section className="permit-shop" aria-label="Fiskekortbutikk">
-      <p>
-        Utforsk fiskekort for Mandalselva. Dette er en kjøpsprototype med et datert
-        produktøyeblikksbilde – betaling og reservasjon er ikke aktivert.
-      </p>
+    <section className="permit-shop" aria-label={t("copy.fiskekortbutikk.14d464f")}>
+      <p>{t("copy.utforsk.fiskekort.for.mandalselva.dette.er.en.kj.8614835")}</p>
       <fieldset>
-        <legend>Velg hovedsone</legend>
+        <legend>{t("copy.velg.hovedsone.05c8f59")}</legend>
         <div className="permit-shop-zones">
           {zones.map((zoneId) => (
             <button
@@ -136,19 +130,22 @@ export function PermitShop({
                 setResetMessage("");
               }}
             >
-              Sone {zoneId}
+              {selectLocalized(language, "Sone", "Zone")} {zoneId}
             </button>
           ))}
         </div>
       </fieldset>
       {areas.length > 1 && (
         <label className="permit-area-filter">
-          Delsone eller salgsområde
+          {t("copy.delsone.eller.salgsomrade.7d5c937")}
           <select value={selectedArea} onChange={(event) => setSelectedArea(event.target.value)}>
-            <option value="all">Vis alle i sone {selectedZone}</option>
+            <option value="all">
+              {t("copy.vis.alle.i.sone.ee3b086")}
+              {selectedZone}
+            </option>
             {areas.map((area) => (
               <option key={area} value={area}>
-                {area}
+                {t(area)}
               </option>
             ))}
           </select>
@@ -157,20 +154,23 @@ export function PermitShop({
       <div className="permit-shop-list">
         {products.map((product) => (
           <article key={product.id}>
-            <small>{product.areaName}</small>
-            <h3>{product.title}</h3>
-            <b>{formatPrototypePermitPrice(product)}</b>
+            <small>{t(product.areaName)}</small>
+            <h3>{t(product.title)}</h3>
+            <b>{formatPrototypePermitPrice(product, language)}</b>
             {!canPurchasePrototypePermit(product) && (
               <span className="permit-shop-price-note">
-                Kontakt {product.seller.contactName} for pris og kjøp · {product.seller.phone}
+                {t("permit.contactForPurchase", {
+                  name: product.seller.contactName,
+                  phone: product.seller.phone,
+                })}
               </span>
             )}
             <strong className="permit-availability available">
-              Tilgjengelighet kontrolleres for valgt dato
+              {t("copy.tilgjengelighet.kontrolleres.for.valgt.dato.cf8072d")}
             </strong>
-            <p>{product.validity.label}</p>
-            <p>{product.capacity.label}</p>
-            <p>{product.note}</p>
+            <p>{t(product.validity.label)}</p>
+            <p>{t(product.capacity.label)}</p>
+            <p>{t(product.note)}</p>
             <div>
               <button
                 className="primary"
@@ -192,13 +192,13 @@ export function PermitShop({
                 }}
               >
                 {product.action === "register-reporting-day"
-                  ? "Velg rapporteringskort"
+                  ? t("content.f04bf0163837")
                   : canPurchasePrototypePermit(product)
-                    ? "Se fiskekort"
-                    : "Se kontaktinformasjon"}
+                    ? t("content.43d5c7677b35")
+                    : t("content.4392dec2b09e")}
               </button>
               <a href={product.source.url} target="_blank" rel="noreferrer">
-                Se produktinformasjon ↗
+                {t("copy.se.produktinformasjon.a1a7572")}
               </a>
             </div>
           </article>
@@ -206,7 +206,8 @@ export function PermitShop({
       </div>
       {testPurchases.length > 0 && (
         <button className="secondary" type="button" onClick={() => void resetTestPurchases()}>
-          Nullstill testkjøpte fiskekort ({testPurchases.length})
+          {t("copy.nullstill.testkj.pte.fiskekort.ce276cb")}
+          {testPurchases.length})
         </button>
       )}
       {resetMessage && (
@@ -216,19 +217,18 @@ export function PermitShop({
       )}
       {reportingDays.records.length > 0 && (
         <section className="permit-reporting-summary" aria-labelledby="reporting-days-title">
-          <h3 id="reporting-days-title">Registrerte rapporteringsdøgn</h3>
+          <h3 id="reporting-days-title">{t("copy.registrerte.rapporteringsd.gn.8341681")}</h3>
           {reportingDays.records.map((record) => (
             <p key={record.id}>
-              <b>{record.areaName}</b> · {record.fishingDate} ·{" "}
-              {permitReportingOutcomeLabels[record.outcome]}
+              <b>{t(record.areaName)}</b> · {record.fishingDate} ·{" "}
+              {t(permitReportingOutcomeLabels[record.outcome])}
             </p>
           ))}
         </section>
       )}
-      {reportingDays.error && <p role="alert">{reportingDays.error}</p>}
+      {reportingDays.error && <p role="alert">{t(reportingDays.error)}</p>}
       <p className="permit-shop-disclaimer">
-        Produktdata kontrollert 01.09.2026. Pris, kapasitet og tilgjengelighet må kontrolleres før
-        et virkelig kjøp.
+        {t("copy.produktdata.kontrollert.01.09.2026.pris.kapasite.206cb48")}
       </p>
     </section>
   );

@@ -1,9 +1,10 @@
+import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
 import { FormError } from "@/components/ui/form-error";
 import type { CatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { formatClock } from "@/lib/time";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function CatchReviewStep({
   activeZone,
   caughtAt,
@@ -13,6 +14,7 @@ export function CatchReviewStep({
   caughtAt: number;
   controller: CatchReportController;
 }) {
+  const { language, t } = useLanguage();
   const {
     comment,
     imageName,
@@ -28,43 +30,57 @@ export function CatchReviewStep({
   const { setStep, setViolationConfirmed, submit } = controller.actions;
   const { blocked, largeSalmon, ruleText, ruleTitle } = validation;
   const { catchSize, metadata } = activeFishingRules;
-
   return (
     <>
-      <small>STEG 3 AV 4 · REGELKONTROLL</small>
-      <h2>{blocked ? "Avlivingen bryter størrelsesreglene" : "Rapporten er kontrollert"}</h2>
+      <small>{t("copy.steg.3.av.4.regelkontroll.288fe43")}</small>
+      <h2>{t(blocked ? "Avlivingen bryter størrelsesreglene" : "Rapporten er kontrollert")}</h2>
       <div
         className={"rule-result " + (blocked ? "blocked" : largeSalmon ? "warning" : "approved")}
       >
         <span>{blocked ? "!" : <Icon name="check" />}</span>
         <div>
-          <b>{ruleTitle}</b>
-          <p>{ruleText}</p>
+          <b>{t(ruleTitle)}</b>
+          <p>{t(ruleText)}</p>
         </div>
       </div>
       <div className="applied-rules">
-        <b>Størrelsesregler som er kontrollert</b>
+        <b>{t("copy.st.rrelsesregler.som.er.kontrollert.65b4c1f")}</b>
         <p>
-          <span>Minstemål</span>
-          <strong>Laks og sjøørret: {catchSize.minimumCm} cm</strong>
+          <span>{t("copy.minstemal.087f16f")}</span>
+          <strong>
+            {t("copy.laks.og.sj.rret.bd16ad9")}: {catchSize.minimumCm} cm
+          </strong>
         </p>
         <p>
-          <span>Fra {metadata.shortVersionLabel}</span>
-          <strong>Én laks opptil {catchSize.largeSalmonMaximumCm} cm</strong>
+          <span>
+            {t("copy.fra.2897b0f")} {metadata.shortVersionLabel}
+          </span>
+          <strong>
+            {selectLocalized(
+              language,
+              `Én laks opptil ${catchSize.largeSalmonMaximumCm} cm`,
+              `One salmon up to ${catchSize.largeSalmonMaximumCm} cm`,
+            )}
+          </strong>
         </p>
         <p>
-          <span>Øvrige avlivede laks</span>
-          <strong>Under {catchSize.regularSalmonMaximumCm} cm</strong>
+          <span>{t("copy.vrige.avlivede.laks.2038bef")}</span>
+          <strong>
+            {t("copy.under.2a268b8")} {catchSize.regularSalmonMaximumCm} cm
+          </strong>
         </p>
         <small>
-          Minstemålet er {catchSize.minimumCm} cm. Regelversjon {metadata.numericVersionLabel} er
-          brukt.
+          {selectLocalized(
+            language,
+            `Minstemålet er ${catchSize.minimumCm} cm. Regelversjon ${metadata.numericVersionLabel} er brukt.`,
+            `The minimum size is ${catchSize.minimumCm} cm. Rule version ${metadata.numericVersionLabel} was applied.`,
+          )}
         </small>
       </div>
       <div className="report-summary">
         <p>
           <b>
-            {species} · {result.toLowerCase()}
+            {t(species)} · {t(result).toLowerCase()}
           </b>
           <small>
             {lengthNumber} cm · {weightNumber} kg
@@ -72,17 +88,23 @@ export function CatchReviewStep({
         </p>
         <p>
           <b>{activeZone}</b>
-          <small>Fangsttid {formatClock(caughtAt)} · økt og sone er lagt til automatisk</small>
+          <small>
+            {selectLocalized(
+              language,
+              `Fangsttid ${formatClock(caughtAt)} · økt og sone er lagt til automatisk`,
+              `Catch time ${formatClock(caughtAt)} · session and zone added automatically`,
+            )}
+          </small>
         </p>
         {imageName && (
           <p>
-            <b>Bilde vedlagt</b>
+            <b>{t("copy.bilde.vedlagt.093df22")}</b>
             <small>{imageName}</small>
           </p>
         )}
         {comment && (
           <p>
-            <b>Kommentar</b>
+            <b>{t("copy.kommentar.19c85a8")}</b>
             <small>{comment}</small>
           </p>
         )}
@@ -96,10 +118,8 @@ export function CatchReviewStep({
               onChange={(event) => setViolationConfirmed(event.target.checked)}
             />
             <span>
-              <b>Jeg forstår at avlivingen ikke var tillatt</b>
-              <small>
-                Opplysningene over er riktige, og rapporten skal vise det som faktisk skjedde.
-              </small>
+              <b>{t("copy.jeg.forstar.at.avlivingen.ikke.var.tillatt.6cbacec")}</b>
+              <small>{t("catch.confirmAccuracy")}</small>
             </span>
           </label>
           <button
@@ -107,17 +127,17 @@ export function CatchReviewStep({
             disabled={!violationConfirmed || isSubmitting}
             onClick={submit}
           >
-            {isSubmitting ? "Sender …" : "Send inn faktisk fangst"}
+            {t(isSubmitting ? "Sender …" : "Send inn faktisk fangst")}
           </button>
         </>
       ) : (
         <button className="primary" disabled={isSubmitting} onClick={submit}>
-          {isSubmitting ? "Sender …" : "Send fangstrapport"}
+          {t(isSubmitting ? "Sender …" : "Send fangstrapport")}
         </button>
       )}
-      <FormError message={submissionError} />
+      <FormError message={submissionError ? t(submissionError) : undefined} />
       <button className="secondary" onClick={() => setStep(2)}>
-        Tilbake og endre
+        {t("copy.tilbake.og.endre.7334721")}
       </button>
     </>
   );

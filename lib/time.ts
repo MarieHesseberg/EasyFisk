@@ -8,22 +8,13 @@ export function formatDuration(seconds: number): string {
     .join(":");
 }
 
-export function formatClock(time: number | null): string {
+export function formatClock(time: number | null, language: AppLanguage = "no"): string {
   if (!time) return "--:--";
-
-  return new Intl.DateTimeFormat("nb-NO", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(new Date(time));
+  return formatTime(time, language);
 }
 
-export function formatLongDuration(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  if (hours) return `${hours} t ${minutes} min`;
-  if (minutes) return `${minutes} min ${remainingSeconds} sek`;
-  return `${remainingSeconds} sek`;
+export function formatLongDuration(seconds: number, language: AppLanguage = "no"): string {
+  return formatDurationValue(seconds, language);
 }
+import type { AppLanguage } from "@/locales";
+import { formatDurationValue, formatTime } from "@/lib/localization-format";

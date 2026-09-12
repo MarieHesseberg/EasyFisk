@@ -17,14 +17,11 @@ import {
 } from "@/domain/statistics/river-statistics";
 import { FishingActivityScreen } from "@/features/fishing-session/fishing-activity-screen";
 import { PersonalStatisticsPanel } from "@/features/statistics/personal-statistics-panel";
-
-const numberFormatter = new Intl.NumberFormat("nb-NO");
-const decimalFormatter = new Intl.NumberFormat("nb-NO", {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
+import { useLanguage } from "@/components/localization/language-provider";
+import { formatDecimal, formatNumber } from "@/lib/localization-format";
 
 export function StatisticsOverview() {
+  const { language, t } = useLanguage();
   const latest = mandalselvaSeasonStatistics.at(-1)!;
   const [selectedYear, setSelectedYear] = useState(latest.year);
   const selectedIndex = mandalselvaSeasonStatistics.findIndex(({ year }) => year === selectedYear);
@@ -37,11 +34,11 @@ export function StatisticsOverview() {
   return (
     <>
       <div className="filter-row">
-        <span>Hele Mandalselva</span>
+        <span>{t("copy.hele.mandalselva.cfd16f7")}</span>
         <label>
-          <span>Sesong</span>
+          <span>{t("copy.sesong.a17a572")}</span>
           <select
-            aria-label="Velg sesong"
+            aria-label={t("copy.velg.sesong.b85e3c2")}
             value={selectedYear}
             onChange={(event) => setSelectedYear(Number(event.target.value))}
           >
@@ -54,39 +51,45 @@ export function StatisticsOverview() {
         </label>
       </div>
       <section className="hero-stat">
-        <small>RAPPORTERT LAKS · {selected.year}</small>
-        <strong>{numberFormatter.format(selected.salmonCount)}</strong>
+        <small>
+          {t("copy.rapportert.laks.7823afb")} · {selected.year}
+        </small>
+        <strong>{formatNumber(selected.salmonCount, language)}</strong>
         <div>
-          <span>Offisiell fangststatistikk</span> for hele Mandalselva
+          <span>{t("copy.offisiell.fangststatistikk.0837bf8")}</span>{" "}
+          {t("copy.for.hele.mandalselva.2d78096")}
         </div>
       </section>
       <div className="stat-grid">
         <Stat
           icon="fish"
-          label="LAKS · KILOGRAM"
-          value={numberFormatter.format(selected.salmonWeightKg)}
+          label={t("copy.laks.kilogram.5e38fbb")}
+          value={formatNumber(selected.salmonWeightKg, language)}
         />
         <Stat
           icon="stats"
-          label="SNITTVEKT LAKS"
-          value={`${decimalFormatter.format(calculateAverageWeight(selected))} kg`}
+          label={t("copy.snittvekt.laks.f8afee9")}
+          value={`${formatDecimal(calculateAverageWeight(selected), language)} kg`}
         />
         <Stat
           icon="fish"
-          label="SJØØRRET · ANTALL"
-          value={numberFormatter.format(selected.seaTroutCount)}
+          label={t("copy.sj.rret.antall.c5d032c")}
+          value={formatNumber(selected.seaTroutCount, language)}
         />
         <Stat
           icon="clock"
-          label="ENDRING FRA ÅRET FØR"
+          label={t("copy.endring.fra.aret.f.r.e9b671e")}
           value={
-            change === null ? "–" : `${change > 0 ? "+" : ""}${decimalFormatter.format(change)} %`
+            change === null ? "–" : `${change > 0 ? "+" : ""}${formatDecimal(change, language)} %`
           }
         />
       </div>
       <section className="chart-card">
-        <h3>Rapportert laks per sesong</h3>
-        <div className="bar-chart" aria-label="Antall rapporterte laks fra 2021 til 2025">
+        <h3>{t("copy.rapportert.laks.per.sesong.f5f5c8c")}</h3>
+        <div
+          className="bar-chart"
+          aria-label={t("copy.antall.rapporterte.laks.fra.2021.til.2025.e039899")}
+        >
           {mandalselvaSeasonStatistics.map(({ year, salmonCount }) => (
             <div key={year} className={year === selectedYear ? "selected" : undefined}>
               <span style={{ height: `${(salmonCount / maximumCatch) * 100}%` }} />
@@ -96,12 +99,12 @@ export function StatisticsOverview() {
         </div>
       </section>
       <p className="privacy-note">
-        Kilde:{" "}
+        {t("copy.kilde.19613cc")}{" "}
         <a href={mandalselvaStatisticsSource.url} target="_blank" rel="noreferrer">
-          {mandalselvaStatisticsSource.label}
+          {t(mandalselvaStatisticsSource.label)}
         </a>
-        , {mandalselvaStatisticsSource.updatedLabel}. Tallene gjelder hele vassdraget og er ikke
-        fordelt på fiskesoner.
+        , {t(mandalselvaStatisticsSource.updatedLabel)}.{" "}
+        {t("copy.tallene.gjelder.hele.vassdraget.og.er.ikke.forde.d5fb770")}
       </p>
     </>
   );
@@ -143,24 +146,28 @@ export function StatisticsScreen({
   startTime: number | null;
   sessions: SessionRecord[];
 }) {
+  const { t } = useLanguage();
   const [view, setView] = useState<"general" | "mine">(active || openMine ? "mine" : "general");
   return (
     <div className="screen">
-      <ScreenHeader title="Statistikk" eyebrow="FANGST, INNSATS OG HISTORIKK" />
+      <ScreenHeader
+        title={t("copy.statistikk.46cd4af")}
+        eyebrow={t("copy.fangst.innsats.og.historikk.76981fa")}
+      />
       <div className="stats-tabs">
         <button
           className={view === "general" ? "selected" : ""}
           aria-pressed={view === "general"}
           onClick={() => setView("general")}
         >
-          Generell statistikk
+          {t("copy.generell.statistikk.e3d13df")}
         </button>
         <button
           className={view === "mine" ? "selected" : ""}
           aria-pressed={view === "mine"}
           onClick={() => setView("mine")}
         >
-          Min fangst og fiskehistorikk
+          {t("copy.min.fangst.og.fiskehistorikk.8f3bbeb")}
         </button>
       </div>
       {view === "general" ? (

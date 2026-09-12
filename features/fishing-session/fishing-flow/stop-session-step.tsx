@@ -1,6 +1,6 @@
 import { FlowTitle } from "@/components/ui/flow-title";
 import { formatClock, formatLongDuration } from "@/lib/time";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function StopSessionStep({
   cancel,
   elapsed,
@@ -14,36 +14,37 @@ export function StopSessionStep({
   startTime: number | null;
   zoneName: string;
 }) {
+  const { language, t } = useLanguage();
   return (
     <div className="flow-content">
       <FlowTitle
         icon="clock"
         eyebrow="AVSLUTT FISKEØKT"
-        title="Fikk du fangst?"
+        title={t("copy.fikk.du.fangst.c3aa311")}
         text="Alle økter lagres, også når du ikke fikk fisk. Dette gir bedre kunnskap om fiskeinnsatsen."
       />
       <div className="stop-summary">
         <span>
-          <small>SONE</small>
-          <b>{zoneName}</b>
+          <small>{t("copy.sone.e4076c9")}</small>
+          <b>{t(zoneName)}</b>
         </span>
         <span>
-          <small>START</small>
-          <b>{formatClock(startTime)}</b>
+          <small>{t("copy.start.7196e7c")}</small>
+          <b>{formatClock(startTime, language)}</b>
         </span>
         <span>
-          <small>VARIGHET</small>
-          <b>{formatLongDuration(elapsed)}</b>
+          <small>{t("copy.varighet.14840d9")}</small>
+          <b>{formatLongDuration(elapsed, language)}</b>
         </span>
       </div>
       <button className="primary" onClick={() => finish(false)}>
-        Nei · registrer nullfangst
+        {t("copy.nei.registrer.nullfangst.aba2116")}
       </button>
       <button className="secondary" onClick={() => finish(true)}>
-        Ja · registrer manglende fangst
+        {t("copy.ja.registrer.manglende.fangst.2f70227")}
       </button>
       <button className="text-button" onClick={cancel}>
-        Fortsett å fiske
+        {t("copy.fortsett.a.fiske.38ab047")}
       </button>
     </div>
   );

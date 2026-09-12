@@ -4,6 +4,7 @@ out/
 coverage/
 playwright-report/
 test-results/
+tmp/pdfs/
 *.log
 .env
 .env.*

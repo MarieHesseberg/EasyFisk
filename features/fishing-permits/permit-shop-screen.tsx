@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import type { ZoneId } from "@/domain/zones/zone";
 import { PermitShop } from "@/features/fishing-permits/permit-shop";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function PermitShopScreen({
   initialZone,
@@ -20,9 +21,13 @@ export function PermitShopScreen({
   onRegisterFee: () => void;
   onRegisterDisinfection: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <div className="screen permit-shop-screen">
-      <ScreenHeader title="Kjøp fiskekort" eyebrow="DAGSKORT, SESONGKORT OG GRUPPEKORT" />
+      <ScreenHeader
+        title={t("copy.kj.p.fiskekort.d32ea04")}
+        eyebrow={t("copy.dagskort.sesongkort.og.gruppekort.9c08652")}
+      />
       <PermitShop
         initialZone={initialZone}
         onPermitPurchased={onPermitPurchased}

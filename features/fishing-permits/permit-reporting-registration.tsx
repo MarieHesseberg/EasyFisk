@@ -1,5 +1,5 @@
 "use client";
-
+import { selectLocalized } from "@/locales";
 import { useMemo, useState } from "react";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/domain/fishing-permits/permit-reporting-day";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
-
+import { useLanguage } from "@/components/localization/language-provider";
 export function PermitReportingRegistration({
   product,
   documents,
@@ -23,6 +23,7 @@ export function PermitReportingRegistration({
   back: () => void;
   save: (record: PermitReportingDay) => OperationResult<void>;
 }) {
+  const { language, t } = useLanguage();
   const [fishingDate, setFishingDate] = useState(() =>
     new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
   );
@@ -32,7 +33,6 @@ export function PermitReportingRegistration({
     () => findQualifyingSeasonPermit(documents, product, fishingDate),
     [documents, fishingDate, product],
   );
-
   function submit() {
     if (!seasonPermit) return;
     const record = {
@@ -42,31 +42,38 @@ export function PermitReportingRegistration({
     const result = save(record);
     setMessage(
       result.ok
-        ? outcome === "pending"
-          ? "Rapporteringsdøgnet er registrert. Fangst eller nullfangst kan føres senere."
-          : outcome === "catch"
-            ? "Rapporteringsdøgnet er registrert med fangststatus."
-            : "Rapporteringsdøgnet er registrert som nullfangst."
-        : result.error,
+        ? selectLocalized(
+            language,
+            outcome === "pending"
+              ? "Rapporteringsdøgnet er registrert. Fangst eller nullfangst kan føres senere."
+              : outcome === "catch"
+                ? "Rapporteringsdøgnet er registrert med fangststatus."
+                : "Rapporteringsdøgnet er registrert som nullfangst.",
+            outcome === "pending"
+              ? "The reporting day has been registered. A catch or no catch can be recorded later."
+              : outcome === "catch"
+                ? "The reporting day has been registered with a catch."
+                : "The reporting day has been registered with no catch.",
+          )
+        : t(result.error),
     );
   }
-
   return (
-    <section className="permit-checkout" aria-label="Registrer rapporteringsdøgn">
+    <section className="permit-checkout" aria-label={t("copy.registrer.rapporteringsd.gn.9349d4d")}>
       <button className="back" type="button" onClick={back}>
-        ‹ Tilbake til fiskekort
+        {t("copy.tilbake.til.fiskekort.bcb4b52")}
       </button>
       <div className="permit-test-warning">
-        <b>Rapporteringskort – ingen betaling</b>
-        <span>Dette registrerer et fiskedøgn for et eksisterende sesongkort.</span>
+        <b>{t("copy.rapporteringskort.ingen.betaling.6290b3a")}</b>
+        <span>{t("copy.dette.registrerer.et.fisked.gn.for.et.eksisteren.efaab3e")}</span>
       </div>
       <article>
-        <small>{product.areaName}</small>
-        <h3>{product.title}</h3>
-        <p>{product.validity.label}</p>
+        <small>{t(product.areaName)}</small>
+        <h3>{t(product.title)}</h3>
+        <p>{t(product.validity.label)}</p>
       </article>
       <label className="permit-test-date">
-        Fiskedato
+        {t("copy.fiskedato.bc8f11c")}
         <input
           type="date"
           value={fishingDate}
@@ -78,12 +85,18 @@ export function PermitReportingRegistration({
       </label>
       {!seasonPermit ? (
         <div className="permit-payment-result error" role="alert">
-          <b>Gyldig sesongkort mangler</b>
-          <span>Registrer et sesongkort for {product.areaName} som dekker valgt fiskedøgn.</span>
+          <b>{t("copy.gyldig.sesongkort.mangler.a77ca4f")}</b>
+          <span>
+            {selectLocalized(
+              language,
+              `Registrer et sesongkort for ${product.areaName} som dekker valgt fiskedøgn.`,
+              `Register a season permit for ${t(product.areaName)} that covers the selected fishing day.`,
+            )}
+          </span>
         </div>
       ) : (
         <fieldset>
-          <legend>Rapportstatus</legend>
+          <legend>{t("copy.rapportstatus.f17eed4")}</legend>
           {Object.entries(permitReportingOutcomeLabels).map(([value, label]) => (
             <label key={value}>
               <input
@@ -92,13 +105,13 @@ export function PermitReportingRegistration({
                 checked={outcome === value}
                 onChange={() => setOutcome(value as PermitReportingOutcome)}
               />
-              {label}
+              {t(label)}
             </label>
           ))}
         </fieldset>
       )}
       <button className="primary" type="button" disabled={!seasonPermit} onClick={submit}>
-        Registrer rapporteringsdøgn
+        {t("copy.registrer.rapporteringsd.gn.9349d4d")}
       </button>
       {message && (
         <div className="permit-payment-result success" role="status" aria-live="polite">

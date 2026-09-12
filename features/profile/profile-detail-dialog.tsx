@@ -7,6 +7,7 @@ import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
 import type { ZoneId } from "@/domain/zones/zone";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
+import { useLanguage } from "@/components/localization/language-provider";
 
 export function ProfileDetailDialog({
   destination,
@@ -29,8 +30,9 @@ export function ProfileDetailDialog({
   onGoHome?: () => void;
   paymentOutcome?: PrototypePaymentOutcome;
 }) {
+  const { t } = useLanguage();
   const dialogRef = useDialogAccessibility(close);
-  const title = detailTitles[destination];
+  const title = t(detailTitles[destination]);
   return (
     <AppDialogPortal>
       <div
@@ -42,9 +44,9 @@ export function ProfileDetailDialog({
         tabIndex={-1}
       >
         <button className="back" onClick={close}>
-          ‹ Tilbake
+          ‹ {t("copy.tilbake.4fb8dc1")}
         </button>
-        <small>PROTOTYPEVISNING</small>
+        <small>{t("copy.prototypevisning.cbf5fb2")}</small>
         <h2 id="detail-title">{title}</h2>
         {destination === "feedback" ? (
           <FeedbackForm />

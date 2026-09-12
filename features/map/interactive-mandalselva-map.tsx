@@ -8,6 +8,7 @@ import {
   type MapCoordinate,
 } from "@/data/map/mandalselva-zone-boundaries";
 import type { FishingZone, ZoneId } from "@/domain/zones/zone";
+import { useLanguage } from "@/components/localization/language-provider";
 
 const tileUrl = "https://{s}-kartcache.nrk.no/tiles/ut_topo_light/{z}/{x}/{y}.jpg";
 
@@ -22,6 +23,7 @@ export function InteractiveMandalselvaMap({
   setSelected: (zone: ZoneId) => void;
   userPosition: MapCoordinate | null;
 }) {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const polygonRefs = useRef(new Map<ZoneId, Polygon>());
@@ -72,7 +74,10 @@ export function InteractiveMandalselvaMap({
             setSelectedRef.current(zone.id);
             setShowDetails(true);
           });
-        polygon.bindTooltip(`Sone ${zone.id}`, { sticky: true, direction: "top" });
+        polygon.bindTooltip(`${t("copy.sone.44f1e2e")} ${zone.id}`, {
+          sticky: true,
+          direction: "top",
+        });
         polygons.set(zone.id, polygon);
       }
 
@@ -86,7 +91,7 @@ export function InteractiveMandalselvaMap({
       mapRef.current = null;
       polygons.clear();
     };
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     for (const zone of mandalselvaMapZones) {
@@ -113,11 +118,11 @@ export function InteractiveMandalselvaMap({
           fillOpacity: 1,
           weight: 3,
         })
-        .bindTooltip("Din posisjon")
+        .bindTooltip(t("copy.din.posisjon.90b81f2"))
         .addTo(mapRef.current!);
       mapRef.current?.panTo(userPosition);
     });
-  }, [userPosition]);
+  }, [t, userPosition]);
 
   function showEntireRiver() {
     mapRef.current?.fitBounds(mandalselvaMapBounds, { padding: [12, 12] });
@@ -130,8 +135,11 @@ export function InteractiveMandalselvaMap({
   }
 
   return (
-    <section className="interactive-river-map" aria-label="Interaktivt kart over Mandalselva">
-      <div className="map-zone-switcher" aria-label="Velg hovedsone">
+    <section
+      className="interactive-river-map"
+      aria-label={t("copy.interaktivt.kart.over.mandalselva.6c7ebf7")}
+    >
+      <div className="map-zone-switcher" aria-label={t("copy.velg.hovedsone.05c8f59")}>
         {zones.map((zone) => (
           <button
             key={zone.id}
@@ -139,44 +147,41 @@ export function InteractiveMandalselvaMap({
             aria-pressed={zone.id === selected}
             onClick={() => selectZone(zone.id)}
           >
-            Sone {zone.id}
+            {t("copy.sone.44f1e2e")} {zone.id}
           </button>
         ))}
         <button type="button" onClick={showEntireRiver}>
-          Hele elva
+          {t("copy.hele.elva.6fb7361")}
         </button>
       </div>
       <div
         ref={containerRef}
         className="leaflet-map-canvas"
-        aria-label="Kart med grensene for fiskesone 1 til 4"
+        aria-label={t("copy.kart.med.grensene.for.fiskesone.1.til.4.3182034")}
       />
       {showDetails && selectedZone && (
         <article className="map-zone-popup" aria-live="polite">
           <button
             type="button"
             className="map-zone-popup-close"
-            aria-label="Lukk soneinformasjon"
+            aria-label={t("copy.lukk.soneinformasjon.593582a")}
             onClick={() => setShowDetails(false)}
           >
             ×
           </button>
-          <small>VALGT FISKEOMRÅDE</small>
-          <h2>{selectedZone.name}</h2>
-          <p>{selectedZone.desc}</p>
+          <small>{t("copy.valgt.fiskeomrade.20c5ede")}</small>
+          <h2>{t(selectedZone.name)}</h2>
+          <p>{t(selectedZone.desc)}</p>
           <a
             href={mandalselvaMapZones.find((zone) => zone.id === selected)?.sourceUrl}
             target="_blank"
             rel="noreferrer"
           >
-            Se offisiell soneinformasjon ↗
+            {t("copy.se.offisiell.soneinformasjon.339f256")}
           </a>
         </article>
       )}
-      <p className="map-source-note">
-        Sonegrensene er basert på koordinatene i Norske Lakseelvers publiserte kart. Fysisk
-        oppmerking langs elva gjelder ved avvik.
-      </p>
+      <p className="map-source-note">{t("map.boundarySourceNote")}</p>
     </section>
   );
 }

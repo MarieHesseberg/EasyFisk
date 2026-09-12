@@ -1,6 +1,6 @@
 import type { DocumentsRepository } from "@/data/contracts/documents-repository";
 import { isFishingDocument } from "@/domain/documents/validate-document";
-import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
+import { operationSucceeded, technicalOperationFailed } from "@/domain/shared/operation-result";
 import { logger } from "@/lib/logger";
 
 // IndexedDB lagrer vedlegg uten å fylle den langt mindre localStorage-kvoten.
@@ -39,27 +39,21 @@ export function createBrowserDocumentsRepository(): DocumentsRepository {
       try {
         const records: unknown[] = await transaction("readonly", (store) => store.getAll());
         if (!records.every(isFishingDocument))
-          return operationFailed(
-            "Dokumentlageret inneholder ugyldige data. Ingen dokumenter er slettet.",
-          );
+          return technicalOperationFailed("storage.invalid-data");
         return operationSucceeded(records.sort((a, b) => b.updatedAt - a.updatedAt));
       } catch (cause) {
         logger.error("Dokumentlageret kunne ikke leses.");
-        return operationFailed("Kunne ikke lese dokumentene på enheten. Prøv igjen.", cause);
+        return technicalOperationFailed("storage.read", cause);
       }
     },
     async save(document) {
       try {
-        if (!isFishingDocument(document))
-          return operationFailed("Dokumentet inneholder ugyldige opplysninger.");
+        if (!isFishingDocument(document)) return technicalOperationFailed("storage.invalid-data");
         await transaction("readwrite", (store) => store.put(document));
         return operationSucceeded(undefined);
       } catch (cause) {
         logger.error("Dokumentlagring mislyktes.");
-        return operationFailed(
-          "Kunne ikke lagre dokumentet. Lagring kan være blokkert eller full. Opplysningene er fortsatt i skjemaet.",
-          cause,
-        );
+        return technicalOperationFailed("storage.write", cause);
       }
     },
     async remove(id) {
@@ -67,7 +61,7 @@ export function createBrowserDocumentsRepository(): DocumentsRepository {
         await transaction("readwrite", (store) => store.delete(id));
         return operationSucceeded(undefined);
       } catch (cause) {
-        return operationFailed("Kunne ikke slette dokumentet.", cause);
+        return technicalOperationFailed("storage.delete", cause);
       }
     },
   };
