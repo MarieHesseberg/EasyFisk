@@ -16,17 +16,14 @@ export function DocumentsPanel({
   kind,
   testDocument,
   allowManualRegistration = true,
-  enableDisinfectorApproval = false,
 }: {
   kind: DocumentKind;
   testDocument?: FishingDocument | null;
   allowManualRegistration?: boolean;
-  enableDisinfectorApproval?: boolean;
 }) {
   const { language, t } = useLanguage();
   const store = useDocuments();
-  const [editing, setEditing] = useState<FishingDocument | "new" | "disinfector" | null>(null);
-  const [approvalTimestamp, setApprovalTimestamp] = useState<number | null>(null);
+  const [editing, setEditing] = useState<FishingDocument | "new" | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const guidance = documentGuidance[kind];
@@ -62,61 +59,20 @@ export function DocumentsPanel({
         <DocumentCard document={testDocument} isMock />
       ) : editing ? (
         <DocumentForm
-          key={typeof editing === "string" ? editing : editing.id}
+          key={editing === "new" ? "new" : editing.id}
           kind={kind}
-          initial={typeof editing === "string" ? undefined : editing}
-          initialValues={
-            editing === "disinfector"
-              ? { issuer: "Mandalselva Villakssenter", performedAt: localDateTimeNow() }
-              : undefined
-          }
-          verification={
-            editing === "disinfector"
-              ? {
-                  method: "disinfector-approved",
-                  verifierName: "Kari Desinfektør",
-                  verifierRole: "Godkjent desinfektør · Mandalselva Villakssenter",
-                  verifiedAt: approvalTimestamp ?? 0,
-                }
-              : { method: "manual" }
-          }
+          initial={editing === "new" ? undefined : editing}
+          verification={{ method: "manual" }}
           cancel={() => setEditing(null)}
           save={async (document) => {
             const result = await store.save(document);
             if (result.ok) {
               setEditing(null);
-              setMessage(
-                document.verification?.method === "disinfector-approved"
-                  ? "documents.disinfectionApprovedAndSaved"
-                  : "documents.manualDocumentSaved",
-              );
+              setMessage("documents.manualDocumentSaved");
             }
             return result;
           }}
         />
-      ) : enableDisinfectorApproval ? (
-        <div className="document-entry-actions">
-          <section
-            className="document-verifier-card"
-            aria-label={t("documents.disinfectorProfile")}
-          >
-            <small>{t("documents.activeRole")}</small>
-            <h3>{t("documents.disinfectorProfile")}</h3>
-            <p>{t("documents.disinfectorPrototypeDescription")}</p>
-            <button
-              className="primary"
-              onClick={() => {
-                setApprovalTimestamp(Date.now());
-                setEditing("disinfector");
-              }}
-            >
-              {t("documents.approveDisinfection")}
-            </button>
-          </section>
-          <button className="secondary" onClick={() => setEditing("new")}>
-            {t("documents.addDisinfectionManually")}
-          </button>
-        </div>
       ) : allowManualRegistration ? (
         <button
           className="primary"
@@ -125,8 +81,11 @@ export function DocumentsPanel({
             setMessage("");
           }}
         >
-          {selectLocalized(language, "Registrer", "Register")}{" "}
-          {t(documentTitles[kind]).toLocaleLowerCase(selectLocalized(language, "nb", "en"))}
+          {kind === "disinfection"
+            ? t("documents.addDisinfectionManually")
+            : `${selectLocalized(language, "Registrer", "Register")} ${t(
+                documentTitles[kind],
+              ).toLocaleLowerCase(selectLocalized(language, "nb", "en"))}`}
         </button>
       ) : null}
       {!isMockView &&
@@ -156,10 +115,4 @@ export function DocumentsPanel({
         ))}
     </section>
   );
-}
-
-function localDateTimeNow() {
-  const date = new Date();
-  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-  return date.toISOString().slice(0, 16);
 }

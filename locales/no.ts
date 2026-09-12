@@ -24,11 +24,14 @@ export const no = {
     "Opplysningene og eventuelle vedlegg lagres ukryptert i denne nettleseren. Andre som bruker samme nettleserprofil kan se dem, og sletting av nettleserdata kan fjerne dem.",
   "documents.permitsOnlyFromShop":
     "Fiskekort utstedes gjennom kjøpsflyten i appen. Det er ikke mulig å opprette et fiskekort manuelt.",
-  "documents.disinfectorProfile": "Desinfektørprofil",
-  "documents.activeRole": "AKTIV ROLLE I PROTOTYPEN",
-  "documents.disinfectorPrototypeDescription":
-    "En godkjent desinfektør kan registrere utført behandling direkte på fiskerens profil. Identiteten må verifiseres av elveeigarlaget i en ferdig løsning.",
-  "documents.approveDisinfection": "Godkjenn desinfisering",
+  "documents.howApprovalWorksEyebrow": "GODKJENNING FRA STASJON",
+  "documents.howApprovalWorks": "Slik får du desinfisering i appen",
+  "documents.approvalStepOne": "Oppgi navnet eller fisker-ID-en din på desinfiseringsstasjonen.",
+  "documents.approvalStepTwo":
+    "Stasjonen registrerer behandlingen og sender godkjenningen til profilen din.",
+  "documents.approvalStepThree": "Godkjenningen vises automatisk her og i statuskontrollen.",
+  "documents.approvalPrototypeNote":
+    "Digital godkjenning fra stasjonen er planlagt, men simuleres ikke i denne fiskerprototypen.",
   "documents.addDisinfectionManually": "Legg til eksisterende bevis manuelt",
   "documents.disinfectorApproved": "Godkjent i appen av {name}",
   "documents.approverRole": "Godkjenner: {role}",
@@ -37,6 +40,7 @@ export const no = {
     "Desinfiseringen er godkjent og lagret på fiskerens profil.",
   "documents.manualDocumentSaved":
     "Dokumentet er lagret på denne enheten. Ikke eksternt verifisert.",
+  "documents.noPermitPurchased": "Ingen fiskekort kjøpt ennå",
   "documents.permitGuidance":
     "Her vises fiskekort som er utstedt gjennom kjøpsflyten i EasyFisk. Sesongkort kan også kreve et eget rapporteringskort for hvert fiskedøgn.",
   "documents.disinfectionGuidance":

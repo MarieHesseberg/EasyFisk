@@ -81,10 +81,14 @@ export function DocumentOverview({
                               `${count} registrert · utløpt eller må fornyes`,
                               `${count} registered · expired or must be renewed`,
                             )
-                        : t("content.6ff5ce507757")}
+                        : kind === "permit"
+                          ? t("documents.noPermitPurchased")
+                          : t("content.6ff5ce507757")}
               </small>
             </span>
-            <span aria-hidden="true">{isTestData && isValid ? "✓" : "＋"}</span>
+            <span aria-hidden="true">
+              {isTestData && isValid ? "✓" : kind === "permit" ? "›" : "＋"}
+            </span>
           </button>
         );
       })}

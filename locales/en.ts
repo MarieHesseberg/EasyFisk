@@ -26,11 +26,14 @@ export const en = {
     "The details and attachments are stored unencrypted in this browser. Others using the same browser profile can view them, and clearing browser data may remove them.",
   "documents.permitsOnlyFromShop":
     "Fishing permits are issued through the in-app purchase flow. A fishing permit cannot be created manually.",
-  "documents.disinfectorProfile": "Disinfector profile",
-  "documents.activeRole": "ACTIVE PROTOTYPE ROLE",
-  "documents.disinfectorPrototypeDescription":
-    "An approved disinfector can record completed treatment directly on the angler's profile. The river owners' association must verify this identity in a production solution.",
-  "documents.approveDisinfection": "Approve disinfection",
+  "documents.howApprovalWorksEyebrow": "APPROVAL FROM A STATION",
+  "documents.howApprovalWorks": "How to receive disinfection approval in the app",
+  "documents.approvalStepOne": "Provide your name or angler ID at the disinfection station.",
+  "documents.approvalStepTwo":
+    "The station records the treatment and sends the approval to your profile.",
+  "documents.approvalStepThree": "The approval appears here and in the status check automatically.",
+  "documents.approvalPrototypeNote":
+    "Digital approval from stations is planned, but is not simulated in this angler prototype.",
   "documents.addDisinfectionManually": "Add an existing certificate manually",
   "documents.disinfectorApproved": "Approved in the app by {name}",
   "documents.approverRole": "Approver: {role}",
@@ -39,6 +42,7 @@ export const en = {
     "The disinfection has been approved and saved to the angler's profile.",
   "documents.manualDocumentSaved":
     "The document has been saved on this device. It has not been externally verified.",
+  "documents.noPermitPurchased": "No fishing permit purchased yet",
   "documents.permitGuidance":
     "This page shows fishing permits issued through the EasyFisk purchase flow. Season permits may also require a separate reporting permit for each fishing day.",
   "documents.disinfectionGuidance":

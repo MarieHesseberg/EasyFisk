@@ -283,16 +283,19 @@ test("desinfisering og fiskeravgift kan registreres med relevante opplysninger",
   await expect(dialog.getByRole("heading", { name: "Kari Fisker" })).toBeVisible();
 });
 
-test("desinfektør kan godkjenne desinfisering direkte i appen", async ({ page }) => {
+test("fiskeren får forklaring om digital godkjenning og et manuelt alternativ", async ({
+  page,
+}) => {
   await page.getByRole("button", { name: /Desinfisering/ }).click();
   const dialog = page.getByRole("dialog", { name: "Desinfisering" });
-  await expect(dialog.getByRole("heading", { name: "Desinfektørprofil" })).toBeVisible();
-  await dialog.getByRole("button", { name: "Godkjenn desinfisering" }).click();
-  await dialog.getByLabel("Navn på fiskeren *").fill("Kari Fisker");
-  await dialog.getByLabel("Utstyr som ble desinfisert *").fill("Stang, snelle, vadere og håv");
-  await dialog.getByRole("button", { name: "Lagre dokument" }).click();
-  await expect(dialog.getByText("Godkjent i appen av Kari Desinfektør")).toBeVisible();
-  await expect(dialog.getByText(/Godkjent desinfektør · Mandalselva Villakssenter/)).toBeVisible();
+  await expect(
+    dialog.getByRole("heading", { name: "Slik får du desinfisering i appen" }),
+  ).toBeVisible();
+  await expect(dialog.getByText(/Stasjonen registrerer behandlingen/)).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Godkjenn desinfisering" })).toHaveCount(0);
+  await expect(
+    dialog.getByRole("button", { name: "Legg til eksisterende bevis manuelt" }),
+  ).toBeVisible();
 });
 
 test("hjemskjermen viser en rulleindikator som følger siden", async ({ page }) => {
