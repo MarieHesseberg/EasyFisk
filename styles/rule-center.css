@@ -1,18 +1,20 @@
 .rule-center {
   display: grid;
-  gap: 9px;
+  gap: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 .rule-version {
   display: flex;
   gap: 11px;
-  background: var(--color-primary-dark);
+  background: var(--color-menu-primary);
   color: var(--color-surface);
   border-radius: var(--radius-card-large);
-  padding: 14px;
+  padding: 18px;
 }
 .rule-version > span {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-round);
   background: var(--color-overlay-surface-faint);
   display: grid;
@@ -25,16 +27,16 @@
   gap: var(--space-1);
 }
 .rule-version small {
-  font-size: 7px;
-  letter-spacing: 1.2px;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
   color: var(--palette-blue-050);
 }
 .rule-version b {
-  font-size: 11px;
+  font-size: 1.125rem;
 }
 .rule-version p {
-  font-size: 8px;
-  color: var(--palette-blue-200);
+  font-size: 1rem;
+  color: var(--color-surface);
   margin: 0;
 }
 .season-alert {
@@ -44,17 +46,17 @@
   color: var(--color-warning-text);
   border: 1px solid var(--color-warning-border);
   border-radius: var(--radius-content);
-  padding: 12px;
+  padding: 16px;
 }
 .season-alert svg {
   flex: none;
 }
 .season-alert b {
-  font-size: 10px;
+  font-size: 1.125rem;
 }
 .season-alert p {
-  font-size: 8px;
-  line-height: 1.45;
+  font-size: 1rem;
+  line-height: 1.6;
   margin: 3px 0 0;
 }
 .rule-center article {
@@ -74,16 +76,16 @@
   gap: var(--space-4);
   border: 0;
   background: var(--color-surface);
-  padding: 12px;
+  padding: 16px;
   text-align: left;
   color: var(--color-text);
 }
 .rule-center article > button > span {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-control);
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--color-menu-icon-surface);
+  color: var(--color-menu-primary);
   display: grid;
   place-items: center;
   flex: none;
@@ -93,12 +95,13 @@
   flex-direction: column;
   gap: var(--space-1);
   flex: 1;
+  min-width: 0;
 }
 .rule-center article > button b {
-  font-size: 11px;
+  font-size: 1.125rem;
 }
 .rule-center article > button small {
-  font-size: 8px;
+  font-size: 1rem;
   color: var(--color-text-muted);
 }
 .rule-center article > button i {
@@ -107,36 +110,36 @@
 }
 .rule-body {
   border-top: 1px solid var(--color-border-faint);
-  padding: 5px 12px 9px 56px;
+  padding: 8px 16px;
 }
 .rule-body p {
   display: flex;
   gap: 7px;
-  font-size: 9px;
-  line-height: 1.45;
-  margin: 9px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 12px 0;
   color: var(--color-text-muted);
 }
 .rule-body svg {
   flex: none;
   color: var(--color-primary-accent);
-  margin-top: 1px;
+  margin-top: 5px;
 }
 .rule-sources {
-  background: var(--color-primary-soft);
+  background: var(--color-menu-icon-surface);
   border-radius: var(--radius-content);
-  padding: 12px;
+  padding: 16px;
   margin-top: 4px;
 }
 .rule-sources b {
   display: block;
-  font-size: 9px;
+  font-size: 1rem;
   margin-bottom: 6px;
 }
 .rule-sources a {
   display: block;
   color: var(--color-primary-dark);
-  font-size: 8px;
+  font-size: 1rem;
   line-height: 1.4;
   margin: 5px 0;
   text-decoration: underline;
@@ -150,5 +153,25 @@
   border-radius: var(--radius-compact);
   padding: 11px;
   margin: -5px 0 12px;
-  font-size: 9px;
+  font-size: 1rem;
+}
+
+.rule-center article > button:focus-visible,
+.rule-sources a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+.rule-center article > button b {
+  color: var(--color-menu-primary);
+}
+.rule-center article > button {
+  min-height: 88px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+.rule-sources a {
+  min-height: 44px;
+  align-content: center;
+  padding-block: 8px;
+  text-underline-offset: 3px;
 }
