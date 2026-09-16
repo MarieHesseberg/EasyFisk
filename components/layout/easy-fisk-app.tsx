@@ -1,7 +1,7 @@
 "use client";
 
 import { createPermitJourney } from "@/features/fishing-permits/permit-journey";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
@@ -32,6 +32,7 @@ import { useLanguage } from "@/components/localization/language-provider";
 
 export function EasyFiskApp() {
   const { t } = useLanguage();
+  const [navigationRevision, setNavigationRevision] = useState(0);
   const [catchReportOpen, setCatchReportOpen] = useState(false);
   const { state, actions } = useEasyFiskController();
   const { documents } = useDocuments();
@@ -92,98 +93,104 @@ export function EasyFiskApp() {
   return (
     <main className="prototype-shell">
       <div className="phone-app">
-        {screen === "home" && (
-          <HomeScreen
-            onStart={actions.openSessionFlow}
-            onRegisterCatch={() => setCatchReportOpen(true)}
-            onHistory={actions.openMyHistory}
-            catches={catches}
-            onRules={() => actions.navigate("rules")}
-            onDocument={actions.openDetail}
-            onPastSession={actions.openPastSession}
-            onBuyPermit={openPermitShop}
-            zoneName={findZoneName(contextZone, zones, active ? sessionSubzone : undefined)}
-            active={active}
-            elapsed={elapsed}
-            startTime={startTime}
-            demoStatus={effectiveStatus.status}
-            scenario={effectiveStatus.scenario}
-            documentReadiness={effectiveStatus.readiness}
-            isStatusTestMode={isStatusTestMode}
-            quotaStatus={displayedQuotaStatus}
-          />
-        )}{" "}
-        {screen === "map" && (
-          <MapScreen selected={zone} setSelected={actions.setZone} onBuyPermit={openPermitShop} />
-        )}{" "}
-        {screen === "permits" && (
-          <PermitShopScreen
-            journey={permitJourney}
-            setJourney={setPermitJourney}
-            onZoneChange={actions.setZone}
-            initialZone={zone}
-            paymentOutcome={paymentOutcome}
-            onPermitPurchased={(purchasedZone) => {
-              actions.setZone(purchasedZone);
-            }}
-            onOpenPermits={() => actions.openDetail("permits")}
-            onGoHome={() => actions.navigate("home")}
-            onRegisterFee={() => actions.openDetail("fee")}
-            onRegisterDisinfection={() => actions.openDetail("disinfection")}
-          />
-        )}{" "}
-        {screen === "rules" && (
-          <RulesScreen
-            demoStatus={effectiveStatus.status}
-            selectedZone={contextZone}
-            documents={documents}
-            now={documentCheckTime}
-            onRegisterPermit={openPermitShop}
-          />
-        )}{" "}
-        {screen === "stats" && (
-          <StatisticsScreen
-            active={active}
-            onStart={() => actions.setFlow("start")}
-            onStop={() => actions.setFlow("stop")}
-            onAddPast={actions.addPastSession}
-            onCatch={actions.addCatch}
-            onCorrectCatch={actions.correctCatch}
-            onShowRules={() => actions.navigate("rules")}
-            openMine={statsMineRequested}
-            openPastSession={pastSessionRequested}
-            onCatchFlowComplete={actions.completeCatchFlow}
-            finishAfterCatch={finishAfterCatch}
-            catches={catches}
-            activeZone={findZoneName(sessionZone, zones, sessionSubzone)}
-            requestedCatchTime={requestedCatchTime}
-            elapsed={elapsed}
-            startTime={startTime}
-            sessions={sessions}
-          />
-        )}{" "}
-        {screen === "more" && (
-          <ProfileScreen
-            demoStatus={demoStatus}
-            documentReadiness={effectiveStatus.readiness}
-            isStatusTestMode={isStatusTestMode}
-            selectDemoStatus={actions.selectDemoStatus}
-            useActualStatus={actions.useActualStatus}
-            openStatistics={() => actions.navigate("stats")}
-            openPermitShop={openPermitShop}
-            paymentOutcome={paymentOutcome}
-            setPaymentOutcome={actions.setPaymentOutcome}
-            testDemoStatus={() => {
-              if (!actions.startStatusTest()) return;
-              actions.navigate("home");
-            }}
-          />
-        )}
+        <Fragment key={navigationRevision}>
+          {screen === "home" && (
+            <HomeScreen
+              onStart={actions.openSessionFlow}
+              onRegisterCatch={() => setCatchReportOpen(true)}
+              onHistory={actions.openMyHistory}
+              catches={catches}
+              onRules={() => actions.navigate("rules")}
+              onDocument={actions.openDetail}
+              onPastSession={actions.openPastSession}
+              onBuyPermit={openPermitShop}
+              zoneName={findZoneName(contextZone, zones, active ? sessionSubzone : undefined)}
+              active={active}
+              elapsed={elapsed}
+              startTime={startTime}
+              demoStatus={effectiveStatus.status}
+              scenario={effectiveStatus.scenario}
+              documentReadiness={effectiveStatus.readiness}
+              isStatusTestMode={isStatusTestMode}
+              quotaStatus={displayedQuotaStatus}
+            />
+          )}{" "}
+          {screen === "map" && (
+            <MapScreen selected={zone} setSelected={actions.setZone} onBuyPermit={openPermitShop} />
+          )}{" "}
+          {screen === "permits" && (
+            <PermitShopScreen
+              journey={permitJourney}
+              setJourney={setPermitJourney}
+              onZoneChange={actions.setZone}
+              initialZone={zone}
+              paymentOutcome={paymentOutcome}
+              onPermitPurchased={(purchasedZone) => {
+                actions.setZone(purchasedZone);
+              }}
+              onOpenPermits={() => actions.openDetail("permits")}
+              onGoHome={() => actions.navigate("home")}
+              onRegisterFee={() => actions.openDetail("fee")}
+              onRegisterDisinfection={() => actions.openDetail("disinfection")}
+            />
+          )}{" "}
+          {screen === "rules" && (
+            <RulesScreen
+              demoStatus={effectiveStatus.status}
+              selectedZone={contextZone}
+              documents={documents}
+              now={documentCheckTime}
+              onRegisterPermit={openPermitShop}
+            />
+          )}{" "}
+          {screen === "stats" && (
+            <StatisticsScreen
+              active={active}
+              onStart={() => actions.setFlow("start")}
+              onStop={() => actions.setFlow("stop")}
+              onAddPast={actions.addPastSession}
+              onCatch={actions.addCatch}
+              onCorrectCatch={actions.correctCatch}
+              onShowRules={() => actions.navigate("rules")}
+              openMine={statsMineRequested}
+              openPastSession={pastSessionRequested}
+              onCatchFlowComplete={actions.completeCatchFlow}
+              finishAfterCatch={finishAfterCatch}
+              catches={catches}
+              activeZone={findZoneName(sessionZone, zones, sessionSubzone)}
+              requestedCatchTime={requestedCatchTime}
+              elapsed={elapsed}
+              startTime={startTime}
+              sessions={sessions}
+            />
+          )}{" "}
+          {screen === "more" && (
+            <ProfileScreen
+              demoStatus={demoStatus}
+              documentReadiness={effectiveStatus.readiness}
+              isStatusTestMode={isStatusTestMode}
+              selectDemoStatus={actions.selectDemoStatus}
+              useActualStatus={actions.useActualStatus}
+              openStatistics={() => actions.navigate("stats")}
+              openPermitShop={openPermitShop}
+              paymentOutcome={paymentOutcome}
+              setPaymentOutcome={actions.setPaymentOutcome}
+              testDemoStatus={() => {
+                if (!actions.startStatusTest()) return;
+                actions.navigate("home");
+              }}
+            />
+          )}
+        </Fragment>
         <BottomNavigation
           activeScreen={screen}
-          navigate={(destination) =>
-            destination === "permits" ? openPermitShop() : actions.navigate(destination)
-          }
+          navigate={(destination) => {
+            setCatchReportOpen(false);
+            actions.dismissCatchFlow();
+            setNavigationRevision((revision) => revision + 1);
+            if (destination === "permits") openPermitShop();
+            else actions.navigate(destination);
+          }}
         />
         {toast && (
           <div className="toast" role="status" aria-live="polite" aria-atomic="true">

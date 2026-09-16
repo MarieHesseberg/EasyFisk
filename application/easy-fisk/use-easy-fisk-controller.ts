@@ -147,6 +147,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     state: { ...navigation.state, ...session.state, ...log.state, toast },
     actions: {
       ...navigation.actions,
+      dismissCatchFlow: () => session.actions.setFinishAfterCatch(false),
       addCatch,
       addPastSession,
       cancelCatchBeforeFinish: () => {

@@ -57,7 +57,7 @@ export function FishingFlow({
         ref={dialogRef}
         className="flow-sheet"
         role="dialog"
-        aria-modal="true"
+        aria-modal="false"
         aria-label={t(
           mode === "start" ? "Start fiske" : mode === "stop" ? "Avslutt økt" : "Økt fullført",
         )}

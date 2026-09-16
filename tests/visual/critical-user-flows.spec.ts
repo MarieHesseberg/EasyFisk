@@ -390,7 +390,9 @@ test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", as
   const openedCatchDialog = page.getByRole("dialog", { name: "Registrer fangst" });
   await expect(openedCatchDialog.getByRole("button", { name: "Lukk fangstrapport" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(openedCatchDialog.getByRole("button", { name: "Neste · størrelse" })).toBeFocused();
+  await expect(
+    page.locator(".bottom-nav").getByRole("button", { name: "Mer", exact: true }),
+  ).toBeFocused();
   const dialog = await completeCatchReport(page);
   await dialog.getByRole("button", { name: "Ferdig" }).click();
 
@@ -399,7 +401,9 @@ test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", as
   const detail = page.getByRole("dialog", { name: /Laks · gjenutsatt/i });
   await expect(detail.getByRole("button", { name: "Lukk fangstrapport" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(detail.getByRole("button", { name: "Meld feil i rapporten" })).toBeFocused();
+  await expect(
+    page.locator(".bottom-nav").getByRole("button", { name: "Mer", exact: true }),
+  ).toBeFocused();
   await detail.getByRole("button", { name: "Meld feil i rapporten" }).click();
   await detail.getByLabel("Hva er feil i rapporten?").fill("Korrekt vekt er 3,2 kg.");
   await detail.getByRole("button", { name: "Lagre rettelse lokalt" }).click();
@@ -509,7 +513,9 @@ test("dialoger holder tastaturfokus og kan lukkes med Escape", async ({ page }) 
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(startDialog.getByRole("button", { name: "Lukk" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(startDialog.getByRole("button", { name: "Velg sone manuelt" })).toBeFocused();
+  await expect(
+    page.locator(".bottom-nav").getByRole("button", { name: "Mer", exact: true }),
+  ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(startDialog).toHaveCount(0);
   await expect(trigger).toBeFocused();

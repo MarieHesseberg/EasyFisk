@@ -28,15 +28,12 @@ export function RulesScreen({
     (document) => isPermitValid(document, now) && getPermitZoneId(document) === selectedZone,
   );
   const missing = !permit;
-  const { metadata, quota, reporting } = activeFishingRules;
+  const { quota, reporting } = activeFishingRules;
   const personalZone =
     fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
   return (
     <div className="screen rules-screen">
-      <ScreenHeader
-        title={t("copy.fiskeregler.647b384")}
-        eyebrow={`${metadata.river.toUpperCase()} · ${selectLocalized(language, "REGELVERSJON", "RULE VERSION")} ${metadata.versionLabel.toUpperCase()}`}
-      />
+      <ScreenHeader title={t("copy.fiskeregler.647b384")} />
       <section className={"personal-rules " + (missing ? "missing" : "ready")}>
         <div className="personal-rules-title">
           <span>
@@ -56,7 +53,6 @@ export function RulesScreen({
         {missing ? (
           <>
             <p>{t("rules.missingPermit")}</p>
-            <p>{t(getZoneSeasonLabel(selectedZone))}</p>
             <button onClick={onRegisterPermit}>{t("copy.registrer.fiskekort.8f222df")}</button>
           </>
         ) : (
@@ -109,7 +105,6 @@ export function RulesScreen({
       <div className="general-rules-heading">
         <small>{t("copy.gjelder.alle.fiskere.b103dd0")}</small>
         <h2>{t("copy.generelle.regler.d26a211")}</h2>
-        <p>{t("copy.her.finner.du.hele.regelverket.ogsa.nar.personli.78e4a56")}</p>
       </div>
       <RuleCenter />
     </div>

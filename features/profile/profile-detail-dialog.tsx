@@ -39,7 +39,7 @@ export function ProfileDetailDialog({
         ref={dialogRef}
         className="detail-page"
         role="dialog"
-        aria-modal="true"
+        aria-modal="false"
         aria-labelledby="detail-title"
         tabIndex={-1}
       >

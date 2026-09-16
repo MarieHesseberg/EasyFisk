@@ -31,6 +31,7 @@ export function useDialogAccessibility(
     (focusable ?? dialog).focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
       if (event.key === "Escape" && onCloseRef.current) {
         event.preventDefault();
         onCloseRef.current();
@@ -38,7 +39,11 @@ export function useDialogAccessibility(
       }
 
       if (event.key !== "Tab") return;
-      const elements = [...dialog.querySelectorAll<HTMLElement>(focusableSelector)];
+      const navigation = document.querySelector(".bottom-nav");
+      const elements = [
+        ...dialog.querySelectorAll<HTMLElement>(focusableSelector),
+        ...(navigation?.querySelectorAll<HTMLElement>(focusableSelector) ?? []),
+      ].filter((element) => element.getClientRects().length > 0);
       if (!elements.length) {
         event.preventDefault();
         dialog.focus();
@@ -56,11 +61,14 @@ export function useDialogAccessibility(
       }
     };
 
+    const navigation = document.querySelector(".bottom-nav");
     dialog.addEventListener("keydown", handleKeyDown);
+    navigation?.addEventListener("keydown", handleKeyDown as EventListener);
     return () => {
       dialog.removeEventListener("keydown", handleKeyDown);
+      navigation?.removeEventListener("keydown", handleKeyDown as EventListener);
       document.body.style.overflow = previousOverflow;
-      returnFocus?.focus();
+      if (returnFocus?.isConnected) returnFocus.focus();
     };
   }, [active, returnFocusRef]);
 

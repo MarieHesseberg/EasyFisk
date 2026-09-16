@@ -33,7 +33,7 @@ export function StatusEngineSettingsDialog({
       ref={dialogRef}
       className="detail-page"
       role="dialog"
-      aria-modal="true"
+      aria-modal="false"
       aria-labelledby="status-engine-title"
       tabIndex={-1}
     >

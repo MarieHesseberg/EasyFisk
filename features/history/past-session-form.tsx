@@ -35,7 +35,7 @@ export function PastSessionForm({
           ref={dialogRef}
           className="catch-modal past-session-modal"
           role="dialog"
-          aria-modal="true"
+          aria-modal="false"
           aria-label={t("copy.registrer.tidligere.fisketur.4812b12")}
           tabIndex={-1}
           onClick={(e) => e.stopPropagation()}

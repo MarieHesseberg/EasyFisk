@@ -1,0 +1,26 @@
+/* Keep global navigation available in every in-app flow. */
+.phone-app .bottom-nav {
+  z-index: calc(var(--layer-session-flow) + 10);
+}
+.phone-app .modal-bg,
+.phone-app .flow-overlay,
+.phone-app .detail-page {
+  bottom: calc(83px + env(safe-area-inset-bottom));
+}
+.phone-app .catch-modal,
+.phone-app .past-session-modal,
+.phone-app .flow-sheet {
+  position: relative;
+  max-height: 100%;
+}
+.phone-app .catch-modal > .modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  margin-bottom: -44px;
+  width: 44px;
+  height: 44px;
+}
+.phone-app .catch-modal > .steps {
+  margin-inline: 44px;
+}

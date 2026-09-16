@@ -43,7 +43,7 @@ export function CatchReportModal({
     sessionStart: startTime || caughtAt,
   });
   const { step } = controller.state;
-  const dialogRef = useDialogAccessibility(finishAfterCatch ? undefined : onClose);
+  const dialogRef = useDialogAccessibility(onClose);
 
   function finish() {
     onClose();
@@ -56,7 +56,7 @@ export function CatchReportModal({
         ref={dialogRef}
         className={`catch-modal catch-modal-step-${step}`}
         role="dialog"
-        aria-modal="true"
+        aria-modal="false"
         aria-label={t("copy.registrer.fangst.7ecfe4d")}
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}

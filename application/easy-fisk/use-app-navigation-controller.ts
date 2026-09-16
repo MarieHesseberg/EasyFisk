@@ -19,6 +19,8 @@ export function useAppNavigationController() {
   const [paymentOutcome, setPaymentOutcome] = useState<PrototypePaymentOutcome>("approved");
 
   function navigate(nextScreen: Screen) {
+    setFlow(null);
+    setGlobalDetail(null);
     setPastSessionRequested(false);
     if (nextScreen === "stats") setStatsMineRequested(false);
     setScreen(nextScreen);
