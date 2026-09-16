@@ -11,7 +11,9 @@ export type DemoStatus =
   | "lateReport"
   | "hotWater"
   | "closed"
-  | "zoneBorder";
+  | "zoneBorder"
+  | "zoneInside"
+  | "zoneOutside";
 export type StatusLevel = "ok" | "warning" | "blocked";
 export type DemoScenario = {
   id: DemoStatus;

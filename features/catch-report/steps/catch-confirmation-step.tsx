@@ -39,17 +39,18 @@ export function CatchConfirmationStep({
       </div>
       <small>{t("copy.steg.4.av.4.sendt.439db98")}</small>
       <h2>{t("copy.fangstrapporten.er.sendt.3e0f255")}</h2>
+      <p>{t("prototype.localOnly")}</p>
       <p className="sent-lead">
         {sentCatch?.late
           ? selectLocalized(
               language,
-              `Rapporten ble sendt ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))} etter fangsten og er merket som forsinket.`,
-              `The report was submitted ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000), language)} after the catch and marked as late.`,
+              `Rapporten ble lagret lokalt ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))} etter fangsten og er merket som forsinket.`,
+              `The report was saved locally ${formatLongDuration(Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000), language)} after the catch and marked as late.`,
             )
           : selectLocalized(
               language,
-              `Rapporten ble sendt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på ${reporting.deadlineHours} timer.`,
-              `The report was submitted ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000)), language) : "shortly"} after the catch, within the ${reporting.deadlineHours}-hour deadline.`,
+              `Rapporten ble lagret lokalt ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000))) : "kort tid"} etter fangsten og innen fristen på ${reporting.deadlineHours} timer.`,
+              `The report was saved locally ${sentCatch ? formatLongDuration(Math.max(0, Math.floor((sentCatch.submittedAt - sentCatch.caughtAt) / 1000)), language) : "shortly"} after the catch, within the ${reporting.deadlineHours}-hour deadline.`,
             )}
       </p>
       {sentCatch?.late && (

@@ -1,24 +1,36 @@
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { selectLocalized } from "@/locales";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import { appContentRepository } from "@/data/repositories/app-content";
+import { fishingContentRepository } from "@/data/repositories/fishing-content";
+import { getPermitZoneId, isPermitValid } from "@/domain/documents/get-permit-zones";
+import type { FishingDocument } from "@/domain/documents/fishing-document";
+import type { ZoneId } from "@/domain/zones/zone";
+import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { RuleCenter } from "@/features/rules/rule-center";
 import { useLanguage } from "@/components/localization/language-provider";
 export function RulesScreen({
-  demoStatus,
+  selectedZone = 3,
+  documents = [],
+  now,
   onRegisterPermit,
 }: {
   demoStatus: DemoStatus;
+  selectedZone?: ZoneId;
+  documents?: FishingDocument[];
+  now: number;
   onRegisterPermit: () => void;
 }) {
   const { language, t } = useLanguage();
-  const missing = demoStatus === "noPermit" || demoStatus === "allMissing";
-  const { metadata, quota, reporting, season } = activeFishingRules;
-  const { riverStatus } = appContentRepository.getContent();
+  const permit = documents.find(
+    (document) => isPermitValid(document, now) && getPermitZoneId(document) === selectedZone,
+  );
+  const missing = !permit;
+  const { metadata, quota, reporting } = activeFishingRules;
   const personalZone =
-    demoStatus === "wrongZone" ? riverStatus.alternatePermitZoneName : riverStatus.currentZoneName;
+    fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
   return (
     <div className="screen rules-screen">
       <ScreenHeader
@@ -32,37 +44,38 @@ export function RulesScreen({
           </span>
           <div>
             <small>{t("copy.regler.for.meg.c93f97c")}</small>
-            <h2>{t(missing ? "Registrer fiskekort" : "Tilpasset ditt fiskekort")}</h2>
+            <h2>
+              {selectLocalized(
+                language,
+                `Regler for ${personalZone}`,
+                `Rules for ${localizeZoneName(personalZone, language)}`,
+              )}
+            </h2>
           </div>
         </div>
         {missing ? (
           <>
             <p>{t("rules.missingPermit")}</p>
+            <p>{t(getZoneSeasonLabel(selectedZone))}</p>
             <button onClick={onRegisterPermit}>{t("copy.registrer.fiskekort.8f222df")}</button>
           </>
         ) : (
           <>
             <p className="permit-zone">
               <Icon name="pin" size={17} />
-              <b>{t(personalZone)}</b>
+              <b>{localizeZoneName(personalZone, language)}</b>
               <span>
                 {selectLocalized(
                   language,
-                  `Døgnkort · gyldig til ${riverStatus.permitExpiry}`,
-                  `Day permit · valid until ${riverStatus.permitExpiry}`,
+                  `${permit.values.category ?? "Fiskekort"} · gyldig til ${permit.values.endsAt?.replace("T", " ")}`,
+                  `${t(permit.values.category ?? "Fiskekort")} · valid until ${permit.values.endsAt?.replace("T", " ")}`,
                 )}
               </span>
             </p>
             <div className="personal-rule-list">
               <p>
                 <b>{t("copy.sesong.a17a572")}</b>
-                <span>
-                  {selectLocalized(
-                    language,
-                    season.standardZoneLabel.replace("–", " til "),
-                    season.standardZoneLabel.replace("juni", "June").replace("august", "August"),
-                  )}
-                </span>
+                <span>{t(getZoneSeasonLabel(selectedZone))}</span>
               </p>
               <p>
                 <b>{t("copy.kvote.6932153")}</b>

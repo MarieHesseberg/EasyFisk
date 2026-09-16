@@ -1,13 +1,11 @@
 "use client";
 import { selectLocalized } from "@/locales";
-import { useState } from "react";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { FormError } from "@/components/ui/form-error";
 import { useLanguage } from "@/components/localization/language-provider";
 export function ProfilePrivacyDetail() {
   const { language, t } = useLanguage();
-  const [saved, setSaved] = useState(false);
   const { error, preferences, setPositionSuggestions, setShareAnonymousData } =
     usePreferencesController();
   const { profile } = appContentRepository.getContent();
@@ -62,9 +60,7 @@ export function ProfilePrivacyDetail() {
         </label>
       </div>
       <FormError message={error ? t(error) : undefined} />
-      <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
-        {t(saved ? "Innstillingene er lagret" : "Lagre innstillinger")}
-      </button>
+      <p role="status">{t("settings.autoSave")}</p>
     </div>
   );
 }

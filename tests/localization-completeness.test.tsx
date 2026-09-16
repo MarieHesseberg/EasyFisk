@@ -34,7 +34,9 @@ test("technical errors render as safe English messages", async () => {
     </LanguageProvider>,
   );
 
-  expect((await screen.findByRole("alert")).textContent).toBe(
-    "The data on this device could not be read. Try again.",
-  );
+  await waitFor(() => {
+    expect(screen.getByRole("alert").textContent).toBe(
+      "The data on this device could not be read. Try again.",
+    );
+  });
 });

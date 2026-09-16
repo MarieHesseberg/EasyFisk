@@ -14,20 +14,30 @@ import type { OperationResult } from "@/domain/shared/operation-result";
 import { useLanguage } from "@/components/localization/language-provider";
 export function PermitReportingRegistration({
   product,
+  initialSelectedDate,
+  initialOutcome,
+  onDateChange,
+  onOutcomeChange,
   documents,
   back,
   save,
 }: {
   product: PrototypePermitProduct;
+  initialSelectedDate?: string;
+  initialOutcome?: PermitReportingOutcome;
+  onDateChange?: (date: string) => void;
+  onOutcomeChange?: (outcome: PermitReportingOutcome) => void;
   documents: FishingDocument[];
   back: () => void;
   save: (record: PermitReportingDay) => OperationResult<void>;
 }) {
   const { language, t } = useLanguage();
-  const [fishingDate, setFishingDate] = useState(() =>
-    new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
+  const [fishingDate, setFishingDate] = useState(
+    () =>
+      initialSelectedDate ??
+      new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
   );
-  const [outcome, setOutcome] = useState<PermitReportingOutcome>("pending");
+  const [outcome, setOutcome] = useState<PermitReportingOutcome>(initialOutcome ?? "pending");
   const [message, setMessage] = useState("");
   const seasonPermit = useMemo(
     () => findQualifyingSeasonPermit(documents, product, fishingDate),
@@ -79,6 +89,7 @@ export function PermitReportingRegistration({
           value={fishingDate}
           onChange={(event) => {
             setFishingDate(event.target.value);
+            onDateChange?.(event.target.value);
             setMessage("");
           }}
         />
@@ -103,7 +114,11 @@ export function PermitReportingRegistration({
                 type="radio"
                 name="reporting-outcome"
                 checked={outcome === value}
-                onChange={() => setOutcome(value as PermitReportingOutcome)}
+                onChange={() => {
+                  setOutcome(value as PermitReportingOutcome);
+                  onOutcomeChange?.(value as PermitReportingOutcome);
+                  setMessage("");
+                }}
               />
               {t(label)}
             </label>

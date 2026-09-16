@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { FormError } from "@/components/ui/form-error";
 import { appContentRepository } from "@/data/repositories/app-content";
@@ -9,7 +8,6 @@ import { useLanguage } from "@/components/localization/language-provider";
 
 export function NotificationsDetail() {
   const { t } = useLanguage();
-  const [saved, setSaved] = useState(false);
   const { error, preferences, setNotification } = usePreferencesController();
   const { notificationOptions, notificationStatus } = appContentRepository.getContent().profile;
   return (
@@ -39,9 +37,7 @@ export function NotificationsDetail() {
         ))}
       </div>
       <FormError message={error ? t(error) : undefined} />
-      <button className="primary" disabled={Boolean(error)} onClick={() => setSaved(true)}>
-        {t(saved ? "Varselinnstillinger lagret" : "Lagre varselinnstillinger")}
-      </button>
+      <p role="status">{t("settings.autoSave")}</p>
     </div>
   );
 }

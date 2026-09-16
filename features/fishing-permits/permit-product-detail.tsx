@@ -55,30 +55,15 @@ export function PermitProductDetail({
       <button className="back" type="button" onClick={back}>
         ‹ {selectLocalized(language, "Tilbake til fiskekort", "Back to permits")}
       </button>
-      <small>
-        {selectLocalized(
-          language,
-          "PRODUKTINFORMASJON · KONTROLLERT",
-          "PRODUCT INFORMATION · VERIFIED",
-        )}{" "}
-        {product.source.checkedAt}
-      </small>
       <h2 id="permit-product-title">{t(product.title)}</h2>
       <p className="permit-product-area">{t(product.areaName)}</p>
 
-      <div
-        className="permit-product-map"
-        role="img"
-        aria-label={t("permit.mapLabel", { zone: product.zoneId })}
-      >
-        <span>Mandalselva</span>
-        {[4, 3, 2, 1].map((zoneId) => (
-          <i key={zoneId} className={zoneId === product.zoneId ? "selected" : ""}>
-            {selectLocalized(language, "Sone", "Zone")} {zoneId}
-          </i>
-        ))}
-        <small>{t("copy.veiledende.sonekart.fysisk.oppmerking.gjelder.9760693")}</small>
-      </div>
+      <strong className="permit-product-price">
+        {formatPrototypePermitPrice(product, language)}
+      </strong>
+      <p>
+        {selectLocalized(language, "Sone", "Zone")} {product.zoneId} · {t(product.capacity.label)}
+      </p>
 
       {!canPurchasePrototypePermit(product) && product.action === "purchase" ? (
         <div className="permit-contact-only-notice">
@@ -115,69 +100,6 @@ export function PermitProductDetail({
         </>
       )}
 
-      <dl className="permit-product-facts">
-        <div>
-          <dt>{t("copy.korttype.599665c")}</dt>
-          <dd>{t(typeLabels[product.type])}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.fisked.gn.og.gyldighet.d9b66e0")}</dt>
-          <dd>{t(product.validity.label)}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.pris.b97114e")}</dt>
-          <dd>{formatPrototypePermitPrice(product, language)}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.fiskere.kort.og.stenger.8d03af3")}</dt>
-          <dd>{t(product.capacity.label)}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.aldersregler.e99e0e1")}</dt>
-          <dd>{t(details.ageRule)}</dd>
-        </div>
-      </dl>
-
-      <section>
-        <h3>{t("copy.utstyr.og.fasiliteter.3d58dcc")}</h3>
-        <ul>
-          {details.equipmentAndFacilities.map((detail) => (
-            <li key={detail}>{t(detail)}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h3>{t("copy.krav.f.r.fiske.a190cd4")}</h3>
-        <ul>
-          {product.requirements.requiresNationalFishingFee && (
-            <li>{t("copy.gyldig.statlig.fiskeravgift.a9319d6")}</li>
-          )}
-          {product.requirements.requiresDisinfection && (
-            <li>{t("copy.gyldig.desinfiseringsbevis.1dc1fdc")}</li>
-          )}
-          {product.requirements.requiresRuleAcceptance && (
-            <li>{t("copy.fiskereglene.ma.leses.og.godtas.06b181f")}</li>
-          )}
-          {product.requirements.requiresSeasonPermit && (
-            <li>{t("copy.gyldig.sesongkort.for.samme.omrade.1aa3171")}</li>
-          )}
-        </ul>
-      </section>
-      <section>
-        <h3>{t("copy.fangst.og.rapportering.f07042e")}</h3>
-        <p>{t(details.reportingRule)}</p>
-      </section>
-      <p className="permit-product-note">{t(product.note)}</p>
-      <PermitSellerContact seller={product.seller} />
-      <a
-        className="permit-product-source"
-        href={product.source.url}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {t("copy.se.original.produktkilde.hos.inatur.4b67735")}
-      </a>
-
       {(canPurchasePrototypePermit(product) || product.action === "register-reporting-day") && (
         <button
           className="primary"
@@ -190,6 +112,71 @@ export function PermitProductDetail({
             : t("content.13a2aa100b4d")}
         </button>
       )}
+      <details className="permit-product-more">
+        <summary>
+          {selectLocalized(
+            language,
+            "Vilkår og produktinformasjon",
+            "Terms and product information",
+          )}
+        </summary>
+        <dl className="permit-product-facts">
+          <div>
+            <dt>{t("copy.korttype.599665c")}</dt>
+            <dd>{t(typeLabels[product.type])}</dd>
+          </div>
+          <div>
+            <dt>{t("copy.fisked.gn.og.gyldighet.d9b66e0")}</dt>
+            <dd>{t(product.validity.label)}</dd>
+          </div>
+          <div>
+            <dt>{t("copy.pris.b97114e")}</dt>
+            <dd>{formatPrototypePermitPrice(product, language)}</dd>
+          </div>
+        </dl>
+
+        <section>
+          <h3>{t("copy.utstyr.og.fasiliteter.3d58dcc")}</h3>
+          <ul>
+            {details.equipmentAndFacilities.map((detail) => (
+              <li key={detail}>{t(detail)}</li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h3>{t("copy.krav.f.r.fiske.a190cd4")}</h3>
+          <ul>
+            {product.requirements.requiresNationalFishingFee && (
+              <li>{t("copy.gyldig.statlig.fiskeravgift.a9319d6")}</li>
+            )}
+            {product.requirements.requiresDisinfection && (
+              <li>{t("copy.gyldig.desinfiseringsbevis.1dc1fdc")}</li>
+            )}
+            {product.requirements.requiresRuleAcceptance && (
+              <li>{t("copy.fiskereglene.ma.leses.og.godtas.06b181f")}</li>
+            )}
+            {product.requirements.requiresSeasonPermit && (
+              <li>{t("copy.gyldig.sesongkort.for.samme.omrade.1aa3171")}</li>
+            )}
+          </ul>
+        </section>
+        <section>
+          <h3>{t("copy.fangst.og.rapportering.f07042e")}</h3>
+          <p>{t(details.reportingRule)}</p>
+        </section>
+        {product.note !== "Pris og tilgjengelighet er simulert for å demonstrere kjøpsflyten." && (
+          <p className="permit-product-note">{t(product.note)}</p>
+        )}
+      </details>
+      <PermitSellerContact seller={product.seller} />
+      <a
+        className="permit-product-source"
+        href={product.source.url}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {t("copy.se.original.produktkilde.hos.inatur.4b67735")}
+      </a>
     </section>
   );
 }

@@ -1,4 +1,21 @@
 :root {
+  --color-surface-cool: #f4f8fa;
+  --color-border-cool: #d1e1e7;
+  --color-text-soft: #4c6879;
+  --color-surface-warm: #faf7f1;
+  --color-border-warm: #e3dacc;
+  --color-icon-warm: #f1e8d9;
+  --color-shortcut-surface: #e4eff4;
+  --color-shortcut-border: #477087;
+  --color-feedback-surface: #f0e4cf;
+  --color-feedback-border: #866a3e;
+  --color-map-control-border: #7293a3;
+  --color-menu-border: #c8d8e1;
+  --color-menu-primary: #345d75;
+  --color-menu-icon-surface: #e8eff3;
+  --color-menu-description: #405968;
+  --color-menu-hover: #f2f6f8;
+
   --palette-blue-050: #eaf4f8;
   --palette-blue-200: #b8dceb;
   --palette-blue-500: #2c7da0;

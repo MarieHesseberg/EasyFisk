@@ -13,6 +13,7 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
     controller.actions;
   return (
     <>
+      <p>{t("prototype.feedbackNotice")}</p>
       <div className="form-intro">
         <Icon name="bell" />
         <div>
@@ -67,7 +68,7 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         <div>
           <Icon name="pin" />
           <span>
-            <b>{t("copy.legg.ved.posisjon.8d430a5")}</b>
+            <b>{t("prototype.testPosition")}</b>
             <small>{t("copy.valgfritt.brukes.bare.til.denne.meldingen.79ad92d")}</small>
           </span>
         </div>

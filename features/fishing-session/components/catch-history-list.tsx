@@ -1,3 +1,4 @@
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { formatClock } from "@/lib/time";
@@ -9,7 +10,7 @@ export function CatchHistoryList({
   catches: CatchRecord[];
   selectCatch: (record: CatchRecord) => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   if (!catches.length) {
     return (
       <section className="catch-history-empty" aria-labelledby="catch-history-title">
@@ -48,11 +49,11 @@ export function CatchHistoryList({
                 {t(record.species)} · {t(record.result).toLowerCase()}
               </b>
               <small>
-                {t(record.zone)} · {record.length} cm · {record.weight} kg
+                {localizeZoneName(record.zone, language)} · {record.length} cm · {record.weight} kg
               </small>
               <em>
                 {formatClock(record.caughtAt)} ·{" "}
-                {t(record.late ? "forsinket rapport" : "rapportert innen fristen")}
+                {t(record.late ? "prototype.catchLate" : "prototype.catchOnTime")}
                 {record.correction ? ` · ${t("copy.rettelse.meldt.60dd0a8")}` : ""}
               </em>
             </p>

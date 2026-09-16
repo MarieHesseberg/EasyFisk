@@ -1,14 +1,9 @@
 "use client";
-import { selectLocalized } from "@/locales";
-import { useState } from "react";
+import { StartSessionStep } from "./fishing-flow/steps/start-session-step";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { FlowMode, SessionRecord } from "@/domain/sessions/session";
 import type { ZoneId } from "@/domain/zones/zone";
-import { PositionStep } from "@/features/fishing-session/fishing-flow/steps/position-step";
-import { RulesStep } from "@/features/fishing-session/fishing-flow/steps/rules-step";
-import { StatusStep } from "@/features/fishing-session/fishing-flow/steps/status-step";
-import { ZoneStep } from "@/features/fishing-session/fishing-flow/steps/zone-step";
 import { SessionSummaryStep } from "@/features/fishing-session/fishing-flow/session-summary-step";
 import { StopSessionStep } from "@/features/fishing-session/fishing-flow/stop-session-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
@@ -32,9 +27,11 @@ export function FishingFlow({
   sessionZone,
   initialZone,
   permittedZoneIds,
+  sessionSubzone,
+  catchCount = 0,
 }: {
   mode: FlowMode;
-  finish: (caught?: boolean, selectedZone?: ZoneId) => void;
+  finish: (caught?: boolean, selectedZone?: ZoneId, subzone?: string) => void;
   cancel: () => void;
   demoStatus: DemoStatus;
   scenario: DemoScenario;
@@ -49,11 +46,10 @@ export function FishingFlow({
   sessionZone: ZoneId;
   initialZone: ZoneId;
   permittedZoneIds: readonly ZoneId[];
+  sessionSubzone?: string;
+  catchCount?: number;
 }) {
-  const { language, t } = useLanguage();
-  const [step, setStep] = useState(1);
-  const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
-  const total = mode === "start" ? 4 : 1;
+  const { t } = useLanguage();
   const dialogRef = useDialogAccessibility(cancel);
   return (
     <div className="flow-overlay">
@@ -74,47 +70,23 @@ export function FishingFlow({
           <span>
             {t(mode === "start" ? "START FISKE" : mode === "stop" ? "AVSLUTT ØKT" : "ØKT FULLFØRT")}
           </span>
-          <em>
-            {mode === "summary"
-              ? t("copy.ferdig.1f6ddf8")
-              : selectLocalized(language, `${step} av ${total}`, `${step} of ${total}`)}
-          </em>
+          {mode === "summary" && <em>{t("copy.ferdig.1f6ddf8")}</em>}
         </div>
 
         {mode === "start" && (
-          <div className="flow-content">
-            {step === 1 && (
-              <StatusStep
-                cancel={cancel}
-                demoStatus={demoStatus}
-                documentReadiness={documentReadiness}
-                isStatusTestMode={isStatusTestMode}
-                quotaStatus={quotaStatus}
-                next={() => setStep(2)}
-                resolveBlock={resolveBlock}
-                openPermitShop={openPermitShop}
-                scenario={scenario}
-                selectedZone={selectedZone}
-              />
-            )}
-            {step === 2 && <PositionStep back={() => setStep(1)} next={() => setStep(3)} />}
-            {step === 3 && (
-              <ZoneStep
-                back={() => setStep(2)}
-                demoStatus={demoStatus}
-                next={() => setStep(4)}
-                selectedZone={selectedZone}
-                selectZone={setSelectedZone}
-                permittedZoneIds={permittedZoneIds}
-              />
-            )}
-            {step === 4 && (
-              <RulesStep
-                back={() => setStep(3)}
-                selectedZone={selectedZone}
-                finish={(zone) => finish(undefined, zone)}
-              />
-            )}
+          <div className="flow-content start-session-content">
+            <StartSessionStep
+              initialZone={initialZone}
+              permittedZoneIds={permittedZoneIds}
+              demoStatus={demoStatus}
+              scenario={scenario}
+              documentReadiness={documentReadiness}
+              isStatusTestMode={isStatusTestMode}
+              quotaStatus={quotaStatus}
+              resolveBlock={resolveBlock}
+              openPermitShop={openPermitShop}
+              finish={(zone, subzone) => finish(undefined, zone, subzone)}
+            />
           </div>
         )}
 
@@ -124,7 +96,13 @@ export function FishingFlow({
             elapsed={elapsed}
             finish={finish}
             startTime={startTime}
-            zoneName={fishingContentRepository.findZone(sessionZone)?.name ?? `Sone ${sessionZone}`}
+            catchCount={catchCount}
+            zoneName={[
+              fishingContentRepository.findZone(sessionZone)?.name ?? `Sone ${sessionZone}`,
+              sessionSubzone,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
           />
         )}
 

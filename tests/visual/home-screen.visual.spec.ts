@@ -12,9 +12,8 @@ for (const viewport of viewports) {
     await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
-    await expect(page).toHaveScreenshot(`home-${viewport.name}.png`, {
+    await expect(page.locator(".phone-app")).toHaveScreenshot(`home-${viewport.name}.png`, {
       animations: "disabled",
-      fullPage: viewport.name !== "desktop",
       // Chromium rasteriserer skrifter litt forskjellig på Windows og Linux i CI.
       // Grensen tåler dette, men fanger fortsatt tydelige layout- og stilendringer.
       maxDiffPixelRatio: 0.08,
@@ -28,52 +27,25 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
 
   await page.getByRole("button", { name: "Switch to English" }).click();
   await expect(page.getByRole("heading", { name: "Your fishing overview" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Documents missing" })).toBeVisible();
-  await expect(
-    page.getByText(
-      "Register a valid fishing permit, valid disinfection, and the national fishing fee or an exemption before you start.",
-    ),
-  ).toBeVisible();
-  await expect(page.getByText("Not registered — add documentation").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
+  await expect(page.locator(".home-preparation-actions button")).toHaveCount(3);
   await expect(page.getByRole("button", { name: "Bytt til norsk" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Permits", exact: true })).toBeVisible();
   await expect(page.locator(".phone-app")).not.toContainText(
     /REGLER OPPDATERT|Når én|Minstemålet|avlivede|De øvrige/,
   );
 
-  await page.locator(".document-overview button").filter({ hasText: "Permits" }).click();
+  await page.getByRole("button", { name: "More", exact: true }).click();
+  await page.getByRole("button", { name: /My fishing permits/ }).click();
   const documents = page.getByRole("dialog", { name: "My fishing permits" });
-  await documents.getByRole("button", { name: /Register permit/ }).click();
-  await expect(documents.getByLabel("Angler's name *")).toBeVisible();
-  await expect(documents.getByLabel("Permit type *").getByRole("option")).toHaveText([
-    "Choose",
-    "Day permit",
-    "Week permit",
-    "Season permit",
-    "Group permit",
-    "Other",
-  ]);
-  await expect(documents).not.toContainText(
-    /Kopier opplysningene|Lokal dokumentmappe|Navn på fiskeren|Utsteder|Gyldig fra|Lagre dokument|Avbryt/,
-  );
-  await documents.getByLabel("Angler's name *").fill("Tourist Angler");
-  await documents.getByLabel("Issuer / seller *").fill("Mandalselva Elveeigarlag");
-  await documents.getByLabel("Permit type *").selectOption({ label: "Day permit" });
-  await documents
-    .getByLabel("Watercourse, zone and subzone, if applicable *")
-    .fill("Mandalselva · Zone 3");
-  await documents.getByLabel("Valid from (Norwegian time) *").fill("2026-08-21T18:00");
-  await documents.getByLabel("Valid until (Norwegian time) *").fill("2026-08-20T18:00");
-  await documents.getByRole("button", { name: "Save document" }).click();
-  await expect(documents.getByRole("alert")).toHaveText(
-    "The end time must be after the start time.",
-  );
-  await documents.getByRole("button", { name: "Cancel" }).click();
+  await expect(documents.getByRole("button", { name: /Register permit/ })).toHaveCount(0);
+  await expect(documents.getByRole("button", { name: "Buy a new fishing permit" })).toBeVisible();
   await documents.locator("button.back").click();
 
-  await page.locator(".document-overview button").filter({ hasText: "Disinfection" }).click();
+  await page.getByRole("button", { name: "Home", exact: true }).press("Enter");
+  await page.getByRole("button", { name: "Register disinfection", exact: true }).click();
   const disinfection = page.getByRole("dialog", { name: "Disinfection" });
-  await disinfection.getByRole("button", { name: "Register disinfection" }).click();
+  await disinfection.getByRole("button", { name: "Add an existing certificate manually" }).click();
   await expect(
     disinfection.getByLabel("Station / person who performed the disinfection *"),
   ).toBeVisible();
@@ -81,10 +53,7 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await disinfection.getByRole("button", { name: "Cancel" }).click();
   await disinfection.locator("button.back").click();
 
-  await page
-    .locator(".document-overview button")
-    .filter({ hasText: "National fishing fee" })
-    .click();
+  await page.getByRole("button", { name: "Register national fishing fee", exact: true }).click();
   const fee = page.getByRole("dialog", { name: "National fishing fee" });
   await fee.getByRole("button", { name: "Register national fishing fee" }).click();
   await expect(fee.getByLabel("Calendar year *")).toBeVisible();
@@ -107,7 +76,8 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
 
   const shop = page.locator(".permit-shop-screen");
   const dayPermit = shop.locator("article").filter({ hasText: "Zone 3 day permit" });
-  await dayPermit.getByRole("button", { name: "View permit" }).click();
+  await dayPermit.getByRole("button", { name: "Buy fishing permit" }).click();
+  await shop.getByText("Terms and product information", { exact: true }).click();
   await expect(shop.getByRole("heading", { name: "Equipment and facilities" })).toBeVisible();
   await expect(shop.getByRole("heading", { name: "Requirements before fishing" })).toBeVisible();
   await expect(shop).not.toContainText(
@@ -119,12 +89,9 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await shop.getByLabel("Date of birth").fill("1990-05-12");
   await shop.getByLabel("Email").fill("tourist@example.com");
   await shop.getByLabel("Phone").fill("98765432");
-  await shop.getByRole("button", { name: "Next · requirements and participants" }).click();
   await shop.getByLabel(/I have read and understood/).check();
   await shop.getByLabel(/I accept the terms/).check();
   await shop.getByRole("button", { name: "Next · review" }).click();
-  await shop.getByLabel(/I confirm that the information is correct/).check();
-  await shop.getByRole("button", { name: "Continue to test payment" }).click();
   await shop.getByRole("button", { name: "Pay 455 kr" }).click();
   await expect(shop.getByRole("status")).toContainText("Your fishing permit has been saved");
   await expect(shop).not.toContainText(
@@ -192,7 +159,9 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
   let dialog = page.getByRole("dialog", { name: "Profile and privacy" });
   await expect(dialog.getByText("Name", { exact: true })).toBeVisible();
   await expect(dialog.getByText("English", { exact: true })).toBeVisible();
-  await expect(dialog.getByRole("button", { name: "Save settings" })).toBeVisible();
+  await expect(dialog.getByRole("status")).toHaveText(
+    "Changes are saved automatically on this device.",
+  );
   await expect(dialog).not.toContainText(
     /Fiskerprofil|Navn|Telefon|Språk|Personvern|Brukes bare|Innstillingene/,
   );
@@ -202,7 +171,9 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
   dialog = page.getByRole("dialog", { name: "Notifications and closures" });
   await expect(dialog.getByText("My notifications")).toBeVisible();
   await expect(dialog.getByText("Emergency closure")).toBeVisible();
-  await expect(dialog.getByRole("button", { name: "Save notification settings" })).toBeVisible();
+  await expect(dialog.getByRole("status")).toHaveText(
+    "Changes are saved automatically on this device.",
+  );
   await expect(dialog).not.toContainText(
     /Mine varsler|Akutt stengning|Varsle dersom|Høy vanntemperatur|Regelendringer|Lagre varsel/,
   );
@@ -218,7 +189,7 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
   await dialog.getByRole("button", { name: "Review report" }).click();
   await expect(dialog.getByRole("heading", { name: "Is the information correct?" })).toBeVisible();
   await dialog.getByRole("checkbox").check();
-  await dialog.getByRole("button", { name: "Submit report" }).click();
+  await dialog.getByRole("button", { name: "Complete test report" }).click();
   await expect(dialog.getByRole("heading", { name: "Thank you for reporting this" })).toBeVisible();
   await expect(dialog).not.toContainText(
     /MELDINGEN|meldte fra|REFERANSE|Send en ny melding|KATEGORI|BESKRIVELSE|POSISJON/,
@@ -277,22 +248,18 @@ test("oppstart og juridisk status er fullstendig på engelsk", async ({ page }) 
 
   await page.getByRole("button", { name: "START FISHING" }).click();
   const flow = page.getByRole("dialog", { name: "Start fishing" });
-  await expect(flow.getByRole("heading", { name: "You are ready to fish" })).toBeVisible();
+  await expect(flow.getByRole("heading", { name: "Find the correct fishing zone" })).toBeVisible();
   await expect(flow).not.toContainText(
     /Kan ikke|Krever bekreftelse|Gyldig tidsrom|Gjeldende år|Kvoter og|Temperatur og|Fiskesesong|originalene er ikke/,
   );
 
-  await flow.getByRole("button", { name: "I have checked the originals · continue" }).click();
   await expect(flow.getByRole("heading", { name: "Find the correct fishing zone" })).toBeVisible();
   await flow.getByRole("button", { name: "Choose zone manually" }).click();
   await expect(flow.getByText("Main zone", { exact: true })).toBeVisible();
   await flow.getByLabel("Main zone").selectOption("3");
-  await flow.getByRole("button", { name: "Confirm zone and view rules" }).click();
-  await expect(flow.getByRole("heading", { name: "Before you start in Zone 3" })).toBeVisible();
   await expect(flow).not.toContainText(
     /REGLER FOR|Før du starter|Redskap|Kvote|Fangst|Bevegelig fiske|Rapporteres|gjenutsatte/,
   );
-  await flow.getByLabel("I have read and understood the rules").check();
   await flow.getByRole("button", { name: "Start fishing in Zone 3" }).click();
 
   await expect(page.getByText("The fishing session has started in Zone 3")).toBeVisible();
@@ -314,8 +281,10 @@ test("oppstart og juridisk status er fullstendig på engelsk", async ({ page }) 
   await expect(catchDialog).not.toContainText(
     /Fangst|Gjenutsatt|Størrelsesregler|Minstemål|Tilbake og endre/,
   );
-  await catchDialog.getByRole("button", { name: "Submit catch report" }).click();
-  await expect(catchDialog.getByRole("heading", { name: "Catch report submitted" })).toBeVisible();
+  await catchDialog.getByRole("button", { name: "Save catch" }).click();
+  await expect(
+    catchDialog.getByRole("heading", { name: "Catch saved on this device" }),
+  ).toBeVisible();
   await expect(catchDialog).not.toContainText(
     /Fangstrapporten|Oppdatert kvotestatus|gjenstår|Ferdig/,
   );
@@ -343,7 +312,7 @@ test("nullfangst på en tidligere tur kan registreres helt på engelsk", async (
   await expect(dialog).not.toContainText(
     /Nullfangst|etterregistrert|Rapporteringsfrist|Tilbake til turen/,
   );
-  await dialog.getByRole("button", { name: "Submit trip and 0 catches" }).click();
+  await dialog.getByRole("button", { name: "Save trip and 0 catches" }).click();
   await expect(dialog.getByRole("heading", { name: "Trip and catches registered" })).toBeVisible();
   await dialog.getByRole("button", { name: "Open history" }).click();
   await expect(page.getByRole("heading", { name: "Recent fishing sessions" })).toBeVisible();
@@ -378,7 +347,7 @@ test("tidligere tur med fangst registreres og vises helt på engelsk", async ({ 
   await dialog.getByPlaceholder("kg").fill("1.8");
   await dialog.getByRole("button", { name: "Add catch and review trip" }).click();
   await expect(dialog.getByText("Catch 1: Salmon · released")).toBeVisible();
-  await dialog.getByRole("button", { name: "Submit trip and 1 catch" }).click();
+  await dialog.getByRole("button", { name: "Save trip and 1 catch" }).click();
   await expect(dialog.getByRole("heading", { name: "Trip and catches registered" })).toBeVisible();
   await dialog.getByRole("button", { name: "Open history" }).click();
 

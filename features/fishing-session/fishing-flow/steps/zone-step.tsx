@@ -14,6 +14,9 @@ export function ZoneStep({
   selectedZone,
   selectZone,
   permittedZoneIds,
+  subzone = "",
+  selectSubzone,
+  located = false,
 }: {
   back: () => void;
   demoStatus: DemoStatus;
@@ -21,6 +24,9 @@ export function ZoneStep({
   selectedZone: ZoneId;
   selectZone: (zone: ZoneId) => void;
   permittedZoneIds: readonly ZoneId[];
+  subzone?: string;
+  selectSubzone?: (value: string) => void;
+  located?: boolean;
 }) {
   const { language, t } = useLanguage();
   const nearBorder = demoStatus === "zoneBorder";
@@ -35,27 +41,51 @@ export function ZoneStep({
         title={
           nearBorder
             ? t("content.5fbd077790ed")
-            : selectLocalized(language, `Vi fant ${zoneLabel}`, `We found ${zoneLabel}`)
+            : selectLocalized(
+                language,
+                `${located ? "Posisjonsforslag:" : "Valgt sone:"} ${zoneLabel}`,
+                `${located ? "Location suggestion:" : "Selected zone:"} ${zoneLabel}`,
+              )
         }
         text={
           nearBorder
-            ? t("content.4f00e6e146c3")
+            ? selectLocalized(
+                language,
+                "Testscenario: kontroller valgt sone mot fysisk oppmerking.",
+                "Test scenario: check the selected zone against physical signs.",
+              )
             : selectLocalized(
                 language,
-                `Posisjonen din ser ut til å være i ${selectedZoneContent.name}.`,
-                `Your location appears to be in ${t(selectedZoneContent.name)}.`,
+                `Bekreft at du skal fiske i ${selectedZoneContent.name}.`,
+                `Confirm that you will fish in ${t(selectedZoneContent.name)}.`,
               )
         }
       />
       {nearBorder && (
         <div className="scenario-banner warning">
-          <b>{t("copy.gps.treffet.er.usikkert.9275f07")}</b>
-          <span>{t("copy.ca.18.meter.fra.registrert.sonegrense.f484f23")}</span>
+          <b>
+            {selectLocalized(
+              language,
+              "Testscenario: usikker sonegrense",
+              "Test scenario: uncertain zone boundary",
+            )}
+          </b>
+          <span>
+            {selectLocalized(
+              language,
+              "Kontroller sonen mot fysisk oppmerking.",
+              "Check the zone against physical signs.",
+            )}
+          </span>
         </div>
       )}
       <div className="zone-confirm">
         <div className={"mini-map " + (nearBorder ? "border-hit" : "")}>
-          <span>{nearBorder ? t("content.72168dde2f56") : t("content.3ba9211139e3")}</span>
+          <span>
+            {nearBorder
+              ? t("content.72168dde2f56")
+              : selectLocalized(language, "VALGT SONE", "SELECTED ZONE")}
+          </span>
           <i />
         </div>
         <label htmlFor="session-zone">{t("copy.hovedsone.449c2c3")}</label>
@@ -77,7 +107,14 @@ export function ZoneStep({
         {selectedSubzones.length > 0 && (
           <>
             <label htmlFor="session-subzone">{t("copy.delsone.ec5e5cb")}</label>
-            <select id="session-subzone">
+            <select
+              id="session-subzone"
+              value={subzone}
+              onChange={(event) => selectSubzone?.(event.target.value)}
+            >
+              <option value="">
+                {selectLocalized(language, "Velg delsone", "Select subzone")}
+              </option>
               {selectedSubzones.map((subzone) => (
                 <option key={subzone}>{subzone}</option>
               ))}
@@ -95,7 +132,14 @@ export function ZoneStep({
             )
           : t("content.8af2db4cecac")}
       </p>
-      <button className="primary" onClick={next}>
+      <button
+        className="primary"
+        disabled={
+          (selectedSubzones.length > 0 && !subzone) ||
+          (permittedZoneIds.length > 0 && !permittedZoneIds.includes(selectedZone))
+        }
+        onClick={next}
+      >
         {t("copy.bekreft.sone.og.se.regler.495416b")}
       </button>
       <button className="text-button" onClick={back}>

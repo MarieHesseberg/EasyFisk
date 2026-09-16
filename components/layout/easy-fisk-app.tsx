@@ -1,5 +1,8 @@
 "use client";
 
+import { createPermitJourney } from "@/features/fishing-permits/permit-journey";
+import { useState } from "react";
+import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { ScrollIndicator } from "@/components/layout/scroll-indicator";
@@ -7,7 +10,6 @@ import { DemoControlPanel } from "@/components/layout/demo-control-panel";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
 import { findDemoStatus } from "@/domain/fishing-rules/find-demo-status";
-import { calculatePersonalStatistics } from "@/domain/statistics/calculate-personal-statistics";
 import { findZoneName } from "@/domain/zones/find-zone-name";
 import { FishingFlow } from "@/features/fishing-session/fishing-flow";
 import { HomeScreen } from "@/features/home/home-screen";
@@ -30,6 +32,7 @@ import { useLanguage } from "@/components/localization/language-provider";
 
 export function EasyFiskApp() {
   const { t } = useLanguage();
+  const [catchReportOpen, setCatchReportOpen] = useState(false);
   const { state, actions } = useEasyFiskController();
   const { documents } = useDocuments();
   const documentCheckTime = useCurrentTime();
@@ -49,17 +52,36 @@ export function EasyFiskApp() {
     screen,
     sessions,
     sessionZone,
+    sessionSubzone,
     startTime,
     statsMineRequested,
     toast,
     zone,
   } = state;
+  const [permitJourney, setPermitJourney] = useState(() => createPermitJourney(zone));
+  function openPermitShop() {
+    setPermitJourney((previous) =>
+      previous.selectedZone === zone
+        ? previous
+        : {
+            ...previous,
+            selectedZone: zone,
+            selectedArea: "all",
+            selectedProductId: null,
+            isProductActionOpen: false,
+          },
+    );
+    actions.closeDetail();
+    actions.closeFlow();
+    actions.navigate("permits");
+  }
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
   const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
   const quotaStatus = getFishingStartQuotaStatus(catches);
   const displayedQuotaStatus = getDisplayedQuotaStatus(quotaStatus, demoStatus, isStatusTestMode);
-  const actualDocumentReadiness = getDocumentReadiness(documents, documentCheckTime, zone);
+  const contextZone = active ? sessionZone : zone;
+  const actualDocumentReadiness = getDocumentReadiness(documents, documentCheckTime, contextZone);
   const validPermitZoneIds = getValidPermitZoneIds(documents, documentCheckTime);
   const effectiveStatus = resolveStatusEngine(
     actualDocumentReadiness,
@@ -67,20 +89,20 @@ export function EasyFiskApp() {
     isStatusTestMode,
     quotaStatus,
   );
-  const personalStatistics = calculatePersonalStatistics(catches, sessions);
   return (
     <main className="prototype-shell">
       <div className="phone-app">
         {screen === "home" && (
           <HomeScreen
             onStart={actions.openSessionFlow}
+            onRegisterCatch={() => setCatchReportOpen(true)}
+            onHistory={actions.openMyHistory}
+            catches={catches}
             onRules={() => actions.navigate("rules")}
-            onFeedback={() => actions.openDetail("feedback")}
-            onControlCard={() => actions.openDetail("control-card")}
             onDocument={actions.openDetail}
             onPastSession={actions.openPastSession}
-            onMapShortcut={() => actions.navigate("map")}
-            onBuyPermit={() => actions.openDetail("permit-shop")}
+            onBuyPermit={openPermitShop}
+            zoneName={findZoneName(contextZone, zones, active ? sessionSubzone : undefined)}
             active={active}
             elapsed={elapsed}
             startTime={startTime}
@@ -88,20 +110,17 @@ export function EasyFiskApp() {
             scenario={effectiveStatus.scenario}
             documentReadiness={effectiveStatus.readiness}
             isStatusTestMode={isStatusTestMode}
-            salmonKilled={personalStatistics.killedSalmonQuota.usedThisSeason}
             quotaStatus={displayedQuotaStatus}
           />
         )}{" "}
         {screen === "map" && (
-          <MapScreen
-            selected={zone}
-            setSelected={actions.setZone}
-            onUseZone={actions.useZone}
-            onBuyPermit={() => actions.openDetail("permit-shop")}
-          />
+          <MapScreen selected={zone} setSelected={actions.setZone} onBuyPermit={openPermitShop} />
         )}{" "}
         {screen === "permits" && (
           <PermitShopScreen
+            journey={permitJourney}
+            setJourney={setPermitJourney}
+            onZoneChange={actions.setZone}
             initialZone={zone}
             paymentOutcome={paymentOutcome}
             onPermitPurchased={(purchasedZone) => {
@@ -116,7 +135,10 @@ export function EasyFiskApp() {
         {screen === "rules" && (
           <RulesScreen
             demoStatus={effectiveStatus.status}
-            onRegisterPermit={() => actions.openDetail("permit-shop")}
+            selectedZone={contextZone}
+            documents={documents}
+            now={documentCheckTime}
+            onRegisterPermit={openPermitShop}
           />
         )}{" "}
         {screen === "stats" && (
@@ -133,7 +155,7 @@ export function EasyFiskApp() {
             onCatchFlowComplete={actions.completeCatchFlow}
             finishAfterCatch={finishAfterCatch}
             catches={catches}
-            activeZone={findZoneName(sessionZone, zones)}
+            activeZone={findZoneName(sessionZone, zones, sessionSubzone)}
             requestedCatchTime={requestedCatchTime}
             elapsed={elapsed}
             startTime={startTime}
@@ -148,7 +170,7 @@ export function EasyFiskApp() {
             selectDemoStatus={actions.selectDemoStatus}
             useActualStatus={actions.useActualStatus}
             openStatistics={() => actions.navigate("stats")}
-            openPermitShop={() => actions.openDetail("permit-shop")}
+            openPermitShop={openPermitShop}
             paymentOutcome={paymentOutcome}
             setPaymentOutcome={actions.setPaymentOutcome}
             testDemoStatus={() => {
@@ -157,7 +179,12 @@ export function EasyFiskApp() {
             }}
           />
         )}
-        <BottomNavigation activeScreen={screen} navigate={actions.navigate} />
+        <BottomNavigation
+          activeScreen={screen}
+          navigate={(destination) =>
+            destination === "permits" ? openPermitShop() : actions.navigate(destination)
+          }
+        />
         {toast && (
           <div className="toast" role="status" aria-live="polite" aria-atomic="true">
             <Icon name="check" size={18} />
@@ -180,9 +207,11 @@ export function EasyFiskApp() {
             resolveBlock={() => actions.resolveBlockedStatus(effectiveStatus.status)}
             openPermitShop={() => {
               actions.closeFlow();
-              actions.openDetail("permit-shop");
+              openPermitShop();
             }}
             sessionZone={sessionZone}
+            sessionSubzone={sessionSubzone}
+            catchCount={catches.filter((record) => record.sessionStart === startTime).length}
             initialZone={zone}
             permittedZoneIds={
               isStatusTestMode &&
@@ -193,12 +222,30 @@ export function EasyFiskApp() {
             }
           />
         )}
+        {(catchReportOpen || (finishAfterCatch && screen === "home")) && (
+          <CatchReportModal
+            activeZone={findZoneName(sessionZone, zones, sessionSubzone)}
+            catches={catches}
+            finishAfterCatch={finishAfterCatch}
+            onCatch={actions.addCatch}
+            onCatchFlowComplete={actions.completeCatchFlow}
+            onClose={() => {
+              setCatchReportOpen(false);
+              if (finishAfterCatch) {
+                if (active) actions.cancelCatchBeforeFinish();
+                else actions.completeCatchFlow();
+              }
+            }}
+            requestedCatchTime={finishAfterCatch ? requestedCatchTime : 0}
+            startTime={startTime}
+          />
+        )}
         {globalDetail && (
           <ProfileDetailDialog
             destination={globalDetail}
             close={actions.closeDetail}
             testReadiness={isStatusTestMode ? effectiveStatus.readiness : undefined}
-            openPermitShop={() => actions.openDetail("permit-shop")}
+            openPermitShop={openPermitShop}
             selectedZone={zone}
             onPermitPurchased={actions.setZone}
             onOpenPermits={() => actions.openDetail("permits")}

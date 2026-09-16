@@ -1,0 +1,54 @@
+/* One reading surface for all expanded product information. */
+.permit-product-more {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+.permit-product-more > summary {
+  padding: 14px 16px;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+.permit-product-more .permit-product-facts {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.permit-product-more .permit-product-facts > div,
+.permit-product-detail .permit-product-more > section,
+.permit-product-more > .permit-product-note {
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+}
+.permit-product-more .permit-product-facts dt,
+.permit-product-detail .permit-product-more h3 {
+  margin: 0;
+  font:
+    700 1rem/1.4 Arial,
+    sans-serif;
+  text-transform: none;
+  color: var(--color-text);
+}
+.permit-product-more .permit-product-facts dd,
+.permit-product-more p,
+.permit-product-more li {
+  font:
+    400 1rem/1.5 Arial,
+    sans-serif;
+  color: var(--color-text);
+}
+.permit-product-detail .permit-product-more section ul {
+  padding-left: 20px;
+  gap: 6px;
+}
+.permit-product-more .permit-product-facts > div,
+.permit-product-detail .permit-product-more > section {
+  gap: 8px;
+}

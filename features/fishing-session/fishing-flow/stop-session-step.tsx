@@ -1,3 +1,5 @@
+import { localizeZoneName } from "@/lib/localize-zone-name";
+import { selectLocalized } from "@/locales";
 import { FlowTitle } from "@/components/ui/flow-title";
 import { formatClock, formatLongDuration } from "@/lib/time";
 import { useLanguage } from "@/components/localization/language-provider";
@@ -7,12 +9,14 @@ export function StopSessionStep({
   finish,
   startTime,
   zoneName,
+  catchCount = 0,
 }: {
   cancel: () => void;
   elapsed: number;
   finish: (caught: boolean) => void;
   startTime: number | null;
   zoneName: string;
+  catchCount?: number;
 }) {
   const { language, t } = useLanguage();
   return (
@@ -20,13 +24,25 @@ export function StopSessionStep({
       <FlowTitle
         icon="clock"
         eyebrow="AVSLUTT FISKEØKT"
-        title={t("copy.fikk.du.fangst.c3aa311")}
-        text="Alle økter lagres, også når du ikke fikk fisk. Dette gir bedre kunnskap om fiskeinnsatsen."
+        title={
+          catchCount
+            ? selectLocalized(
+                language,
+                `${catchCount} fangst${catchCount === 1 ? "" : "er"} registrert`,
+                `${catchCount} ${catchCount === 1 ? "catch" : "catches"} recorded`,
+              )
+            : selectLocalized(language, "Avslutte uten fangst?", "Finish without a catch?")
+        }
+        text={selectLocalized(
+          language,
+          "Sjekk at alle fangstene er registrert før du avslutter.",
+          "Check that all catches are recorded before finishing.",
+        )}
       />
       <div className="stop-summary">
         <span>
           <small>{t("copy.sone.e4076c9")}</small>
-          <b>{t(zoneName)}</b>
+          <b>{localizeZoneName(zoneName, language)}</b>
         </span>
         <span>
           <small>{t("copy.start.7196e7c")}</small>
@@ -38,10 +54,16 @@ export function StopSessionStep({
         </span>
       </div>
       <button className="primary" onClick={() => finish(false)}>
-        {t("copy.nei.registrer.nullfangst.aba2116")}
+        {catchCount
+          ? selectLocalized(
+              language,
+              "Avslutt tur med registrerte fangster",
+              "Finish trip with recorded catches",
+            )
+          : selectLocalized(language, "Avslutt uten fangst", "Finish without a catch")}
       </button>
       <button className="secondary" onClick={() => finish(true)}>
-        {t("copy.ja.registrer.manglende.fangst.2f70227")}
+        {selectLocalized(language, "Registrer manglende fangst", "Record a missing catch")}
       </button>
       <button className="text-button" onClick={cancel}>
         {t("copy.fortsett.a.fiske.38ab047")}

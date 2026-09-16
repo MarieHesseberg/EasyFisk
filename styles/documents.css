@@ -117,3 +117,78 @@
   color: var(--color-text-muted);
   font-size: 12px;
 }
+.documents-panel-simple {
+  font-size: 1rem;
+  gap: 16px;
+}
+.documents-panel-simple > p {
+  margin: 0;
+}
+.documents-panel-simple .document-intro {
+  color: var(--color-text);
+  line-height: 1.5;
+}
+.documents-panel-simple > .primary {
+  min-height: 50px;
+  border-radius: 14px;
+  font-size: 1rem;
+}
+.documents-panel-simple .document-resource-link {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.document-more-information {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.document-more-information summary {
+  padding: 14px;
+  min-height: 48px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.document-more-information p {
+  margin: 0;
+  padding: 14px;
+  border-top: 1px solid var(--color-border);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.documents-panel-simple .document-form {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+.document-practical-section {
+  padding: 14px;
+  border-top: 1px solid var(--color-border);
+}
+.document-practical-section h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.document-more-information .document-practical-section p {
+  padding: 0;
+  border: 0;
+}
+.document-guidance-source {
+  display: block;
+  padding: 14px;
+  border-top: 1px solid var(--color-border);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-primary);
+}

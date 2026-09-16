@@ -40,13 +40,15 @@ function documentSummary(kind: DocumentKind, documents: FishingDocument[], langu
 export function DocumentOverview({
   open,
   testReadiness,
+  readiness,
 }: {
   open: (destination: DetailDestination) => void;
   testReadiness?: DocumentReadiness;
+  readiness?: DocumentReadiness;
 }) {
   const { language, t } = useLanguage();
   const { documents, loading, error } = useDocuments();
-  const actualReadiness = getDocumentReadiness(documents);
+  const actualReadiness = readiness && !testReadiness ? readiness : getDocumentReadiness(documents);
   return (
     <div className="document-overview">
       {error && <p role="alert">{t(error)}</p>}

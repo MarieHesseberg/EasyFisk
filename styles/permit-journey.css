@@ -1,0 +1,99 @@
+.screen.map-screen {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 0 calc(83px + env(safe-area-inset-bottom));
+}
+.map-screen > .screen-header {
+  flex: 0 0 auto;
+}
+.map-screen .interactive-river-map {
+  flex: 1;
+  min-height: 0;
+}
+.map-screen .leaflet-map-canvas {
+  height: 100%;
+  min-height: 0;
+}
+.map-screen .map-source-note {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  z-index: var(--layer-map-controls);
+  background: var(--color-surface-translucent);
+  padding: 4px 12px;
+  pointer-events: none;
+}
+.map-screen .map-location-controls {
+  position: absolute;
+  z-index: var(--layer-map-controls);
+  top: 66px;
+  left: 12px;
+  right: 58px;
+  padding: 0;
+  pointer-events: none;
+}
+.map-screen .map-location-controls > * {
+  pointer-events: auto;
+}
+.map-screen .map-location-controls .secondary {
+  width: fit-content;
+  background: var(--color-surface-translucent);
+}
+.map-screen .map-location-status {
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
+  padding: 10px;
+  font-size: 12px;
+}
+.map-screen .map-zone-popup {
+  bottom: 60px;
+  max-height: calc(100% - 135px);
+  overflow-y: auto;
+}
+.map-buy-permit {
+  width: 100%;
+  min-height: 44px;
+  margin: 6px 0;
+}
+.map-zone-popup .text-button {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 6px;
+}
+.permit-product-price {
+  display: block;
+  font-size: 24px;
+  color: var(--color-primary);
+}
+.permit-product-more {
+  margin-block: 16px;
+  border-block: 1px solid var(--color-border);
+  padding-block: 12px;
+}
+.permit-product-more summary {
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+  font-weight: 700;
+}
+.permit-checkout-step dd {
+  overflow-wrap: anywhere;
+}
+.permit-product-detail > .back,
+.permit-checkout > .back {
+  width: fit-content;
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-primary);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.permit-order-summary dt {
+  overflow-wrap: anywhere;
+}

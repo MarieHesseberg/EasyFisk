@@ -127,8 +127,8 @@ export function ReviewStep({ controller }: { controller: PastSessionController }
           ? t("copy.lagrer.85686f0")
           : selectLocalized(
               language,
-              `Send inn tur og ${reports.length} fangst${reports.length === 1 ? "" : "er"}`,
-              `Submit trip and ${reports.length} ${reports.length === 1 ? "catch" : "catches"}`,
+              `Lagre tur og ${reports.length} fangst${reports.length === 1 ? "" : "er"}`,
+              `Save trip and ${reports.length} ${reports.length === 1 ? "catch" : "catches"}`,
             )}
       </button>
       {caught && (

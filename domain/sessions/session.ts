@@ -1,5 +1,9 @@
 export type FlowMode = "start" | "stop" | "summary";
-export type ActiveSessionSnapshot = { startTime: number; zone: import("../zones/zone").ZoneId };
+export type ActiveSessionSnapshot = {
+  startTime: number;
+  zone: import("../zones/zone").ZoneId;
+  subzone?: string;
+};
 export type SessionRecord = {
   id: string;
   start: number;
@@ -7,4 +11,5 @@ export type SessionRecord = {
   duration: number;
   zone: string;
   result: string;
+  subzone?: string;
 };

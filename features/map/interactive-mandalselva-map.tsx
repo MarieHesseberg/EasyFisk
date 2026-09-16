@@ -8,6 +8,7 @@ import {
   type MapCoordinate,
 } from "@/data/map/mandalselva-zone-boundaries";
 import type { FishingZone, ZoneId } from "@/domain/zones/zone";
+import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/localization/language-provider";
 
 const tileUrl = "https://{s}-kartcache.nrk.no/tiles/ut_topo_light/{z}/{x}/{y}.jpg";
@@ -17,11 +18,19 @@ export function InteractiveMandalselvaMap({
   selected,
   setSelected,
   userPosition,
+  onBuyPermit,
+  locate,
+  isLocating,
+  locationMessage,
 }: {
   zones: readonly FishingZone[];
   selected: ZoneId;
   setSelected: (zone: ZoneId) => void;
   userPosition: MapCoordinate | null;
+  onBuyPermit?: () => void;
+  locate?: () => void;
+  isLocating?: boolean;
+  locationMessage?: string;
 }) {
   const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,7 +39,7 @@ export function InteractiveMandalselvaMap({
   const userMarkerRef = useRef<CircleMarker | null>(null);
   const setSelectedRef = useRef(setSelected);
   const initialSelectedRef = useRef(selected);
-  const [showDetails, setShowDetails] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
   const selectedZone = zones.find((zone) => zone.id === selected) ?? zones[0];
 
   useEffect(() => {
@@ -48,6 +57,7 @@ export function InteractiveMandalselvaMap({
         zoomControl: false,
         attributionControl: true,
         scrollWheelZoom: false,
+        zoomAnimation: false,
         minZoom: 9,
         maxZoom: 16,
       });
@@ -81,14 +91,16 @@ export function InteractiveMandalselvaMap({
         polygons.set(zone.id, polygon);
       }
 
-      map.fitBounds(mandalselvaMapBounds, { padding: [12, 12] });
+      map.fitBounds(mandalselvaMapBounds, { padding: [12, 12], animate: false });
       mapRef.current = map;
     });
 
     return () => {
       isCancelled = true;
+      mapRef.current?.stop();
       mapRef.current?.remove();
       mapRef.current = null;
+      userMarkerRef.current = null;
       polygons.clear();
     };
   }, [t]);
@@ -102,13 +114,20 @@ export function InteractiveMandalselvaMap({
     }
     const selectedBoundary = mandalselvaMapZones.find((zone) => zone.id === selected)?.boundary;
     if (selectedBoundary && mapRef.current) {
-      mapRef.current.fitBounds(selectedBoundary, { padding: [34, 34], maxZoom: 12 });
+      mapRef.current.fitBounds(selectedBoundary, {
+        padding: [34, 34],
+        maxZoom: 12,
+        animate: false,
+      });
     }
   }, [selected]);
 
   useEffect(() => {
     if (!mapRef.current || !userPosition) return;
+    const map = mapRef.current;
+    let cancelled = false;
     void import("leaflet").then((leaflet) => {
+      if (cancelled || mapRef.current !== map) return;
       userMarkerRef.current?.remove();
       userMarkerRef.current = leaflet
         .circleMarker(userPosition, {
@@ -119,15 +138,13 @@ export function InteractiveMandalselvaMap({
           weight: 3,
         })
         .bindTooltip(t("copy.din.posisjon.90b81f2"))
-        .addTo(mapRef.current!);
-      mapRef.current?.panTo(userPosition);
+        .addTo(map);
+      map.panTo(userPosition, { animate: false });
     });
+    return () => {
+      cancelled = true;
+    };
   }, [t, userPosition]);
-
-  function showEntireRiver() {
-    mapRef.current?.fitBounds(mandalselvaMapBounds, { padding: [12, 12] });
-    setShowDetails(false);
-  }
 
   function selectZone(zoneId: ZoneId) {
     setSelected(zoneId);
@@ -150,9 +167,6 @@ export function InteractiveMandalselvaMap({
             {t("copy.sone.44f1e2e")} {zone.id}
           </button>
         ))}
-        <button type="button" onClick={showEntireRiver}>
-          {t("copy.hele.elva.6fb7361")}
-        </button>
       </div>
       <div
         ref={containerRef}
@@ -171,17 +185,27 @@ export function InteractiveMandalselvaMap({
           </button>
           <small>{t("copy.valgt.fiskeomrade.20c5ede")}</small>
           <h2>{t(selectedZone.name)}</h2>
-          <p>{t(selectedZone.desc)}</p>
-          <a
-            href={mandalselvaMapZones.find((zone) => zone.id === selected)?.sourceUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("copy.se.offisiell.soneinformasjon.339f256")}
-          </a>
+          <p>{t(selectedZone.season)}</p>
+          {onBuyPermit && (
+            <button className="primary map-buy-permit" onClick={onBuyPermit}>
+              {t("copy.se.og.velg.fiskekort.i.sone.de70e36")} {selectedZone.id}
+            </button>
+          )}
         </article>
       )}
-      <p className="map-source-note">{t("map.boundarySourceNote")}</p>
+      {locate && (
+        <div className="map-location-controls">
+          <button className="secondary" onClick={locate} disabled={isLocating}>
+            <Icon name="pin" size={18} />
+            {t(isLocating ? "location.loading" : "content.2cfe36db276e")}
+          </button>
+          {locationMessage && (
+            <div className="map-location-status" role="status">
+              {locationMessage}
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 }

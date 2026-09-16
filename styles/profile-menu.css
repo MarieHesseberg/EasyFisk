@@ -35,7 +35,8 @@
   margin-top: 15px;
   background: var(--color-surface);
   border-radius: 19px;
-  padding: 3px 14px;
+  padding: 0 16px;
+  border: 1px solid var(--color-menu-border);
 }
 .menu-list button {
   width: 100%;
@@ -44,35 +45,61 @@
   background: transparent;
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 13px 0;
+  gap: 14px;
+  min-height: 92px;
+  padding: 18px 0;
+  color: var(--color-menu-primary);
+  font-family: Arial, sans-serif;
   text-align: left;
 }
 .menu-list button > span {
   display: grid;
   place-items: center;
-  width: 37px;
-  height: 37px;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--radius-control);
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--color-menu-icon-surface);
+  color: var(--color-menu-primary);
 }
 .menu-list p {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 6px;
+  min-width: 0;
   margin: 0;
 }
 .menu-list b {
-  font-size: 12px;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 700;
 }
 .menu-list small {
-  font-size: 9px;
-  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--color-menu-description);
 }
 .version {
   text-align: center;
   font-size: 9px;
   color: var(--color-text-muted);
+}
+
+.menu-list button:last-child {
+  border-bottom: 0;
+}
+.menu-list button > svg {
+  flex-shrink: 0;
+  color: var(--color-menu-primary);
+}
+.menu-list button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+@media (hover: hover) {
+  .menu-list button:hover {
+    background: var(--color-menu-hover);
+  }
 }

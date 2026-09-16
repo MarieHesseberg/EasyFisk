@@ -1,3 +1,4 @@
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
 import { formatClock, formatDuration } from "@/lib/time";
@@ -9,6 +10,7 @@ export function ActiveSessionCard({
   registerCatch,
   showRules,
   stop,
+  compact = false,
 }: {
   activeZone: string;
   elapsed: number;
@@ -16,19 +18,20 @@ export function ActiveSessionCard({
   registerCatch: () => void;
   showRules: () => void;
   stop: () => void;
+  compact?: boolean;
 }) {
   const { language, t } = useLanguage();
   return (
-    <section className="active-session">
+    <section className={`active-session${compact ? " active-session-compact" : ""}`}>
       <span className="pulse" />
       <small>{t("copy.aktiv.fiske.kt.316984d")}</small>
-      <h2>{t(activeZone)}</h2>
+      <h2>{localizeZoneName(activeZone, language)}</h2>
       <div className="big-time">{formatDuration(elapsed)}</div>
       <p>
         {selectLocalized(
           language,
-          `Startet i dag kl. ${formatClock(startTime, language)} · GPS-sone bekreftet`,
-          `Started today at ${formatClock(startTime, language)} · GPS zone confirmed`,
+          `Startet kl. ${formatClock(startTime, language)} · valgt sone`,
+          `Started at ${formatClock(startTime, language)} · selected zone`,
         )}
       </p>
       <div className="session-actions">
@@ -36,13 +39,15 @@ export function ActiveSessionCard({
           <Icon name="fish" />
           {t("copy.registrer.fangst.7ecfe4d")}
         </button>
-        <button onClick={showRules}>
-          <Icon name="map" />
-          {t("copy.sone.og.regler.44d7d17")}
-        </button>
+        {!compact && (
+          <button onClick={showRules}>
+            <Icon name="map" />
+            {t("copy.sone.og.regler.44d7d17")}
+          </button>
+        )}
       </div>
       <button className="outline-danger" onClick={stop}>
-        {t("copy.stopp.bekreft.fangst.eller.nullfangst.daab96b")}
+        {selectLocalized(language, "Avslutt tur", "Finish trip")}
       </button>
     </section>
   );

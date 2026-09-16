@@ -47,13 +47,10 @@ export function FeedbackReviewStep({ controller }: { controller: FeedbackControl
           checked={isConfirmed}
           onChange={(event) => setIsConfirmed(event.target.checked)}
         />
-        <span>
-          {t("copy.jeg.bekrefter.at.opplysningene.er.riktige.meldin.c606640")}{" "}
-          {feedback.organizationName}.
-        </span>
+        <span>{t("prototype.feedbackConsent")}</span>
       </label>
       <button className="primary" disabled={!isConfirmed || isSubmitting} onClick={submit}>
-        {t(isSubmitting ? "Sender …" : "Send melding")}
+        {t(isSubmitting ? "prototype.saving" : "prototype.testMessage")}
       </button>
       <FormError message={submissionError ? t(submissionError) : undefined} />
       <button className="secondary" onClick={() => setStep(1)}>

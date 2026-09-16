@@ -1,9 +1,17 @@
+import { useUserLocation } from "@/features/map/hooks/use-user-location";
+import { findMandalselvaZoneAtPosition } from "@/data/map/mandalselva-zone-boundaries";
+import type { ZoneId } from "@/domain/zones/zone";
 import { FlowTitle } from "@/components/ui/flow-title";
 import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/localization/language-provider";
 
-export function PositionStep({ back, next }: { back: () => void; next: () => void }) {
+export function PositionStep({ back, next }: { back: () => void; next: (zone?: ZoneId) => void }) {
   const { t } = useLanguage();
+  const location = useUserLocation((position) => {
+    const zone = findMandalselvaZoneAtPosition(position);
+    if (!zone) return t("copy.posisjon.funnet.utenfor.de.registrerte.hovedsone.01eed28");
+    next(zone);
+  });
   return (
     <>
       <FlowTitle
@@ -15,12 +23,13 @@ export function PositionStep({ back, next }: { back: () => void; next: () => voi
       <div className="permission-card">
         <Icon name="pin" size={30} />
         <b>{t("copy.tillat.posisjon.nar.du.starter.8b37ef3")}</b>
-        <p>{t("copy.easyfisk.lagrer.bare.sone.og.valgfri.startposisj.9daf0dd")}</p>
+        <p>{t("location.singleUse")}</p>
       </div>
-      <button className="primary" onClick={next}>
+      {location.message && <p role="status">{location.message}</p>}
+      <button className="primary" disabled={location.isLoading} onClick={location.locate}>
         {t("copy.tillat.og.finn.sone.3fbbe01")}
       </button>
-      <button className="secondary" onClick={next}>
+      <button className="secondary" onClick={() => next()}>
         {t("copy.velg.sone.manuelt.ad41072")}
       </button>
       <button className="text-button" onClick={back}>

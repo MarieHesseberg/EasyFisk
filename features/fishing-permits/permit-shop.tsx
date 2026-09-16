@@ -10,18 +10,17 @@ import { testPurchaseDocumentPrefix } from "./create-test-permit-document";
 import { usePermitReportingDays } from "./use-permit-reporting-days";
 import { usePermitPurchases } from "./use-permit-purchases";
 import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-reporting-day";
-import {
-  canPurchasePrototypePermit,
-  formatPrototypePermitPrice,
-} from "@/domain/fishing-permits/prototype-permit-product";
+import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { PermitProductDetail } from "./permit-product-detail";
 import { getPrototypePermitDateRange } from "@/domain/fishing-permits/get-prototype-permit-availability";
 import { useLanguage } from "@/components/localization/language-provider";
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
-const todayInNorway = () =>
-  new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
+import { createPermitJourney, type PermitJourneyProps, type PermitJourney } from "./permit-journey";
 export function PermitShop({
+  journey,
+  setJourney,
+  onZoneChange,
   initialZone = 3,
   onPermitPurchased,
   onOpenPermits,
@@ -29,7 +28,7 @@ export function PermitShop({
   paymentOutcome = "approved",
   onRegisterFee,
   onRegisterDisinfection,
-}: {
+}: PermitJourneyProps & {
   initialZone?: ZoneId;
   onPermitPurchased?: (zoneId: ZoneId) => void;
   onOpenPermits?: () => void;
@@ -38,11 +37,22 @@ export function PermitShop({
   onRegisterFee?: () => void;
   onRegisterDisinfection?: () => void;
 }) {
-  const [selectedZone, setSelectedZone] = useState<ZoneId>(initialZone);
-  const [selectedArea, setSelectedArea] = useState("all");
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const [isProductActionOpen, setIsProductActionOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(todayInNorway);
+  const [localJourney, setLocalJourney] = useState(() => createPermitJourney(initialZone));
+  const current = journey ?? localJourney;
+  const update = setJourney ?? setLocalJourney;
+  const { selectedZone, selectedArea, selectedProductId, isProductActionOpen, selectedDate } =
+    current;
+  function change<Key extends keyof PermitJourney>(key: Key, value: PermitJourney[Key]) {
+    update((previous) => ({ ...previous, [key]: value }));
+  }
+  const setSelectedDate = (date: string) => change("selectedDate", date);
+  const setSelectedProductId = (id: string | null) => change("selectedProductId", id);
+  const setIsProductActionOpen = (open: boolean) => change("isProductActionOpen", open);
+  const setSelectedArea = (area: string) => change("selectedArea", area);
+  const setSelectedZone = (zone: ZoneId) => {
+    change("selectedZone", zone);
+    onZoneChange?.(zone);
+  };
   const [resetMessage, setResetMessage] = useState("");
   const { language, t } = useLanguage();
   const documents = useDocuments();
@@ -90,6 +100,15 @@ export function PermitShop({
     if (selectedProduct.action === "register-reporting-day")
       return (
         <PermitReportingRegistration
+          initialSelectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          initialOutcome={current.reportingDrafts[selectedProduct.id]}
+          onOutcomeChange={(outcome) =>
+            update((previous) => ({
+              ...previous,
+              reportingDrafts: { ...previous.reportingDrafts, [selectedProduct.id]: outcome },
+            }))
+          }
           product={selectedProduct}
           documents={documents.documents}
           back={() => setIsProductActionOpen(false)}
@@ -105,9 +124,27 @@ export function PermitShop({
         savePurchase={purchases.save}
         onPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}
-        onGoHome={onGoHome}
+        onGoHome={() => {
+          setSelectedProductId(null);
+          setIsProductActionOpen(false);
+          onGoHome?.();
+        }}
         paymentOutcome={paymentOutcome}
         initialSelectedDate={selectedDate}
+        initialForm={current.drafts[selectedProduct.id]}
+        initialReceipt={current.receipts[`${selectedProduct.id}:${selectedDate}`]}
+        onFormChange={(form) =>
+          update((previous) => ({
+            ...previous,
+            drafts: { ...previous.drafts, [selectedProduct.id]: form },
+          }))
+        }
+        onReceipt={(receipt) =>
+          update((previous) => ({
+            ...previous,
+            receipts: { ...previous.receipts, [`${selectedProduct.id}:${selectedDate}`]: receipt },
+          }))
+        }
         onRegisterFee={onRegisterFee}
         onRegisterDisinfection={onRegisterDisinfection}
       />
@@ -153,54 +190,47 @@ export function PermitShop({
       )}
       <div className="permit-shop-list">
         {products.map((product) => (
-          <article key={product.id}>
-            <small>{t(product.areaName)}</small>
-            <h3>{t(product.title)}</h3>
-            <b>{formatPrototypePermitPrice(product, language)}</b>
-            {!canPurchasePrototypePermit(product) && (
-              <span className="permit-shop-price-note">
-                {t("permit.contactForPurchase", {
-                  name: product.seller.contactName,
-                  phone: product.seller.phone,
-                })}
-              </span>
-            )}
-            <strong className="permit-availability available">
-              {t("copy.tilgjengelighet.kontrolleres.for.valgt.dato.cf8072d")}
-            </strong>
-            <p>{t(product.validity.label)}</p>
-            <p>{t(product.capacity.label)}</p>
-            <p>{t(product.note)}</p>
-            <div>
-              <button
-                className="primary"
-                type="button"
-                onClick={() => {
-                  const range = getPrototypePermitDateRange(product);
-                  const today = todayInNorway();
-                  setSelectedDate(
-                    product.type === "season"
+          <article key={product.id} className="permit-product-card">
+            <h3 id={`permit-title-${product.id}`}>{t(product.title)}</h3>
+            <b>
+              {product.price.amountNok === null
+                ? t("permit.priceUnavailable")
+                : `${new Intl.NumberFormat(language === "no" ? "nb-NO" : "en-GB").format(product.price.amountNok)} kr`}
+            </b>
+            <button
+              className="primary permit-product-card-open"
+              type="button"
+              aria-describedby={`permit-title-${product.id}`}
+              onClick={() => {
+                const range = getPrototypePermitDateRange(product);
+                const today = selectedDate;
+                setSelectedDate(
+                  product.type === "season"
+                    ? range.startsOn
+                    : today < range.startsOn
                       ? range.startsOn
-                      : today < range.startsOn
-                        ? range.startsOn
-                        : today > range.endsOn
-                          ? range.endsOn
-                          : today,
-                  );
-                  setIsProductActionOpen(false);
-                  setSelectedProductId(product.id);
-                }}
-              >
-                {product.action === "register-reporting-day"
-                  ? t("content.f04bf0163837")
-                  : canPurchasePrototypePermit(product)
-                    ? t("content.43d5c7677b35")
-                    : t("content.4392dec2b09e")}
-              </button>
-              <a href={product.source.url} target="_blank" rel="noreferrer">
-                {t("copy.se.produktinformasjon.a1a7572")}
-              </a>
-            </div>
+                      : today > range.endsOn
+                        ? range.endsOn
+                        : today,
+                );
+                update((previous) => ({
+                  ...previous,
+                  isProductActionOpen: false,
+                  selectedProductId: product.id,
+                  receipts: Object.fromEntries(
+                    Object.entries(previous.receipts).filter(
+                      ([key]) => !key.startsWith(`${product.id}:`),
+                    ),
+                  ),
+                }));
+              }}
+            >
+              {product.action === "register-reporting-day"
+                ? t("content.f04bf0163837")
+                : canPurchasePrototypePermit(product)
+                  ? t("copy.kj.p.fiskekort.d32ea04")
+                  : t("content.4392dec2b09e")}
+            </button>
           </article>
         ))}
       </div>

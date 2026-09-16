@@ -1,0 +1,99 @@
+/* Keep home readable and compact without restricting text growth. */
+.home-screen .app-header {
+  padding-bottom: 14px;
+}
+.home-screen .app-header h1 {
+  margin-top: 18px;
+}
+.home-screen .status-card.preparing {
+  padding: 16px;
+}
+.home-screen .preparing .status-top small,
+.home-screen .preparing > p {
+  display: none;
+}
+.home-screen .preparing h2 {
+  font-size: 1.375rem;
+  margin: 0;
+}
+.home-screen .home-preparation-actions {
+  margin-top: 14px;
+  gap: 8px;
+}
+.home-screen .preparing .start-button {
+  min-height: 48px;
+  padding: 11px 12px;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.home-screen .home-past-session-button,
+.home-screen .home-feedback-card {
+  min-height: 80px;
+  padding: 12px;
+  gap: 10px;
+  margin-top: 10px;
+  border-width: 1px;
+}
+.home-screen .home-past-session-button {
+  background: var(--color-shortcut-surface);
+  border-color: var(--color-shortcut-border);
+}
+.home-screen .home-feedback-card {
+  background: var(--color-feedback-surface);
+  border-color: var(--color-feedback-border);
+}
+.home-screen .home-past-session-button b,
+.home-screen .home-feedback-card b {
+  font-size: 1rem;
+  line-height: 1.3;
+  color: #123b5d;
+}
+.home-screen .home-past-session-button small,
+.home-screen .home-feedback-card p {
+  font-size: 1rem;
+  line-height: 1.3;
+  color: #123b5d;
+}
+.home-screen .home-past-session-button > .home-shortcut-icon,
+.home-screen .home-feedback-card > span {
+  flex-basis: 36px;
+  width: 36px;
+  height: 40px;
+  background: transparent;
+}
+@media (max-height: 700px) and (max-width: 599px) {
+  .home-screen .app-header {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .home-screen .app-header h1 {
+    font-size: 1.625rem;
+    margin-top: 12px;
+  }
+  .home-screen .status-card.preparing {
+    padding: 12px;
+  }
+  .home-screen .home-preparation-actions {
+    margin-top: 10px;
+  }
+}
+.home-screen .app-header-actions {
+  top: 18px;
+}
+.home-screen .language-switcher {
+  min-height: 44px;
+}
+@media (max-height: 700px) and (max-width: 599px) {
+  .home-screen .app-header-actions {
+    top: 10px;
+  }
+}
+/* The three preparation actions share the original blue button style. */
+.home-screen .preparing .start-button {
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: transparent;
+  border-radius: var(--radius-card-soft);
+  text-align: center;
+}

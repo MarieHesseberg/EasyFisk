@@ -4,3 +4,6 @@ out
 visual-baseline/screenshots
 package-lock.json
 next-env.d.ts
+tmp/
+playwright-report/
+test-results/

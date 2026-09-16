@@ -59,6 +59,15 @@ export function ProfileScreen({
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
+        <button onClick={() => setDetail("control-card")}>
+          <span>
+            <Icon name="shield" />
+          </span>
+          <p>
+            <b>{t("copy.mine.dokumenter.39d5623")}</b>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
         <button onClick={openPermitShop}>
           <span>
             <Icon name="ticket" />

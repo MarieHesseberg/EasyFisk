@@ -1,0 +1,119 @@
+/* Shared card treatment for preparation and the two home shortcuts. */
+.home-screen .status-card.preparing {
+  padding: 20px;
+  border-radius: 20px;
+  background: linear-gradient(155deg, var(--color-primary-soft), var(--color-surface-cool));
+  border-color: var(--color-border-cool);
+}
+.home-screen .preparing .status-top {
+  gap: 12px;
+}
+.home-screen .preparing .status-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+.home-screen .preparing h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 4px 0 0;
+  text-wrap: balance;
+}
+.home-screen .preparing .status-top small {
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 1;
+  color: var(--color-text-soft);
+}
+.home-screen .preparing > p {
+  margin: 16px 0 0;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+  opacity: 1;
+}
+.home-preparation-actions {
+  gap: 10px;
+  margin-top: 18px;
+}
+.home-screen .preparing .start-button {
+  justify-content: flex-start;
+  min-height: 52px;
+  padding: 14px;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  text-align: left;
+  font-weight: 700;
+}
+.home-screen .preparing .preparation-disinfection,
+.home-screen .preparing .preparation-fee,
+.home-screen .preparing .document-ready {
+  background: var(--color-surface);
+  border-color: var(--color-border-cool);
+  color: var(--color-primary-dark);
+}
+.home-screen .home-past-session-button,
+.home-screen .home-feedback-card {
+  min-height: 92px;
+  padding: 16px;
+  margin-top: 14px;
+  gap: 12px;
+  border: 1px solid var(--color-border-cool);
+  border-radius: 20px;
+  box-shadow: 0 3px 12px #123b5d06;
+  color: var(--color-text);
+}
+.home-screen .home-past-session-button {
+  background: var(--color-surface);
+}
+.home-screen .home-feedback-card {
+  background: var(--color-surface-warm);
+  border-color: var(--color-border-warm);
+}
+.home-screen .home-past-session-button > .home-shortcut-icon,
+.home-screen .home-feedback-card > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.home-screen .home-feedback-card > span {
+  background: var(--color-icon-warm);
+}
+.home-shortcut-copy,
+.home-feedback-card > div {
+  min-width: 0;
+}
+.home-screen .home-past-session-button b,
+.home-screen .home-feedback-card b {
+  font:
+    700 15px/1.35 Arial,
+    sans-serif;
+  color: var(--color-text);
+}
+.home-screen .home-past-session-button small,
+.home-screen .home-feedback-card p {
+  font:
+    400 12px/1.45 Arial,
+    sans-serif;
+  color: var(--color-text-soft);
+}
+.home-screen .home-past-session-button > svg,
+.home-screen .home-feedback-card > svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-soft);
+}
+.home-screen .home-past-session-button:focus-visible,
+.home-screen .home-feedback-card:focus-visible,
+.home-screen .preparing .start-button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}

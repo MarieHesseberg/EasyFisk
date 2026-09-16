@@ -1,4 +1,5 @@
 "use client";
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { localizeSessionResult } from "@/lib/localize-session-result";
 
 import { selectLocalized } from "@/locales";
@@ -52,7 +53,7 @@ export function SessionHistoryList({
               key={session.id}
               day={String(date.getDate()).padStart(2, "0")}
               month={monthFormatter.format(date).replace(".", "").toUpperCase()}
-              title={t(session.zone)}
+              title={localizeZoneName(session.zone, language)}
               time={`${formatClock(session.start, language)}–${formatClock(session.end, language)} · ${formatLongDuration(session.duration, language)}`}
               result={localizeSessionResult(session.result, language)}
               onClick={() => setSelectedSession(session)}

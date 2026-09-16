@@ -13,13 +13,20 @@ test("PDF 1–2: notification contents and missing-document checks are English",
   await expect(alerts).toContainText("The example permit expires today at 17:59.");
   await expect(alerts).toContainText("The rules were updated on 1 August.");
   await page.getByRole("button", { name: "Close notifications" }).click();
-  await page.getByRole("button", { name: "SEE WHAT IS MISSING" }).click();
-  const flow = page.getByRole("dialog", { name: "Start fishing" });
-  await expect(flow).toContainText("1 of 4");
-  await expect(flow).toContainText("Cannot start");
-  await expect(flow).toContainText("STATUS FROM YOUR DOCUMENTS");
-  await expect(flow.getByRole("button", { name: "Find and buy a fishing permit" })).toBeVisible();
-  await expect(flow).not.toContainText(/Mangler|Gyldig|Kvoter|Kan ikke|Avbryt|Sone 3/);
+  await page.getByRole("button", { name: "Map", exact: true }).click();
+  await page
+    .locator(".map-zone-switcher")
+    .getByRole("button", { name: "Zone 3", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Use zone 3 for the fishing session" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "View and choose permits in zone 3" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Home", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Buy fishing permit", exact: true })).toBeVisible();
 });
 
 for (const zone of [1, 2, 3, 4]) {
@@ -29,25 +36,23 @@ for (const zone of [1, 2, 3, 4]) {
       .locator(".map-zone-switcher")
       .getByRole("button", { name: `Zone ${zone}`, exact: true })
       .click();
-    const sheet = page.locator(".zone-sheet");
+    const sheet = page.locator(".map-zone-popup");
     await expect(
       sheet.getByRole("heading", { name: new RegExp(`^Zone ${zone}`), level: 2 }),
     ).toBeVisible();
-    await expect(sheet).toContainText("SEASON 2026");
     await expect(sheet).not.toContainText(
       /SESONG|Sone|fiskedøgn|døgnkort|simulert|offentliggjort|inkludert/,
     );
     await sheet.getByRole("button", { name: `View and choose permits in zone ${zone}` }).click();
-    const shop = page.getByRole("dialog", { name: "Permits and purchases" });
+    const shop = page.locator(".permit-shop-screen");
     await expect(shop.locator(".permit-shop-list > article").first()).toBeVisible();
     const count = await shop.locator(".permit-shop-list > article").count();
     expect(count).toBeGreaterThan(0);
     for (let index = 0; index < count; index++) {
       await shop.locator(".permit-shop-list > article").nth(index).getByRole("button").click();
       const detail = shop.locator(".permit-product-detail");
-      await expect(
-        detail.getByRole("img", { name: `Guide map showing zone ${zone}` }),
-      ).toBeVisible();
+      await expect(detail).toContainText(`Zone ${zone}`);
+      await detail.getByText("Terms and product information", { exact: true }).click();
       await expect(detail).not.toContainText(
         /fiskedøgn|døgnkort|sesongkort|Simulert|Kapasitet|Inntil|Fangst|Gyldig|Registreringen|Datokalenderen|Fortsett|sesongen/,
       );
@@ -59,13 +64,13 @@ for (const zone of [1, 2, 3, 4]) {
 test("English mobile home stays within the viewport and switches back to Norwegian", async ({
   page,
 }, testInfo) => {
-  await expect(page.getByRole("heading", { name: "Documents missing" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
   await page.screenshot({ path: testInfo.outputPath("english-home.png"), fullPage: true });
   await page.getByRole("button", { name: "Bytt til norsk" }).click();
-  await expect(page.getByRole("heading", { name: "Dokumentasjon mangler" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Gjør deg klar til å fiske" })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "no");

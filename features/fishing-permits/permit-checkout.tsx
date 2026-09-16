@@ -1,4 +1,6 @@
 "use client";
+import type { PermitReceipt } from "./permit-journey";
+import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { getDocumentReadiness } from "@/domain/documents/get-document-readiness";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
@@ -11,7 +13,6 @@ import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
 import {
   PermitBuyerStep,
   PermitConfirmationStep,
-  PermitPaymentStep,
   PermitRequirementsStep,
   PermitReviewStep,
 } from "./permit-checkout-steps";
@@ -19,7 +20,7 @@ import { usePermitCheckoutController } from "./use-permit-checkout-controller";
 import { getPrototypePermitAvailability } from "@/domain/fishing-permits/get-prototype-permit-availability";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { useLanguage } from "@/components/localization/language-provider";
-const stepNumbers = { buyer: 1, requirements: 2, review: 3, payment: 4, confirmation: 5 } as const;
+const stepNumbers = { buyer: 1, review: 2, confirmation: 3 } as const;
 export function PermitCheckout({
   product,
   documents = [],
@@ -31,6 +32,10 @@ export function PermitCheckout({
   onGoHome,
   paymentOutcome = "approved",
   initialSelectedDate,
+  initialForm,
+  onFormChange,
+  initialReceipt,
+  onReceipt,
   onRegisterFee,
   onRegisterDisinfection,
 }: {
@@ -44,6 +49,10 @@ export function PermitCheckout({
   onGoHome?: () => void;
   paymentOutcome?: PrototypePaymentOutcome;
   initialSelectedDate?: string;
+  initialForm?: PermitCheckoutForm;
+  onFormChange?: (form: PermitCheckoutForm) => void;
+  initialReceipt?: PermitReceipt;
+  onReceipt?: (receipt: PermitReceipt) => void;
   onRegisterFee?: () => void;
   onRegisterDisinfection?: () => void;
 }) {
@@ -55,6 +64,10 @@ export function PermitCheckout({
     onPurchased,
     paymentOutcome,
     initialSelectedDate,
+    initialForm,
+    onFormChange,
+    initialReceipt,
+    onReceipt,
   });
   const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
   let validity = null;
@@ -76,7 +89,7 @@ export function PermitCheckout({
         </button>
       )}
       <ol className="permit-checkout-progress" aria-label={t("copy.fremdrift.feea71d")}>
-        {[1, 2, 3, 4, 5].map((number) => (
+        {[1, 2, 3].map((number) => (
           <li
             key={number}
             aria-current={stepNumbers[checkout.step] === number ? "step" : undefined}
@@ -89,14 +102,17 @@ export function PermitCheckout({
         <b>{t("copy.testkj.p.dette.er.en.prototype.d619945")}</b>
         <span>{t("copy.ingen.reservasjon.eller.betaling.gjennomf.res.2f46e3e")}</span>
       </div>
-      <article className="permit-selected-product">
-        <small>{t(product.areaName)}</small>
-        <h2>{t(product.title)}</h2>
-        <b>{formatPrototypePermitPrice(product)}</b>
-        <p>{t(product.validity.label)}</p>
-      </article>
+      {checkout.step === "buyer" && (
+        <article className="permit-selected-product">
+          <small>{t(product.areaName)}</small>
+          <h2>{t(product.title)}</h2>
+          <b>{formatPrototypePermitPrice(product)}</b>
+          <p>{t(product.validity.label)}</p>
+        </article>
+      )}
       {checkout.step === "buyer" && (
         <PermitBuyerStep
+          embedded
           selectedDate={checkout.selectedDate}
           form={checkout.form}
           updateForm={checkout.updateForm}
@@ -104,14 +120,14 @@ export function PermitCheckout({
           next={checkout.continueFromBuyer}
         />
       )}
-      {checkout.step === "requirements" && (
+      {checkout.step === "buyer" && (
         <PermitRequirementsStep
           product={product}
           form={checkout.form}
           updateForm={checkout.updateForm}
           readiness={{ fee: readiness.fee, disinfection: readiness.disinfection }}
-          back={() => checkout.backTo("buyer")}
-          next={checkout.continueFromRequirements}
+          back={back}
+          next={checkout.continueFromBuyer}
         />
       )}
       {checkout.step === "review" && (
@@ -120,17 +136,9 @@ export function PermitCheckout({
           selectedDate={checkout.selectedDate}
           form={checkout.form}
           updateForm={checkout.updateForm}
-          back={() => checkout.backTo("requirements")}
-          next={checkout.continueToPayment}
-        />
-      )}
-      {checkout.step === "payment" && (
-        <PermitPaymentStep
-          product={product}
-          form={checkout.form}
-          back={() => checkout.backTo("review")}
-          submit={() => void checkout.submit()}
           isSubmitting={checkout.isSubmitting}
+          back={() => checkout.backTo("buyer")}
+          next={() => void checkout.submit()}
         />
       )}
       {checkout.step === "confirmation" && checkout.receipt && (

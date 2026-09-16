@@ -174,7 +174,6 @@ export function StatisticsScreen({
         <StatisticsOverview />
       ) : (
         <>
-          <PersonalStatisticsPanel statistics={calculatePersonalStatistics(catches, sessions)} />
           <FishingActivityScreen
             embedded
             openPastSession={openPastSession}
@@ -194,6 +193,7 @@ export function StatisticsScreen({
             startTime={startTime}
             sessions={sessions}
           />
+          <PersonalStatisticsPanel statistics={calculatePersonalStatistics(catches, sessions)} />
         </>
       )}
     </div>

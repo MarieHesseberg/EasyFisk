@@ -44,16 +44,17 @@ export function CatchReportDetail({
         <div className={"report-status-banner " + (report.late ? "late" : "ok")}>
           <Icon name={report.late ? "clock" : "check"} />
           <div>
-            <b>{t(report.late ? "Rapportert etter fristen" : "Rapportert innen fristen")}</b>
+            <b>{t(report.late ? "prototype.catchLate" : "prototype.catchOnTime")}</b>
             <span>
               {selectLocalized(
                 language,
-                `Fangst ${formatClock(report.caughtAt, language)} · sendt ${formatClock(report.submittedAt, language)}`,
-                `Caught ${formatClock(report.caughtAt, language)} · submitted ${formatClock(report.submittedAt, language)}`,
+                `Fangst ${formatClock(report.caughtAt, language)} · lagret lokalt ${formatClock(report.submittedAt, language)}`,
+                `Caught ${formatClock(report.caughtAt, language)} · saved locally ${formatClock(report.submittedAt, language)}`,
               )}
             </span>
           </div>
         </div>
+        <p>{t("prototype.localOnly")}</p>
         {report.imageData && (
           // Bildet er lokalt valgt av brukeren og finnes som en data-URL, ikke som en optimaliserbar fil.
           // eslint-disable-next-line @next/next/no-img-element

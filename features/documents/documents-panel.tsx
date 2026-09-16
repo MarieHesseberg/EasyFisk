@@ -6,6 +6,7 @@ import {
   type DocumentKind,
   type FishingDocument,
 } from "@/domain/documents/fishing-document";
+import { DocumentPracticalInformation } from "./document-practical-information";
 import { DocumentForm } from "./document-form";
 import { DocumentCard } from "./document-card";
 import { documentGuidance } from "./document-guidance";
@@ -15,7 +16,7 @@ import { useLanguage } from "@/components/localization/language-provider";
 export function DocumentsPanel({
   kind,
   testDocument,
-  allowManualRegistration = true,
+  allowManualRegistration = kind !== "permit",
 }: {
   kind: DocumentKind;
   testDocument?: FishingDocument | null;
@@ -27,26 +28,42 @@ export function DocumentsPanel({
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const guidance = documentGuidance[kind];
+  const compact = kind !== "permit";
   const actualDocuments = store.documents.filter((document) => document.kind === kind);
   const hasValidActualDocument = getDocumentReadiness(actualDocuments).valid[kind];
   const isMockView = testDocument !== undefined && testDocument !== null && !hasValidActualDocument;
   const isMissingTest = testDocument === null && !hasValidActualDocument;
   return (
-    <section className="documents-panel" aria-label={t(documentTitles[kind])}>
-      <p>{t(guidance.text)}</p>
-      <a href={guidance.url} target="_blank" rel="noreferrer">
-        {t(guidance.link)} ↗
-      </a>
-      <p className="document-status">
-        {t(
-          isMockView
-            ? "Testmodus – opplysningene nedenfor er mockdata og lagres ikke."
-            : isMissingTest
-              ? "Testmodus – registrer dokumentet nedenfor for å løse den simulerte mangelen."
-              : "Lokal dokumentmappe – ikke en godkjenning. Dokumentene er ikke eksternt verifisert.",
-        )}
-      </p>
-      <p>{t("documents.localStoragePrivacy")}</p>
+    <section
+      className={`documents-panel${compact ? " documents-panel-simple" : ""}`}
+      aria-label={t(documentTitles[kind])}
+    >
+      {compact ? (
+        <p className="document-intro">
+          {kind === "fee"
+            ? selectLocalized(
+                language,
+                "Legg til kvitteringen for betalt fiskeravgift.",
+                "Add the receipt for your paid fishing fee.",
+              )
+            : selectLocalized(
+                language,
+                "Legg til beviset du fikk da utstyret ble desinfisert.",
+                "Add the certificate you received when your equipment was disinfected.",
+              )}
+        </p>
+      ) : (
+        <p>{t(guidance.text)}</p>
+      )}
+      {(isMockView || isMissingTest) && (
+        <p className="document-status">
+          {t(
+            isMockView
+              ? "Testmodus – opplysningene nedenfor er mockdata og lagres ikke."
+              : "Testmodus – registrer dokumentet nedenfor for å løse den simulerte mangelen.",
+          )}
+        </p>
+      )}
       {!isMockView && store.loading && <p role="status">{t("copy.henter.dokumenter.8a0c2dc")}</p>}
       {!isMockView && (store.error || error) && (
         <p role="alert">
@@ -113,6 +130,25 @@ export function DocumentsPanel({
             }}
           />
         ))}
+      <a className="document-resource-link" href={guidance.url} target="_blank" rel="noreferrer">
+        {compact
+          ? kind === "fee"
+            ? selectLocalized(language, "Betal avgift / hent kvittering", "Pay fee / get receipt")
+            : selectLocalized(language, "Finn desinfiseringssted", "Find a disinfection station")
+          : t(guidance.link)}{" "}
+        ↗
+      </a>
+      <details className="document-more-information">
+        <summary>{selectLocalized(language, "Mer informasjon", "More information")}</summary>
+        {kind === "fee" || kind === "disinfection" ? (
+          <DocumentPracticalInformation kind={kind} />
+        ) : (
+          <>
+            <p>{t("content.edde3c5a4756")}</p>
+            <p>{t("documents.localStoragePrivacy")}</p>
+          </>
+        )}
+      </details>
     </section>
   );
 }

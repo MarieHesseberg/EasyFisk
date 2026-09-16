@@ -9,6 +9,7 @@ export function useActiveSessionController(repository: FishingLogRepository) {
   const [active, setActive] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [sessionZone, setSessionZone] = useState<ZoneId>(3);
+  const [sessionSubzone, setSessionSubzone] = useState<string | undefined>();
   const [finishAfterCatch, setFinishAfterCatch] = useState(false);
   const [requestedCatchTime, setRequestedCatchTime] = useState(0);
   const { elapsed, setElapsed } = useSessionTimer(active, startTime);
@@ -21,6 +22,7 @@ export function useActiveSessionController(repository: FishingLogRepository) {
       if (!restoredSession) return;
       setStartTime(restoredSession.startTime);
       setSessionZone(restoredSession.zone);
+      setSessionSubzone(restoredSession.subzone);
       setActive(true);
     });
     return () => {
@@ -28,11 +30,16 @@ export function useActiveSessionController(repository: FishingLogRepository) {
     };
   }, [repository]);
 
-  function start(selectedZone: ZoneId) {
+  function start(selectedZone: ZoneId, subzone?: string) {
     const now = Date.now();
-    const result = repository.saveActiveSession({ startTime: now, zone: selectedZone });
+    const result = repository.saveActiveSession({
+      startTime: now,
+      zone: selectedZone,
+      ...(subzone ? { subzone } : {}),
+    });
     if (!result.ok) return result;
     setSessionZone(selectedZone);
+    setSessionSubzone(subzone);
     setStartTime(now);
     setElapsed(0);
     setActive(true);
@@ -51,7 +58,15 @@ export function useActiveSessionController(repository: FishingLogRepository) {
   }
 
   return {
-    state: { active, elapsed, finishAfterCatch, requestedCatchTime, sessionZone, startTime },
+    state: {
+      active,
+      elapsed,
+      finishAfterCatch,
+      requestedCatchTime,
+      sessionZone,
+      sessionSubzone,
+      startTime,
+    },
     actions: {
       requestCatchBeforeFinish,
       setActive,

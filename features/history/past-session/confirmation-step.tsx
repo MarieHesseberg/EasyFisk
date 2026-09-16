@@ -18,6 +18,7 @@ export function ConfirmationStep({
       </div>
       <small>{t("copy.etterregistreringen.er.sendt.8bdc195")}</small>
       <h2>{t("copy.tur.og.fangster.er.registrert.6457353")}</h2>
+      <p>{t("prototype.localOnly")}</p>
       <p className="sent-lead">{t("history.previousTripSaved")}</p>
       <div className="report-id">
         <small>{t("copy.kt.2f297d2")}</small>

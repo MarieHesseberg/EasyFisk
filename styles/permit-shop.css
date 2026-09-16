@@ -129,3 +129,6 @@
 .permit-reporting-summary p {
   margin: 0;
 }
+.permit-product-card-open {
+  margin-top: var(--space-4);
+}

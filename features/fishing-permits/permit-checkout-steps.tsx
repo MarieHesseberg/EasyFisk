@@ -12,12 +12,14 @@ type UpdateForm = <Key extends keyof PermitCheckoutForm>(
   value: PermitCheckoutForm[Key],
 ) => void;
 export function PermitBuyerStep({
+  embedded = false,
   selectedDate,
   form,
   updateForm,
   availability,
   next,
 }: {
+  embedded?: boolean;
   selectedDate: string;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
@@ -76,14 +78,16 @@ export function PermitBuyerStep({
           onChange={(event) => updateForm("phone", event.target.value)}
         />
       </label>
-      <button
-        className="primary"
-        type="button"
-        disabled={!["available", "low"].includes(availability.status)}
-        onClick={next}
-      >
-        {t("copy.neste.krav.og.deltakere.39ad70a")}
-      </button>
+      {!embedded && (
+        <button
+          className="primary"
+          type="button"
+          disabled={!["available", "low"].includes(availability.status)}
+          onClick={next}
+        >
+          {t("copy.neste.krav.og.deltakere.39ad70a")}
+        </button>
+      )}
     </div>
   );
 }
@@ -146,6 +150,9 @@ export function PermitRequirementsStep({
           {t("copy.du.kan.kj.pe.kortet.na.men.kan.ikke.starte.fiske.95066be")}
         </p>
       )}
+      <a href={product.source.url} target="_blank" rel="noreferrer">
+        {t("copy.se.original.produktkilde.hos.inatur.4b67735")}
+      </a>
       <label className="permit-consent">
         <input
           type="checkbox"
@@ -177,14 +184,15 @@ export function PermitReviewStep({
   product,
   selectedDate,
   form,
-  updateForm,
+  isSubmitting = false,
   back,
   next,
 }: {
   product: PrototypePermitProduct;
   selectedDate: string;
   form: PermitCheckoutForm;
-  updateForm: UpdateForm;
+  updateForm?: UpdateForm;
+  isSubmitting?: boolean;
   back: () => void;
   next: () => void;
 }) {
@@ -201,7 +209,9 @@ export function PermitReviewStep({
         </div>
         <div>
           <dt>{t("copy.omrade.3ba9267")}</dt>
-          <dd>{t(product.areaName)}</dd>
+          <dd>
+            {selectLocalized(language, "Sone", "Zone")} {product.zoneId} · {t(product.areaName)}
+          </dd>
         </div>
         <div>
           <dt>{t("copy.gyldig.d0441fd")}</dt>
@@ -213,66 +223,30 @@ export function PermitReviewStep({
           <dt>{t("copy.kortholder.2628a15")}</dt>
           <dd>{form.fullName}</dd>
         </div>
-        <PriceSummaryRows price={price} language={language} />
-      </dl>
-      <label className="permit-consent">
-        <input
-          type="checkbox"
-          checked={form.confirmsDetails}
-          onChange={(event) => updateForm("confirmsDetails", event.target.checked)}
-        />
-        {t("copy.jeg.bekrefter.at.opplysningene.er.riktige.159b496")}
-      </label>
-      <div className="permit-checkout-actions">
-        <button className="secondary" type="button" onClick={back}>
-          {t("copy.tilbake.og.endre.7334721")}
-        </button>
-        <button className="primary" type="button" onClick={next}>
-          {t("copy.ga.til.testbetaling.315024d")}
-        </button>
-      </div>
-    </div>
-  );
-}
-export function PermitPaymentStep({
-  product,
-  form,
-  back,
-  submit,
-  isSubmitting,
-}: {
-  product: PrototypePermitProduct;
-  form: PermitCheckoutForm;
-  back: () => void;
-  submit: () => void;
-  isSubmitting: boolean;
-}) {
-  const { language, t } = useLanguage();
-  const price = getPermitPriceSummary(product, form);
-  return (
-    <div className="permit-checkout-step permit-payment-step">
-      <small>{t("copy.sikker.testbetaling.cfbdf20")}</small>
-      <h3>{t("copy.betal.fiskekortet.f9c5ba3")}</h3>
-      <div className="permit-test-warning">
-        <b>{t("copy.dette.er.en.simulert.betaling.4126f20")}</b>
-        <span>{t("copy.ingen.kortopplysninger.registreres.og.ingen.peng.5d1179b")}</span>
-      </div>
-      <dl className="permit-order-summary">
         <div>
-          <dt>{t("copy.betalingsmate.5026a1a")}</dt>
-          <dd>{t("copy.testkort.4242.64ff459")}</dd>
+          <dt>{t("copy.e.post.b3418c9")}</dt>
+          <dd>{form.email}</dd>
         </div>
+        <div>
+          <dt>{t("copy.telefon.40314f8")}</dt>
+          <dd>{form.phone}</dd>
+        </div>
+        {product.type === "group" && (
+          <div>
+            <dt>{t("copy.medfiskere.ett.fullt.navn.per.linje.b8f9c1f")}</dt>
+            <dd style={{ whiteSpace: "pre-line" }}>{form.coFishersText}</dd>
+          </div>
+        )}
         <PriceSummaryRows price={price} language={language} />
       </dl>
-      <p className="permit-no-real-payment">{t("copy.ingen.ekte.betaling.gjennomf.res.5e69190")}</p>
       <div className="permit-checkout-actions">
         <button className="secondary" type="button" disabled={isSubmitting} onClick={back}>
-          {t("copy.tilbake.4fb8dc1")}
+          {t("copy.tilbake.og.endre.7334721")}
         </button>
-        <button className="primary" type="button" disabled={isSubmitting} onClick={submit}>
+        <button className="primary" type="button" disabled={isSubmitting} onClick={next}>
           {isSubmitting
             ? t("copy.behandler.testbetaling.384e9f3")
-            : `${t(selectLocalized(language, "Betal", "Pay"))} ${price.totalNok} kr`}
+            : `${selectLocalized(language, "Betal", "Pay")} ${price.totalNok} kr`}
         </button>
       </div>
     </div>
@@ -388,14 +362,20 @@ function PriceSummaryRows({
   const { t } = useLanguage();
   return (
     <>
-      <div>
-        <dt>{t("copy.grunnpris.69eff4c")}</dt>
-        <dd>{price.basePriceNok} kr</dd>
-      </div>
-      <div>
-        <dt>{t("copy.administrasjonsgebyr.d0ec567")}</dt>
-        <dd>{price.administrationFeeNok === 0 ? "0 kr" : `${price.administrationFeeNok} kr`}</dd>
-      </div>
+      {price.administrationFeeNok > 0 && (
+        <>
+          <div>
+            <dt>{t("copy.grunnpris.69eff4c")}</dt>
+            <dd>{price.basePriceNok} kr</dd>
+          </div>
+          <div>
+            <dt>{t("copy.administrasjonsgebyr.d0ec567")}</dt>
+            <dd>
+              {price.administrationFeeNok === 0 ? "0 kr" : `${price.administrationFeeNok} kr`}
+            </dd>
+          </div>
+        </>
+      )}
       <div>
         <dt>{t("copy.omfang.5d26931")}</dt>
         <dd>

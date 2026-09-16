@@ -127,12 +127,12 @@ export function CatchReviewStep({
             disabled={!violationConfirmed || isSubmitting}
             onClick={submit}
           >
-            {t(isSubmitting ? "Sender …" : "Send inn faktisk fangst")}
+            {t(isSubmitting ? "prototype.saving" : "prototype.saveActualCatch")}
           </button>
         </>
       ) : (
         <button className="primary" disabled={isSubmitting} onClick={submit}>
-          {t(isSubmitting ? "Sender …" : "Send fangstrapport")}
+          {t(isSubmitting ? "prototype.saving" : "prototype.saveCatch")}
         </button>
       )}
       <FormError message={submissionError ? t(submissionError) : undefined} />

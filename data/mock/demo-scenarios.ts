@@ -141,6 +141,26 @@ export const demoStatuses: DemoScenario[] = [
     action: t("Se åpne soner", "View open zones"),
   }),
   scenario({
+    id: "zoneInside",
+    label: t("GPS innenfor en fiskesone", "GPS inside a fishing zone"),
+    title: t("Du er klar til å fiske", "You are ready to fish"),
+    detail: t(
+      "Testposisjon innenfor Sone 3. Ingen ekte posisjon brukes.",
+      "Test location inside Zone 3. No real location is used.",
+    ),
+    level: "ok",
+  }),
+  scenario({
+    id: "zoneOutside",
+    label: t("GPS utenfor fiskesonene", "GPS outside the fishing zones"),
+    title: t("Velg fiskesone", "Choose fishing zone"),
+    detail: t(
+      "Testposisjon utenfor alle fiskesonene. Velg sone manuelt.",
+      "Test location outside all fishing zones. Choose a zone manually.",
+    ),
+    level: "warning",
+  }),
+  scenario({
     id: "zoneBorder",
     label: t("GPS ved en sonegrense", "GPS near a zone boundary"),
     title: t("Posisjonen er nær en sonegrense", "The location is near a zone boundary"),

@@ -1,3 +1,4 @@
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { localizeSessionResult } from "@/lib/localize-session-result";
 import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
@@ -46,7 +47,7 @@ export function SessionHistoryDetail({
         <div className="detail-data">
           <p>
             <span>{t("copy.sone.44f1e2e")}</span>
-            <b>{t(session.zone)}</b>
+            <b>{localizeZoneName(session.zone, language)}</b>
           </p>
           <p>
             <span>{t("copy.tidspunkt.83ee898")}</span>

@@ -47,11 +47,9 @@ async function completePermitCheckoutDetails(user: ReturnType<typeof userEvent.s
   await user.type(screen.getByLabelText("Fødselsdato"), "1990-05-12");
   await user.type(screen.getByLabelText("E-post"), "marie@example.no");
   await user.type(screen.getByLabelText("Telefon"), "98765432");
-  await user.click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
   await user.click(screen.getByLabelText(/Jeg har lest og forstått fiskereglene/));
   await user.click(screen.getByLabelText(/Jeg godtar vilkårene/));
   await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
-  await user.click(screen.getByLabelText(/Jeg bekrefter at opplysningene er riktige/));
 }
 
 test("personlig statistikk viser lokalt beregnet historikk og kvoter", () => {
@@ -227,8 +225,8 @@ test("tilbakemeldingsflyten validerer, kontrollerer og sender", async () => {
   await user.click(screen.getByRole("button", { name: "Kontroller meldingen" }));
   expect(screen.getByRole("heading", { name: "Er opplysningene riktige?" })).toBeTruthy();
   await user.click(screen.getByRole("checkbox"));
-  await user.click(screen.getByRole("button", { name: "Send melding" }));
-  expect(await screen.findByText("MELDINGEN ER SENDT")).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Fullfør testmelding" }));
+  expect(await screen.findByText("Testmeldingen er fullført")).toBeTruthy();
 });
 
 test("kartet viser en forståelig melding når posisjonstilgang avslås", async () => {
@@ -245,37 +243,21 @@ test("kartet viser en forståelig melding når posisjonstilgang avslås", async 
         } as GeolocationPositionError),
     },
   });
-  render(
-    <MapScreen
-      selected={3}
-      setSelected={() => undefined}
-      onUseZone={() => undefined}
-      onBuyPermit={() => undefined}
-    />,
-  );
+  render(<MapScreen selected={3} setSelected={() => undefined} onBuyPermit={() => undefined} />);
   await userEvent.setup().click(screen.getByRole("button", { name: "Vis min posisjon" }));
   expect((await screen.findByRole("status")).textContent).toContain("Posisjonstilgang ble avslått");
 });
 
-test("kartprototypen viser Holmegård-kort og et produkt i hver hovedsone", () => {
+test("kartet viser ikke produktkatalogen, som fortsatt har kort i alle soner", () => {
   for (const zoneId of [1, 2, 3, 4] as const) {
     expect(permitCatalogRepository.listProductsByZone(zoneId).length).toBeGreaterThan(0);
   }
 
-  render(
-    <MapScreen
-      selected={2}
-      setSelected={() => undefined}
-      onUseZone={() => undefined}
-      onBuyPermit={() => undefined}
-    />,
-  );
+  render(<MapScreen selected={2} setSelected={() => undefined} onBuyPermit={() => undefined} />);
 
-  expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
-  expect(screen.getByRole("heading", { name: "Holmegård sesongkort" })).toBeTruthy();
-  expect(screen.getByRole("heading", { name: "Rapporteringskort for sesongkort" })).toBeTruthy();
-  expect(screen.getByText("2 dagskort per fiskedøgn")).toBeTruthy();
-  expect(screen.getByText("15 sesongkort totalt")).toBeTruthy();
+  expect(screen.queryByRole("heading", { name: "Holmegård dagskort" })).toBeNull();
+  expect(screen.queryByRole("button", { name: /Se og velg fiskekort/ })).toBeNull();
+  expect(screen.getByRole("region", { name: "Interaktivt kart over Mandalselva" })).toBeTruthy();
 });
 
 test("fiskekortkatalogen tilbyr strukturerte produktdata gjennom repositoryet", () => {
@@ -312,14 +294,13 @@ test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyt
   const product = screen.getByRole("heading", { name: "Båtkort sone 1" }).closest("article");
   if (!product) throw new Error("Produktkort mangler");
 
-  expect(product.textContent).toContain("Kontakt Karl Gjermund Damli for pris og kjøp");
-  expect(product.querySelector("a")?.textContent).toContain("Se produktinformasjon");
+  expect(product.textContent).toContain("Pris ikke offentliggjort");
   const detailButton = product.querySelector("button");
   if (!detailButton) throw new Error("Knapp for produktdetaljer mangler");
   await userEvent.setup().click(detailButton);
   expect(screen.getByRole("heading", { name: "Båtkort sone 1" })).toBeTruthy();
-  expect(screen.getByText("Veiledende sonekart · fysisk oppmerking gjelder")).toBeTruthy();
-  expect(screen.getByText("Pris ikke offentliggjort")).toBeTruthy();
+  expect(screen.getByRole("link", { name: /Se original produktkilde hos Inatur/ })).toBeTruthy();
+  expect(screen.getAllByText("Pris ikke offentliggjort").length).toBeGreaterThan(0);
   expect(screen.getByText("Kjøp via selger")).toBeTruthy();
   expect(screen.getByText("Karl Gjermund Damli")).toBeTruthy();
   expect(screen.getByRole("link", { name: /Ring \+47 901 44 337/ })).toBeTruthy();
@@ -340,11 +321,11 @@ test("kjøpskontrolleren avviser produkter uten dokumentert pris", async () => {
     />,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · kontroller" }));
   expect(screen.getByRole("alert").textContent).toContain(
     "kan ikke kjøpes før prisen er bekreftet",
   );
-  expect(screen.queryByRole("heading", { name: "Deltakere og fiskekrav" })).toBeNull();
+  expect(screen.queryByRole("button", { name: /Betal .* kr/ })).toBeNull();
 });
 
 test("produktregisteret har døgnkort, sesongkort og gruppekort", () => {
@@ -490,8 +471,7 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   const user = userEvent.setup();
   await completePermitCheckoutDetails(user);
   expect(screen.queryByRole("radio", { name: /Betaling/ })).toBeNull();
-  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
-  expect(screen.getByRole("heading", { name: "Betal fiskekortet" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Kontroller bestillingen" })).toBeTruthy();
   await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
 
   expect(saved).toHaveLength(1);
@@ -564,7 +544,6 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   );
 
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
   await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Betalingen ble avbrutt");
   unmount();
@@ -585,7 +564,6 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
     />,
   );
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Gå til testbetaling" }));
   await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
   expect(saves).toBe(0);
@@ -604,7 +582,7 @@ test("kjøpsreisen stopper når nødvendige kjøperopplysninger mangler", async 
     />,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · krav og deltakere" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · kontroller" }));
   expect(screen.getByRole("alert").textContent).toContain("Oppgi fullt navn");
   expect(screen.getByRole("heading", { name: "Fiskedato og kortinnehaver" })).toBeTruthy();
 });
@@ -615,13 +593,14 @@ test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
     <MapScreen
       selected={2}
       setSelected={() => undefined}
-      onUseZone={() => undefined}
       onBuyPermit={() => {
         opened = true;
       }}
     />,
   );
 
+  expect(screen.queryByRole("button", { name: "Se og velg fiskekort i sone 2" })).toBeNull();
+  await userEvent.setup().click(screen.getByRole("button", { name: "Sone 2" }));
   await userEvent
     .setup()
     .click(screen.getByRole("button", { name: "Se og velg fiskekort i sone 2" }));
@@ -712,7 +691,7 @@ test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", async () => {
     await result.current.actions.finishSessionFlow(false);
   });
   expect(result.current.state.active).toBe(false);
-  expect(result.current.state.lastSession?.result).toBe("Nullfangst registrert");
+  expect(result.current.state.lastSession?.result).toBe("1 fangst");
 });
 
 test("tidligere økt og fangst kan etterregistreres", async () => {
@@ -858,4 +837,35 @@ test("fangstbilde hentes tilbake fra bildelager etter ny controller", async () =
   );
 
   expect(second.result.current.state.catches[0].id).toBe(storedId);
+});
+
+test("lagringsfeil bevarer kjøpsopplysninger og samme bestilling kan prøves igjen", async () => {
+  const product = permitCatalogRepository.findProduct("zone-3-day")!;
+  const ids: string[] = [];
+  let attemptCount = 0;
+  render(
+    <PermitCheckout
+      product={product}
+      initialSelectedDate="2026-08-20"
+      back={() => undefined}
+      savePurchase={() => operationSucceeded(undefined)}
+      save={async (document) => {
+        ids.push(document.id);
+        if (++attemptCount === 1) throw new Error("Storage unavailable");
+        return operationSucceeded(undefined);
+      }}
+    />,
+  );
+  const user = userEvent.setup();
+  await completePermitCheckoutDetails(user);
+  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  expect(screen.getByRole("alert").textContent).toContain("Opplysningene er bevart");
+  await user.click(screen.getByRole("button", { name: "Tilbake og endre" }));
+  expect((screen.getByLabelText("Fullt navn") as HTMLInputElement).value).toBe("Marie Hesseberg");
+  expect((screen.getByLabelText(/Jeg godtar vilkårene/) as HTMLInputElement).checked).toBe(true);
+  await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
+  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
+  expect(ids).toHaveLength(2);
+  expect(ids[1]).toBe(ids[0]);
 });

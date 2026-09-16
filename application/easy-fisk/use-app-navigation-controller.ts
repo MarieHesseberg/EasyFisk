@@ -40,6 +40,11 @@ export function useAppNavigationController() {
       closeDetail: () => setGlobalDetail(null),
       closeFlow: () => setFlow(null),
       navigate,
+      openMyHistory: () => {
+        setPastSessionRequested(false);
+        setStatsMineRequested(true);
+        setScreen("stats");
+      },
       openPastSession: () => {
         setPastSessionRequested(true);
         setStatsMineRequested(true);

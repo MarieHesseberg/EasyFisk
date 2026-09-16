@@ -14,6 +14,10 @@ import { useActiveSessionController } from "./use-active-session-controller";
 import { useAppNavigationController } from "./use-app-navigation-controller";
 import { useFishingLogController } from "./use-fishing-log-controller";
 import { useLanguage } from "@/components/localization/language-provider";
+function sessionResult(count: number) {
+  return count ? `${count} fangst${count === 1 ? "" : "er"}` : "Nullfangst registrert";
+}
+
 export function useEasyFiskController(repository: FishingLogRepository = fishingLogRepository) {
   const { language, t } = useLanguage();
   const navigation = useAppNavigationController();
@@ -21,17 +25,18 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   const log = useFishingLogController(repository);
   const { message: toast, showToast } = useTimedToast();
   const { demoStatus, flow, zone } = navigation.state;
-  const { active, finishAfterCatch, sessionZone, startTime } = session.state;
-  async function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId) {
+  const { active, finishAfterCatch, sessionZone, sessionSubzone, startTime } = session.state;
+  async function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId, subzone?: string) {
     if (flow === "start") {
       const selected = selectedZone ?? zone;
-      const result = session.actions.start(selected);
+      const result = session.actions.start(selected, subzone);
       if (!result.ok) {
         showToast(t(result.error));
         return;
       }
+      navigation.actions.setZone(selected);
       navigation.actions.closeFlow();
-      navigation.actions.navigate("stats");
+      navigation.actions.navigate("home");
       showToast(
         selectLocalized(
           language,
@@ -43,7 +48,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     }
     if (flow === "stop" && caught) {
       navigation.actions.closeFlow();
-      navigation.actions.setScreen("stats");
+      navigation.actions.setScreen("home");
       session.actions.requestCatchBeforeFinish();
       return;
     }
@@ -53,8 +58,11 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       const completed = createSessionRecord(
         startedAt,
         end,
-        findZoneName(sessionZone, fishingContentRepository.getZones()),
-        "Nullfangst registrert",
+        findZoneName(sessionZone, fishingContentRepository.getZones(), sessionSubzone),
+        sessionResult(
+          log.state.catches.filter((record) => record.sessionStart === startedAt).length,
+        ),
+        sessionSubzone,
       );
       const result = await log.actions.saveCompletedSession(completed, [], true);
       if (!result.ok) {
@@ -76,7 +84,10 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         startTime ?? end,
         end,
         record.zone,
-        `1 ${t(record.species).toLowerCase()} · ${t(record.result).toLowerCase()}`,
+        sessionResult(
+          log.state.catches.filter((existing) => existing.sessionStart === startTime).length + 1,
+        ),
+        sessionSubzone,
       );
       const completedResult = await log.actions.saveCompletedSession(
         completedSession,
@@ -119,7 +130,16 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
   function useZone(selectedZone: ZoneId) {
     navigation.actions.setZone(selectedZone);
-    session.actions.setSessionZone(selectedZone);
+    if (active) {
+      showToast(
+        selectLocalized(
+          language,
+          "Sone valgt i kartet. Den aktive turen er uendret.",
+          "Map zone selected. Your active trip is unchanged.",
+        ),
+      );
+      return;
+    }
     navigation.actions.setScreen("home");
     navigation.actions.setFlow("start");
   }
@@ -129,6 +149,10 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       ...navigation.actions,
       addCatch,
       addPastSession,
+      cancelCatchBeforeFinish: () => {
+        session.actions.setFinishAfterCatch(false);
+        if (active) navigation.actions.setFlow("stop");
+      },
       completeCatchFlow: () => {
         session.actions.setFinishAfterCatch(false);
         navigation.actions.setFlow("summary");

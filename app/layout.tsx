@@ -38,6 +38,13 @@ import "@/styles/responsive.css";
 import "@/styles/documents.css";
 import "@/styles/scroll-indicator.css";
 import "@/styles/language-switcher.css";
+import "@/styles/home-journey.css";
+import "@/styles/home-shortcuts.css";
+import "@/styles/home-accessibility.css";
+import "@/styles/session-start.css";
+import "@/styles/permit-journey.css";
+import "@/styles/map-controls.css";
+import "@/styles/permit-terms.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

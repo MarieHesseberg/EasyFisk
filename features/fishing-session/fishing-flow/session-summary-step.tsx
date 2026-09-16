@@ -1,3 +1,5 @@
+import { localizeSessionResult } from "@/lib/localize-session-result";
+import { localizeZoneName } from "@/lib/localize-zone-name";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { formatClock, formatLongDuration } from "@/lib/time";
@@ -21,7 +23,7 @@ export function SessionSummaryStep({
       <div className="final-summary">
         <div>
           <small>{t("copy.sone.e4076c9")}</small>
-          <b>{t(session.zone)}</b>
+          <b>{localizeZoneName(session.zone, language)}</b>
         </div>
         <div>
           <small>{t("copy.tidspunkt.00d279e")}</small>
@@ -35,7 +37,7 @@ export function SessionSummaryStep({
         </div>
         <div>
           <small>{t("copy.fangst.31f8f71")}</small>
-          <b>{t(session.result)}</b>
+          <b>{localizeSessionResult(session.result, language)}</b>
         </div>
         <div>
           <small>{t("copy.rapportstatus.f529088")}</small>

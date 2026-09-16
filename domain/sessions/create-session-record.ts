@@ -5,6 +5,7 @@ export function createSessionRecord(
   end: number,
   zone: string,
   result: string,
+  subzone?: string,
 ): SessionRecord {
   return {
     id: `EF-OKT-${start}-${end}`,
@@ -13,5 +14,6 @@ export function createSessionRecord(
     duration: Math.max(1, Math.floor((end - start) / 1000)),
     zone,
     result,
+    ...(subzone ? { subzone } : {}),
   };
 }

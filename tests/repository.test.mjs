@@ -57,7 +57,6 @@ test("regelverdier hentes fra ett versjonert regelgrunnlag", async () => {
     "domain/catches/reporting-deadline.ts",
     "domain/quotas/get-quota-status.ts",
     "data/mock/rule-sections.ts",
-    "features/home/home-screen.tsx",
     "features/rules/rules-screen.tsx",
     "features/rules/rule-center.tsx",
     "features/catch-report/steps/catch-review-step.tsx",
@@ -252,6 +251,24 @@ test("grensesnittet bruker bare den godkjente blåpaletten og semantiske varself
       .toLowerCase()
       .match(/#[0-9a-f]{6}(?:[0-9a-f]{2})?/g) ?? [];
   const approvedBases = [
+    // Muted blue and warm shortcut colors requested for the mobile redesign.
+    "#f4f8fa",
+    "#d1e1e7",
+    "#4c6879",
+    "#faf7f1",
+    "#e3dacc",
+    "#f1e8d9",
+    "#e4eff4",
+    "#477087",
+    "#f0e4cf",
+    "#866a3e",
+    "#7293a3",
+    "#c8d8e1",
+    "#345d75",
+    "#e8eff3",
+    "#405968",
+    "#f2f6f8",
+
     "#eaf4f8",
     "#b8dceb",
     "#2c7da0",

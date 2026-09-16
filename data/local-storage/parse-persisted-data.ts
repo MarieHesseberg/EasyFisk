@@ -57,7 +57,8 @@ function isSessionRecord(value: unknown): value is SessionRecord {
     isFiniteNumber(value.end) &&
     isFiniteNumber(value.duration) &&
     typeof value.zone === "string" &&
-    typeof value.result === "string"
+    typeof value.result === "string" &&
+    isOptionalString(value.subzone)
   );
 }
 
@@ -68,7 +69,8 @@ function isLegacySessionRecord(value: unknown): value is LegacySessionRecord {
     isFiniteNumber(value.end) &&
     isFiniteNumber(value.duration) &&
     typeof value.zone === "string" &&
-    typeof value.result === "string"
+    typeof value.result === "string" &&
+    isOptionalString(value.subzone)
   );
 }
 
@@ -80,7 +82,8 @@ function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
   return (
     isObject(value) &&
     isFiniteNumber(value.startTime) &&
-    (value.zone === 1 || value.zone === 2 || value.zone === 3 || value.zone === 4)
+    (value.zone === 1 || value.zone === 2 || value.zone === 3 || value.zone === 4) &&
+    isOptionalString(value.subzone)
   );
 }
 

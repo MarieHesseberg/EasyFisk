@@ -1,3 +1,4 @@
+import type { PermitJourneyProps } from "./permit-journey";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import type { ZoneId } from "@/domain/zones/zone";
 import { PermitShop } from "@/features/fishing-permits/permit-shop";
@@ -5,6 +6,9 @@ import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-pu
 import { useLanguage } from "@/components/localization/language-provider";
 
 export function PermitShopScreen({
+  journey,
+  setJourney,
+  onZoneChange,
   initialZone,
   onPermitPurchased,
   onOpenPermits,
@@ -12,7 +16,7 @@ export function PermitShopScreen({
   paymentOutcome,
   onRegisterFee,
   onRegisterDisinfection,
-}: {
+}: PermitJourneyProps & {
   initialZone: ZoneId;
   onPermitPurchased: (zoneId: ZoneId) => void;
   onOpenPermits: () => void;
@@ -29,6 +33,9 @@ export function PermitShopScreen({
         eyebrow={t("copy.dagskort.sesongkort.og.gruppekort.9c08652")}
       />
       <PermitShop
+        journey={journey}
+        setJourney={setJourney}
+        onZoneChange={onZoneChange}
         initialZone={initialZone}
         onPermitPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}

@@ -1,4 +1,20 @@
 export const no = {
+  "location.insecure":
+    "Nettleseren krever en sikker adresse (HTTPS) for posisjon. Velg sone manuelt her.",
+  "settings.autoSave": "Endringer lagres automatisk på denne enheten.",
+  "prototype.localOnly": "Lagret på denne enheten. Ikke sendt til elveeigarlaget.",
+  "prototype.feedbackComplete": "Testmeldingen er fullført",
+  "prototype.feedbackNotice":
+    "Ingen melding er sendt eller lagret. Dette er bare en demonstrasjon.",
+  "prototype.feedbackConsent":
+    "Jeg bekrefter at opplysningene er riktige. Dette er en test; meldingen sendes ikke.",
+  "prototype.testMessage": "Fullfør testmelding",
+  "prototype.saveCatch": "Lagre fangst",
+  "prototype.saveActualCatch": "Lagre faktisk fangst",
+  "prototype.saving": "Lagrer …",
+  "prototype.catchLate": "Lagret etter fristen",
+  "prototype.catchOnTime": "Lagret innen fristen",
+  "prototype.testPosition": "Eksempelposisjon – ikke hentet fra enheten",
   "language.switchToEnglish": "Switch to English",
   "language.switchToNorwegian": "Bytt til norsk",
   "language.english": "English",
@@ -15,7 +31,7 @@ export const no = {
   "catch.savedAsReported":
     "Fangsten er lagret slik den faktisk ble oppgitt, med tydelig merking for mulig oppfølging.",
   "catch.actualTimePreserved":
-    "Det faktiske fangsttidspunktet er beholdt, og innsendingstidspunktet er registrert separat.",
+    "Det faktiske fangsttidspunktet er beholdt, og tidspunktet for lokal lagring er registrert separat.",
   "catch.harvestFollowUp":
     "Fangsten er registrert som avlivet. Rapporten er merket for mulig oppfølging fordi størrelsen er utenfor tillatt grense.",
   "catch.confirmAccuracy":
@@ -131,7 +147,7 @@ export const no = {
   "copy.er.opplysningene.riktige.0ac71b4": "Er opplysningene riktige?",
   "copy.etterregistrering.fangst.f4b6896": "ETTERREGISTRERING · FANGST",
   "copy.etterregistrering.tur.28c8b42": "ETTERREGISTRERING · TUR",
-  "copy.etterregistreringen.er.sendt.8bdc195": "ETTERREGISTRERINGEN ER SENDT",
+  "copy.etterregistreringen.er.sendt.8bdc195": "ETTERREGISTRERING LAGRET LOKALT",
   "copy.f.dselsdato.c71a920": "Fødselsdato",
   "copy.faktisk.fangsttid.f0af7b2": "Faktisk fangsttid",
   "copy.fangst.04050e7": "Fangst",
@@ -144,7 +160,7 @@ export const no = {
   "copy.fangster.03afa4a": "Fangster",
   "copy.fangster.du.rapporterer.vises.her.fdb15db": "Fangster du rapporterer, vises her.",
   "copy.fangster.i.kten.baf1d73": "Fangster i økten",
-  "copy.fangstrapporten.er.sendt.3e0f255": "Fangstrapporten er sendt",
+  "copy.fangstrapporten.er.sendt.3e0f255": "Fangsten er lagret på denne enheten",
   "copy.ferdig.1f6ddf8": "Ferdig",
   "copy.fikk.du.fangst.c3aa311": "Fikk du fangst?",
   "copy.finn.riktig.fiskesone.33661af": "Finn riktig fiskesone",
@@ -214,7 +230,7 @@ export const no = {
     "Ingen reservasjon eller betaling gjennomføres.",
   "copy.ingen.tidligere.fiske.kter.c735256": "Ingen tidligere fiskeøkter",
   "copy.innhold.kontrollert.f924dee": "innhold kontrollert",
-  "copy.innsendt.fangstrapport.bc44267": "INNSENDT FANGSTRAPPORT",
+  "copy.innsendt.fangstrapport.bc44267": "LOKALT LAGRET FANGSTRAPPORT",
   "copy.interaktivt.kart.over.mandalselva.6c7ebf7": "Interaktivt kart over Mandalselva",
   "copy.ja.legg.til.fangst.b9b578c": "Ja · legg til fangst",
   "copy.jeg.har.lest.og.forstatt.reglene.5497ce6": "Jeg har lest og forstått reglene",
@@ -230,7 +246,7 @@ export const no = {
   "copy.kontakt.selger.b199545": "Kontakt selger",
   "copy.kontroller.bestillingen.1bd9bf4": "Kontroller bestillingen",
   "copy.kontroller.dagsaktuell.status.34a88f1": "Kontroller dagsaktuell status",
-  "copy.kontroller.f.r.innsending.94790aa": "KONTROLLER FØR INNSENDING",
+  "copy.kontroller.f.r.innsending.94790aa": "KONTROLLER TESTMELDING",
   "copy.kontroller.kilde.b98dfe7": "Kontroller kilde",
   "copy.kontroller.meldingen.538f52b": "Kontroller meldingen",
   "copy.kontroller.turen.f.r.innsending.9e347a9": "Kontroller turen før innsending",
@@ -247,7 +263,7 @@ export const no = {
   "copy.kvoter.og.rapportering.6b4b100": "Kvoter og rapportering",
   "copy.lagre.og.legg.til.en.fangst.til.cf79651": "Lagre og legg til en fangst til",
   "copy.lagrer.85686f0": "Lagrer …",
-  "copy.lagt.ved.med.samtykke.f86e73d": "lagt ved med samtykke",
+  "copy.lagt.ved.med.samtykke.f86e73d": "eksempelposisjon",
   "copy.laks.2d51eba": "Laks",
   "copy.laks.kilogram.5e38fbb": "LAKS · KILOGRAM",
   "copy.laks.og.sj.rret.bd16ad9": "Laks og sjøørret",
@@ -293,7 +309,7 @@ export const no = {
   "copy.personlig.laksekvote.6b7582e": "Personlig laksekvote",
   "copy.personvern.og.samtykker.274afdf": "Personvern og samtykker",
   "copy.posisjon.7733e25": "POSISJON",
-  "copy.posisjon.hentet.med.samtykke.e779358": "posisjon hentet med samtykke",
+  "copy.posisjon.hentet.med.samtykke.e779358": "eksempelposisjon i prototypen",
   "copy.posisjon.ved.soneforslag.bafc7ae": "Posisjon ved soneforslag",
   "copy.pr.v.igjen.0a31d71": "Prøv igjen",
   "copy.pr.v.statusmotoren.2bde28f": "Prøv statusmotoren",
@@ -331,12 +347,12 @@ export const no = {
   "copy.resultat.a68cd1b": "RESULTAT",
   "copy.resultat.c9f6c1d": "Resultat",
   "copy.resultat.ved.neste.testbetaling.624acf3": "Resultat ved neste testbetaling",
-  "copy.rettelse.er.meldt.feec083": "Rettelse er meldt",
-  "copy.rettelse.meldt.60dd0a8": "rettelse meldt",
+  "copy.rettelse.er.meldt.feec083": "Rettelse lagret lokalt",
+  "copy.rettelse.meldt.60dd0a8": "rettelse lagret lokalt",
   "copy.salgskalender.4afb904": "Salgskalender",
   "copy.se.offisiell.soneinformasjon.339f256": "Se offisiell soneinformasjon ↗",
   "copy.send.en.ny.melding.bb40a14": "Send en ny melding",
-  "copy.send.rettelsesmelding.48949f1": "Send rettelsesmelding",
+  "copy.send.rettelsesmelding.48949f1": "Lagre rettelse lokalt",
   "copy.sesong.a17a572": "Sesong",
   "copy.sesongkort.ma.registreres.f.rst.7749e94": "Sesongkort må registreres først",
   "copy.sesongkortets.gyldighet.8ef20e1": "Sesongkortets gyldighet",
@@ -370,7 +386,7 @@ export const no = {
   "copy.steg.1.av.4.fangst.e168eda": "STEG 1 AV 4 · FANGST",
   "copy.steg.2.av.4.detaljer.45c9ed9": "STEG 2 AV 4 · DETALJER",
   "copy.steg.3.av.4.regelkontroll.288fe43": "STEG 3 AV 4 · REGELKONTROLL",
-  "copy.steg.4.av.4.sendt.439db98": "STEG 4 AV 4 · SENDT",
+  "copy.steg.4.av.4.sendt.439db98": "STEG 4 AV 4 · LAGRET LOKALT",
   "copy.storlaks.unntaket.er.brukt.18d641e": "Storlaks-unntaket er brukt",
   "copy.takk.for.at.du.meldte.fra.21b901a": "Takk for at du meldte fra",
   "copy.takk.for.rapporteringen.c880a91": "Takk for rapporteringen",
@@ -446,7 +462,7 @@ export const no = {
   "copy.etterregistrer.en.tur.uten.a.starte.en.ny.fiske..be70a08":
     "Etterregistrer en tur uten å starte en ny fiskeøkt",
   "copy.faktisk.tur.og.fangsttid.beholdes.innsendingstid.e1d8785":
-    "Faktisk tur- og fangsttid beholdes. Innsendingstid registreres separat.",
+    "Faktisk tur- og fangsttid beholdes. Tidspunktet for lokal lagring registreres separat.",
   "copy.fangsttid.ma.v.re.innenfor.turen.lengde.og.vekt..5790876":
     "Fangsttid må være innenfor turen. Lengde og vekt må fylles ut.",
   "copy.fiskekortet.er.kj.pt.men.fiske.kan.ikke.startes..09b9f06":
@@ -1003,6 +1019,5 @@ export const no = {
   "content.f66f616bc64c": "Dokumentet er lagret på denne enheten. Ikke eksternt verifisert.",
   "content.b08f3c83621d": "Dokumentet er slettet fra denne enheten.",
 } as const;
-
 export type TranslationKey = keyof typeof no;
 export type TranslationCatalog = Record<TranslationKey, string>;
