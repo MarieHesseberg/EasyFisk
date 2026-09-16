@@ -164,9 +164,7 @@ export function PermitProductDetail({
           <h3>{t("copy.fangst.og.rapportering.f07042e")}</h3>
           <p>{t(details.reportingRule)}</p>
         </section>
-        {product.note !== "Pris og tilgjengelighet er simulert for å demonstrere kjøpsflyten." && (
-          <p className="permit-product-note">{t(product.note)}</p>
-        )}
+        {t(product.note) && <p className="permit-product-note">{t(product.note)}</p>}
       </details>
       <PermitSellerContact seller={product.seller} />
       <a

@@ -190,17 +190,11 @@ export function HomeScreen({
       {!active && documentReadiness.complete && (
         <p className="home-document-status">
           <Icon name="check" size={16} />
-          {isStatusTestMode
-            ? selectLocalized(
-                language,
-                "Testmodus · dokumentkrav oppfylt",
-                "Test mode · document requirements met",
-              )
-            : selectLocalized(
-                language,
-                "Dokumentkrav registrert i appen",
-                "Document requirements recorded in the app",
-              )}
+          {selectLocalized(
+            language,
+            "Dokumentkrav registrert i appen",
+            "Document requirements recorded in the app",
+          )}
         </p>
       )}
 

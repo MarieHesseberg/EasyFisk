@@ -97,3 +97,25 @@
 .permit-order-summary dt {
   overflow-wrap: anywhere;
 }
+
+.permit-checkout-step .permit-purchase-requirement-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--color-warning-border);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.permit-purchase-requirement-note > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.permit-checkout-step .permit-purchase-requirement-note > p {
+  margin: 0;
+  font: inherit;
+}

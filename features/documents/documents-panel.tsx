@@ -32,7 +32,6 @@ export function DocumentsPanel({
   const actualDocuments = store.documents.filter((document) => document.kind === kind);
   const hasValidActualDocument = getDocumentReadiness(actualDocuments).valid[kind];
   const isMockView = testDocument !== undefined && testDocument !== null && !hasValidActualDocument;
-  const isMissingTest = testDocument === null && !hasValidActualDocument;
   return (
     <section
       className={`documents-panel${compact ? " documents-panel-simple" : ""}`}
@@ -54,15 +53,6 @@ export function DocumentsPanel({
         </p>
       ) : (
         <p>{t(guidance.text)}</p>
-      )}
-      {(isMockView || isMissingTest) && (
-        <p className="document-status">
-          {t(
-            isMockView
-              ? "Testmodus – opplysningene nedenfor er mockdata og lagres ikke."
-              : "Testmodus – registrer dokumentet nedenfor for å løse den simulerte mangelen.",
-          )}
-        </p>
       )}
       {!isMockView && store.loading && <p role="status">{t("copy.henter.dokumenter.8a0c2dc")}</p>}
       {!isMockView && (store.error || error) && (

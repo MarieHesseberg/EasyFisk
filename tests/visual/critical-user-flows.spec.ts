@@ -18,10 +18,10 @@ async function selectAllOkayStatus(page: Page, startTest = true) {
   const dialog = page.getByRole("dialog", { name: "Statusmotor" });
   await dialog.getByLabel("Situasjon").selectOption("ok");
   if (startTest) {
-    await dialog.getByRole("button", { name: /test valgt situasjon/i }).click();
+    await dialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
     await page.getByRole("button", { name: "START FISKE" }).click();
   } else {
-    await dialog.getByRole("button", { name: /test valgt situasjon/i }).click();
+    await dialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   }
 }
 
@@ -61,7 +61,7 @@ async function selectPaymentOutcome(page: Page, outcome: "approved" | "cancelled
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   const dialog = page.getByRole("dialog", { name: "Statusmotor" });
-  await dialog.getByLabel("Resultat ved neste testbetaling").selectOption(outcome);
+  await dialog.getByLabel("Resultat ved neste betaling").selectOption(outcome);
   await dialog.getByRole("button", { name: "Tilbake" }).click();
 }
 
@@ -80,7 +80,7 @@ test("fiskekortbutikken åpnes fra hjem, kart, Mer og Mine fiskekort", async ({ 
     .locator(".map-zone-switcher")
     .getByRole("button", { name: "Sone 3", exact: true })
     .click();
-  await page.getByRole("button", { name: /Se og velg fiskekort i sone/ }).click();
+  await page.getByRole("button", { name: /Fiskekort i sone/ }).click();
   shop = page.locator(".permit-shop-screen");
   await expect(shop).toBeVisible();
   await page.getByRole("button", { name: "Mer", exact: true }).click();
@@ -129,15 +129,13 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await shop.getByText("Vilkår og produktinformasjon", { exact: true }).click();
   await expect(shop.getByText(/inntil tre stenger/i)).toBeVisible();
   await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
-  await expect(shop.getByText("Testkjøp – dette er en prototype.")).toBeVisible();
+  await expect(shop.locator(".permit-test-warning")).toHaveCount(0);
   await completePermitCheckoutDetails(shop, true);
   const reviewSummary = shop.locator(".permit-order-summary");
   await expect(reviewSummary).not.toContainText("Administrasjonsgebyr");
   await expect(reviewSummary).toContainText("1 kort · 2 deltakere");
   await expect(reviewSummary).toContainText("Totalt beløp2400 kr");
-  await expect(shop.locator(".permit-test-warning")).toContainText(
-    "Ingen reservasjon eller betaling gjennomføres.",
-  );
+  await expect(shop.locator(".permit-test-warning")).toHaveCount(0);
   await shop.getByRole("button", { name: "Betal 2400 kr" }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
   await expect(shop.getByRole("status")).toContainText("Sone 2 · Fuskeland");
@@ -350,7 +348,7 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
   await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
   await dialog.getByLabel("Situasjon").selectOption("noPermit");
   await expect(dialog.getByRole("status")).toContainText("Blokkerer oppstart");
-  await dialog.getByRole("button", { name: /test valgt situasjon/i }).click();
+  await dialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
 
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
   await expect(
@@ -362,16 +360,16 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
     .getByRole("button", { name: "Sone 3", exact: true })
     .click();
   await expect(page.getByRole("dialog", { name: "Start fiske" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Se og velg fiskekort i sone 3" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fiskekort i sone 3" })).toBeVisible();
 
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   const readyDialog = page.getByRole("dialog", { name: "Statusmotor" });
   await readyDialog.getByLabel("Situasjon").selectOption("ok");
   await expect(readyDialog.getByRole("status")).toContainText("Oppstart tillatt");
-  await readyDialog.getByRole("button", { name: /valgt testsituasjon/i }).click();
+  await readyDialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
-  await expect(page.getByText("Testmodus · dokumentkrav oppfylt")).toBeVisible();
+  await expect(page.getByText("Dokumentkrav registrert i appen")).toBeVisible();
   await expect(page.locator(".document-overview")).toHaveCount(0);
 });
 

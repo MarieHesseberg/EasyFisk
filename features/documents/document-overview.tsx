@@ -17,9 +17,9 @@ const destinations: Record<DocumentKind, DetailDestination> = {
 };
 const kinds: DocumentKind[] = ["permit", "disinfection", "fee"];
 const mockSummaries: Record<DocumentKind, string> = {
-  permit: "Testdata · Døgnkort for sone 3 · gyldig i dag",
-  disinfection: "Testdata · attest registrert i dag · gyldig i 20 dager",
-  fee: "Testdata · fiskeravgift betalt for 2026",
+  permit: "Døgnkort for sone 3 · gyldig i dag",
+  disinfection: "attest registrert i dag · gyldig i 20 dager",
+  fee: "fiskeravgift betalt for 2026",
 };
 function documentSummary(kind: DocumentKind, documents: FishingDocument[], language: "no" | "en") {
   const document = documents

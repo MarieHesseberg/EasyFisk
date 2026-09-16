@@ -44,7 +44,7 @@ export const mockAppContent: AppContent = {
   profile: {
     initials: "MF",
     fisherId: "10482",
-    name: "Prototypebruker",
+    name: "Fisker",
     maskedPhone: "•• •• •• 82",
     language: "Norsk bokmål",
     controlCodePrefix: "EF",

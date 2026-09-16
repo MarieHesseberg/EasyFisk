@@ -115,23 +115,12 @@ export function StartSessionStep({
         title={t("copy.finn.riktig.fiskesone.33661af")}
         text={t("location.singleUse")}
       />
-      {simulated && (
-        <p className="start-location-test">
-          {selectLocalized(
-            language,
-            "Testposisjon – bruker ikke mobilens GPS.",
-            "Test location – does not use your phone’s GPS.",
-          )}
-        </p>
-      )}
       <button
         className={showSelection ? "secondary" : "primary"}
         disabled={location.isLoading}
         onClick={requestLocation}
       >
-        {simulated
-          ? selectLocalized(language, "Prøv testposisjon", "Try test location")
-          : t("copy.tillat.og.finn.sone.3fbbe01")}
+        {t("copy.tillat.og.finn.sone.3fbbe01")}
       </button>
       {location.isLoading && <p role="status">{location.message}</p>}
       {(notice || locationFailed) && (

@@ -3,12 +3,10 @@ export const no = {
     "Nettleseren krever en sikker adresse (HTTPS) for posisjon. Velg sone manuelt her.",
   "settings.autoSave": "Endringer lagres automatisk på denne enheten.",
   "prototype.localOnly": "Lagret på denne enheten. Ikke sendt til elveeigarlaget.",
-  "prototype.feedbackComplete": "Testmeldingen er fullført",
-  "prototype.feedbackNotice":
-    "Ingen melding er sendt eller lagret. Dette er bare en demonstrasjon.",
-  "prototype.feedbackConsent":
-    "Jeg bekrefter at opplysningene er riktige. Dette er en test; meldingen sendes ikke.",
-  "prototype.testMessage": "Fullfør testmelding",
+  "prototype.feedbackComplete": "Meldingen er gjennomgått",
+  "prototype.feedbackNotice": "Ingen melding er sendt eller lagret.",
+  "prototype.feedbackConsent": "Jeg bekrefter at opplysningene er riktige.",
+  "prototype.testMessage": "Fullfør melding",
   "prototype.saveCatch": "Lagre fangst",
   "prototype.saveActualCatch": "Lagre faktisk fangst",
   "prototype.saving": "Lagrer …",
@@ -46,8 +44,6 @@ export const no = {
   "documents.approvalStepTwo":
     "Stasjonen registrerer behandlingen og sender godkjenningen til profilen din.",
   "documents.approvalStepThree": "Godkjenningen vises automatisk her og i statuskontrollen.",
-  "documents.approvalPrototypeNote":
-    "Digital godkjenning fra stasjonen er planlagt, men simuleres ikke i denne fiskerprototypen.",
   "documents.addDisinfectionManually": "Legg til eksisterende bevis manuelt",
   "documents.disinfectorApproved": "Godkjent i appen av {name}",
   "documents.approverRole": "Godkjenner: {role}",
@@ -70,7 +66,7 @@ export const no = {
   "location.unavailable": "Posisjon er ikke tilgjengelig. Velg sone manuelt.",
   "location.timeout": "Posisjonshentingen tok for lang tid. Prøv igjen eller velg sone manuelt.",
   "location.found": "Posisjon funnet.",
-  "permit.testPurchasesRemoved": "Alle testkjøpte fiskekort er fjernet fra denne enheten.",
+  "permit.testPurchasesRemoved": "Alle kjøpte fiskekort er fjernet fra denne enheten.",
   "history.previousTripSaved":
     "Den tidligere fisketuren er lagt til i historikken. Alle fangster er merket som etterregistrert.",
   "history.closureDataUnavailable":
@@ -79,8 +75,7 @@ export const no = {
     "Sonegrensene er basert på koordinatene i Norske Lakseelvers publiserte kart. Fysisk oppmerking langs elva gjelder ved avvik.",
   "documents.controlFolderNote":
     "Din lokale dokumentmappe. Appen utsteder ikke kontrollbevis. Ta med originalene og vis dokumentasjonen fra utsteder ved kontroll.",
-  "prototype.statusScenarioExplanation":
-    "Velg situasjonen prototypen skal bruke. Statusen påvirker kontrollene på hjemskjermen og om en fiskeøkt kan startes. Gyldige registrerte dokumenter kan dekke mangler i testsituasjonen. Dokumentene slettes ikke.",
+  "prototype.statusScenarioExplanation": "Velg situasjonen som skal brukes ved statuskontrollen.",
   "rules.missingPermit":
     "Vi mangler fiskekortet ditt. Registrer kortet for å se regler for riktig hovedsone og eventuell delsone.",
   "rules.permitBasedDisclaimer":
@@ -107,9 +102,8 @@ export const no = {
   "copy.art.308e17d": "Art",
   "copy.avbryt.d10c9f7": "Avbryt",
   "copy.avlivet.laks.5088826": "Avlivet laks",
-  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b":
-    "Avslutt testmodus · bruk registrerte dokumenter",
-  "copy.behandler.testbetaling.384e9f3": "Behandler testbetaling …",
+  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b": "Bruk registrerte dokumenter",
+  "copy.behandler.testbetaling.384e9f3": "Behandler betaling …",
   "copy.behold.e8381c0": "Behold",
   "copy.beregnet.fra.dine.lokale.data.ecd8e12": "BEREGNET FRA DINE LOKALE DATA",
   "copy.beskriv.hva.som.skal.korrigeres.88504bb": "Beskriv hva som skal korrigeres",
@@ -137,7 +131,7 @@ export const no = {
   "copy.desinfisering.mangler.eller.er.utl.pt.a8e1e5d": "! Desinfisering mangler eller er utløpt",
   "copy.desinfisering.registrert.84485d1": "✓ Desinfisering registrert",
   "copy.detaljer.for.fiske.kt.30d5863": "Detaljer for fiskeøkt",
-  "copy.dette.er.en.simulert.betaling.4126f20": "Dette er en simulert betaling.",
+
   "copy.din.fiskeoversikt.68cb7f9": "Din fiskeoversikt",
   "copy.din.statistikk.d5b8cf2": "Din statistikk",
   "copy.dokumentasjon.og.status.0fd030e": "Dokumentasjon og status",
@@ -194,7 +188,7 @@ export const no = {
   "copy.fullf.r.kravene.f.r.du.fisker.ba15348": "Fullfør kravene før du fisker",
   "copy.fullf.rt.og.registrert.26e53d3": "Fullført og registrert",
   "copy.fullt.navn.f714eec": "Fullt navn",
-  "copy.funksjoner.i.prototypen.021b510": "FUNKSJONER I PROTOTYPEN",
+  "copy.funksjoner.i.prototypen.021b510": "FUNKSJONER",
   "copy.generell.statistikk.e3d13df": "Generell statistikk",
   "copy.generelle.regler.d26a211": "Generelle regler",
   "copy.gjelder.alle.fiskere.b103dd0": "GJELDER ALLE FISKERE",
@@ -246,7 +240,7 @@ export const no = {
   "copy.kontakt.selger.b199545": "Kontakt selger",
   "copy.kontroller.bestillingen.1bd9bf4": "Kontroller bestillingen",
   "copy.kontroller.dagsaktuell.status.34a88f1": "Kontroller dagsaktuell status",
-  "copy.kontroller.f.r.innsending.94790aa": "KONTROLLER TESTMELDING",
+  "copy.kontroller.f.r.innsending.94790aa": "KONTROLLER MELDING",
   "copy.kontroller.kilde.b98dfe7": "Kontroller kilde",
   "copy.kontroller.meldingen.538f52b": "Kontroller meldingen",
   "copy.kontroller.turen.f.r.innsending.9e347a9": "Kontroller turen før innsending",
@@ -309,15 +303,12 @@ export const no = {
   "copy.personlig.laksekvote.6b7582e": "Personlig laksekvote",
   "copy.personvern.og.samtykker.274afdf": "Personvern og samtykker",
   "copy.posisjon.7733e25": "POSISJON",
-  "copy.posisjon.hentet.med.samtykke.e779358": "eksempelposisjon i prototypen",
+  "copy.posisjon.hentet.med.samtykke.e779358": "Valgt posisjon",
   "copy.posisjon.ved.soneforslag.bafc7ae": "Posisjon ved soneforslag",
   "copy.pr.v.igjen.0a31d71": "Prøv igjen",
   "copy.pr.v.statusmotoren.2bde28f": "Prøv statusmotoren",
   "copy.pris.b97114e": "Pris",
-  "copy.prototype.uten.live.data.c75154d": "PROTOTYPE UTEN LIVE-DATA",
-  "copy.prototypeinnstilling.8444e8e": "PROTOTYPEINNSTILLING",
-  "copy.prototypeutvalg.55cdf18": "PROTOTYPEUTVALG",
-  "copy.prototypevisning.cbf5fb2": "PROTOTYPEVISNING",
+
   "copy.rapport.id.4b4e7b0": "RAPPORT-ID",
   "copy.rapporten.blir.merket.som.etterregistrert.ecda397":
     "Rapporten blir merket som etterregistrert",
@@ -346,7 +337,7 @@ export const no = {
   "copy.regler.for.valgt.sone.44737ce": "REGLER FOR VALGT SONE",
   "copy.resultat.a68cd1b": "RESULTAT",
   "copy.resultat.c9f6c1d": "Resultat",
-  "copy.resultat.ved.neste.testbetaling.624acf3": "Resultat ved neste testbetaling",
+  "copy.resultat.ved.neste.testbetaling.624acf3": "Resultat ved neste betaling",
   "copy.rettelse.er.meldt.feec083": "Rettelse lagret lokalt",
   "copy.rettelse.meldt.60dd0a8": "rettelse lagret lokalt",
   "copy.salgskalender.4afb904": "Salgskalender",
@@ -359,7 +350,7 @@ export const no = {
   "copy.sesongkvote.7476319": "Sesongkvote",
   "copy.sesongkvote.laks.4d55979": "Sesongkvote laks",
   "copy.sesongkvoten.kan.v.re.nadd.6c085f1": "Sesongkvoten kan være nådd",
-  "copy.sikker.testbetaling.cfbdf20": "SIKKER TESTBETALING",
+  "copy.sikker.testbetaling.cfbdf20": "SIKKER BETALING",
   "copy.siste.fangster.cda78f3": "Siste fangster",
   "copy.siste.fiske.kter.7ecd617": "Siste fiskeøkter",
   "copy.situasjon.526cb92": "Situasjon",
@@ -392,11 +383,10 @@ export const no = {
   "copy.takk.for.rapporteringen.c880a91": "Takk for rapporteringen",
   "copy.telefon.40314f8": "Telefon",
   "copy.temperatur.og.stengning.fce78e3": "Temperatur og stengning",
-  "copy.testbetaling.godkjent.kj.pet.er.fullf.rt.db09d1d":
-    "Testbetaling godkjent · kjøpet er fullført",
-  "copy.testkj.p.dette.er.en.prototype.d619945": "Testkjøp – dette er en prototype.",
+  "copy.testbetaling.godkjent.kj.pet.er.fullf.rt.db09d1d": "Kortet er klart",
+
   "copy.testkort.4242.64ff459": "Testkort ···· 4242",
-  "copy.testreferanse.ed0f389": "Testreferanse",
+  "copy.testreferanse.ed0f389": "Referanse",
   "copy.tidspunkt.00d279e": "TIDSPUNKT",
   "copy.tidspunkt.83ee898": "Tidspunkt",
   "copy.tilbake.4fb8dc1": "Tilbake",
@@ -450,8 +440,7 @@ export const no = {
   "copy.ca.18.meter.fra.registrert.sonegrense.f484f23": "Ca. 18 meter fra registrert sonegrense",
   "copy.datoene.settes.automatisk.for.hele.sesongen.b2a2fd4":
     "Datoene settes automatisk for hele sesongen.",
-  "copy.dette.er.en.intern.prototypeinnstilling.og.vises.310b3f3":
-    "Dette er en intern prototypeinnstilling og vises ikke i kjøpsskjemaet.",
+
   "copy.dette.registrerer.et.fisked.gn.for.et.eksisteren.efaab3e":
     "Dette registrerer et fiskedøgn for et eksisterende sesongkort.",
   "copy.din.posisjon.90b81f2": "Din posisjon",
@@ -494,7 +483,7 @@ export const no = {
   "copy.velg.kategori.og.skriv.en.beskrivelse.pa.minst.1.1758154":
     "Velg kategori og skriv en beskrivelse på minst 10 tegn.",
   "copy.velg.situasjon.for.prototypens.statuskontroll.5bd6f62":
-    "Velg situasjon for prototypens statuskontroll",
+    "Velg situasjon for statuskontrollen",
   "copy.ingen.kortopplysninger.registreres.og.ingen.peng.5d1179b":
     "Ingen kortopplysninger registreres, og ingen penger trekkes.",
   "copy.jeg.bekrefter.at.opplysningene.er.riktige.meldin.c606640":
@@ -519,13 +508,12 @@ export const no = {
     "Rapporter feil, forsøpling, syk fisk eller mistenkelig fiske.",
   "copy.registrer.det.faktiske.tidspunktet.og.omradet.sa.3464b6a":
     "Registrer det faktiske tidspunktet og området så nøyaktig du kan.",
-  "copy.se.og.velg.fiskekort.i.sone.de70e36": "Se og velg fiskekort i sone",
+  "copy.se.og.velg.fiskekort.i.sone.de70e36": "Fiskekort i sone",
   "copy.slette.denne.lokale.kopien.originalen.hos.utsted.b1f3850":
     "Slette denne lokale kopien? Originalen hos utsteder endres ikke.",
   "copy.neste.kontroller.ad7f463": "Neste · kontroller",
-  "copy.jeg.bekrefter.at.opplysningene.er.riktige.159b496":
-    "Jeg bekrefter at opplysningene er riktige.",
-  "copy.ga.til.testbetaling.315024d": "Gå til testbetaling",
+
+  "copy.ga.til.testbetaling.315024d": "Gå til betaling",
   "copy.delsone.eller.salgsomrade.7d5c937": "Delsone eller salgsområde",
   "copy.tilgjengelighet.kontrolleres.for.valgt.dato.cf8072d":
     "Tilgjengelighet kontrolleres for valgt dato",
@@ -541,20 +529,20 @@ export const no = {
   "copy.jeg.har.lest.og.forstatt.fiskereglene.for.mandal.8457e64":
     "Jeg har lest og forstått fiskereglene for Mandalselva.",
   "copy.jeg.godtar.vilkarene.for.dette.simulerte.kj.pet.b27d12e":
-    "Jeg godtar vilkårene for dette simulerte kjøpet.",
+    "Jeg godtar vilkårene for kjøpet.",
   "copy.tilbake.til.fiskekort.bcb4b52": "‹ Tilbake til fiskekort",
   "copy.dette.kortet.kan.ikke.kj.pes.i.easyfisk.prototyp.c0afee1":
-    "Dette kortet kan ikke kjøpes i EasyFisk-prototypen. Kontakt selger for pris, tilgjengelighet og kjøp.",
+    "Dette kortet kan ikke kjøpes i EasyFisk. Kontakt selger for pris, tilgjengelighet og kjøp.",
   "copy.se.original.produktkilde.hos.inatur.4b67735": "Se original produktkilde hos Inatur ↗",
   "copy.fiskedato.bc8f11c": "Fiskedato",
   "copy.ledig.26d52d2": "Ledig",
   "copy.fa.igjen.3629356": "Få igjen",
   "copy.utsolgt.b24d822": "Utsolgt",
   "copy.utforsk.fiskekort.for.mandalselva.dette.er.en.kj.8614835":
-    "Utforsk fiskekort for Mandalselva. Dette er en kjøpsprototype med et datert produktøyeblikksbilde – betaling og reservasjon er ikke aktivert.",
+    "Utforsk fiskekort for Mandalselva.",
   "copy.vis.alle.i.sone.ee3b086": "Vis alle i sone",
   "copy.kontakt.a92b9bc": "Kontakt",
-  "copy.nullstill.testkj.pte.fiskekort.ce276cb": "Nullstill testkjøpte fiskekort (",
+  "copy.nullstill.testkj.pte.fiskekort.ce276cb": "Nullstill fiskekort (",
   "copy.produktdata.kontrollert.01.09.2026.pris.kapasite.206cb48":
     "Produktdata kontrollert 01.09.2026. Pris, kapasitet og tilgjengelighet må kontrolleres før et virkelig kjøp.",
   "copy.sone.og.regler.44d7d17": "Sone og regler",
@@ -577,8 +565,7 @@ export const no = {
     "Ingen penger er trukket. Kortet ligger nå under Mine fiskekort og brukes av statuskontrollen.",
   "copy.start.registrerer.fisketid.og.sone.ved.stopp.bek.32fa5b7":
     "Start registrerer fisketid og sone. Ved stopp bekrefter du fangst eller nullfangst.",
-  "copy.produktdataene.er.et.datert.yeblikksbilde.tilgje.8ec2601":
-    "Produktdataene er et datert øyeblikksbilde. Tilgjengelighet og betaling simuleres i prototypen.",
+
   "content.b2126416f95c": "FISKEØKT PÅGÅR",
   "content.2fcc8611ac7e": "HANDLING KREVES",
   "content.74599867e791": "MÅ KONTROLLERES",
@@ -743,14 +730,14 @@ export const no = {
   "content.be56eaf491ed": "VALGT DEMOSONE",
   "content.32fe2e76bc9c": "Piren · sone 1",
   "content.998c9a9789c1": "Piren døgnkort",
-  "content.6625a38dc267": "Simulert ledig",
+  "content.6625a38dc267": "Ledig",
   "content.101c9609fcf4": "Valgt fiskedøgn",
   "content.392f08f212b4": "Kapasitet vises ved valg av dato hos selger",
-  "content.d3639078c782": "Simulert prototypepris. Offentlig produktside oppgir ikke pris.",
+  "content.d3639078c782": "Kontakt selger for pris.",
   "content.ae007c25f08e": "Sandnes · sone 1",
   "content.70a8539d70c0": "Sandnes døgnkort",
-  "content.14cf3de4735c": "Simulert få kort igjen",
-  "content.221003d724b7": "Pris og tilgjengelighet er simulert for å demonstrere kjøpsflyten.",
+  "content.14cf3de4735c": "Få kort igjen",
+
   "content.ea9bba329eaa": "Hele sone 1 · munningen–Vik",
   "content.fe8a3c1a57d1": "Båtkort sone 1",
   "content.4831fb04f10d": "Ikke lagt ut for salg ennå",
@@ -759,27 +746,23 @@ export const no = {
   "content.e105ce3eaaa1": "Bjørkenes døgnkort",
   "content.d6d1d681dd33": "Kl. 18.00–17.59 neste dag",
   "content.ed6903e7c1a3": "4 døgnkort per fiskedøgn",
-  "content.ec4938fb2072":
-    "Simulert pris innenfor Inaturs oppgitte prisnivå på 100–400 kr for sone 2.",
+
   "content.9c8fe0c32727": "Fossefjellene døgnkort",
-  "content.beea3cd36317": "Simulert ikke i salg",
+  "content.beea3cd36317": "Ikke i salg",
   "content.ab965a177356": "3 døgnkort per fiskedøgn",
   "content.111928de00a8":
     "Gjelder Fossefjellene. Fossefjellene Syd er et eget produkt med to kort per døgn.",
   "content.63ec140581b4": "Furuholmen 1. juni-kort",
   "content.1e8ba451edd4": "1. juni kl. 00.00–17.59",
   "content.2a665366eec9": "Del av fem dagskort per døgn",
-  "content.d893aae4942f":
-    "Eget kort for første del av åpningsdøgnet. Prisen er simulert i prototypen.",
+  "content.d893aae4942f": "Eget kort for første del av åpningsdøgnet.",
   "content.b901e2e51619": "Furuholmen dagskort",
   "content.fd9ac8df4fed": "5 dagskort per fiskedøgn",
-  "content.c1916d622606":
-    "Gjelder de tre delstrekningene. Prisen er simulert innenfor oppgitt nivå i sone 2.",
+  "content.c1916d622606": "Gjelder de tre delstrekningene.",
   "content.f5512ee55cab": "Furuholmen sesongkort",
   "content.df480cdb4c58": "1. juni–31. august 2026",
   "content.b91b75c1f5b7": "Kapasitet må bekreftes hos selger",
-  "content.a37823a63c7f":
-    "Sesongkortet er reelt, mens 4 800 kr er en tydelig simulert prototypepris.",
+  "content.a37823a63c7f": "Sesongkort",
   "content.17f657acdfe7": "Fuskeland gruppekort",
   "content.15351849d0d7": "Ledig gruppekort",
   "content.23977312463b": "Ett valgt fiskedøgn",
@@ -788,11 +771,10 @@ export const no = {
   "content.e7a41b65adff": "Holmegård dagskort",
   "content.eb8d527690a1": "Kun 1 kort igjen",
   "content.6b4edae63917": "2 dagskort per fiskedøgn",
-  "content.079c748ccbed":
-    "Simulert sone 2-pris. Enkel hytte og gapahuk/grillhytte ved elvebredden inngår.",
+  "content.079c748ccbed": "Enkel hytte og gapahuk/grillhytte ved elvebredden inngår.",
   "content.326195f4802f": "Holmegård sesongkort",
   "content.1e06eafb5dbc": "15 sesongkort totalt",
-  "content.2da3d1a81db2": "Simulert sesongpris. Krever eget rapporteringskort for hvert fiskedøgn.",
+  "content.2da3d1a81db2": "Krever eget rapporteringskort for hvert fiskedøgn.",
   "content.ef819c6a6ffb": "Rapporteringskort for sesongkort",
   "content.f2fc6de11796": "For innehaver av sesongkort",
   "content.aab37bb706b7": "Obligatorisk døgnregistrering, ikke et separat fiskekortkjøp.",
@@ -806,7 +788,7 @@ export const no = {
   "content.abe08ef104dc": "Personlig ukekort for hele hovedsonen",
   "content.f18d3c289882": "Inatur oppgir 2 280 kr som oppdatert pris for ukekort i 2026.",
   "content.d27ae71ec7b2": "Sone 3 sesongkort",
-  "content.2f0e1e3b9a66": "Simulert utsolgt",
+
   "content.36192e152ed4": "Personlig sesongkort for hele hovedsonen",
   "content.dc48d3458540": "Inatur oppgir 7 980 kr som oppdatert pris for sesongkort i 2026.",
   "content.19c4d08945d8": "Lakseosen døgnkort",
@@ -814,7 +796,7 @@ export const no = {
   "content.9860abc7583c": "2 døgnkort per fiskedøgn",
   "content.66949b55ca8e": "Kortet gjelder den navngitte delsonen ved utløpet av Manflåvann.",
   "content.6e8516382c4e": "Klevlandsfossen døgnkort",
-  "content.78376d14d5d4": "Reelt begrenset salgsområde. Prisen er simulert for prototypekjøpet.",
+  "content.78376d14d5d4": "Begrenset antall kort.",
   "content.bf909f8aace8":
     "Statlig fiskeravgift kreves fra fylte 18 år. Eventuelle lokale aldersvilkår må kontrolleres hos selger.",
   "content.bd03913fe8b5":
@@ -849,7 +831,7 @@ export const no = {
   "content.5bf112ab0b14": "1. juni–15. september",
   "content.3432e4812939": "Døgnkort",
   "content.8ee757fc875b": "Ukekort",
-  "content.4100be4b8ead": "Sesongkort",
+
   "content.16940dc266b5": "Båtkort",
   "content.45c36bc8b915": "Gruppekort",
   "content.0cf5785027de": "Rapporteringskort",
@@ -860,7 +842,7 @@ export const no = {
   "content.a311a8f8cd03": "Ledig denne datoen",
   "content.b8716d1ce25e": "Utenfor fiskesesongen",
   "content.ead9d7f67b31": "Velg en gyldig fiskedato",
-  "content.6efd89ec2472": "SIMULERT STATUSKONTROLL",
+  "content.6efd89ec2472": "STATUSKONTROLL",
   "content.83f5954f5c70": "STATUS FRA DINE DOKUMENTER",
   "content.e253e94863ca": "Kan ikke starte",
   "content.f9c3f7ac04c4": "Krever bekreftelse",
@@ -876,10 +858,10 @@ export const no = {
   "content.60956fa61772": "Aktivt stengningsvarsel",
   "content.2828b2266a11": "Ingen temperaturstengning i valgt testsituasjon",
   "content.b48667b3e672": "Finn og kjøp fiskekort",
-  "content.049f89a984af": "Testdata · Døgnkort for sone 3 · gyldig i dag",
-  "content.d7775c6ae0d2": "Testdata · attest registrert i dag · gyldig i 20 dager",
-  "content.a34dcf4ae09a": "Testdata · fiskeravgift betalt for 2026",
-  "content.bf8faf47403a": "Testdata · mangler eller er ikke gyldig",
+  "content.049f89a984af": "Døgnkort for sone 3 · gyldig i dag",
+  "content.d7775c6ae0d2": "attest registrert i dag · gyldig i 20 dager",
+  "content.a34dcf4ae09a": "fiskeravgift betalt for 2026",
+  "content.bf8faf47403a": "mangler eller er ikke gyldig",
   "content.abb94ff6057f": "Kunne ikke lese lagring",
   "content.3ff7a65a8f97": "gyldig fiskekort",
   "content.abec8605f05f": "gyldig desinfisering",
@@ -892,7 +874,7 @@ export const no = {
   "permit.seasonRequired": "Datokalenderen åpnes når et gyldig sesongkort for {area} er funnet.",
   "permit.priceUnavailable": "Pris ikke offentliggjort",
   "permit.freeRegistration": "Gratis døgnregistrering",
-  "permit.simulatedPrice": "{price} · simulert",
+  "permit.simulatedPrice": "{price}",
   "permit.remaining": "{count} kort igjen denne datoen",
   "permit.oneRemaining": "1 kort igjen denne datoen",
   "permit.salesNotOpen": "Salget for {year} er ikke åpnet",
@@ -905,7 +887,7 @@ export const no = {
   "content.186bbd9ffd42": "Regelendringer, temperatur og frister",
   "content.386d6ae0a554": "Profil og personvern",
   "content.1ed8ef664b80": "Språk, samtykker og konto",
-  "content.5ada6633b087": "Prototypebruker",
+  "content.5ada6633b087": "Fisker",
   "content.65388a1cdaff": "Lagre innstillinger",
   "content.c424b83cbb1d": "Innstillingene er lagret",
   "content.425176c9fba8":
@@ -946,14 +928,12 @@ export const no = {
   "content.7d860b4ad56e": "Sender …",
   "content.d8ada5848930": "Send inn faktisk fangst",
   "content.90332cb62dca": "Send fangstrapport",
-  "content.d31c8b0c7d5d": "Testdata · ikke et virkelig dokument",
+  "content.d31c8b0c7d5d": "ikke et virkelig dokument",
   "content.211ece693265": "Egenregistrert · ikke eksternt verifisert",
   "content.d3b307e58e8b": "Endre registrering",
   "content.85d2c744960e": "Ny registrering",
   "content.adf1599d9df7": "Lagre dokument",
-  "content.3f2c1ca97622": "Testmodus – opplysningene nedenfor er mockdata og lagres ikke.",
-  "content.4c61bba4eeca":
-    "Testmodus – registrer dokumentet nedenfor for å løse den simulerte mangelen.",
+
   "content.edde3c5a4756":
     "Lokal dokumentmappe – ikke en godkjenning. Dokumentene er ikke eksternt verifisert.",
   "content.e0fea6c02234": "Lagt til",
@@ -970,10 +950,10 @@ export const no = {
     "Alle økter lagres, også når du ikke fikk fisk. Dette gir bedre kunnskap om fiskeinnsatsen.",
   "content.e424ec20d270": "Neste · registrer fangst",
   "content.c77569f87d29": "Varselinnstillinger lagret",
-  "content.53fd835d6c7a": "TESTMODUS ER AKTIV",
+  "content.53fd835d6c7a": "VALGT SITUASJON",
   "content.027494c4cd84": "NORMALMODUS ER AKTIV",
-  "content.f9050db5beb7": "Bruk valgt testsituasjon",
-  "content.552802094421": "Aktiver og test valgt situasjon",
+  "content.f9050db5beb7": "Bruk valgt situasjon",
+
   "content.82d935cc243d": "Navn på fiskeren",
   "content.a3c9245e41b1": "Kort-/kvitteringsnummer (hvis oppgitt)",
   "content.435711c8ca64": "Utsteder / selger",

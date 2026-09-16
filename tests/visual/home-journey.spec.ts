@@ -133,7 +133,7 @@ test("home groups preparation actions, then offers start", async ({ page }) => {
     await page.getByRole("button", { name: /Statusmotor/ }).click();
     const dialog = page.getByRole("dialog", { name: "Statusmotor" });
     await dialog.getByLabel("Situasjon").selectOption(scenario);
-    await dialog.getByRole("button", { name: /test valgt situasjon|valgt testsituasjon/i }).click();
+    await dialog.getByRole("button", { name: /bruk valgt situasjon|valgt testsituasjon/i }).click();
     await expect(
       page.locator(".status-card").getByRole("button", { name: action, exact: true }),
     ).toBeVisible();

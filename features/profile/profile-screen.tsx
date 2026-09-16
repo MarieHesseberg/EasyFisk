@@ -128,7 +128,7 @@ export function ProfileScreen({
         <button onClick={() => setDetail("feedback")}>{t("copy.opprett.melding.99f0597")}</button>
       </section>
       <p className="version">
-        EasyFisk prototype · {t("copy.innhold.kontrollert.f924dee")}{" "}
+        EasyFisk · {t("copy.innhold.kontrollert.f924dee")}{" "}
         {activeFishingRules.metadata.numericSourcesCheckedLabel}
       </p>
       {detail === "status-engine" && (

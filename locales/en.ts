@@ -4,11 +4,10 @@ export const en = {
     "Your browser requires a secure address (HTTPS) for location access. Choose a zone manually here.",
   "settings.autoSave": "Changes are saved automatically on this device.",
   "prototype.localOnly": "Saved on this device. Not sent to the river association.",
-  "prototype.feedbackComplete": "Test report completed",
-  "prototype.feedbackNotice": "No report has been sent or saved. This is a demonstration only.",
-  "prototype.feedbackConsent":
-    "I confirm that the details are correct. This is a test; the report will not be sent.",
-  "prototype.testMessage": "Complete test report",
+  "prototype.feedbackComplete": "Report reviewed",
+  "prototype.feedbackNotice": "No report has been sent or saved.",
+  "prototype.feedbackConsent": "I confirm that the information is correct.",
+  "prototype.testMessage": "Complete report",
   "prototype.saveCatch": "Save catch",
   "prototype.saveActualCatch": "Save actual catch",
   "prototype.saving": "Saving …",
@@ -46,8 +45,6 @@ export const en = {
   "documents.approvalStepTwo":
     "The station records the treatment and sends the approval to your profile.",
   "documents.approvalStepThree": "The approval appears here and in the status check automatically.",
-  "documents.approvalPrototypeNote":
-    "Digital approval from stations is planned, but is not simulated in this angler prototype.",
   "documents.addDisinfectionManually": "Add an existing certificate manually",
   "documents.disinfectorApproved": "Approved in the app by {name}",
   "documents.approverRole": "Approver: {role}",
@@ -80,8 +77,7 @@ export const en = {
     "Zone boundaries are based on coordinates in Norske Lakseelver's published map. Physical markings along the river apply if there are discrepancies.",
   "documents.controlFolderNote":
     "Your local document folder. The app does not issue inspection certificates. Bring the originals and show issuer documentation during an inspection.",
-  "prototype.statusScenarioExplanation":
-    "Choose the scenario used by the prototype. The status affects home-screen checks and whether a fishing session can start. Valid registered documents can satisfy missing requirements in the test scenario. The documents are not deleted.",
+  "prototype.statusScenarioExplanation": "Choose the scenario used for the status check.",
   "rules.missingPermit":
     "Your fishing permit is missing. Register it to see rules for the correct main zone and any sub-zone.",
   "rules.permitBasedDisclaimer":
@@ -108,9 +104,8 @@ export const en = {
   "copy.art.308e17d": "Species",
   "copy.avbryt.d10c9f7": "Cancel",
   "copy.avlivet.laks.5088826": "Harvested salmon",
-  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b":
-    "End test mode · use registered documents",
-  "copy.behandler.testbetaling.384e9f3": "Processing test payment…",
+  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b": "Use registered documents",
+  "copy.behandler.testbetaling.384e9f3": "Processing payment…",
   "copy.behold.e8381c0": "Keep",
   "copy.beregnet.fra.dine.lokale.data.ecd8e12": "CALCULATED FROM YOUR LOCAL DATA",
   "copy.beskriv.hva.som.skal.korrigeres.88504bb": "Describe what should be corrected",
@@ -138,7 +133,7 @@ export const en = {
   "copy.desinfisering.mangler.eller.er.utl.pt.a8e1e5d": "! Disinfection missing or expired",
   "copy.desinfisering.registrert.84485d1": "✓ Disinfection registered",
   "copy.detaljer.for.fiske.kt.30d5863": "Fishing-session details",
-  "copy.dette.er.en.simulert.betaling.4126f20": "This is a simulated payment.",
+
   "copy.din.fiskeoversikt.68cb7f9": "Your fishing overview",
   "copy.din.statistikk.d5b8cf2": "Your statistics",
   "copy.dokumentasjon.og.status.0fd030e": "Documents and status",
@@ -196,7 +191,7 @@ export const en = {
   "copy.fullf.r.kravene.f.r.du.fisker.ba15348": "Complete the requirements before fishing",
   "copy.fullf.rt.og.registrert.26e53d3": "Completed and registered",
   "copy.fullt.navn.f714eec": "Full name",
-  "copy.funksjoner.i.prototypen.021b510": "PROTOTYPE FEATURES",
+  "copy.funksjoner.i.prototypen.021b510": "FEATURES",
   "copy.generell.statistikk.e3d13df": "General statistics",
   "copy.generelle.regler.d26a211": "General rules",
   "copy.gjelder.alle.fiskere.b103dd0": "APPLIES TO ALL ANGLERS",
@@ -249,7 +244,7 @@ export const en = {
   "copy.kontakt.selger.b199545": "Contact seller",
   "copy.kontroller.bestillingen.1bd9bf4": "Review your order",
   "copy.kontroller.dagsaktuell.status.34a88f1": "Check today's status",
-  "copy.kontroller.f.r.innsending.94790aa": "REVIEW TEST REPORT",
+  "copy.kontroller.f.r.innsending.94790aa": "REVIEW REPORT",
   "copy.kontroller.kilde.b98dfe7": "Check source",
   "copy.kontroller.meldingen.538f52b": "Review report",
   "copy.kontroller.turen.f.r.innsending.9e347a9": "Review the trip before submitting",
@@ -311,15 +306,12 @@ export const en = {
   "copy.personlig.laksekvote.6b7582e": "Personal salmon quota",
   "copy.personvern.og.samtykker.274afdf": "Privacy and consent",
   "copy.posisjon.7733e25": "LOCATION",
-  "copy.posisjon.hentet.med.samtykke.e779358": "example location in the prototype",
+  "copy.posisjon.hentet.med.samtykke.e779358": "Selected location",
   "copy.posisjon.ved.soneforslag.bafc7ae": "Location for zone suggestions",
   "copy.pr.v.igjen.0a31d71": "Try again",
   "copy.pr.v.statusmotoren.2bde28f": "Try the status engine",
   "copy.pris.b97114e": "Price",
-  "copy.prototype.uten.live.data.c75154d": "PROTOTYPE WITHOUT LIVE DATA",
-  "copy.prototypeinnstilling.8444e8e": "PROTOTYPE SETTING",
-  "copy.prototypeutvalg.55cdf18": "PROTOTYPE SELECTION",
-  "copy.prototypevisning.cbf5fb2": "PROTOTYPE VIEW",
+
   "copy.rapport.id.4b4e7b0": "REPORT ID",
   "copy.rapporten.blir.merket.som.etterregistrert.ecda397":
     "The report will be marked as registered later",
@@ -348,7 +340,7 @@ export const en = {
   "copy.regler.for.valgt.sone.44737ce": "RULES FOR SELECTED ZONE",
   "copy.resultat.a68cd1b": "OUTCOME",
   "copy.resultat.c9f6c1d": "Outcome",
-  "copy.resultat.ved.neste.testbetaling.624acf3": "Result of next test payment",
+  "copy.resultat.ved.neste.testbetaling.624acf3": "Next payment result",
   "copy.rettelse.er.meldt.feec083": "Correction saved locally",
   "copy.rettelse.meldt.60dd0a8": "correction saved locally",
   "copy.salgskalender.4afb904": "Sales calendar",
@@ -361,7 +353,7 @@ export const en = {
   "copy.sesongkvote.7476319": "Season quota",
   "copy.sesongkvote.laks.4d55979": "Season salmon quota",
   "copy.sesongkvoten.kan.v.re.nadd.6c085f1": "The season quota may have been reached",
-  "copy.sikker.testbetaling.cfbdf20": "SECURE TEST PAYMENT",
+  "copy.sikker.testbetaling.cfbdf20": "SECURE PAYMENT",
   "copy.siste.fangster.cda78f3": "Recent catches",
   "copy.siste.fiske.kter.7ecd617": "Recent fishing sessions",
   "copy.situasjon.526cb92": "Scenario",
@@ -394,11 +386,10 @@ export const en = {
   "copy.takk.for.rapporteringen.c880a91": "Thank you for reporting",
   "copy.telefon.40314f8": "Phone",
   "copy.temperatur.og.stengning.fce78e3": "Temperature and closures",
-  "copy.testbetaling.godkjent.kj.pet.er.fullf.rt.db09d1d":
-    "Test payment approved · purchase complete",
-  "copy.testkj.p.dette.er.en.prototype.d619945": "Test purchase — this is a prototype.",
+  "copy.testbetaling.godkjent.kj.pet.er.fullf.rt.db09d1d": "Your permit is ready",
+
   "copy.testkort.4242.64ff459": "Test card ···· 4242",
-  "copy.testreferanse.ed0f389": "Test reference",
+  "copy.testreferanse.ed0f389": "Reference",
   "copy.tidspunkt.00d279e": "TIME",
   "copy.tidspunkt.83ee898": "Time",
   "copy.tilbake.4fb8dc1": "Back",
@@ -451,8 +442,7 @@ export const en = {
     "Approximately 18 metres from the registered zone boundary",
   "copy.datoene.settes.automatisk.for.hele.sesongen.b2a2fd4":
     "The dates are set automatically for the entire season.",
-  "copy.dette.er.en.intern.prototypeinnstilling.og.vises.310b3f3":
-    "This is an internal prototype setting and is not shown in the checkout form.",
+
   "copy.dette.registrerer.et.fisked.gn.for.et.eksisteren.efaab3e":
     "This registers a fishing day for an existing season permit.",
   "copy.din.posisjon.90b81f2": "Your location",
@@ -495,7 +485,7 @@ export const en = {
   "copy.velg.kategori.og.skriv.en.beskrivelse.pa.minst.1.1758154":
     "Choose a category and enter a description of at least 10 characters.",
   "copy.velg.situasjon.for.prototypens.statuskontroll.5bd6f62":
-    "Choose a scenario for the prototype status check",
+    "Choose a scenario for the status check",
   "copy.ingen.kortopplysninger.registreres.og.ingen.peng.5d1179b":
     "No card details are recorded and no money is charged.",
   "copy.jeg.bekrefter.at.opplysningene.er.riktige.meldin.c606640":
@@ -520,13 +510,12 @@ export const en = {
     "Report errors, littering, sick fish, or suspicious fishing activity.",
   "copy.registrer.det.faktiske.tidspunktet.og.omradet.sa.3464b6a":
     "Record the actual time and area as accurately as possible.",
-  "copy.se.og.velg.fiskekort.i.sone.de70e36": "View and choose permits in zone",
+  "copy.se.og.velg.fiskekort.i.sone.de70e36": "Permits in zone",
   "copy.slette.denne.lokale.kopien.originalen.hos.utsted.b1f3850":
     "Delete this local copy? The issuer's original will not be changed.",
   "copy.neste.kontroller.ad7f463": "Next · review",
-  "copy.jeg.bekrefter.at.opplysningene.er.riktige.159b496":
-    "I confirm that the information is correct.",
-  "copy.ga.til.testbetaling.315024d": "Continue to test payment",
+
+  "copy.ga.til.testbetaling.315024d": "Continue to payment",
   "copy.delsone.eller.salgsomrade.7d5c937": "Sub-zone or sales area",
   "copy.tilgjengelighet.kontrolleres.for.valgt.dato.cf8072d":
     "Availability is checked for the selected date",
@@ -541,11 +530,10 @@ export const en = {
   "copy.fjern.vedlegg.ab8a6da": "Remove attachment",
   "copy.jeg.har.lest.og.forstatt.fiskereglene.for.mandal.8457e64":
     "I have read and understood the fishing rules for Mandalselva.",
-  "copy.jeg.godtar.vilkarene.for.dette.simulerte.kj.pet.b27d12e":
-    "I accept the terms for this simulated purchase.",
+  "copy.jeg.godtar.vilkarene.for.dette.simulerte.kj.pet.b27d12e": "I accept the terms of purchase.",
   "copy.tilbake.til.fiskekort.bcb4b52": "‹ Back to fishing permits",
   "copy.dette.kortet.kan.ikke.kj.pes.i.easyfisk.prototyp.c0afee1":
-    "This permit cannot be purchased in the EasyFisk prototype. Contact the seller for price, availability, and purchase.",
+    "This permit cannot be purchased in EasyFisk. Contact the seller for price, availability, and purchase.",
   "copy.se.original.produktkilde.hos.inatur.4b67735":
     "View the original product source on Inatur ↗",
   "copy.fiskedato.bc8f11c": "Fishing date",
@@ -553,10 +541,10 @@ export const en = {
   "copy.fa.igjen.3629356": "Few remaining",
   "copy.utsolgt.b24d822": "Sold out",
   "copy.utforsk.fiskekort.for.mandalselva.dette.er.en.kj.8614835":
-    "Explore fishing permits for Mandalselva. This is a purchase prototype using a dated product snapshot—payment and reservations are not enabled.",
+    "Explore fishing permits for Mandalselva.",
   "copy.vis.alle.i.sone.ee3b086": "Show all in zone",
   "copy.kontakt.a92b9bc": "Contact",
-  "copy.nullstill.testkj.pte.fiskekort.ce276cb": "Reset test-purchased fishing permits (",
+  "copy.nullstill.testkj.pte.fiskekort.ce276cb": "Reset fishing permits (",
   "copy.produktdata.kontrollert.01.09.2026.pris.kapasite.206cb48":
     "Product data checked on 1 September 2026. Price, capacity, and availability must be verified before a real purchase.",
   "copy.sone.og.regler.44d7d17": "Zone and rules",
@@ -579,8 +567,7 @@ export const en = {
     "No money has been charged. The permit is now under My permits and is used by the status check.",
   "copy.start.registrerer.fisketid.og.sone.ved.stopp.bek.32fa5b7":
     "Starting records fishing time and zone. When stopping, confirm a catch or zero catch.",
-  "copy.produktdataene.er.et.datert.yeblikksbilde.tilgje.8ec2601":
-    "Product data is a dated snapshot. Availability and payment are simulated in the prototype.",
+
   "content.b2126416f95c": "FISHING SESSION ACTIVE",
   "content.2fcc8611ac7e": "ACTION REQUIRED",
   "content.74599867e791": "CHECK REQUIRED",
@@ -752,16 +739,14 @@ export const en = {
   "content.be56eaf491ed": "SELECTED DEMO ZONE",
   "content.32fe2e76bc9c": "Piren · zone 1",
   "content.998c9a9789c1": "Piren day permit",
-  "content.6625a38dc267": "Simulated availability",
+  "content.6625a38dc267": "Availability",
   "content.101c9609fcf4": "Selected fishing day",
   "content.392f08f212b4": "Capacity is shown when selecting a date with the seller",
-  "content.d3639078c782":
-    "Simulated prototype price. The public product page does not state a price.",
+  "content.d3639078c782": "Contact the seller for pricing.",
   "content.ae007c25f08e": "Sandnes · zone 1",
   "content.70a8539d70c0": "Sandnes day permit",
-  "content.14cf3de4735c": "Simulated low availability",
-  "content.221003d724b7":
-    "Price and availability are simulated to demonstrate the purchase process.",
+  "content.14cf3de4735c": "Low availability",
+
   "content.ea9bba329eaa": "Entire zone 1 · river mouth–Vik",
   "content.fe8a3c1a57d1": "Zone 1 boat permit",
   "content.4831fb04f10d": "Not yet on sale",
@@ -771,26 +756,23 @@ export const en = {
   "content.e105ce3eaaa1": "Bjørkenes day permit",
   "content.d6d1d681dd33": "18:00–17:59 the next day",
   "content.ed6903e7c1a3": "4 day permits per fishing day",
-  "content.ec4938fb2072": "Simulated price within Inatur's stated range of 100–400 kr for zone 2.",
+
   "content.9c8fe0c32727": "Fossefjellene day permit",
-  "content.beea3cd36317": "Simulated not on sale",
+  "content.beea3cd36317": "Not on sale",
   "content.ab965a177356": "3 day permits per fishing day",
   "content.111928de00a8":
     "Covers Fossefjellene. Fossefjellene Syd is a separate product with two permits per day.",
   "content.63ec140581b4": "Furuholmen 1 June permit",
   "content.1e8ba451edd4": "1 June, 00:00–17:59",
   "content.2a665366eec9": "Part of five day permits per day",
-  "content.d893aae4942f":
-    "Separate permit for the first part of opening day. The prototype price is simulated.",
+  "content.d893aae4942f": "Separate permit for the first part of opening day.",
   "content.b901e2e51619": "Furuholmen day permit",
   "content.fd9ac8df4fed": "5 day permits per fishing day",
-  "content.c1916d622606":
-    "Covers the three river stretches. The simulated price is within the stated range for zone 2.",
+  "content.c1916d622606": "Covers the three river stretches.",
   "content.f5512ee55cab": "Furuholmen season permit",
   "content.df480cdb4c58": "1 June–31 August 2026",
   "content.b91b75c1f5b7": "Capacity must be confirmed with the seller",
-  "content.a37823a63c7f":
-    "The season permit is a real product; 4,800 kr is a simulated prototype price.",
+  "content.a37823a63c7f": "Season permit",
   "content.17f657acdfe7": "Fuskeland group permit",
   "content.15351849d0d7": "Group permit available",
   "content.23977312463b": "One selected fishing day",
@@ -800,12 +782,10 @@ export const en = {
   "content.e7a41b65adff": "Holmegård day permit",
   "content.eb8d527690a1": "Only 1 permit remaining",
   "content.6b4edae63917": "2 day permits per fishing day",
-  "content.079c748ccbed":
-    "Simulated zone 2 price. Includes a basic riverside cabin and shelter/barbecue hut.",
+  "content.079c748ccbed": "Includes a basic riverside cabin and shelter/barbecue hut.",
   "content.326195f4802f": "Holmegård season permit",
   "content.1e06eafb5dbc": "15 season permits in total",
-  "content.2da3d1a81db2":
-    "Simulated season price. A separate reporting card is required for each fishing day.",
+  "content.2da3d1a81db2": "A separate reporting card is required for each fishing day.",
   "content.ef819c6a6ffb": "Reporting card for season permit holders",
   "content.f2fc6de11796": "For season permit holders",
   "content.aab37bb706b7": "Mandatory day registration, not a separate fishing permit purchase.",
@@ -819,7 +799,7 @@ export const en = {
   "content.abe08ef104dc": "Personal week permit for the entire main zone",
   "content.f18d3c289882": "Inatur lists 2,280 kr as the updated price for a week permit in 2026.",
   "content.d27ae71ec7b2": "Zone 3 season permit",
-  "content.2f0e1e3b9a66": "Simulated sold out",
+
   "content.36192e152ed4": "Personal season permit for the entire main zone",
   "content.dc48d3458540": "Inatur lists 7,980 kr as the updated price for a season permit in 2026.",
   "content.19c4d08945d8": "Lakseosen day permit",
@@ -827,8 +807,7 @@ export const en = {
   "content.9860abc7583c": "2 day permits per fishing day",
   "content.66949b55ca8e": "The permit covers the named sub-zone at the outlet of Manflåvann.",
   "content.6e8516382c4e": "Klevlandsfossen day permit",
-  "content.78376d14d5d4":
-    "A real area with limited permit sales. The price is simulated for the prototype purchase.",
+  "content.78376d14d5d4": "Limited number of permits.",
   "content.bf909f8aace8":
     "The national fishing fee is required from age 18. Check any local age conditions with the seller.",
   "content.bd03913fe8b5": "Equipment and facilities are not specified on the public product page.",
@@ -862,7 +841,7 @@ export const en = {
   "content.5bf112ab0b14": "1 June–15 September",
   "content.3432e4812939": "Day permit",
   "content.8ee757fc875b": "Week permit",
-  "content.4100be4b8ead": "Season permit",
+
   "content.16940dc266b5": "Boat permit",
   "content.45c36bc8b915": "Group permit",
   "content.0cf5785027de": "Reporting card",
@@ -873,7 +852,7 @@ export const en = {
   "content.a311a8f8cd03": "Available on this date",
   "content.b8716d1ce25e": "Outside the fishing season",
   "content.ead9d7f67b31": "Choose a valid fishing date",
-  "content.6efd89ec2472": "SIMULATED STATUS CHECK",
+  "content.6efd89ec2472": "STATUS CHECK",
   "content.83f5954f5c70": "STATUS FROM YOUR DOCUMENTS",
   "content.e253e94863ca": "Cannot start",
   "content.f9c3f7ac04c4": "Confirmation required",
@@ -889,10 +868,10 @@ export const en = {
   "content.60956fa61772": "Active closure notice",
   "content.2828b2266a11": "No temperature closure in the selected test scenario",
   "content.b48667b3e672": "Find and buy a fishing permit",
-  "content.049f89a984af": "Test data · zone 3 day permit · valid today",
-  "content.d7775c6ae0d2": "Test data · certificate registered today · valid for 20 days",
-  "content.a34dcf4ae09a": "Test data · national fishing fee paid for 2026",
-  "content.bf8faf47403a": "Test data · missing or invalid",
+  "content.049f89a984af": "zone 3 day permit · valid today",
+  "content.d7775c6ae0d2": "certificate registered today · valid for 20 days",
+  "content.a34dcf4ae09a": "national fishing fee paid for 2026",
+  "content.bf8faf47403a": "missing or invalid",
   "content.abb94ff6057f": "Could not read stored data",
   "content.3ff7a65a8f97": "a valid fishing permit",
   "content.abec8605f05f": "valid disinfection",
@@ -906,7 +885,7 @@ export const en = {
     "The date calendar opens when a valid season permit for {area} has been found.",
   "permit.priceUnavailable": "Price not published",
   "permit.freeRegistration": "Free day registration",
-  "permit.simulatedPrice": "{price} · simulated",
+  "permit.simulatedPrice": "{price}",
   "permit.remaining": "{count} permits remaining on this date",
   "permit.oneRemaining": "1 permit remaining on this date",
   "permit.salesNotOpen": "Sales for {year} have not opened",
@@ -919,7 +898,7 @@ export const en = {
   "content.186bbd9ffd42": "Rule changes, temperature and deadlines",
   "content.386d6ae0a554": "Profile and privacy",
   "content.1ed8ef664b80": "Language, consent and account",
-  "content.5ada6633b087": "Prototype user",
+  "content.5ada6633b087": "Angler",
   "content.65388a1cdaff": "Save settings",
   "content.c424b83cbb1d": "Settings saved",
   "content.425176c9fba8":
@@ -960,14 +939,12 @@ export const en = {
   "content.7d860b4ad56e": "Submitting…",
   "content.d8ada5848930": "Submit the actual catch",
   "content.90332cb62dca": "Submit catch report",
-  "content.d31c8b0c7d5d": "Test data · not a real document",
+  "content.d31c8b0c7d5d": "not a real document",
   "content.211ece693265": "Self-registered · not externally verified",
   "content.d3b307e58e8b": "Edit registration",
   "content.85d2c744960e": "New registration",
   "content.adf1599d9df7": "Save document",
-  "content.3f2c1ca97622": "Test mode — the details below are mock data and are not saved.",
-  "content.4c61bba4eeca":
-    "Test mode — register the document below to resolve the simulated missing requirement.",
+
   "content.edde3c5a4756":
     "Local document folder — not an approval. The documents have not been externally verified.",
   "content.e0fea6c02234": "Added",
@@ -984,10 +961,10 @@ export const en = {
     "All sessions are saved, including those without a catch. This helps improve knowledge of fishing effort.",
   "content.e424ec20d270": "Next · register catch",
   "content.c77569f87d29": "Notification settings saved",
-  "content.53fd835d6c7a": "TEST MODE IS ACTIVE",
+  "content.53fd835d6c7a": "SELECTED SCENARIO",
   "content.027494c4cd84": "NORMAL MODE IS ACTIVE",
-  "content.f9050db5beb7": "Use selected test scenario",
-  "content.552802094421": "Activate and test selected scenario",
+  "content.f9050db5beb7": "Use selected scenario",
+
   "content.82d935cc243d": "Angler's name",
   "content.a3c9245e41b1": "Permit / receipt number (if provided)",
   "content.435711c8ca64": "Issuer / seller",

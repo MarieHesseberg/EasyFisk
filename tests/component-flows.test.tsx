@@ -225,8 +225,8 @@ test("tilbakemeldingsflyten validerer, kontrollerer og sender", async () => {
   await user.click(screen.getByRole("button", { name: "Kontroller meldingen" }));
   expect(screen.getByRole("heading", { name: "Er opplysningene riktige?" })).toBeTruthy();
   await user.click(screen.getByRole("checkbox"));
-  await user.click(screen.getByRole("button", { name: "Fullfør testmelding" }));
-  expect(await screen.findByText("Testmeldingen er fullført")).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Fullfør melding" }));
+  expect(await screen.findByText("Meldingen er gjennomgått")).toBeTruthy();
 });
 
 test("kartet viser en forståelig melding når posisjonstilgang avslås", async () => {
@@ -256,7 +256,7 @@ test("kartet viser ikke produktkatalogen, som fortsatt har kort i alle soner", (
   render(<MapScreen selected={2} setSelected={() => undefined} onBuyPermit={() => undefined} />);
 
   expect(screen.queryByRole("heading", { name: "Holmegård dagskort" })).toBeNull();
-  expect(screen.queryByRole("button", { name: /Se og velg fiskekort/ })).toBeNull();
+  expect(screen.queryByRole("button", { name: /Fiskekort i sone/ })).toBeNull();
   expect(screen.getByRole("region", { name: "Interaktivt kart over Mandalselva" })).toBeTruthy();
 });
 
@@ -599,11 +599,9 @@ test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
     />,
   );
 
-  expect(screen.queryByRole("button", { name: "Se og velg fiskekort i sone 2" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Fiskekort i sone 2" })).toBeNull();
   await userEvent.setup().click(screen.getByRole("button", { name: "Sone 2" }));
-  await userEvent
-    .setup()
-    .click(screen.getByRole("button", { name: "Se og velg fiskekort i sone 2" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Fiskekort i sone 2" }));
   expect(opened).toBe(true);
 });
 

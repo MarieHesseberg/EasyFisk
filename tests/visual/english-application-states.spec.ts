@@ -117,10 +117,10 @@ test("all prototype legal-status scenarios render their English state", async ({
       await expect(dialog.getByRole("status")).toContainText(expectedDetail);
       await dialog
         .getByRole("button", {
-          name: /Activate and test selected scenario|Use selected test scenario/,
+          name: "Use selected scenario",
         })
         .click();
-      await expect(page.getByText("TEST MODE IS ACTIVE").first()).toBeVisible();
+      await expect(page.getByText("SELECTED SCENARIO").first()).toBeVisible();
     });
   }
 });

@@ -1,0 +1,33 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+.phone-app .screen:not(.map-screen),
+.phone-app .detail-page,
+.phone-app .catch-modal,
+.phone-app .flow-sheet {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y pinch-zoom;
+  overflow-wrap: anywhere;
+}
+
+.phone-app .screen > *,
+.phone-app .detail-page > *,
+.phone-app .catch-modal > *,
+.phone-app .flow-sheet > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.phone-app input,
+.phone-app select,
+.phone-app textarea {
+  min-width: 0;
+  max-width: 100%;
+}

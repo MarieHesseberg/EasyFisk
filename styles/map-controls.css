@@ -78,21 +78,40 @@
   bottom: 92px;
   left: 12px;
   right: 12px;
-  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   max-height: calc(100% - 164px);
-  background: var(--color-surface);
-  border-color: var(--color-map-control-border);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  overflow: visible;
 }
-.map-screen .map-zone-popup p,
-.map-screen .map-zone-popup a,
-.map-screen .map-zone-popup .text-button {
+.map-screen .map-buy-permit {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-surface);
+  border-radius: 14px;
+  box-shadow: 0 3px 12px var(--color-shadow);
   font-size: 1rem;
+  line-height: 1.35;
 }
-.map-screen .map-zone-popup .text-button {
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-primary-soft);
+.map-screen .map-zone-popup-close {
+  position: static;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-map-control-border);
+  border-radius: 50%;
+  background: var(--color-surface);
   color: var(--color-primary-dark);
+  box-shadow: 0 3px 12px var(--color-shadow);
 }
 .map-screen .interactive-river-map:has(.map-zone-popup) .leaflet-control-zoom {
   visibility: hidden;

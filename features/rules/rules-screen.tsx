@@ -24,13 +24,17 @@ export function RulesScreen({
   onRegisterPermit: () => void;
 }) {
   const { language, t } = useLanguage();
-  const permit = documents.find(
-    (document) => isPermitValid(document, now) && getPermitZoneId(document) === selectedZone,
+  const validPermits = documents.filter(
+    (document) => isPermitValid(document, now) && getPermitZoneId(document) !== undefined,
   );
+  const permit =
+    validPermits.find((document) => getPermitZoneId(document) === selectedZone) ?? validPermits[0];
+  const permitZone = permit ? getPermitZoneId(permit)! : undefined;
   const missing = !permit;
   const { quota, reporting } = activeFishingRules;
-  const personalZone =
-    fishingContentRepository.findZone(selectedZone)?.name ?? `Sone ${selectedZone}`;
+  const personalZone = permitZone
+    ? (fishingContentRepository.findZone(permitZone)?.name ?? `Sone ${permitZone}`)
+    : "";
   return (
     <div className="screen rules-screen">
       <ScreenHeader title={t("copy.fiskeregler.647b384")} />
@@ -42,11 +46,17 @@ export function RulesScreen({
           <div>
             <small>{t("copy.regler.for.meg.c93f97c")}</small>
             <h2>
-              {selectLocalized(
-                language,
-                `Regler for ${personalZone}`,
-                `Rules for ${localizeZoneName(personalZone, language)}`,
-              )}
+              {missing
+                ? selectLocalized(
+                    language,
+                    "Spesifikke regler for din sone",
+                    "Specific rules for your zone",
+                  )
+                : selectLocalized(
+                    language,
+                    `Regler for ${personalZone}`,
+                    `Rules for ${localizeZoneName(personalZone, language)}`,
+                  )}
             </h2>
           </div>
         </div>
@@ -71,7 +81,7 @@ export function RulesScreen({
             <div className="personal-rule-list">
               <p>
                 <b>{t("copy.sesong.a17a572")}</b>
-                <span>{t(getZoneSeasonLabel(selectedZone))}</span>
+                <span>{t(getZoneSeasonLabel(permitZone!))}</span>
               </p>
               <p>
                 <b>{t("copy.kvote.6932153")}</b>

@@ -46,9 +46,6 @@ export function ProfileDetailDialog({
         <button className="back" onClick={close}>
           ‹ {t("copy.tilbake.4fb8dc1")}
         </button>
-        {destination !== "fee" && destination !== "disinfection" && (
-          <small>{t("copy.prototypevisning.cbf5fb2")}</small>
-        )}
         <h2 id="detail-title">{title}</h2>
         {destination === "feedback" ? (
           <FeedbackForm />

@@ -26,7 +26,7 @@ export function createTestPermitDocument(
     kind: "permit",
     updatedAt: now,
     values: {
-      holder: purchase?.buyer.fullName ?? "Prototypebruker",
+      holder: purchase?.buyer.fullName ?? "Fisker",
       reference: `TEST-${product.id.toUpperCase()}-${now}`,
       issuer: "EasyFisk testkjøp – ikke eksternt verifisert",
       category: categories[product.type],

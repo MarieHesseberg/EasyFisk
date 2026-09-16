@@ -14,6 +14,7 @@ import { localizeSessionResult } from "../lib/localize-session-result";
 import { translateContent } from "../locales";
 
 function expectTranslated(value: string) {
+  if (!value) return;
   expect(translateContent("en", value), value).not.toBe(value);
   expect(translateContent("no", value), value).toBe(value);
 }

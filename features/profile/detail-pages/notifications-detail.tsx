@@ -15,7 +15,6 @@ export function NotificationsDetail() {
       <div className="detail-alert">
         <Icon name="bell" />
         <div>
-          <small>{t("copy.prototype.uten.live.data.c75154d")}</small>
           <h3>{t("copy.kontroller.dagsaktuell.status.34a88f1")}</h3>
           <p>{t(notificationStatus)}</p>
         </div>

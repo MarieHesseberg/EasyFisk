@@ -1,6 +1,5 @@
 import { Icon } from "@/components/ui/icon";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { appContentRepository } from "@/data/repositories/app-content";
 import { StatusEngineControl } from "@/features/status-engine/status-engine-control";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
@@ -29,7 +28,6 @@ export function DemoControlPanel({
   const { t } = useLanguage();
   return (
     <aside className="prototype-note feature-panel">
-      <span>{t("copy.demonstrasjonsmodus.bc46805")}</span>
       <h2>{t("copy.pr.v.statusmotoren.2bde28f")}</h2>
       <p className="demo-intro">
         {t("copy.velg.en.situasjon.valget.pavirker.statuskontroll.ce64541")}
@@ -55,11 +53,6 @@ export function DemoControlPanel({
           </li>
         ))}
       </ul>
-      <small>
-        {t(
-          `Prototypen bruker realistiske ${activeFishingRules.metadata.seasonYear}-regler. Kart, persondata, forhold og statistikk er demonstrasjonsdata.`,
-        )}
-      </small>
     </aside>
   );
 }

@@ -12,7 +12,7 @@ test("manual zone and subzone survive refresh and map exploration on mobile", as
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   const settings = page.getByRole("dialog", { name: "Statusmotor" });
   await settings.getByLabel("Situasjon").selectOption("ok");
-  await settings.getByRole("button", { name: /test valgt situasjon/i }).click();
+  await settings.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   await page.getByRole("button", { name: "START FISKE", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await expect(page.getByLabel("Hovedsone", { exact: true })).toHaveValue("4");

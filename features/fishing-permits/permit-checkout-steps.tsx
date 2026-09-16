@@ -1,3 +1,4 @@
+import { Icon } from "@/components/ui/icon";
 import { selectLocalized } from "@/locales";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
@@ -123,32 +124,11 @@ export function PermitRequirementsStep({
           />
         </label>
       )}
-      <div
-        className="permit-requirement-status"
-        aria-label={t("copy.dokumentstatus.ved.fiskedato.71094f9")}
-      >
-        <b>{t("copy.dokumenter.kontrolleres.igjen.nar.fisket.starter.05296bd")}</b>
-        {product.requirements.requiresNationalFishingFee && (
-          <span>
-            {t(
-              readiness.fee
-                ? "✓ Fiskeravgift registrert"
-                : "! Fiskeravgift mangler eller er utløpt",
-            )}
-          </span>
-        )}
-        {product.requirements.requiresDisinfection && (
-          <span>
-            {readiness.disinfection
-              ? t("copy.desinfisering.registrert.84485d1")
-              : t("copy.desinfisering.mangler.eller.er.utl.pt.a8e1e5d")}
-          </span>
-        )}
-      </div>
       {(!readiness.fee || !readiness.disinfection) && (
-        <p className="permit-purchase-requirement-note">
-          {t("copy.du.kan.kj.pe.kortet.na.men.kan.ikke.starte.fiske.95066be")}
-        </p>
+        <div className="permit-purchase-requirement-note">
+          <Icon name="bell" size={22} />
+          <p>{t("copy.du.kan.kj.pe.kortet.na.men.kan.ikke.starte.fiske.95066be")}</p>
+        </div>
       )}
       <a href={product.source.url} target="_blank" rel="noreferrer">
         {t("copy.se.original.produktkilde.hos.inatur.4b67735")}

@@ -7,13 +7,13 @@ test("kartet åpner kjøp først ved sonevalg; sone, dato og kladd følger hele 
   await page.goto("/");
   await page.getByRole("button", { name: "Kart", exact: true }).click();
   await expect(page.locator(".permit-shop-list, .zone-sheet, .map-zone-popup")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /Se og velg fiskekort/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Fiskekort i sone/ })).toHaveCount(0);
   await page.locator(".phone-app").screenshot({ path: testInfo.outputPath("map.png") });
   await page
     .locator(".map-zone-switcher")
     .getByRole("button", { name: "Sone 2", exact: true })
     .click();
-  await page.getByRole("button", { name: "Se og velg fiskekort i sone 2" }).click();
+  await page.getByRole("button", { name: "Fiskekort i sone 2" }).click();
   const shop = page.locator(".permit-shop-screen");
   await expect(shop.getByRole("button", { name: "Sone 2", exact: true })).toHaveAttribute(
     "aria-pressed",

@@ -8,7 +8,7 @@ async function openStart(page: Page, scenario = "ok") {
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   const settings = page.getByRole("dialog", { name: "Statusmotor" });
   await settings.getByLabel("Situasjon").selectOption(scenario);
-  await settings.getByRole("button", { name: /test valgt situasjon/i }).click();
+  await settings.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   await page.locator(".status-card button").click();
   const dialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(dialog.getByRole("heading", { name: "Finn riktig fiskesone" })).toBeVisible();
@@ -24,7 +24,7 @@ test("inside-zone test suggests zone and starts without other confirmation scree
   page.on("pageerror", (error) => errors.push(error.message));
   const dialog = await openStart(page, "zoneInside");
   await page.screenshot({ path: "tmp/pdfs/preview/start-single-page.png" });
-  await dialog.getByRole("button", { name: "Prøv testposisjon" }).click();
+  await dialog.getByRole("button", { name: "Tillat og finn sone" }).click();
   await expect(dialog.getByRole("status")).toHaveText("Posisjonsforslag: Sone 3");
   const start = dialog.getByRole("button", { name: "Start fiske i Sone 3" });
   await expect(start).toBeInViewport();
@@ -39,7 +39,7 @@ test("outside-zone test warns and requires a manual selection on the same page",
   page,
 }) => {
   const dialog = await openStart(page, "zoneOutside");
-  await dialog.getByRole("button", { name: "Prøv testposisjon" }).click();
+  await dialog.getByRole("button", { name: "Tillat og finn sone" }).click();
   await expect(dialog.getByRole("alert")).toContainText("utenfor de registrerte fiskesonene");
   await expect(dialog.getByLabel("Hovedsone")).toHaveValue("");
   await expect(dialog.getByRole("button", { name: "Start fiske", exact: true })).toBeDisabled();

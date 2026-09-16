@@ -189,7 +189,7 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
   await dialog.getByRole("button", { name: "Review report" }).click();
   await expect(dialog.getByRole("heading", { name: "Is the information correct?" })).toBeVisible();
   await dialog.getByRole("checkbox").check();
-  await dialog.getByRole("button", { name: "Complete test report" }).click();
+  await dialog.getByRole("button", { name: "Complete report" }).click();
   await expect(dialog.getByRole("heading", { name: "Thank you for reporting this" })).toBeVisible();
   await expect(dialog).not.toContainText(
     /MELDINGEN|meldte fra|REFERANSE|Send en ny melding|KATEGORI|BESKRIVELSE|POSISJON/,
@@ -244,7 +244,7 @@ test("oppstart og juridisk status er fullstendig på engelsk", async ({ page }) 
   await page.getByRole("button", { name: /Status engine/ }).click();
   const statusDialog = page.getByRole("dialog", { name: "Status engine" });
   await statusDialog.getByLabel("Scenario").selectOption("ok");
-  await statusDialog.getByRole("button", { name: "Activate and test selected scenario" }).click();
+  await statusDialog.getByRole("button", { name: "Use selected scenario" }).click();
 
   await page.getByRole("button", { name: "START FISHING" }).click();
   const flow = page.getByRole("dialog", { name: "Start fishing" });

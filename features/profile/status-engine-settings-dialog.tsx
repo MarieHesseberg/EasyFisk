@@ -40,7 +40,6 @@ export function StatusEngineSettingsDialog({
       <button className="back" onClick={close}>
         ‹ {t("copy.tilbake.4fb8dc1")}
       </button>
-      <small>{t("copy.prototypeinnstilling.8444e8e")}</small>
       <h2 id="status-engine-title">{t("copy.statusmotor.9cef87d")}</h2>
       <p className="detail-lead">{t("prototype.statusScenarioExplanation")}</p>
       <section className="status-engine-settings">

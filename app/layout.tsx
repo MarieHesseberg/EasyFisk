@@ -46,13 +46,14 @@ import "@/styles/permit-journey.css";
 import "@/styles/map-controls.css";
 import "@/styles/permit-terms.css";
 import "@/styles/navigation-access.css";
+import "@/styles/vertical-scroll.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",
-  description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+  description: "EasyFisk for Mandalselva Elveeigarlag.",
   openGraph: {
     title: "EasyFisk",
-    description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+    description: "EasyFisk for Mandalselva Elveeigarlag.",
     type: "website",
     locale: "nb_NO",
     siteName: "EasyFisk",
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "EasyFisk",
-    description: "Prototypen EasyFisk for Mandalselva Elveeigarlag.",
+    description: "EasyFisk for Mandalselva Elveeigarlag.",
   },
   other: {
     "codex-preview": "development",

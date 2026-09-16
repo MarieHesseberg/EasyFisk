@@ -98,10 +98,6 @@ export function PermitCheckout({
           </li>
         ))}
       </ol>
-      <div className="permit-test-warning">
-        <b>{t("copy.testkj.p.dette.er.en.prototype.d619945")}</b>
-        <span>{t("copy.ingen.reservasjon.eller.betaling.gjennomf.res.2f46e3e")}</span>
-      </div>
       {checkout.step === "buyer" && (
         <article className="permit-selected-product">
           <small>{t(product.areaName)}</small>

@@ -100,7 +100,7 @@ function recordLiteral(value, file, node, sourceFile, violations) {
 }
 
 function isApprovedLiteral(value) {
-  return /^(?:easyfisk|Mandalselva|cm\s*·?|kg\s*·?|kr|SESONG|NB|GPS|NOK|Inatur|Cloudflare|EasyFisk prototype ·|Mandalselva Elveeigarlag ·|Lovdata ·|Statsforvalteren i Agder ·)$/i.test(
+  return /^(?:easyfisk|Mandalselva|cm\s*·?|kg\s*·?|kr|SESONG|NB|GPS|NOK|Inatur|Cloudflare|EasyFisk ·|Mandalselva Elveeigarlag ·|Lovdata ·|Statsforvalteren i Agder ·)$/i.test(
     value,
   );
 }

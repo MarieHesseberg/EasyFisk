@@ -43,12 +43,12 @@ export function StatusEngineControl({
         ))}
       </select>
       <div className={`demo-result ${selected.level}`} role="status" aria-live="polite">
-        <small>{t(isTestMode ? "TESTMODUS ER AKTIV" : "NORMALMODUS ER AKTIV")}</small>
+        <small>{t(isTestMode ? "VALGT SITUASJON" : "NORMALMODUS ER AKTIV")}</small>
         <b>{getStatusResult(selected, language)}</b>
         <span>{t(localizeText(selected.detail, language))}</span>
       </div>
       <button className="demo-start" onClick={startTest}>
-        {t(isTestMode ? "Bruk valgt testsituasjon" : "Aktiver og test valgt situasjon")}
+        {t("content.f9050db5beb7")}
       </button>
       {isTestMode && (
         <button className="secondary" onClick={useActualStatus}>
@@ -69,7 +69,6 @@ export function StatusEngineControl({
         <option value="cancelled">{t("copy.betaling.avbrytes.ba0b329")}</option>
         <option value="failed">{t("copy.betaling.feiler.f1a3c37")}</option>
       </select>
-      <small>{t("copy.dette.er.en.intern.prototypeinnstilling.og.vises.310b3f3")}</small>
     </>
   );
 }

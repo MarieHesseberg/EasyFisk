@@ -175,6 +175,11 @@ export function InteractiveMandalselvaMap({
       />
       {showDetails && selectedZone && (
         <article className="map-zone-popup" aria-live="polite">
+          {onBuyPermit && (
+            <button className="primary map-buy-permit" onClick={onBuyPermit}>
+              {t("copy.se.og.velg.fiskekort.i.sone.de70e36")} {selectedZone.id}
+            </button>
+          )}
           <button
             type="button"
             className="map-zone-popup-close"
@@ -183,14 +188,6 @@ export function InteractiveMandalselvaMap({
           >
             ×
           </button>
-          <small>{t("copy.valgt.fiskeomrade.20c5ede")}</small>
-          <h2>{t(selectedZone.name)}</h2>
-          <p>{t(selectedZone.season)}</p>
-          {onBuyPermit && (
-            <button className="primary map-buy-permit" onClick={onBuyPermit}>
-              {t("copy.se.og.velg.fiskekort.i.sone.de70e36")} {selectedZone.id}
-            </button>
-          )}
         </article>
       )}
       {locate && (

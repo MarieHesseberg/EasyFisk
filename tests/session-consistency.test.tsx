@@ -190,7 +190,7 @@ test("rules display actual permit type, area and validity instead of the mock da
   render(
     <RulesScreen
       demoStatus="ok"
-      selectedZone={4}
+      selectedZone={3}
       now={Date.parse("2026-08-10T12:00:00")}
       onRegisterPermit={() => undefined}
       documents={[
@@ -210,7 +210,21 @@ test("rules display actual permit type, area and validity instead of the mock da
     />,
   );
   expect(screen.getByText(/Sesongkort · gyldig til 2026-09-15/)).toBeTruthy();
+  expect(screen.getByRole("heading", { name: /Regler for Sone 4/ })).toBeTruthy();
   expect(screen.queryByText(/Døgnkort · gyldig til/)).toBeNull();
+});
+
+test("rules do not present a selected map zone as the angler's zone without a permit", () => {
+  render(
+    <RulesScreen
+      demoStatus="ok"
+      selectedZone={3}
+      now={Date.parse("2026-08-10T12:00:00")}
+      onRegisterPermit={() => undefined}
+    />,
+  );
+  expect(screen.getByRole("heading", { name: "Spesifikke regler for din sone" })).toBeTruthy();
+  expect(screen.queryByRole("heading", { name: /Regler for Sone/ })).toBeNull();
 });
 
 test("reporting-day registration uses the date selected on the product", () => {
