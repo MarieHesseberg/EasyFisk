@@ -38,6 +38,12 @@ test("Vipps can be cancelled and completed without secure-context randomUUID", a
   await page.screenshot({ path: testInfo.outputPath("payment-confirmation.png") });
   await shop.getByRole("button", { name: "Åpne fiskekort" }).click();
   await expect(page.getByRole("heading", { name: "Mine fiskekort", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Hjem", exact: true }).click();
+  await expect(page.getByRole("button", { name: /Fiskekort (kjøpt|registrert)/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Kjøp fiskekort", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Regler", exact: true }).click();
+  await expect(page.getByRole("heading", { name: /Regler for Sone 3/ })).toBeVisible();
+  await expect(page.getByText(/Vi mangler fiskekortet ditt/)).toHaveCount(0);
   await page.reload();
   await page.getByRole("button", { name: "Mer", exact: true }).click();
   await page.getByRole("button", { name: /Mine fiskekort/ }).click();

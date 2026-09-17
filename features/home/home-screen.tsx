@@ -11,6 +11,8 @@ import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-
 import type { CatchRecord } from "@/domain/catches/catch";
 import { useLanguage } from "@/components/localization/language-provider";
 import { localizeText } from "@/domain/localization/localized-text";
+import type { FishingDocument } from "@/domain/documents/fishing-document";
+import { isPermitValid } from "@/domain/documents/get-permit-zones";
 
 const documentStatuses: DemoStatus[] = [
   "allMissing",
@@ -39,6 +41,8 @@ export function HomeScreen({
   documentReadiness,
   isStatusTestMode,
   quotaStatus,
+  ownedPermit,
+  now,
 }: {
   zoneName: string;
   onStart: () => void;
@@ -57,6 +61,8 @@ export function HomeScreen({
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   quotaStatus: FishingStartQuotaStatus;
+  ownedPermit?: FishingDocument;
+  now: number;
 }) {
   const { language, t } = useLanguage();
   const screenRef = useRef<HTMLDivElement>(null);
@@ -99,15 +105,34 @@ export function HomeScreen({
                 [
                   {
                     kind: "permit",
-                    label: t("copy.kj.p.fiskekort.d32ea04"),
+                    label: ownedPermit
+                      ? isPermitValid(ownedPermit, now)
+                        ? selectLocalized(
+                            language,
+                            "Fiskekort registrert",
+                            "Fishing permit registered",
+                          )
+                        : new Date(ownedPermit.values.startsAt ?? "").getTime() > now
+                          ? selectLocalized(
+                              language,
+                              "Fiskekort kjøpt · kommende",
+                              "Permit purchased · upcoming",
+                            )
+                          : selectLocalized(
+                              language,
+                              "Fiskekort kjøpt · utløpt",
+                              "Permit purchased · expired",
+                            )
+                      : t("copy.kj.p.fiskekort.d32ea04"),
                     saved: selectLocalized(
                       language,
                       "Fiskekort registrert",
                       "Fishing permit registered",
                     ),
-                    open: documentReadiness.valid.permit
-                      ? () => onDocument("permits")
-                      : onBuyPermit,
+                    open:
+                      documentReadiness.valid.permit || ownedPermit
+                        ? () => onDocument("permits")
+                        : onBuyPermit,
                   },
                   {
                     kind: "disinfection",

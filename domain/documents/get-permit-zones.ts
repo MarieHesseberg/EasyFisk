@@ -14,6 +14,29 @@ export function isPermitValid(document: FishingDocument, now = Date.now()) {
   return startsAt <= now && endsAt >= now;
 }
 
+/** Display an owned permit even outside its validity period, without granting fishing readiness. */
+export function getDisplayedPermit(
+  documents: FishingDocument[],
+  now: number,
+  preferredZone?: ZoneId,
+) {
+  const permits = documents.filter(
+    (document) =>
+      getPermitZoneId(document) !== undefined &&
+      Number.isFinite(Date.parse(document.values.startsAt ?? "")) &&
+      Number.isFinite(Date.parse(document.values.endsAt ?? "")),
+  );
+  const current = permits.filter((document) => isPermitValid(document, now));
+  const candidates = current.length ? current : permits;
+  return [...candidates].sort(
+    (a, b) =>
+      (current.length
+        ? Number(getPermitZoneId(b) === preferredZone) -
+          Number(getPermitZoneId(a) === preferredZone)
+        : 0) || b.updatedAt - a.updatedAt,
+  )[0];
+}
+
 export function getValidPermitZoneIds(documents: FishingDocument[], now = Date.now()) {
   return Array.from(
     new Set(

@@ -3,7 +3,11 @@ import { selectLocalized } from "@/locales";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
-import { getPermitZoneId, isPermitValid } from "@/domain/documents/get-permit-zones";
+import {
+  getDisplayedPermit,
+  getPermitZoneId,
+  isPermitValid,
+} from "@/domain/documents/get-permit-zones";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import type { ZoneId } from "@/domain/zones/zone";
 import { getZoneSeasonLabel } from "@/domain/zones/zone-rules";
@@ -24,11 +28,7 @@ export function RulesScreen({
   onRegisterPermit: () => void;
 }) {
   const { language, t } = useLanguage();
-  const validPermits = documents.filter(
-    (document) => isPermitValid(document, now) && getPermitZoneId(document) !== undefined,
-  );
-  const permit =
-    validPermits.find((document) => getPermitZoneId(document) === selectedZone) ?? validPermits[0];
+  const permit = getDisplayedPermit(documents, now, selectedZone);
   const permitZone = permit ? getPermitZoneId(permit)! : undefined;
   const missing = !permit;
   const { quota, reporting } = activeFishingRules;
@@ -69,12 +69,12 @@ export function RulesScreen({
           <>
             <p className="permit-zone">
               <Icon name="pin" size={17} />
-              <b>{localizeZoneName(personalZone, language)}</b>
+              <b>{localizeZoneName(permit.values.area ?? personalZone, language)}</b>
               <span>
                 {selectLocalized(
                   language,
-                  `${permit.values.category ?? "Fiskekort"} · gyldig til ${permit.values.endsAt?.replace("T", " ")}`,
-                  `${t(permit.values.category ?? "Fiskekort")} · valid until ${permit.values.endsAt?.replace("T", " ")}`,
+                  `${permit.values.category ?? "Fiskekort"} · ${isPermitValid(permit, now) ? "gyldig til" : new Date(permit.values.startsAt ?? "").getTime() > now ? "gyldig fra" : "utløpt"} ${(new Date(permit.values.startsAt ?? "").getTime() > now ? permit.values.startsAt : permit.values.endsAt)?.replace("T", " ")}`,
+                  `${t(permit.values.category ?? "Fiskekort")} · ${isPermitValid(permit, now) ? "valid until" : new Date(permit.values.startsAt ?? "").getTime() > now ? "valid from" : "expired"} ${(new Date(permit.values.startsAt ?? "").getTime() > now ? permit.values.startsAt : permit.values.endsAt)?.replace("T", " ")}`,
                 )}
               </span>
             </p>

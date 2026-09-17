@@ -26,7 +26,7 @@ import {
   getDisplayedQuotaStatus,
   getFishingStartQuotaStatus,
 } from "@/domain/quotas/get-fishing-start-quota-status";
-import { getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
+import { getDisplayedPermit, getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
 import { useCurrentTime } from "@/hooks/use-current-time";
 import { useLanguage } from "@/components/localization/language-provider";
 
@@ -111,6 +111,8 @@ export function EasyFiskApp() {
               demoStatus={effectiveStatus.status}
               scenario={effectiveStatus.scenario}
               documentReadiness={effectiveStatus.readiness}
+              ownedPermit={getDisplayedPermit(documents, documentCheckTime, contextZone)}
+              now={documentCheckTime}
               isStatusTestMode={isStatusTestMode}
               quotaStatus={displayedQuotaStatus}
             />
