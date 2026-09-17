@@ -1,4 +1,5 @@
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
+import { additionalPermitProducts } from "./mandalselva-additional-permits";
 const sourceCheckedAt = "2026-09-01";
 
 const elveeigarlagSeller = {
@@ -42,6 +43,7 @@ const source = (url: string) => ({
 });
 
 export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
+  ...additionalPermitProducts,
   {
     id: "zone-1-piren-day",
     zoneId: 1,
@@ -117,12 +119,16 @@ export const prototypePermitProducts: readonly PrototypePermitProduct[] = [
     title: "Fossefjellene døgnkort",
     type: "day",
     action: "purchase",
-    availability: { status: "not-on-sale", label: "Ikke i salg", remainingUnits: null },
+    availability: { status: "available", label: "Ledig", remainingUnits: null },
     validity: { label: "Kl. 18.00–17.59 neste dag", startsAt: "18:00", endsAt: "17:59" },
     capacity: { label: "3 døgnkort per fiskedøgn", permitsPerFishingDay: 3 },
-    price: { amountNok: null, status: "not-published" },
+    price: { amountNok: 500, status: "verified" },
     requirements: commonRequirements,
-    source: source("https://www.inatur.no/laksefiske/6203ca9c6f3607461547101b"),
+    source: {
+      ...source("https://www.inatur.no/laksefiske/6203ca9c6f3607461547101b"),
+      checkedAt: "2026-09-17",
+      priceUrl: "https://www.scanatura.no/webshop/default.aspx?ID=1623&ObjektID=119220",
+    },
     seller: fossefjelleneSeller,
     note: "Gjelder Fossefjellene. Fossefjellene Syd er et eget produkt med to kort per døgn.",
   },

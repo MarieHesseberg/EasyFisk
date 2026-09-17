@@ -421,9 +421,9 @@ test("produktregisteret dekker alle soner og bruker dokumenterte Inatur-priser",
   expect(productsPerZone).toEqual(
     new Map([
       [1, 3],
-      [2, 9],
+      [2, 30],
       [3, 3],
-      [4, 2],
+      [4, 8],
     ]),
   );
   expect(permitCatalogRepository.findProduct("zone-2-fuskeland-group")?.price.amountNok).toBe(2400);
@@ -472,7 +472,8 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   await completePermitCheckoutDetails(user);
   expect(screen.queryByRole("radio", { name: /Betaling/ })).toBeNull();
   expect(screen.getByRole("heading", { name: "Kontroller bestillingen" })).toBeTruthy();
-  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
+  await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
 
   expect(saved).toHaveLength(1);
   expect(isFishingDocument(saved[0])).toBe(true);
@@ -482,7 +483,7 @@ test("godkjent testbetaling lager et gyldig lokalt fiskekort", async () => {
   expect(purchases.at(-1)?.status).toBe("completed");
   expect(getDocumentReadiness(saved, Date.parse("2026-08-31T12:00:00"), 3).valid.permit).toBe(true);
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
-  expect(screen.getByText(/Ingen penger er trukket/)).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Betaling godkjent" })).toBeTruthy();
   await user.click(screen.getByRole("button", { name: "Åpne fiskekort" }));
   await user.click(screen.getByRole("button", { name: "Tilbake til hjem" }));
   expect(openedPermits).toBe(true);
@@ -544,7 +545,8 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
   );
 
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
+  await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Betalingen ble avbrutt");
   unmount();
 
@@ -564,7 +566,8 @@ test("avbrutt og feilet testbetaling lagrer ikke fiskekort", async () => {
     />,
   );
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
+  await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Testbetalingen feilet");
   expect(saves).toBe(0);
   expect(purchaseStatuses).toEqual(["cancelled", "failed"]);
@@ -599,9 +602,9 @@ test("kartets kjøpsknapp åpner den felles fiskekortbutikken", async () => {
     />,
   );
 
-  expect(screen.queryByRole("button", { name: "Fiskekort i sone 2" })).toBeNull();
+  expect(screen.queryByRole("button", { name: "Kjøp fiskekort i sone 2" })).toBeNull();
   await userEvent.setup().click(screen.getByRole("button", { name: "Sone 2" }));
-  await userEvent.setup().click(screen.getByRole("button", { name: "Fiskekort i sone 2" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Kjøp fiskekort i sone 2" }));
   expect(opened).toBe(true);
 });
 
@@ -856,13 +859,15 @@ test("lagringsfeil bevarer kjøpsopplysninger og samme bestilling kan prøves ig
   );
   const user = userEvent.setup();
   await completePermitCheckoutDetails(user);
-  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
+  await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
   expect(screen.getByRole("alert").textContent).toContain("Opplysningene er bevart");
   await user.click(screen.getByRole("button", { name: "Tilbake og endre" }));
   expect((screen.getByLabelText("Fullt navn") as HTMLInputElement).value).toBe("Marie Hesseberg");
   expect((screen.getByLabelText(/Jeg godtar vilkårene/) as HTMLInputElement).checked).toBe(true);
   await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
-  await user.click(screen.getByRole("button", { name: "Betal 455 kr" }));
+  await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
+  await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");
   expect(ids).toHaveLength(2);
   expect(ids[1]).toBe(ids[0]);

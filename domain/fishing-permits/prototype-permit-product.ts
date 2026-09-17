@@ -49,6 +49,7 @@ export type PrototypePermitRequirements = {
 
 export type PrototypePermitSource = {
   url: string;
+  priceUrl?: string;
   checkedAt: string;
   status: "verified-public-source";
 };

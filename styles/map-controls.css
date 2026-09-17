@@ -96,22 +96,11 @@
   min-height: 52px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid var(--color-surface);
+  border: 0;
   border-radius: 14px;
   box-shadow: 0 3px 12px var(--color-shadow);
   font-size: 1rem;
   line-height: 1.35;
-}
-.map-screen .map-zone-popup-close {
-  position: static;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--color-map-control-border);
-  border-radius: 50%;
-  background: var(--color-surface);
-  color: var(--color-primary-dark);
-  box-shadow: 0 3px 12px var(--color-shadow);
 }
 .map-screen .interactive-river-map:has(.map-zone-popup) .leaflet-control-zoom {
   visibility: hidden;

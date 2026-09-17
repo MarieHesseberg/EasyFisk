@@ -1,4 +1,5 @@
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
+import { getZoneSeasonEnd } from "../zones/zone-rules.ts";
 import { t, translateContent, type AppLanguage } from "../../locales/index.ts";
 import type {
   PrototypePermitAvailability,
@@ -23,11 +24,8 @@ export function getPrototypePermitDateRange(product: PrototypePermitProduct) {
     };
   }
   return {
-    startsOn: activeFishingRules.season.startDate,
-    endsOn:
-      product.zoneId === activeFishingRules.season.extendedZoneId
-        ? activeFishingRules.season.extendedEndDate
-        : activeFishingRules.season.standardEndDate,
+    startsOn: product.validity.seasonStartsOn ?? activeFishingRules.season.startDate,
+    endsOn: product.validity.seasonEndsOn ?? getZoneSeasonEnd(product.zoneId, product.areaName),
   };
 }
 

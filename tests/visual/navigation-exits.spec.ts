@@ -123,6 +123,6 @@ test("map and notification close buttons respond to actual clicks", async ({ pag
   await expect(page.locator(".header-alert-panel")).toHaveCount(0);
   await tab(page, "Kart");
   await page.getByRole("button", { name: "Sone 2", exact: true }).click();
-  await page.getByRole("button", { name: "Lukk soneinformasjon" }).click();
+  await page.locator(".leaflet-map-canvas").click({ position: { x: 20, y: 30 } });
   await expect(page.locator(".map-zone-popup")).toHaveCount(0);
 });

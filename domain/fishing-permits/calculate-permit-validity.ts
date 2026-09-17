@@ -59,8 +59,9 @@ export function calculatePermitValidity(
   const startsAt = product.validity.startsAt ?? "00:00";
   const endsAt = product.validity.endsAt ?? "23:59";
   const endsOn = endsAt < startsAt ? addCalendarDays(selectedDate, 1) : selectedDate;
+  const seasonEnd = product.validity.seasonEndsOn;
   return {
     startsAt: `${selectedDate}T${startsAt}`,
-    endsAt: `${endsOn}T${endsAt}`,
+    endsAt: seasonEnd && endsOn > seasonEnd ? `${seasonEnd}T23:59` : `${endsOn}T${endsAt}`,
   };
 }

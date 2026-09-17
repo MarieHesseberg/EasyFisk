@@ -80,7 +80,7 @@ test("fiskekortbutikken åpnes fra hjem, kart, Mer og Mine fiskekort", async ({ 
     .locator(".map-zone-switcher")
     .getByRole("button", { name: "Sone 3", exact: true })
     .click();
-  await page.getByRole("button", { name: /Fiskekort i sone/ }).click();
+  await page.getByRole("button", { name: /Kjøp fiskekort i sone/ }).click();
   shop = page.locator(".permit-shop-screen");
   await expect(shop).toBeVisible();
   await page.getByRole("button", { name: "Mer", exact: true }).click();
@@ -136,7 +136,8 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(reviewSummary).toContainText("1 kort · 2 deltakere");
   await expect(reviewSummary).toContainText("Totalt beløp2400 kr");
   await expect(shop.locator(".permit-test-warning")).toHaveCount(0);
-  await shop.getByRole("button", { name: "Betal 2400 kr" }).click();
+  await shop.getByRole("button", { name: "Betal med Vipps", exact: true }).click();
+  await shop.getByRole("button", { name: "Godkjenn 2400 kr", exact: true }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
   await expect(shop.getByRole("status")).toContainText("Sone 2 · Fuskeland");
   await expect(shop.getByRole("status")).toContainText("EF-TEST-");
@@ -165,13 +166,13 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(
     page
       .getByRole("region", { name: "Interaktivt kart over Mandalselva" })
-      .getByRole("heading", { name: /Sone 1/ }),
+      .getByRole("button", { name: "Kjøp fiskekort i sone 1" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Sone 4", exact: true }).click();
   await expect(
     page
       .getByRole("region", { name: "Interaktivt kart over Mandalselva" })
-      .getByRole("heading", { name: /Sone 4/ }),
+      .getByRole("button", { name: "Kjøp fiskekort i sone 4" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Hjem" }).click();
 });
@@ -193,7 +194,8 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await shop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(shop);
   await expect(shop.getByRole("radio")).toHaveCount(0);
-  await shop.getByRole("button", { name: "Betal 455 kr" }).click();
+  await shop.getByRole("button", { name: "Betal med Vipps", exact: true }).click();
+  await shop.getByRole("button", { name: "Godkjenn 455 kr", exact: true }).click();
   await expect(shop.getByRole("alert")).toContainText("Betalingen ble avbrutt");
 
   await resetApp(page);
@@ -206,7 +208,8 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
   await failedShop.getByRole("button", { name: /20\. august 2026/ }).click();
   await failedShop.getByRole("button", { name: "Fortsett til kjøp" }).click();
   await completePermitCheckoutDetails(failedShop);
-  await failedShop.getByRole("button", { name: "Betal 455 kr" }).click();
+  await failedShop.getByRole("button", { name: "Betal med Vipps", exact: true }).click();
+  await failedShop.getByRole("button", { name: "Godkjenn 455 kr", exact: true }).click();
   await expect(failedShop.getByRole("alert")).toContainText("Testbetalingen feilet");
 });
 
@@ -360,7 +363,7 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
     .getByRole("button", { name: "Sone 3", exact: true })
     .click();
   await expect(page.getByRole("dialog", { name: "Start fiske" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Fiskekort i sone 3" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Kjøp fiskekort i sone 3" })).toBeVisible();
 
   await page.getByRole("button", { name: "Mer" }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();

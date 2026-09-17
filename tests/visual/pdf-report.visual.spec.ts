@@ -21,7 +21,7 @@ test("PDF 1–2: notification contents and missing-document checks are English",
   await expect(
     page.getByRole("button", { name: "Use zone 3 for the fishing session" }),
   ).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Permits in zone 3" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Buy permits in zone 3" })).toBeVisible();
   await page.getByRole("button", { name: "Home", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Buy fishing permit", exact: true })).toBeVisible();
@@ -39,7 +39,7 @@ for (const zone of [1, 2, 3, 4]) {
     await expect(sheet).not.toContainText(
       /SESONG|Sone|fiskedøgn|døgnkort|simulert|offentliggjort|inkludert/,
     );
-    await sheet.getByRole("button", { name: `Permits in zone ${zone}` }).click();
+    await sheet.getByRole("button", { name: `Buy permits in zone ${zone}` }).click();
     const shop = page.locator(".permit-shop-screen");
     await expect(shop.locator(".permit-shop-list > article").first()).toBeVisible();
     const count = await shop.locator(".permit-shop-list > article").count();

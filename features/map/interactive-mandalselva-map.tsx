@@ -61,6 +61,7 @@ export function InteractiveMandalselvaMap({
         minZoom: 9,
         maxZoom: 16,
       });
+      map.on("click", () => setShowDetails(false));
       leaflet.control.zoom({ position: "bottomright" }).addTo(map);
       leaflet
         .tileLayer(tileUrl, {
@@ -73,6 +74,7 @@ export function InteractiveMandalselvaMap({
       for (const zone of mandalselvaMapZones) {
         const polygon = leaflet
           .polygon(zone.boundary, {
+            bubblingMouseEvents: false,
             color: zone.color,
             fillColor: zone.color,
             fillOpacity: zone.id === initialSelectedRef.current ? 0.28 : 0.12,
@@ -82,7 +84,7 @@ export function InteractiveMandalselvaMap({
           .addTo(map)
           .on("click", () => {
             setSelectedRef.current(zone.id);
-            setShowDetails(true);
+            setShowDetails((open) => !open);
           });
         polygon.bindTooltip(`${t("copy.sone.44f1e2e")} ${zone.id}`, {
           sticky: true,
@@ -180,14 +182,6 @@ export function InteractiveMandalselvaMap({
               {t("copy.se.og.velg.fiskekort.i.sone.de70e36")} {selectedZone.id}
             </button>
           )}
-          <button
-            type="button"
-            className="map-zone-popup-close"
-            aria-label={t("copy.lukk.soneinformasjon.593582a")}
-            onClick={() => setShowDetails(false)}
-          >
-            ×
-          </button>
         </article>
       )}
       {locate && (

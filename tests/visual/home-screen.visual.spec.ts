@@ -92,8 +92,11 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await shop.getByLabel(/I have read and understood/).check();
   await shop.getByLabel(/I accept the terms/).check();
   await shop.getByRole("button", { name: "Next · review" }).click();
-  await shop.getByRole("button", { name: "Pay 455 kr" }).click();
-  await expect(shop.getByRole("status")).toContainText("Your fishing permit has been saved");
+  await shop.getByRole("button", { name: "Pay with Vipps", exact: true }).click();
+  await shop.getByRole("button", { name: "Approve 455 kr", exact: true }).click();
+  await expect(shop.getByRole("status")).toContainText(
+    "Your fishing permit is saved under My permits.",
+  );
   await expect(shop).not.toContainText(
     /Fiskedato|Kortinnehaver|Fødselsdato|Deltakere|fiskekrav|Kontroller bestillingen|Grunnpris|Totalt beløp|Testbetaling godkjent|Bestillingsnummer|Gyldig fra|Utsteder/,
   );

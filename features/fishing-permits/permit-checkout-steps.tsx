@@ -224,9 +224,7 @@ export function PermitReviewStep({
           {t("copy.tilbake.og.endre.7334721")}
         </button>
         <button className="primary" type="button" disabled={isSubmitting} onClick={next}>
-          {isSubmitting
-            ? t("copy.behandler.testbetaling.384e9f3")
-            : `${selectLocalized(language, "Betal", "Pay")} ${price.totalNok} kr`}
+          {isSubmitting ? t("copy.behandler.testbetaling.384e9f3") : t("payment.payWithVipps")}
         </button>
       </div>
     </div>
@@ -258,9 +256,8 @@ export function PermitConfirmationStep({
   return (
     <div className="permit-checkout-step permit-confirmation" role="status">
       <span className="permit-confirmation-icon">✓</span>
-      <small>{t("copy.testbetaling.godkjent.kj.pet.er.fullf.rt.db09d1d")}</small>
-      <h3>{t("copy.fiskekortet.er.lagret.ceb7e12")}</h3>
-      <p>{t("copy.ingen.penger.er.trukket.kortet.ligger.na.under.m.b92481b")}</p>
+      <h3>{t("payment.approved")}</h3>
+      <p>{t("payment.saved")}</p>
       <dl className="permit-order-summary">
         <div>
           <dt>{t("copy.kort.12ed908")}</dt>
@@ -275,14 +272,6 @@ export function PermitConfirmationStep({
           <dd>
             {selectLocalized(language, "Sone", "Zone")} {product.zoneId} · {t(product.areaName)}
           </dd>
-        </div>
-        <div>
-          <dt>{t("copy.bestillingsnummer.aa58839")}</dt>
-          <dd>{purchase.orderNumber}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.testreferanse.ed0f389")}</dt>
-          <dd>{purchase.paymentReference}</dd>
         </div>
         <div>
           <dt>{t("copy.gyldig.fra.32590ea")}</dt>
@@ -300,11 +289,28 @@ export function PermitConfirmationStep({
               : `${purchase.priceNok} kr`}
           </dd>
         </div>
-        <div>
-          <dt>{t("copy.utsteder.a468935")}</dt>
-          <dd>{purchase.issuer}</dd>
-        </div>
       </dl>
+      <div className="permit-confirmation-actions">
+        <button className="primary" type="button" onClick={openPermits}>
+          {t("copy.apne.fiskekort.8aece66")}
+        </button>
+        <button className="secondary" type="button" onClick={goHome}>
+          {t("copy.tilbake.til.hjem.d935a7f")}
+        </button>
+      </div>
+      <details className="permit-receipt-details">
+        <summary>{t("payment.receiptDetails")}</summary>
+        <dl className="permit-order-summary">
+          <div>
+            <dt>{t("copy.bestillingsnummer.aa58839")}</dt>
+            <dd>{purchase.orderNumber}</dd>
+          </div>
+          <div>
+            <dt>{t("copy.testreferanse.ed0f389")}</dt>
+            <dd>{purchase.paymentReference}</dd>
+          </div>
+        </dl>
+      </details>
       {(!readiness.fee || !readiness.disinfection) && (
         <section className="permit-missing-documents" aria-labelledby="missing-documents-title">
           <h4 id="missing-documents-title">{t("copy.fullf.r.kravene.f.r.du.fisker.ba15348")}</h4>
@@ -321,14 +327,6 @@ export function PermitConfirmationStep({
           )}
         </section>
       )}
-      <div className="permit-confirmation-actions">
-        <button className="primary" type="button" onClick={openPermits}>
-          {t("copy.apne.fiskekort.8aece66")}
-        </button>
-        <button className="secondary" type="button" onClick={goHome}>
-          {t("copy.tilbake.til.hjem.d935a7f")}
-        </button>
-      </div>
     </div>
   );
 }

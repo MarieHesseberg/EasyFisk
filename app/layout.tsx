@@ -47,6 +47,7 @@ import "@/styles/map-controls.css";
 import "@/styles/permit-terms.css";
 import "@/styles/navigation-access.css";
 import "@/styles/vertical-scroll.css";
+import "@/styles/permit-payment.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

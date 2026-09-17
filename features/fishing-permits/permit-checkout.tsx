@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import type { PermitReceipt } from "./permit-journey";
 import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
@@ -20,7 +21,8 @@ import { usePermitCheckoutController } from "./use-permit-checkout-controller";
 import { getPrototypePermitAvailability } from "@/domain/fishing-permits/get-prototype-permit-availability";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { useLanguage } from "@/components/localization/language-provider";
-const stepNumbers = { buyer: 1, review: 2, confirmation: 3 } as const;
+import { PermitVippsPayment } from "./permit-vipps-payment";
+const stepNumbers = { buyer: 1, review: 2, payment: 2, confirmation: 3 } as const;
 export function PermitCheckout({
   product,
   documents = [],
@@ -69,6 +71,11 @@ export function PermitCheckout({
     initialReceipt,
     onReceipt,
   });
+  const checkoutRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    checkoutRef.current?.scrollIntoView?.({ block: "start" });
+    checkoutRef.current?.focus({ preventScroll: true });
+  }, [checkout.step]);
   const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
   let validity = null;
   try {
@@ -82,9 +89,14 @@ export function PermitCheckout({
     product.zoneId,
   ).valid;
   return (
-    <section className="permit-checkout" aria-label={t("copy.kj.p.fiskekort.d32ea04")}>
-      {checkout.step !== "confirmation" && (
-        <button className="back" type="button" onClick={back}>
+    <section
+      ref={checkoutRef}
+      tabIndex={-1}
+      className="permit-checkout"
+      aria-label={t("copy.kj.p.fiskekort.d32ea04")}
+    >
+      {checkout.step !== "confirmation" && checkout.step !== "payment" && (
+        <button className="back" type="button" onClick={back} disabled={checkout.isSubmitting}>
           {t("copy.tilbake.til.fiskekort.bcb4b52")}
         </button>
       )}
@@ -134,7 +146,16 @@ export function PermitCheckout({
           updateForm={checkout.updateForm}
           isSubmitting={checkout.isSubmitting}
           back={() => checkout.backTo("buyer")}
-          next={() => void checkout.submit()}
+          next={checkout.openPayment}
+        />
+      )}
+      {checkout.step === "payment" && (
+        <PermitVippsPayment
+          product={product}
+          form={checkout.form}
+          isSubmitting={checkout.isSubmitting}
+          approve={() => void checkout.submit()}
+          cancel={checkout.cancelPayment}
         />
       )}
       {checkout.step === "confirmation" && checkout.receipt && (

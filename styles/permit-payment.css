@@ -1,0 +1,70 @@
+.permit-vipps-payment {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.permit-vipps-payment h3,
+.permit-vipps-payment p {
+  margin: 0;
+}
+.permit-vipps-brand {
+  justify-self: center;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 28px;
+  font-weight: 850;
+}
+.permit-vipps-payment h3 {
+  font-size: 24px;
+}
+.permit-vipps-merchant,
+.permit-vipps-caption {
+  color: var(--color-text-soft);
+}
+.permit-vipps-amount {
+  font-size: 40px;
+  line-height: 1.2;
+}
+.permit-vipps-account {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-cool);
+  text-align: left;
+}
+.permit-vipps-account > span {
+  display: grid;
+}
+.permit-vipps-payment button {
+  min-height: 52px;
+  font-size: 17px;
+}
+.permit-confirmation > h3 {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  line-height: 1.2;
+}
+.permit-confirmation > p {
+  font-size: 17px;
+  line-height: 1.5;
+}
+.permit-receipt-details {
+  text-align: left;
+}
+.permit-receipt-details summary {
+  padding: var(--space-4) 0;
+  color: var(--color-primary);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}

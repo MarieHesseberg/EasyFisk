@@ -7,13 +7,13 @@ test("kartet åpner kjøp først ved sonevalg; sone, dato og kladd følger hele 
   await page.goto("/");
   await page.getByRole("button", { name: "Kart", exact: true }).click();
   await expect(page.locator(".permit-shop-list, .zone-sheet, .map-zone-popup")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /Fiskekort i sone/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Kjøp fiskekort i sone/ })).toHaveCount(0);
   await page.locator(".phone-app").screenshot({ path: testInfo.outputPath("map.png") });
   await page
     .locator(".map-zone-switcher")
     .getByRole("button", { name: "Sone 2", exact: true })
     .click();
-  await page.getByRole("button", { name: "Fiskekort i sone 2" }).click();
+  await page.getByRole("button", { name: "Kjøp fiskekort i sone 2" }).click();
   const shop = page.locator(".permit-shop-screen");
   await expect(shop.getByRole("button", { name: "Sone 2", exact: true })).toHaveAttribute(
     "aria-pressed",
@@ -57,7 +57,8 @@ test("kartet åpner kjøp først ved sonevalg; sone, dato og kladd følger hele 
   await shop.getByRole("button", { name: "Tilbake og endre" }).click();
   await expect(shop.getByLabel("Telefon")).toHaveValue("98765432");
   await shop.getByRole("button", { name: "Neste · kontroller" }).click();
-  await shop.getByRole("button", { name: /^Betal \d+ kr$/ }).click();
+  await shop.getByRole("button", { name: "Betal med Vipps" }).click();
+  await shop.getByRole("button", { name: /^Godkjenn \d+ kr$/ }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");
   await expect(shop.getByRole("status")).toContainText("2026-08-21");
   await expect(shop.getByRole("status")).toContainText("Sone 2 · Holmegård");

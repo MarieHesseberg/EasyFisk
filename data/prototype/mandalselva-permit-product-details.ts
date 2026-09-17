@@ -2,6 +2,7 @@ import type {
   PrototypePermitProduct,
   PrototypePermitProductDetails,
 } from "@/domain/fishing-permits/prototype-permit-product";
+import { additionalPermitDetails } from "./mandalselva-additional-permits";
 
 const commonDetails: PrototypePermitProductDetails = {
   ageRule:
@@ -14,6 +15,7 @@ const commonDetails: PrototypePermitProductDetails = {
 };
 
 const detailsByProductId: Partial<Record<string, Partial<PrototypePermitProductDetails>>> = {
+  ...additionalPermitDetails,
   "zone-1-boat-day": {
     equipmentAndFacilities: [
       "Kortet tillater inntil to stenger fra båt.",

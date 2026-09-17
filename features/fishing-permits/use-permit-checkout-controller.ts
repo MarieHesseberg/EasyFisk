@@ -22,13 +22,14 @@ import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { OperationResult } from "@/domain/shared/operation-result";
 import { createTestPermitDocument } from "./create-test-permit-document";
+import { createLocalId } from "@/lib/create-local-id";
 import {
   canSelectPrototypePermit,
   getPrototypePermitAvailability,
   getPrototypePermitDateRange,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
-export type CheckoutStep = "buyer" | "review" | "confirmation";
+export type CheckoutStep = "buyer" | "review" | "payment" | "confirmation";
 
 function todayInNorway() {
   return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
@@ -105,6 +106,11 @@ export function usePermitCheckoutController({
     setStep("review");
   }
 
+  function paymentError(message: string) {
+    setStep("review");
+    setError(message);
+  }
+
   async function submit() {
     if (submissionLock.current || receipt) return;
     const validationError = validatePermitBuyer(form) || validatePermitParticipants(product, form);
@@ -115,18 +121,18 @@ export function usePermitCheckoutController({
     try {
       calculatePermitValidity(product, selectedDate);
     } catch {
-      return setError("Velg en gyldig fiskedato for dette kortet.");
+      return paymentError("Velg en gyldig fiskedato for dette kortet.");
     }
     if (!canPurchasePrototypePermit(product))
-      return setError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
+      return paymentError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
     const availability = getPrototypePermitAvailability(product, selectedDate);
-    if (!canSelectPrototypePermit(availability)) return setError(availability.label);
+    if (!canSelectPrototypePermit(availability)) return paymentError(availability.label);
     submissionLock.current = true;
     setIsSubmitting(true);
     try {
       const key = JSON.stringify([product.id, selectedDate, form]);
       if (attempt.current?.key !== key)
-        attempt.current = { key, now: Date.now(), id: `permit-purchase-${crypto.randomUUID()}` };
+        attempt.current = { key, now: Date.now(), id: `permit-purchase-${createLocalId()}` };
       const { now, id: purchaseId } = attempt.current;
       const orderNumber = `EF-${String(now).slice(-8)}`;
       const paymentReference = `EF-TEST-${now}`;
@@ -159,8 +165,8 @@ export function usePermitCheckoutController({
         };
         const stored = savePurchase(purchase);
         setIsSubmitting(false);
-        if (!stored.ok) return setError(stored.error);
-        return setError(
+        if (!stored.ok) return paymentError(stored.error);
+        return paymentError(
           paymentOutcome === "cancelled"
             ? "Betalingen ble avbrutt. Bestillingen er registrert, men ingen kort ble utstedt."
             : "Testbetalingen feilet. Bestillingen er registrert, men ingen kort ble utstedt.",
@@ -175,14 +181,14 @@ export function usePermitCheckoutController({
       const purchaseStored = savePurchase(approvedPurchase);
       if (!purchaseStored.ok) {
         setIsSubmitting(false);
-        return setError(purchaseStored.error);
+        return paymentError(purchaseStored.error);
       }
       const document = createTestPermitDocument(product, selectedDate, now, approvedPurchase);
       const result = await save(document);
       setIsSubmitting(false);
       if (!result.ok) {
         savePurchase({ ...approvedPurchase, status: "issuance-failed" });
-        return setError(result.error);
+        return paymentError(result.error);
       }
       const completedPurchase: PermitPurchase = {
         ...approvedPurchase,
@@ -191,7 +197,7 @@ export function usePermitCheckoutController({
         completedAt: Date.now(),
       };
       const completed = savePurchase(completedPurchase);
-      if (!completed.ok) return setError(completed.error);
+      if (!completed.ok) return paymentError(completed.error);
       const receipt = { document, purchase: completedPurchase };
       setReceipt(receipt);
       onReceipt?.(receipt);
@@ -199,7 +205,7 @@ export function usePermitCheckoutController({
       setStep("confirmation");
       onPurchased?.(product.zoneId);
     } catch {
-      setError(
+      paymentError(
         selectLocalized(
           language,
           "Kunne ikke lagre kjøpet. Opplysningene er bevart. Prøv igjen.",
@@ -222,6 +228,21 @@ export function usePermitCheckoutController({
     receipt,
     continueFromBuyer,
     submit,
+    openPayment: () => {
+      setError("");
+      setStep("payment");
+    },
+    cancelPayment: () => {
+      if (submissionLock.current) return;
+      setStep("review");
+      setError(
+        selectLocalized(
+          language,
+          "Betalingen ble avbrutt. Du kan prøve igjen.",
+          "Payment cancelled. You can try again.",
+        ),
+      );
+    },
     backTo: (target: CheckoutStep) => {
       setError("");
       setStep(target);
