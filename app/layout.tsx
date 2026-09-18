@@ -52,6 +52,8 @@ import "@/styles/vertical-scroll.css";
 import "@/styles/permit-payment.css";
 import "@/styles/feedback-history.css";
 
+import "@/styles/streamlined-forms.css";
+
 export const metadata: Metadata = {
   title: "EasyFisk",
   description: "EasyFisk for Mandalselva Elveeigarlag.",

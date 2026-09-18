@@ -25,6 +25,17 @@ function isOptionalString(value: unknown): value is string | undefined {
   return value === undefined || typeof value === "string";
 }
 
+function isEditableCatch(value: unknown) {
+  return (
+    isObject(value) &&
+    ["Laks", "Sjøørret", "Annen art"].includes(String(value.species)) &&
+    ["Gjenutsatt", "Avlivet"].includes(String(value.result)) &&
+    isFiniteNumber(value.length) &&
+    isFiniteNumber(value.weight) &&
+    isOptionalString(value.comment)
+  );
+}
+
 function isCatchRecord(value: unknown): value is CatchRecord {
   if (!isObject(value)) return false;
   const species = value.species;
@@ -45,7 +56,17 @@ function isCatchRecord(value: unknown): value is CatchRecord {
     isOptionalString(value.imageId) &&
     isOptionalString(value.imageData) &&
     isOptionalString(value.comment) &&
-    isOptionalString(value.correction)
+    isOptionalString(value.correction) &&
+    (value.revisions === undefined ||
+      (Array.isArray(value.revisions) &&
+        value.revisions.every(
+          (revision) =>
+            isObject(revision) &&
+            isFiniteNumber(revision.changedAt) &&
+            typeof revision.reason === "string" &&
+            isEditableCatch(revision.before) &&
+            isEditableCatch(revision.after),
+        )))
   );
 }
 

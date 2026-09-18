@@ -70,11 +70,9 @@ test("catch close works at every step and navigation keeps the active trip", asy
   for (const step of [1, 2, 3]) {
     await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
-    if (step === 2) await dialog.getByRole("button", { name: "Neste · størrelse" }).click();
     if (step >= 3) {
       await dialog.getByPlaceholder("cm").fill("65");
       await dialog.getByPlaceholder("kg").fill("3");
-      await dialog.getByRole("button", { name: "Neste · regelkontroll" }).click();
     }
     await dialog.getByRole("button", { name: "Lukk fangstrapport" }).click();
     await expect(dialog).toHaveCount(0);

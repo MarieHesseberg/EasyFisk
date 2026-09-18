@@ -9,14 +9,19 @@ export function usePermitPurchases() {
   const [error, setError] = useState("");
   useEffect(() => {
     let active = true;
-    Promise.resolve().then(() => {
+    const refresh = () => {
       if (!active) return;
       const result = createLocalStoragePermitPurchaseRepository(window.localStorage).list();
       if (result.ok) setPurchases(result.value);
       else setError(result.error);
-    });
+    };
+    Promise.resolve().then(refresh);
+    window.addEventListener("easyfisk-purchases-changed", refresh);
+    window.addEventListener("storage", refresh);
     return () => {
       active = false;
+      window.removeEventListener("easyfisk-purchases-changed", refresh);
+      window.removeEventListener("storage", refresh);
     };
   }, []);
   function save(purchase: PermitPurchase) {
@@ -26,6 +31,7 @@ export function usePermitPurchases() {
       const refreshed = repository.list();
       if (refreshed.ok) setPurchases(refreshed.value);
       setError("");
+      window.dispatchEvent(new Event("easyfisk-purchases-changed"));
     } else setError(result.error);
     return result;
   }
@@ -34,6 +40,7 @@ export function usePermitPurchases() {
     if (result.ok) {
       setPurchases([]);
       setError("");
+      window.dispatchEvent(new Event("easyfisk-purchases-changed"));
     } else setError(result.error);
     return result;
   }

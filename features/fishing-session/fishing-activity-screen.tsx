@@ -1,8 +1,9 @@
 "use client";
+import { correctCatchRecord } from "@/domain/catches/correct-catch";
 import { useRef, useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import type { CatchRecord } from "@/domain/catches/catch";
+import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
@@ -41,7 +42,10 @@ export function FishingActivityScreen({
   catches: CatchRecord[];
   activeZone: string;
   requestedCatchTime: number;
-  onCorrectCatch: (id: string, note: string) => void;
+  onCorrectCatch: (
+    id: string,
+    note: string | CatchEdit,
+  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
   onShowRules: () => void;
   elapsed: number;
   startTime: number | null;
@@ -128,8 +132,10 @@ export function FishingActivityScreen({
           report={selectedCatch}
           onClose={() => setSelectedCatch(null)}
           onCorrect={(note) => {
-            onCorrectCatch(selectedCatch.id, note);
-            setSelectedCatch({ ...selectedCatch, correction: note });
+            const result = onCorrectCatch(selectedCatch.id, note);
+            if (result && !result.ok) return result;
+            setSelectedCatch(correctCatchRecord(selectedCatch, note));
+            return result;
           }}
         />
       )}

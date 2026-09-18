@@ -1,3 +1,4 @@
+import { correctCatchRecord } from "../../domain/catches/correct-catch.ts";
 import type { KeyValueStorage } from "../contracts/key-value-storage";
 import type { FishingLogRepository } from "../contracts/fishing-log-repository";
 import {
@@ -59,7 +60,7 @@ export function createLocalStorageFishingLogRepository(
       update((current) => ({
         ...current,
         catches: current.catches.map((record) =>
-          record.id === id ? { ...record, correction: note } : record,
+          record.id === id ? correctCatchRecord(record, note) : record,
         ),
       })),
   };

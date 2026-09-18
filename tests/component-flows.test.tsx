@@ -54,7 +54,6 @@ async function completePermitCheckoutDetails(user: ReturnType<typeof userEvent.s
   await user.type(screen.getByLabelText("Telefon"), "98765432");
   await user.click(screen.getByLabelText(/Jeg har lest og forstått fiskereglene/));
   await user.click(screen.getByLabelText(/Jeg godtar vilkårene/));
-  await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
 }
 
 test("personlig statistikk viser lokalt beregnet historikk og kvoter", () => {
@@ -329,7 +328,7 @@ test("kjøpskontrolleren avviser produkter uten dokumentert pris", async () => {
     />,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · kontroller" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Betal med Vipps" }));
   expect(
     screen
       .getAllByRole("alert")
@@ -603,7 +602,7 @@ test("kjøpsreisen stopper når nødvendige kjøperopplysninger mangler", async 
     />,
   );
 
-  await userEvent.setup().click(screen.getByRole("button", { name: "Neste · kontroller" }));
+  await userEvent.setup().click(screen.getByRole("button", { name: "Betal med Vipps" }));
   expect(screen.getByRole("alert").textContent).toContain("Oppgi fullt navn");
   expect(screen.getByRole("heading", { name: "Fiskedato og kortinnehaver" })).toBeTruthy();
 });
@@ -884,10 +883,8 @@ test("lagringsfeil bevarer kjøpsopplysninger og samme bestilling kan prøves ig
       .getAllByRole("alert")
       .some((alert) => alert.textContent?.includes("Opplysningene er bevart")),
   ).toBe(true);
-  await user.click(screen.getByRole("button", { name: "Tilbake og endre" }));
   expect((screen.getByLabelText("Fullt navn") as HTMLInputElement).value).toBe("Marie Hesseberg");
   expect((screen.getByLabelText(/Jeg godtar vilkårene/) as HTMLInputElement).checked).toBe(true);
-  await user.click(screen.getByRole("button", { name: "Neste · kontroller" }));
   await user.click(screen.getByRole("button", { name: "Betal med Vipps" }));
   await user.click(screen.getByRole("button", { name: "Godkjenn 455 kr" }));
   expect(screen.getByRole("status").textContent).toContain("Fiskekortet er lagret");

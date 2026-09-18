@@ -1,39 +1,17 @@
 "use client";
-import { selectLocalized } from "@/locales";
+import { ProfileForm } from "../profile-form";
 import { usePreferencesController } from "@/features/profile/hooks/use-preferences-controller";
-import { appContentRepository } from "@/data/repositories/app-content";
+
 import { FormError } from "@/components/ui/form-error";
 import { useLanguage } from "@/components/localization/language-provider";
 export function ProfilePrivacyDetail() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const { error, preferences, setPositionSuggestions, setShareAnonymousData } =
     usePreferencesController();
-  const { profile } = appContentRepository.getContent();
+
   return (
     <div className="specific-detail">
-      <div className="profile-detail">
-        <div className="avatar">{profile.initials}</div>
-        <div>
-          <h3>{t("copy.fiskerprofil.3593163")}</h3>
-          <p>
-            {t("copy.fisker.id.d632837")} {profile.fisherId}
-          </p>
-        </div>
-      </div>
-      <div className="detail-data">
-        <p>
-          <span>{t("copy.navn.32dae7e")}</span>
-          <b>{t(profile.name)}</b>
-        </p>
-        <p>
-          <span>{t("copy.telefon.40314f8")}</span>
-          <b>{profile.maskedPhone}</b>
-        </p>
-        <p>
-          <span>{t("copy.sprak.52ba694")}</span>
-          <b>{selectLocalized(language, profile.language, "English")}</b>
-        </p>
-      </div>
+      <ProfileForm />
       <h3 className="detail-subtitle">{t("copy.personvern.og.samtykker.274afdf")}</h3>
       <div className="toggle-list">
         <label>

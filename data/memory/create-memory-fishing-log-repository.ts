@@ -1,3 +1,4 @@
+import { correctCatchRecord } from "../../domain/catches/correct-catch.ts";
 import type { FishingLogRepository } from "../contracts/fishing-log-repository";
 import type { CatchRecord } from "../../domain/catches/catch";
 import type { ActiveSessionSnapshot, SessionRecord } from "../../domain/sessions/session";
@@ -37,7 +38,7 @@ export function createMemoryFishingLogRepository(
     },
     updateCatchCorrection: (id, note) => {
       catches = catches.map((record) =>
-        record.id === id ? { ...record, correction: note } : record,
+        record.id === id ? correctCatchRecord(record, note) : record,
       );
       return operationSucceeded(undefined);
     },

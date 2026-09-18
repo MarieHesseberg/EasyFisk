@@ -93,6 +93,7 @@ export function PermitBuyerStep({
   );
 }
 export function PermitRequirementsStep({
+  embedded = false,
   product,
   form,
   updateForm,
@@ -100,6 +101,7 @@ export function PermitRequirementsStep({
   back,
   next,
 }: {
+  embedded?: boolean;
   product: PrototypePermitProduct;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
@@ -149,18 +151,21 @@ export function PermitRequirementsStep({
         />
         {t("copy.jeg.godtar.vilkarene.for.dette.simulerte.kj.pet.b27d12e")}
       </label>
-      <div className="permit-checkout-actions">
-        <button className="secondary" type="button" onClick={back}>
-          {t("copy.tilbake.4fb8dc1")}
-        </button>
-        <button className="primary" type="button" onClick={next}>
-          {t("copy.neste.kontroller.ad7f463")}
-        </button>
-      </div>
+      {!embedded && (
+        <div className="permit-checkout-actions">
+          <button className="secondary" type="button" onClick={back}>
+            {t("copy.tilbake.4fb8dc1")}
+          </button>
+          <button className="primary" type="button" onClick={next}>
+            {t("copy.neste.kontroller.ad7f463")}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 export function PermitReviewStep({
+  embedded = false,
   product,
   selectedDate,
   form,
@@ -168,6 +173,7 @@ export function PermitReviewStep({
   back,
   next,
 }: {
+  embedded?: boolean;
   product: PrototypePermitProduct;
   selectedDate: string;
   form: PermitCheckoutForm;
@@ -199,18 +205,22 @@ export function PermitReviewStep({
             {validity.startsAt.replace("T", " ")} – {validity.endsAt.replace("T", " ")}
           </dd>
         </div>
-        <div>
-          <dt>{t("copy.kortholder.2628a15")}</dt>
-          <dd>{form.fullName}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.e.post.b3418c9")}</dt>
-          <dd>{form.email}</dd>
-        </div>
-        <div>
-          <dt>{t("copy.telefon.40314f8")}</dt>
-          <dd>{form.phone}</dd>
-        </div>
+        {!embedded && (
+          <>
+            <div>
+              <dt>{t("copy.kortholder.2628a15")}</dt>
+              <dd>{form.fullName}</dd>
+            </div>
+            <div>
+              <dt>{t("copy.e.post.b3418c9")}</dt>
+              <dd>{form.email}</dd>
+            </div>
+            <div>
+              <dt>{t("copy.telefon.40314f8")}</dt>
+              <dd>{form.phone}</dd>
+            </div>
+          </>
+        )}
         {product.type === "group" && (
           <div>
             <dt>{t("copy.medfiskere.ett.fullt.navn.per.linje.b8f9c1f")}</dt>
@@ -220,9 +230,11 @@ export function PermitReviewStep({
         <PriceSummaryRows price={price} language={language} />
       </dl>
       <div className="permit-checkout-actions">
-        <button className="secondary" type="button" disabled={isSubmitting} onClick={back}>
-          {t("copy.tilbake.og.endre.7334721")}
-        </button>
+        {!embedded && (
+          <button className="secondary" type="button" disabled={isSubmitting} onClick={back}>
+            {t("copy.tilbake.og.endre.7334721")}
+          </button>
+        )}
         <button className="primary" type="button" disabled={isSubmitting} onClick={next}>
           {isSubmitting ? t("copy.behandler.testbetaling.384e9f3") : t("payment.payWithVipps")}
         </button>

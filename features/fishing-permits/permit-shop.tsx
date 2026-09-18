@@ -191,6 +191,16 @@ export function PermitShop({
           </select>
         </label>
       )}
+      <label className="permit-area-filter">
+        {t("copy.dato.aaf5660")}
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(event) => {
+            if (event.target.value) setSelectedDate(event.target.value);
+          }}
+        />
+      </label>
       <div className="permit-shop-list">
         {products.map((product) => (
           <article key={product.id} className="permit-product-card">

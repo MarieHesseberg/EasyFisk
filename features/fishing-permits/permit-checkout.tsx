@@ -1,4 +1,5 @@
 "use client";
+import { usePermitPurchases } from "./use-permit-purchases";
 import { emptyPermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import { DraftScope, DraftControls } from "@/hooks/use-draft";
 import { useEffect, useRef } from "react";
@@ -24,7 +25,7 @@ import { getPrototypePermitAvailability } from "@/domain/fishing-permits/get-pro
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { useLanguage } from "@/components/localization/language-provider";
 import { PermitVippsPayment } from "./permit-vipps-payment";
-const stepNumbers = { buyer: 1, review: 2, payment: 2, confirmation: 3 } as const;
+const stepNumbers = { buyer: 1, review: 1, payment: 2, confirmation: 3 } as const;
 function PermitCheckoutContent({
   product,
   documents = [],
@@ -61,6 +62,7 @@ function PermitCheckoutContent({
   onRegisterDisinfection?: () => void;
 }) {
   const { t } = useLanguage();
+  const { purchases } = usePermitPurchases();
   const checkout = usePermitCheckoutController({
     product,
     save,
@@ -78,7 +80,13 @@ function PermitCheckoutContent({
     checkoutRef.current?.scrollIntoView?.({ block: "start" });
     checkoutRef.current?.focus({ preventScroll: true });
   }, [checkout.step]);
-  const availability = getPrototypePermitAvailability(product, checkout.selectedDate);
+  const availability = getPrototypePermitAvailability(
+    product,
+    checkout.selectedDate,
+    undefined,
+    undefined,
+    purchases.filter((purchase) => purchase.id !== checkout.heldPurchaseId),
+  );
   let validity = null;
   try {
     validity = calculatePermitValidity(product, checkout.selectedDate);
@@ -113,7 +121,7 @@ function PermitCheckoutContent({
           </li>
         ))}
       </ol>
-      {checkout.step === "buyer" && (
+      {(checkout.step === "buyer" || checkout.step === "review") && (
         <article className="permit-selected-product">
           <small>{t(product.areaName)}</small>
           <h2>{t(product.title)}</h2>
@@ -121,7 +129,7 @@ function PermitCheckoutContent({
           <p>{t(product.validity.label)}</p>
         </article>
       )}
-      {checkout.step === "buyer" && (
+      {(checkout.step === "buyer" || checkout.step === "review") && (
         <PermitBuyerStep
           embedded
           selectedDate={checkout.selectedDate}
@@ -131,8 +139,9 @@ function PermitCheckoutContent({
           next={checkout.continueFromBuyer}
         />
       )}
-      {checkout.step === "buyer" && (
+      {(checkout.step === "buyer" || checkout.step === "review") && (
         <PermitRequirementsStep
+          embedded
           product={product}
           form={checkout.form}
           updateForm={checkout.updateForm}
@@ -141,15 +150,16 @@ function PermitCheckoutContent({
           next={checkout.continueFromBuyer}
         />
       )}
-      {checkout.step === "review" && (
+      {(checkout.step === "buyer" || checkout.step === "review") && validity && (
         <PermitReviewStep
+          embedded
           product={product}
           selectedDate={checkout.selectedDate}
           form={checkout.form}
           updateForm={checkout.updateForm}
           isSubmitting={checkout.isSubmitting}
           back={() => checkout.backTo("buyer")}
-          next={checkout.openPayment}
+          next={checkout.continueFromBuyer}
         />
       )}
       {checkout.step === "payment" && (

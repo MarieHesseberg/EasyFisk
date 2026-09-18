@@ -1,5 +1,6 @@
 "use client";
 import { DraftScope, DraftControls, useDraftState } from "@/hooks/use-draft";
+import { CatchEntryForm } from "./catch-entry-form";
 import { getAppNow } from "@/domain/shared/app-clock";
 
 import { createPortal } from "react-dom";
@@ -8,9 +9,6 @@ import type { CatchRecord } from "@/domain/catches/catch";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { useCatchReportController } from "@/features/catch-report/hooks/use-catch-report-controller";
 import { CatchConfirmationStep } from "@/features/catch-report/steps/catch-confirmation-step";
-import { CatchDetailsStep } from "@/features/catch-report/steps/catch-details-step";
-import { CatchReviewStep } from "@/features/catch-report/steps/catch-review-step";
-import { CatchSelectionStep } from "@/features/catch-report/steps/catch-selection-step";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { useLanguage } from "@/components/localization/language-provider";
 
@@ -71,21 +69,7 @@ function CatchReportModalContent({
         </button>
         <div className="sheet-handle" />
         {step < 4 && <DraftControls disabled={controller.state.isSubmitting} />}
-        <div className="steps four">
-          <span className={step >= 1 ? "on" : ""}>1</span>
-          <i />
-          <span className={step >= 2 ? "on" : ""}>2</span>
-          <i />
-          <span className={step >= 3 ? "on" : ""}>3</span>
-          <i />
-          <span className={step >= 4 ? "on" : ""}>4</span>
-        </div>
-
-        {step === 1 && <CatchSelectionStep controller={controller} />}
-        {step === 2 && <CatchDetailsStep controller={controller} />}
-        {step === 3 && (
-          <CatchReviewStep activeZone={activeZone} caughtAt={caughtAt} controller={controller} />
-        )}
+        {step < 4 && <CatchEntryForm controller={controller} />}
         {step === 4 && (
           <CatchConfirmationStep
             catches={catches}

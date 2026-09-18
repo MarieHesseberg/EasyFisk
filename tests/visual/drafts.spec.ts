@@ -88,7 +88,6 @@ test("catch draft resumes its step and measurements, then clears on completion",
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
-  await dialog.getByRole("button", { name: "Neste · størrelse" }).click();
   await dialog.getByPlaceholder("cm").fill("65");
   await dialog.getByPlaceholder("kg").fill("3");
   await expect(dialog.getByText("Kladd lagret", { exact: true })).toBeVisible();
@@ -96,14 +95,12 @@ test("catch draft resumes its step and measurements, then clears on completion",
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
   await expect(dialog.getByPlaceholder("cm")).toHaveValue("65");
   await expect(dialog.getByPlaceholder("kg")).toHaveValue("3");
-  await dialog.getByRole("button", { name: "Neste · regelkontroll" }).click();
   await dialog.getByRole("button", { name: "Lagre fangst" }).click();
   await expect(
     dialog.getByRole("heading", { name: "Fangsten er lagret på denne enheten" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Hjem", exact: true }).click();
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
-  await dialog.getByRole("button", { name: "Neste · størrelse" }).click();
   await expect(dialog.getByPlaceholder("cm")).toHaveValue("");
 });
 test("past trip retains date and area across reload", async ({ page }) => {

@@ -1,4 +1,4 @@
-import type { CatchRecord } from "../../domain/catches/catch";
+import type { CatchEdit, CatchRecord } from "../../domain/catches/catch";
 import type { ActiveSessionSnapshot, SessionRecord } from "../../domain/sessions/session";
 import type { OperationResult } from "../../domain/shared/operation-result";
 
@@ -14,5 +14,5 @@ export interface FishingLogRepository {
     catches: CatchRecord[],
     clearActiveSession: boolean,
   ): OperationResult<void>;
-  updateCatchCorrection(id: string, note: string): OperationResult<void>;
+  updateCatchCorrection(id: string, note: string | CatchEdit): OperationResult<void>;
 }

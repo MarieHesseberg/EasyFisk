@@ -1,3 +1,4 @@
+import { usePermitPurchases } from "./use-permit-purchases";
 import { selectLocalized } from "@/locales";
 import { useState } from "react";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
@@ -28,6 +29,7 @@ export function PermitSalesCalendar({
   setSelectedDate: (date: string) => void;
 }) {
   const { language, t } = useLanguage();
+  const { purchases } = usePermitPurchases();
   const range = getPrototypePermitDateRange(product);
   const firstMonth = range.startsOn.slice(0, 7);
   const lastMonth = range.endsOn.slice(0, 7);
@@ -79,7 +81,13 @@ export function PermitSalesCalendar({
         {Array.from({ length: daysInMonth }, (_, index) => {
           const day = index + 1;
           const date = calendarDate(selectedMonth.year, selectedMonth.month, day);
-          const availability = getPrototypePermitAvailability(product, date, language);
+          const availability = getPrototypePermitAvailability(
+            product,
+            date,
+            language,
+            undefined,
+            purchases,
+          );
           const isInSeason = date >= range.startsOn && date <= range.endsOn;
           const isSelectable = isInSeason && canSelectPrototypePermit(availability);
           return (

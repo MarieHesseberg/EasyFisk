@@ -1,0 +1,69 @@
+.local-profile-form {
+  display: grid;
+  gap: 16px;
+}
+.local-profile-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.local-profile-form input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  font: inherit;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  color: var(--color-primary-dark);
+  background: var(--color-surface);
+}
+
+.catch-entry-form {
+  display: grid;
+  gap: 16px;
+}
+.catch-entry-form fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  min-width: 0;
+}
+.catch-entry-form legend,
+.catch-entry-form label {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.catch-entry-form input,
+.catch-entry-form textarea,
+.local-profile-form select,
+.local-profile-form textarea {
+  font: inherit;
+  font-size: 1rem;
+  min-height: 48px;
+  padding: 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  width: 100%;
+  color: var(--color-primary-dark);
+  background: var(--color-surface);
+}
+.catch-entry-form input[type="checkbox"] {
+  width: 24px;
+  min-height: 24px;
+  flex-shrink: 0;
+}
+.catch-extras summary {
+  cursor: pointer;
+  padding: 12px 0;
+  min-height: 48px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.catch-modal .draft-controls {
+  margin-right: 64px;
+}
+.catch-entry-form .input-row label {
+  font-size: 1rem;
+}

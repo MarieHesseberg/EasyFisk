@@ -24,7 +24,6 @@ test("purchase, documents and a completed trip share the same date without statu
   await shop.getByLabel("Telefon").fill("98765432");
   await shop.getByLabel(/Jeg har lest og forstått/).check();
   await shop.getByLabel(/Jeg godtar vilkårene/).check();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await shop.getByRole("button", { name: "Betal med Vipps" }).click();
   await expect(shop.getByRole("heading", { name: "Godkjenn betaling" })).toBeVisible();
   await expect(shop.getByText("Ingen penger trekkes.", { exact: true })).toBeVisible();

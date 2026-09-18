@@ -1,4 +1,5 @@
 "use client";
+import { readProfile } from "@/features/profile/local-profile";
 import { DraftScope, DraftControls, useDraft, useDraftState } from "@/hooks/use-draft";
 import { getAppNow, getAppDate, getAppDateTime } from "@/domain/shared/app-clock";
 
@@ -35,10 +36,10 @@ function DocumentFormContent({
     "values",
     initial?.values ??
       (kind === "fee"
-        ? { year: getAppDate().slice(0, 4), paidAt: getAppDate() }
+        ? { holder: readProfile().fullName, year: getAppDate().slice(0, 4), paidAt: getAppDate() }
         : kind === "disinfection"
-          ? { performedAt: getAppDateTime() }
-          : {}),
+          ? { holder: readProfile().fullName, performedAt: getAppDateTime() }
+          : { holder: readProfile().fullName }),
   );
   const [attachment, setAttachment] = useDraftState<Blob | undefined>(
     "attachment",

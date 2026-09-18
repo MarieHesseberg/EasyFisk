@@ -1,3 +1,5 @@
+import type { PermitPurchase } from "./permit-purchase.ts";
+import { calculatePermitValidity } from "./calculate-permit-validity.ts";
 import { getAppDate, getAppNow } from "../shared/app-clock.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 import { getZoneSeasonEnd } from "../zones/zone-rules.ts";
@@ -36,8 +38,9 @@ export function getPrototypePermitAvailability(
   fishingDate: string,
   language: AppLanguage = "no",
   now = getAppNow(),
+  purchases: readonly PermitPurchase[] = [],
 ): PrototypePermitAvailability {
-  const result = getAvailability(product, fishingDate);
+  const result = getAvailability(product, fishingDate, purchases);
   const today = getAppDate(now);
   const seasonEnd = getPrototypePermitDateRange(product).endsOn;
   if (
@@ -74,6 +77,7 @@ export function getPrototypePermitAvailability(
 function getAvailability(
   product: PrototypePermitProduct,
   fishingDate: string,
+  purchases: readonly PermitPurchase[],
 ): PrototypePermitAvailability {
   if (!isCalendarDate(fishingDate)) {
     return { status: "no-fishing-date", label: "Velg en gyldig fiskedato", remainingUnits: 0 };
@@ -104,7 +108,30 @@ function getAvailability(
 
   const capacity = product.capacity.permitsPerFishingDay;
   if (capacity) {
-    const remainingUnits = stableNumber(`${product.id}:${fishingDate}`) % (capacity + 1);
+    const sold = new Set(
+      purchases
+        .filter((purchase) => {
+          if (
+            purchase.productId !== product.id ||
+            !["completed", "payment-approved", "issuance-failed"].includes(purchase.status)
+          )
+            return false;
+          try {
+            const validity = calculatePermitValidity(product, purchase.fishingDate);
+            return (
+              calculatePermitValidity(product, fishingDate).startsAt <= validity.endsAt &&
+              calculatePermitValidity(product, fishingDate).endsAt >= validity.startsAt
+            );
+          } catch {
+            return false;
+          }
+        })
+        .map((purchase) => purchase.id),
+    ).size;
+    const remainingUnits = Math.max(
+      0,
+      (stableNumber(`${product.id}:${fishingDate}`) % (capacity + 1)) - sold,
+    );
     if (remainingUnits === 0)
       return { status: "sold-out", label: "Utsolgt denne datoen", remainingUnits: 0 };
     if (remainingUnits === 1)

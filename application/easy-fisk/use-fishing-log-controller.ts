@@ -3,7 +3,7 @@ import { getAppNow } from "@/domain/shared/app-clock";
 
 import { useEffect, useState } from "react";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
-import type { CatchRecord } from "@/domain/catches/catch";
+import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
 import type { SessionRecord } from "@/domain/sessions/session";
 import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
@@ -86,14 +86,18 @@ export function useFishingLogController(
     return operationSucceeded(completed);
   }
 
-  function correctCatch(id: string, note: string) {
+  function correctCatch(id: string, note: string | CatchEdit) {
     const result = repository.updateCatchCorrection(id, note);
     if (!result.ok) {
       logger.error(result.error, { cause: result.cause });
       return result;
     }
     setCatches((current) =>
-      current.map((record) => (record.id === id ? { ...record, correction: note } : record)),
+      current.map((record) =>
+        record.id === id
+          ? { ...record, ...repository.listCatches().find((saved) => saved.id === id) }
+          : record,
+      ),
     );
     return result;
   }

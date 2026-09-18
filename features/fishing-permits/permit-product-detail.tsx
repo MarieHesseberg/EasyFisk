@@ -1,3 +1,4 @@
+import { usePermitPurchases } from "./use-permit-purchases";
 import { selectLocalized } from "@/locales";
 import {
   canPurchasePrototypePermit,
@@ -39,7 +40,14 @@ export function PermitProductDetail({
   documents: FishingDocument[];
 }) {
   const { language, t } = useLanguage();
-  const availability = getPrototypePermitAvailability(product, selectedDate, language);
+  const { purchases } = usePermitPurchases();
+  const availability = getPrototypePermitAvailability(
+    product,
+    selectedDate,
+    language,
+    undefined,
+    purchases,
+  );
   const dateRange = getPrototypePermitDateRange(product);
   const details = getPrototypePermitProductDetails(product);
   const hasQualifyingSeasonPermit =

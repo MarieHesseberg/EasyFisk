@@ -7,7 +7,7 @@ import {
   mandalselvaSeasonStatistics,
   mandalselvaStatisticsSource,
 } from "@/data/statistics/mandalselva-statistics";
-import type { CatchRecord } from "@/domain/catches/catch";
+import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { calculatePersonalStatistics } from "@/domain/statistics/calculate-personal-statistics";
@@ -138,7 +138,10 @@ export function StatisticsScreen({
   catches: CatchRecord[];
   activeZone: string;
   requestedCatchTime: number;
-  onCorrectCatch: (id: string, note: string) => void;
+  onCorrectCatch: (
+    id: string,
+    note: string | CatchEdit,
+  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
   onShowRules: () => void;
   openMine: boolean;
   openPastSession: boolean;

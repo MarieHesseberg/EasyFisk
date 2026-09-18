@@ -3,7 +3,8 @@ import { AppDialogPortal } from "@/components/ui/app-dialog-portal";
 import { selectLocalized } from "@/locales";
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import type { CatchRecord } from "@/domain/catches/catch";
+import { CatchCorrectionForm } from "./catch-correction-form";
+import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { formatClock } from "@/lib/time";
 import { useLanguage } from "@/components/localization/language-provider";
@@ -14,11 +15,12 @@ export function CatchReportDetail({
 }: {
   report: CatchRecord;
   onClose: () => void;
-  onCorrect: (note: string) => void;
+  onCorrect: (
+    note: string | CatchEdit,
+  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
 }) {
   const { language, t } = useLanguage();
-  const [note, setNote] = useState(report.correction || ""),
-    [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(false);
   const dialogRef = useDialogAccessibility(onClose);
   return (
     <AppDialogPortal>
@@ -107,37 +109,43 @@ export function CatchReportDetail({
           )}
           {report.correction && !editing && (
             <div className="correction-sent">
-              <b>{t("copy.rettelse.er.meldt.feec083")}</b>
+              <b>{selectLocalized(language, "Rettelsen er lagret", "Correction saved")}</b>
               <p>{report.correction}</p>
             </div>
           )}
+          {report.revisions?.length ? (
+            <details>
+              <summary>
+                {selectLocalized(language, "Endringshistorikk", "Change history")} (
+                {report.revisions.length})
+              </summary>
+              {report.revisions.map((revision, index) => (
+                <div className="past-review" key={index}>
+                  <b>
+                    {new Date(revision.changedAt).toLocaleString(
+                      language === "no" ? "nb-NO" : "en-GB",
+                    )}
+                  </b>
+                  <p>
+                    {t(revision.before.species)} · {t(revision.before.result)} ·{" "}
+                    {revision.before.length} cm · {revision.before.weight} kg {"→"}{" "}
+                    {t(revision.after.species)} · {t(revision.after.result)} ·{" "}
+                    {revision.after.length} cm · {revision.after.weight} kg
+                  </p>
+                  <p>{revision.reason}</p>
+                </div>
+              ))}
+            </details>
+          ) : null}
           {editing ? (
-            <>
-              <label className="correction-field">
-                {t("copy.hva.er.feil.i.rapporten.96c6ca7")}
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder={t("copy.beskriv.hva.som.skal.korrigeres.88504bb")}
-                />
-              </label>
-              <button
-                className="primary"
-                disabled={note.trim().length < 5}
-                onClick={() => {
-                  onCorrect(note.trim());
-                  setEditing(false);
-                }}
-              >
-                {t("copy.send.rettelsesmelding.48949f1")}
-              </button>
-              <button className="secondary" onClick={() => setEditing(false)}>
-                {t("copy.avbryt.d10c9f7")}
-              </button>
-            </>
+            <CatchCorrectionForm
+              report={report}
+              onSave={onCorrect}
+              onCancel={() => setEditing(false)}
+            />
           ) : (
             <button className="secondary" onClick={() => setEditing(true)}>
-              {t(report.correction ? "Oppdater rettelsesmelding" : "Meld feil i rapporten")}
+              {selectLocalized(language, "Rett fangsten", "Correct catch")}
             </button>
           )}
         </div>

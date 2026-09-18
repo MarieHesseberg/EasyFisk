@@ -1,4 +1,6 @@
 "use client";
+import { createLocalStoragePermitPurchaseRepository } from "@/data/local-storage/create-local-storage-permit-purchase-repository";
+import { readProfile } from "@/features/profile/local-profile";
 import { getAppNow, getAppDate } from "@/domain/shared/app-clock";
 
 import type { PermitReceipt } from "./permit-journey";
@@ -71,7 +73,9 @@ export function usePermitCheckoutController({
   });
   const [form, setForm] = useDraftState<PermitCheckoutForm>(
     "form",
-    draft?.discarded ? emptyPermitCheckoutForm : (initialForm ?? emptyPermitCheckoutForm),
+    draft?.discarded
+      ? { ...emptyPermitCheckoutForm, ...readProfile() }
+      : (initialForm ?? { ...emptyPermitCheckoutForm, ...readProfile() }),
   );
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -80,8 +84,29 @@ export function usePermitCheckoutController({
     purchase: PermitPurchase;
   } | null>(initialReceipt ?? null);
   const submissionLock = useRef(false);
-  const attempt = useRef<{ key: string; now: number; id: string } | null>(null);
+  const [attempt, setAttempt] = useDraftState<{ key: string; now: number; id: string } | null>(
+    "purchaseAttempt",
+    null,
+  );
 
+  function currentAvailability() {
+    const result = createLocalStoragePermitPurchaseRepository(window.localStorage).list();
+    if (!result.ok)
+      return { status: "not-on-sale" as const, label: result.error, remainingUnits: 0 };
+    return getPrototypePermitAvailability(
+      product,
+      selectedDate,
+      language,
+      undefined,
+      result.value.filter(
+        (purchase) =>
+          purchase.id !==
+          (attempt?.key === JSON.stringify([product.id, selectedDate, form])
+            ? attempt.id
+            : undefined),
+      ),
+    );
+  }
   function updateForm<Key extends keyof PermitCheckoutForm>(
     key: Key,
     value: PermitCheckoutForm[Key],
@@ -102,16 +127,16 @@ export function usePermitCheckoutController({
     } catch {
       return setError("Velg en gyldig fiskedato for dette kortet.");
     }
-    const availability = getPrototypePermitAvailability(product, selectedDate);
+    const availability = currentAvailability();
     if (!canSelectPrototypePermit(availability)) return setError(availability.label);
     setError("");
     const participantError = validatePermitParticipants(product, form);
     if (participantError) return setError(participantError);
-    setStep("review");
+    setStep("payment");
   }
 
   function paymentError(message: string) {
-    setStep("review");
+    setStep("buyer");
     setError(message);
   }
 
@@ -129,15 +154,18 @@ export function usePermitCheckoutController({
     }
     if (!canPurchasePrototypePermit(product))
       return paymentError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
-    const availability = getPrototypePermitAvailability(product, selectedDate);
+    const availability = currentAvailability();
     if (!canSelectPrototypePermit(availability)) return paymentError(availability.label);
     submissionLock.current = true;
     setIsSubmitting(true);
     try {
       const key = JSON.stringify([product.id, selectedDate, form]);
-      if (attempt.current?.key !== key)
-        attempt.current = { key, now: getAppNow(), id: `permit-purchase-${createLocalId()}` };
-      const { now, id: purchaseId } = attempt.current;
+      const currentAttempt =
+        attempt?.key === key
+          ? attempt
+          : { key, now: getAppNow(), id: `permit-purchase-${createLocalId()}` };
+      setAttempt(currentAttempt);
+      const { now, id: purchaseId } = currentAttempt;
       const orderNumber = `EF-${String(now).slice(-8)}`;
       const paymentReference = `EF-TEST-${now}`;
       const price = getPermitPriceSummary(product, form);
@@ -224,6 +252,8 @@ export function usePermitCheckoutController({
   }
 
   return {
+    heldPurchaseId:
+      attempt?.key === JSON.stringify([product.id, selectedDate, form]) ? attempt.id : undefined,
     step,
     selectedDate,
     form,
@@ -239,7 +269,7 @@ export function usePermitCheckoutController({
     },
     cancelPayment: () => {
       if (submissionLock.current) return;
-      setStep("review");
+      setStep("buyer");
       setError(
         selectLocalized(
           language,

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import { appContentRepository } from "@/data/repositories/app-content";
+import { useLocalProfile } from "./use-local-profile";
 import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import type { DemoStatus } from "@/domain/fishing-rules/rule";
@@ -42,19 +43,24 @@ export function ProfileScreen({
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { t } = useLanguage();
-  const { profile } = appContentRepository.getContent();
+  const profile = useLocalProfile();
   const scenarios = fishingContentRepository.getDemoScenarios();
   const selectedScenario = findDemoStatus(demoStatus, scenarios);
   return (
     <div className="screen">
       <ScreenHeader title={t("navigation.more")} />
       <button className="more-profile-card" onClick={() => setDetail("profile-privacy")}>
-        <div className="avatar">{profile.initials}</div>
+        <div className="avatar">
+          {profile.fullName
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((name) => name[0])
+            .join("") || "•"}
+        </div>
         <div>
           <h2>{t("copy.fiskerprofil.3593163")}</h2>
-          <p>
-            {t("copy.fisker.id.d632837")} · {profile.fisherId}
-          </p>
+          <p>{profile.fullName || t("copy.navn.32dae7e")}</p>
         </div>
         <Icon name="chevron" />
       </button>
@@ -98,18 +104,20 @@ export function ProfileScreen({
           </p>
           <Icon name="chevron" size={18} />
         </button>
-        {profile.menuItems.map(({ destination, icon, title, description }) => (
-          <button key={destination} onClick={() => setDetail(destination)}>
-            <span>
-              <Icon name={icon} />
-            </span>
-            <p>
-              <b>{t(title)}</b>
-              <small>{t(description)}</small>
-            </p>
-            <Icon name="chevron" size={18} />
-          </button>
-        ))}
+        {appContentRepository
+          .getContent()
+          .profile.menuItems.map(({ destination, icon, title, description }) => (
+            <button key={destination} onClick={() => setDetail(destination)}>
+              <span>
+                <Icon name={icon} />
+              </span>
+              <p>
+                <b>{t(title)}</b>
+                <small>{t(description)}</small>
+              </p>
+              <Icon name="chevron" size={18} />
+            </button>
+          ))}
         <button onClick={() => setDetail("fee")}>
           <span>
             <Icon name="book" />

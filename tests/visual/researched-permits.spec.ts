@@ -24,7 +24,6 @@ test("ny delsone beholder pris, område og dato gjennom kjøp på mobil", async 
   await shop.getByLabel("Telefon").fill("98765432");
   await shop.getByLabel(/Jeg har lest og forstått/).check();
   await shop.getByLabel(/Jeg godtar vilkårene/).check();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await expect(shop.locator(".permit-order-summary")).toContainText("Sone 2 · Holmesland B");
   await shop.getByRole("button", { name: "Betal med Vipps", exact: true }).click();
   await shop.getByRole("button", { name: "Godkjenn 375 kr", exact: true }).click();

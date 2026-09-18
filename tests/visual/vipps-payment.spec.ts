@@ -20,16 +20,13 @@ test("Vipps can be cancelled and completed without secure-context randomUUID", a
   await shop.getByLabel("Telefon").fill("98765432");
   await shop.getByLabel(/Jeg har lest og forstått/).check();
   await shop.getByLabel(/Jeg godtar vilkårene/).check();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await shop.getByRole("button", { name: "Betal med Vipps" }).click();
   await expect(shop.getByRole("heading", { name: "Godkjenn betaling" })).toBeVisible();
   await expect(shop.getByText("Ingen penger trekkes.", { exact: true })).toBeVisible();
   await shop.getByRole("button", { name: "Avbryt betaling" }).click();
   await expect(shop.getByRole("alert")).toContainText("Betalingen ble avbrutt");
-  await shop.getByRole("button", { name: "Tilbake og endre" }).click();
   await expect(shop.getByLabel("Fullt navn")).toHaveValue("Test Fisker");
   await expect(shop.getByLabel(/Jeg godtar vilkårene/)).toBeChecked();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await shop.getByRole("button", { name: "Betal med Vipps" }).click();
   await page.screenshot({ path: testInfo.outputPath("vipps-approval.png") });
   await shop.getByRole("button", { name: "Godkjenn 455 kr" }).click();

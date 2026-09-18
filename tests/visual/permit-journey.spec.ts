@@ -49,14 +49,11 @@ test("kartet åpner kjøp først ved sonevalg; sone, dato og kladd følger hele 
   await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
   await expect(shop.getByLabel("E-post")).toHaveValue("marie@example.no");
   await expect(shop.getByLabel(/Jeg godtar vilkårene/)).toBeChecked();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await expect(shop.locator(".permit-checkout-progress li")).toHaveCount(3);
   await expect(shop.locator(".permit-order-summary")).toContainText("Sone 2 · Holmegård");
   await expect(shop.locator(".permit-order-summary")).toContainText("2026-08-21");
   await shop.screenshot({ path: testInfo.outputPath("review.png") });
-  await shop.getByRole("button", { name: "Tilbake og endre" }).click();
   await expect(shop.getByLabel("Telefon")).toHaveValue("98765432");
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
   await shop.getByRole("button", { name: "Betal med Vipps" }).click();
   await shop.getByRole("button", { name: /^Godkjenn \d+ kr$/ }).click();
   await expect(shop.getByRole("status")).toContainText("Fiskekortet er lagret");

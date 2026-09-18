@@ -35,10 +35,8 @@ async function startFishing(page: Page) {
 
 async function completeCatchReport(page: Page) {
   const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
-  await dialog.getByRole("button", { name: "Neste · størrelse" }).click();
   await dialog.getByPlaceholder("cm").fill("65");
   await dialog.getByPlaceholder("kg").fill("3");
-  await dialog.getByRole("button", { name: "Neste · regelkontroll" }).click();
   await dialog.getByRole("button", { name: "Lagre fangst" }).click();
   await expect(
     dialog.getByRole("heading", { name: "Fangsten er lagret på denne enheten" }),
@@ -54,7 +52,6 @@ async function completePermitCheckoutDetails(shop: Locator, group = false) {
   if (group) await shop.getByLabel(/Medfiskere/).fill("Ola Nordmann");
   await shop.getByLabel(/Jeg har lest og forstått fiskereglene/).check();
   await shop.getByLabel(/Jeg godtar vilkårene/).check();
-  await shop.getByRole("button", { name: "Neste · kontroller" }).click();
 }
 
 async function selectPaymentOutcome(page: Page, outcome: "approved" | "cancelled" | "failed") {
@@ -405,12 +402,13 @@ test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", as
   await expect(
     page.locator(".bottom-nav").getByRole("button", { name: "Mer", exact: true }),
   ).toBeFocused();
-  await detail.getByRole("button", { name: "Meld feil i rapporten" }).click();
-  await detail.getByLabel("Hva er feil i rapporten?").fill("Korrekt vekt er 3,2 kg.");
-  await detail.getByRole("button", { name: "Lagre rettelse lokalt" }).click();
+  await detail.getByRole("button", { name: "Rett fangsten" }).click();
+  await detail.getByLabel("Hvorfor retter du fangsten?").fill("Korrekt vekt er 3,2 kg.");
+  await detail.getByLabel("Vekt (kg)").fill("3.2");
+  await detail.getByRole("button", { name: "Lagre rettelse", exact: true }).click();
 
-  await expect(detail.getByText("Rettelse lagret lokalt")).toBeVisible();
-  await expect(detail.getByText("Korrekt vekt er 3,2 kg.")).toBeVisible();
+  await expect(detail.getByText("Rettelsen er lagret")).toBeVisible();
+  await expect(detail.getByText("Korrekt vekt er 3,2 kg.").first()).toBeVisible();
 });
 
 test("fangstskjemaets neste-knapp er tilgjengelig på en lav mobilskjerm", async ({ page }) => {
@@ -419,11 +417,16 @@ test("fangstskjemaets neste-knapp er tilgjengelig på en lav mobilskjerm", async
   await page.getByRole("button", { name: "Registrer fangst" }).click();
 
   const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
-  const nextButton = dialog.getByRole("button", { name: "Neste · størrelse" });
+  const nextButton = dialog.getByRole("button", { name: "Lagre fangst", exact: true });
+  await dialog.getByPlaceholder("cm").fill("65");
+  await dialog.getByPlaceholder("kg").fill("3");
+  await nextButton.scrollIntoViewIfNeeded();
 
   await expect(nextButton).toBeInViewport();
   await nextButton.click();
-  await expect(dialog.getByRole("heading", { name: "Størrelse og dokumentasjon" })).toBeVisible();
+  await expect(
+    dialog.getByRole("heading", { name: "Fangsten er lagret på denne enheten" }),
+  ).toBeVisible();
 });
 
 test("fangstskjemaet kan lukkes med X på en lav mobilskjerm", async ({ page }) => {
@@ -457,7 +460,7 @@ test("tidligere økt med fangst kan registreres gjennom hele skjemaet", async ({
   await page.getByRole("button", { name: /Registrer en tidligere fisketur/ }).click();
 
   const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
-  await dialog.getByLabel("Dato påkrevd").fill("2026-08-20");
+  await dialog.getByLabel("Dato påkrevd").fill("2026-08-19");
   await dialog.getByLabel("Hovedsone påkrevd").selectOption("2");
   await dialog.getByLabel("Delsone påkrevd").selectOption({ index: 1 });
   await dialog.getByRole("button", { name: "Ja · legg til fangst" }).click();
@@ -488,10 +491,8 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
   await startFishing(page);
   await page.getByRole("button", { name: "Registrer fangst" }).click();
   const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
-  await dialog.getByRole("button", { name: "Neste · størrelse" }).click();
   await dialog.getByPlaceholder("cm").fill("65");
   await dialog.getByPlaceholder("kg").fill("3");
-  await dialog.getByRole("button", { name: "Neste · regelkontroll" }).click();
   await page.evaluate(() => {
     Storage.prototype.setItem = () => {
       throw new DOMException("Lagringskvoten er overskredet", "QuotaExceededError");
@@ -502,7 +503,7 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
   await expect(dialog.getByRole("alert")).toHaveText(
     "Kunne ikke lagre dataene på denne enheten. Kontroller lagringsplassen og prøv igjen.",
   );
-  await expect(dialog.getByRole("heading", { name: "Rapporten er kontrollert" })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Registrer fangst" })).toBeVisible();
   await expect(dialog.getByText("Fangsten er lagret på denne enheten")).toHaveCount(0);
 });
 

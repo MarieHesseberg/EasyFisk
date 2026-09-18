@@ -23,7 +23,8 @@ export function validateCatch(
   weight: number,
 ): CatchValidation {
   const { catchSize, metadata } = activeFishingRules;
-  const detailsValid = length > 0 && weight > 0;
+  const detailsValid =
+    Number.isFinite(length) && Number.isFinite(weight) && length > 0 && weight > 0;
   const regulatedSpecies = species === "Laks" || species === "Sjøørret";
   const killed = result === "Avlivet";
   const tooSmall = killed && regulatedSpecies && length < catchSize.minimumCm;
