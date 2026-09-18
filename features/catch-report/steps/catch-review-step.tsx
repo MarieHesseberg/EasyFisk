@@ -109,6 +109,28 @@ export function CatchReviewStep({
           </p>
         )}
       </div>
+      {blocked && (
+        <label>
+          {selectLocalized(
+            language,
+            "Forklar hva som skjedde (valgfritt)",
+            "Explain what happened (optional)",
+          )}
+          <textarea
+            value={comment}
+            maxLength={300}
+            onChange={(e) => controller.actions.setComment(e.target.value)}
+          />
+          <p>
+            {controller.state.deliveryGuidance?.instruction ??
+              selectLocalized(
+                language,
+                "Kontakt lokalt oppsyn for å avklare innlevering etter reglene der du fisket.",
+                "Contact the local warden to clarify delivery according to local rules.",
+              )}
+          </p>
+        </label>
+      )}
       {blocked ? (
         <>
           <label className="violation-confirm">

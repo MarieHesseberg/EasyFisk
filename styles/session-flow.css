@@ -71,7 +71,9 @@
   font-weight: bold;
 }
 .flow-title h2 {
-  font: 700 24px Georgia;
+  font:
+    600 24px Arial,
+    sans-serif;
   margin: 5px 0 7px;
 }
 .flow-title p {

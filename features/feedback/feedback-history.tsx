@@ -1,4 +1,5 @@
 "use client";
+import { selectLocalized } from "@/locales";
 import { useEffect, useState } from "react";
 import { feedbackRepository } from "@/data/repositories/feedback";
 import type { FeedbackMessage } from "@/domain/feedback/feedback-message";
@@ -11,6 +12,9 @@ export function FeedbackHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [revision, setRevision] = useState(0);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   useEffect(() => {
     let active = true;
     feedbackRepository.list().then(
@@ -34,6 +38,15 @@ export function FeedbackHistory() {
   }, [revision]);
   return (
     <section className="feedback-history" aria-label={t("feedback.mine")}>
+      {deleteError && (
+        <p role="alert">
+          {selectLocalized(
+            language,
+            "Kunne ikke slette innmeldingen. Prøv igjen.",
+            "Could not delete the report. Please try again.",
+          )}
+        </p>
+      )}
       {loading && <p role="status">{t("feedback.loading")}</p>}
       {error && (
         <div role="alert">
@@ -60,6 +73,42 @@ export function FeedbackHistory() {
               <span className="feedback-message-status">{t("feedback.received")}</span>
             </summary>
             <FeedbackMessageDetail message={message} compact />
+            {deleting === message.id ? (
+              <div>
+                <p>
+                  {selectLocalized(
+                    language,
+                    "Slette denne lokale innmeldingen og vedleggene?",
+                    "Delete this local report and its attachments?",
+                  )}
+                </p>
+                <button
+                  disabled={busy}
+                  onClick={async () => {
+                    setBusy(true);
+                    setDeleteError(false);
+                    try {
+                      await feedbackRepository.remove(message.id);
+                      setMessages((current) => current.filter((item) => item.id !== message.id));
+                      setDeleting(null);
+                    } catch {
+                      setDeleteError(true);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  {selectLocalized(language, "Ja, slett innmelding", "Yes, delete report")}
+                </button>
+                <button disabled={busy} onClick={() => setDeleting(null)}>
+                  {selectLocalized(language, "Avbryt", "Cancel")}
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setDeleting(message.id)}>
+                {selectLocalized(language, "Slett innmelding", "Delete report")}
+              </button>
+            )}
           </details>
         ))}
     </section>

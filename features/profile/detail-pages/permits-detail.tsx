@@ -1,3 +1,4 @@
+import { LandownerAccess } from "@/features/documents/landowner-access";
 import { DocumentsPanel } from "@/features/documents/documents-panel";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { useLanguage } from "@/components/localization/language-provider";
@@ -17,6 +18,7 @@ export function PermitsDetail({
           {t("copy.kj.p.nytt.fiskekort.9152e50")}
         </button>
       )}
+      <LandownerAccess />
       <p>{t("documents.permitsOnlyFromShop")}</p>
       <DocumentsPanel kind="permit" testDocument={testDocument} allowManualRegistration={false} />
     </>

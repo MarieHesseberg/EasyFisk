@@ -32,11 +32,11 @@ test("message, actual coordinates, image and reference persist after reload", as
   });
   await expect(dialog.getByText("Meldingen er lagret", { exact: true })).toBeVisible();
   const reference = await dialog.locator("dd").first().innerText();
-  await dialog.getByRole("button", { name: "Åpne Mine meldinger" }).click();
+  await dialog.getByRole("button", { name: "Åpne Mine innmeldinger" }).click();
   await expect(dialog.locator(".feedback-history-item")).toHaveCount(1);
   await page.reload();
   await page.getByRole("button", { name: "Mer", exact: true }).click();
-  await page.getByRole("button", { name: /Mine meldinger/ }).click();
+  await page.getByRole("button", { name: /Mine innmeldinger/ }).click();
   await page.locator(".feedback-history-item summary").click();
   await expect(page.locator(".feedback-history-item")).toContainText(reference);
   await expect(page.locator(".feedback-message-detail")).toContainText("58.24000, 7.52000");
@@ -47,6 +47,14 @@ test("message, actual coordinates, image and reference persist after reload", as
       .evaluate((img: HTMLImageElement) => img.naturalWidth),
   ).toBe(1);
   await page.screenshot({ path: info.outputPath("saved-message.png") });
+  await page.getByRole("button", { name: "Slett innmelding", exact: true }).click();
+  await page.getByRole("button", { name: "Ja, slett innmelding", exact: true }).click();
+  await expect(page.locator(".feedback-history-item")).toHaveCount(0);
+  await page.reload();
+  await page.getByRole("button", { name: "Mer", exact: true }).click();
+  await page.getByRole("button", { name: /Mine innmeldinger/ }).click();
+  await expect(page.locator(".feedback-history-item")).toHaveCount(0);
+
   await page.getByRole("button", { name: "Hjem", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
 });
@@ -85,6 +93,6 @@ test("denied GPS and failed storage preserve form and allow a single successful 
   await expect(dialog).toContainText("Forsøpling ved elvebredden");
   await dialog.getByRole("button", { name: "Lagre melding" }).click();
   await expect(dialog.getByText("Meldingen er lagret", { exact: true })).toBeVisible();
-  await dialog.getByRole("button", { name: "Åpne Mine meldinger" }).click();
+  await dialog.getByRole("button", { name: "Åpne Mine innmeldinger" }).click();
   await expect(dialog.locator(".feedback-history-item")).toHaveCount(1);
 });

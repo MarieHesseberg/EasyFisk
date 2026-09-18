@@ -102,7 +102,8 @@ test("calendar states and prices translate without changing availability", () =>
       const en = getPrototypePermitAvailability(product, date, "en");
       expect(en.status).toBe(no.status);
       expect(en.remainingUnits).toBe(no.remainingUnits);
-      expect(en.label).not.toBe(no.label);
+      if (no.label) expect(en.label).not.toBe(no.label);
+      else expect(en.label).toBe("");
     }
     expect(formatPrototypePermitPrice(product, "en")).not.toMatch(/simulert|Gratis|offentliggjort/);
   }

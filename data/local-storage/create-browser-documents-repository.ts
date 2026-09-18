@@ -1,3 +1,4 @@
+import type { FishingDocument } from "@/domain/documents/fishing-document";
 import type { DocumentsRepository } from "@/data/contracts/documents-repository";
 import { isFishingDocument } from "@/domain/documents/validate-document";
 import { operationSucceeded, technicalOperationFailed } from "@/domain/shared/operation-result";
@@ -65,4 +66,26 @@ export function createBrowserDocumentsRepository(): DocumentsRepository {
       }
     },
   };
+}
+
+export async function saveDocumentsAtomically(documents: FishingDocument[]) {
+  if (!documents.length || !documents.every(isFishingDocument))
+    return technicalOperationFailed("storage.invalid-data");
+  try {
+    const database = await openDatabase();
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const tx = database.transaction("documents", "readwrite");
+        tx.oncomplete = () => resolve();
+        tx.onabort = () => reject(tx.error);
+        tx.onerror = () => reject(tx.error);
+        for (const document of documents) tx.objectStore("documents").put(document);
+      });
+      return operationSucceeded(undefined);
+    } finally {
+      database.close();
+    }
+  } catch (cause) {
+    return technicalOperationFailed("storage.write", cause);
+  }
 }

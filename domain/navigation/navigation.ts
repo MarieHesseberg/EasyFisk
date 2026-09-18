@@ -9,4 +9,5 @@ export type DetailDestination =
   | "messages"
   | "feedback"
   | "control-card"
-  | "profile-privacy";
+  | "profile-privacy"
+  | "reset-data";

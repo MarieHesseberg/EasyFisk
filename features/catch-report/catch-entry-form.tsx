@@ -91,6 +91,28 @@ export function CatchEntryForm({ controller }: { controller: CatchReportControll
           <span>{t("catch.confirmAccuracy")}</span>
         </label>
       )}
+      {s.validation.detailsValid && s.validation.blocked && (
+        <label>
+          {selectLocalized(
+            language,
+            "Forklar hva som skjedde (valgfritt)",
+            "Explain what happened (optional)",
+          )}
+          <textarea
+            value={s.comment}
+            maxLength={300}
+            onChange={(e) => a.setComment(e.target.value)}
+          />
+          <p>
+            {s.deliveryGuidance?.instruction ??
+              selectLocalized(
+                language,
+                "Kontakt lokalt oppsyn for å avklare innlevering etter reglene der du fisket.",
+                "Contact the local warden to clarify delivery according to local rules.",
+              )}
+          </p>
+        </label>
+      )}
       <details className="catch-extras">
         <summary>{selectLocalized(language, "Legg til mer", "Add more")}</summary>
         <ImageUploadField

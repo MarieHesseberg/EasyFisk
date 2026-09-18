@@ -183,10 +183,12 @@ body {
 }
 .wordmark {
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .app-header h1 {
-  font: 700 29px Georgia;
+  font:
+    600 29px Arial,
+    sans-serif;
   margin: 25px 0 0;
 }
 .app-header > p {
@@ -216,4 +218,21 @@ body {
   width: 7px;
   height: 7px;
   border-radius: var(--radius-round);
+}
+
+.brand-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+}
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
 }

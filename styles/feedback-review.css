@@ -55,7 +55,9 @@
   font-weight: bold;
 }
 .feedback-confirmation h3 {
-  font: 700 21px Georgia;
+  font:
+    600 21px Arial,
+    sans-serif;
   margin: 5px 0;
 }
 .feedback-confirmation > p {

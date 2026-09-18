@@ -1,3 +1,4 @@
+import { ResetDataPanel } from "@/features/reset/reset-data-panel";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import { ControlCardDetail } from "./control-card-detail";
 import { DisinfectionDetail } from "./disinfection-detail";
@@ -38,6 +39,8 @@ export function ProfileDetailContent({
         ? testDocuments[kind]
         : null;
   switch (destination) {
+    case "reset-data":
+      return <ResetDataPanel />;
     case "control-card":
       return <ControlCardDetail testReadiness={testReadiness} />;
     case "permits":

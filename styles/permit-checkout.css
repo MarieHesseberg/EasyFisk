@@ -27,7 +27,7 @@
 .permit-test-date {
   display: grid;
   gap: var(--space-3);
-  font-weight: 800;
+  font-weight: 600;
 }
 .permit-test-date input {
   min-height: 44px;
@@ -51,7 +51,7 @@
 }
 .permit-checkout legend {
   margin-bottom: var(--space-3);
-  font-weight: 800;
+  font-weight: 600;
 }
 .permit-checkout label {
   display: flex;
@@ -84,7 +84,7 @@
   border-radius: 50%;
   background: var(--color-primary-soft);
   color: var(--color-primary);
-  font-weight: 800;
+  font-weight: 600;
 }
 .permit-checkout-progress li[aria-current="step"] {
   background: var(--color-primary);
@@ -105,7 +105,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  font-weight: 800;
+  font-weight: 600;
 }
 .permit-checkout-step > label:not(.permit-consent) input,
 .permit-checkout-step textarea {
@@ -152,7 +152,7 @@
 }
 .permit-order-summary dd {
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
 }
 .permit-checkout-actions {
   display: grid;
@@ -199,7 +199,7 @@
 }
 .permit-checkout-date-summary span {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .permit-checkout-date-summary small {
   color: var(--color-text-muted);
@@ -211,7 +211,7 @@
   border-radius: var(--radius-control);
   background: var(--color-warning-soft);
   color: var(--color-warning-text);
-  font-weight: 700;
+  font-weight: 600;
 }
 .permit-no-real-payment {
   text-align: center;

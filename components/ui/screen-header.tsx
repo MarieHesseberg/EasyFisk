@@ -1,25 +1,30 @@
 "use client";
 
-import { getAppDate } from "@/domain/shared/app-clock";
-import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import { appContentRepository } from "@/data/repositories/app-content";
+import { useHeaderNotices } from "@/features/notifications/use-header-notices";
+import { selectLocalized } from "@/locales";
 import { LanguageSwitcher } from "@/components/localization/language-switcher";
 import { useLanguage } from "@/components/localization/language-provider";
 
-const { headerAlerts } = appContentRepository.getContent();
-
 export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: string }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const { notices, unread, markRead } = useHeaderNotices();
+  const [readError, setReadError] = useState(false);
   const [showAlerts, setShowAlerts] = useState(false);
   return (
     <header className="app-header">
       <div>
-        <span className="brand-mark">
-          <Icon name="fish" size={19} />
-        </span>
-        <span className="wordmark">easyfisk</span>
+        <button
+          className="brand-home"
+          aria-label={t("copy.tilbake.til.hjem.d935a7f")}
+          onClick={() => window.dispatchEvent(new Event("easyfisk-home"))}
+        >
+          <span className="brand-mark">
+            <Icon name="fish" size={19} />
+          </span>
+          <span className="wordmark">easyfisk</span>
+        </button>
       </div>
       <div className="app-header-actions">
         <LanguageSwitcher />
@@ -27,34 +32,48 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
           <button
             className="round-btn"
             aria-label={t("copy.varsler.0c495cd")}
-            onClick={() => setShowAlerts(true)}
+            aria-expanded={showAlerts}
+            aria-controls="header-notices"
+            onClick={() => {
+              setShowAlerts(!showAlerts);
+              if (!showAlerts) setReadError(!markRead());
+            }}
           >
             <Icon name="bell" size={20} />
-            <i />
+            {unread && (
+              <i aria-label={selectLocalized(language, "Uleste varsler", "Unread notifications")} />
+            )}
           </button>
         )}
       </div>
       {eyebrow && <p>{eyebrow}</p>}
       <h1>{title}</h1>
       {showAlerts && (
-        <div className="header-alert-panel">
+        <section
+          className="header-alert-panel"
+          id="header-notices"
+          aria-label={t("copy.varsler.0c495cd")}
+        >
           <button aria-label={t("copy.lukk.varsler.3e7a49b")} onClick={() => setShowAlerts(false)}>
             ×
           </button>
-          <small>{t("copy.varsler.9c9660c")}</small>
-          <h3>{t("copy.kontrollerte.meldinger.og.eksempelvarsler.3bed6fe")}</h3>
-          {headerAlerts
-            .filter(
-              (alert) =>
-                alert.message !== activeFishingRules.currentNotice.title ||
-                getAppDate() >= activeFishingRules.currentNotice.publishedDate,
-            )
-            .map((alert) => (
-              <p key={alert.message}>
-                <Icon name={alert.icon} size={15} /> {t(alert.message)}
-              </p>
-            ))}
-        </div>
+          <h3>{t("copy.varsler.0c495cd")}</h3>
+          {notices.map((notice) => (
+            <article key={notice.id}>
+              <h4>{notice.title}</h4>
+              <p>{notice.detail}</p>
+            </article>
+          ))}
+          {readError && (
+            <p role="alert">
+              {selectLocalized(
+                language,
+                "Kunne ikke huske at varslene er lest. Prøv igjen.",
+                "Could not save read status. Please try again.",
+              )}
+            </p>
+          )}
+        </section>
       )}
     </header>
   );

@@ -20,6 +20,7 @@ export type CatchRecord = {
   imageId?: string;
   imageData?: string;
   comment?: string;
+  rulesVersion?: string;
   correction?: string;
   revisions?: { changedAt: number; before: CatchEditable; after: CatchEditable; reason: string }[];
 };

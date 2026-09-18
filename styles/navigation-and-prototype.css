@@ -22,7 +22,7 @@
   align-items: center;
   gap: var(--space-2);
   font-size: 9px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .bottom-nav button.selected {
   color: var(--color-primary);
@@ -45,7 +45,9 @@
   color: var(--color-primary);
 }
 .prototype-note h2 {
-  font: 700 45px/1.08 Georgia;
+  font:
+    600 45px/1.08 Arial,
+    sans-serif;
   margin: 16px 0 20px;
 }
 .prototype-note > p {

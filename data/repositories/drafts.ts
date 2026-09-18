@@ -34,6 +34,9 @@ function enqueue<T>(id: string, action: () => Promise<T>) {
   return next;
 }
 export const draftRepository = {
+  async flush() {
+    await Promise.allSettled([...queues.values()]);
+  },
   async read(id: string): Promise<Record<string, unknown>> {
     await queues.get(id)?.catch(() => {});
     const value = await transact("readonly", (store) => store.get(id));

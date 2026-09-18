@@ -31,6 +31,7 @@ function PermitCheckoutContent({
   documents = [],
   back,
   save,
+  saveMany,
   savePurchase,
   onPurchased,
   onOpenPermits,
@@ -48,6 +49,7 @@ function PermitCheckoutContent({
   documents?: FishingDocument[];
   back: () => void;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
+  saveMany?: (documents: FishingDocument[]) => Promise<OperationResult<void>>;
   savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   onOpenPermits?: () => void;
@@ -66,6 +68,7 @@ function PermitCheckoutContent({
   const checkout = usePermitCheckoutController({
     product,
     save,
+    saveMany,
     savePurchase,
     onPurchased,
     paymentOutcome,
@@ -131,6 +134,7 @@ function PermitCheckoutContent({
       )}
       {(checkout.step === "buyer" || checkout.step === "review") && (
         <PermitBuyerStep
+          multipleDates={product.type === "day"}
           embedded
           selectedDate={checkout.selectedDate}
           form={checkout.form}

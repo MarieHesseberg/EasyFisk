@@ -9,7 +9,7 @@ export function getPermitZoneId(document: FishingDocument): ZoneId | undefined {
 }
 
 export function isPermitValid(document: FishingDocument, now = getAppNow()) {
-  if (document.kind !== "permit") return false;
+  if (document.kind !== "permit" || document.forOtherPerson) return false;
   const startsAt = new Date(document.values.startsAt ?? "").getTime();
   const endsAt = new Date(document.values.endsAt ?? "").getTime();
   return startsAt <= now && endsAt >= now;
@@ -23,6 +23,7 @@ export function getDisplayedPermit(
 ) {
   const permits = documents.filter(
     (document) =>
+      !document.forOtherPerson &&
       getPermitZoneId(document) !== undefined &&
       Number.isFinite(Date.parse(document.values.startsAt ?? "")) &&
       Number.isFinite(Date.parse(document.values.endsAt ?? "")),

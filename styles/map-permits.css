@@ -11,12 +11,14 @@
 .map-permit-heading small {
   color: var(--color-primary-accent);
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 1.2px;
 }
 .map-permit-heading h3 {
   margin: 3px 0 0;
-  font: 700 18px Georgia;
+  font:
+    600 18px Arial,
+    sans-serif;
 }
 .map-permit-heading > span {
   color: var(--color-text-muted);
@@ -60,7 +62,7 @@
 .map-permit-list a {
   grid-column: 1 / -1;
   color: var(--color-primary);
-  font-weight: 700;
+  font-weight: 600;
 }
 .map-permit-disclaimer {
   margin: var(--space-4) 0 0;

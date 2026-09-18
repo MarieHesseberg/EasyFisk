@@ -21,7 +21,9 @@
   font-weight: bold;
 }
 .more-profile-card h2 {
-  font: 700 18px Georgia;
+  font:
+    600 18px Arial,
+    sans-serif;
   margin: 0;
 }
 .more-profile-card p {
@@ -73,7 +75,7 @@
 .menu-list b {
   font-size: 1.125rem;
   line-height: 1.35;
-  font-weight: 700;
+  font-weight: 600;
 }
 .menu-list small {
   font-size: 1rem;

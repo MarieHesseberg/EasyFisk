@@ -24,7 +24,7 @@ Under **Mer → Statusmotor** kan du teste ulike situasjoner. Velg for eksempel
 «Alt er i orden (oppstart tillatt)», «Fiskekort mangler» eller «Døgnkvoten er nådd»,
 og trykk på knappen for å aktivere testsituasjonen. Prøv deretter å starte en økt
 og se om forklaringen gir mening. Registrerte, gyldige dokumenter kan dekke mangler
-også i testmodus. Trykk «Avslutt testmodus · bruk registrerte dokumenter» for å gå tilbake.
+også i testmodus. Trykk «Avslutt testmodus og bruk mine data» for å gå tilbake.
 
 ## Skriv gjerne ned det du legger merke til
 
@@ -37,3 +37,11 @@ sendes ikke til elveeigarlaget. Testkort er ikke gyldige fiskekort. Det du regis
 lagres lokalt i nettleseren du bruker.
 
 _For utvikling og teknisk oppsett, se [utviklerveiledningen](DEVELOPMENT.md)._
+
+## Slett data og start på nytt
+
+Under **Mer → Slett og tilbakestill** kan du slette fisketurer og fangster, dokumenter og kortkjøp, innmeldinger, profil, innstillinger eller kladder. Velg **Alt – start med en tom app** for full tilbakestilling. Slettingen må bekreftes. Bilder, vedlegg, tildelte tilganger, aktive turer og kladder omfattes også. Kart og regelinformasjon beholdes.
+
+Varselbjella husker leste varsler. Den røde prikken kommer tilbake ved nye varsler. Eksempelvarsler om fiktive kort vises ikke.
+
+Statusmotorens valg forhåndsvises før du aktiverer dem. GPS bruker den vanlige sonevelgeren, og testsituasjoner kan ikke avslutte en pågående fisketur.

@@ -169,10 +169,7 @@ export function HomeScreen({
                   className={`start-button preparation-${item.kind}${documentReadiness.valid[item.kind] ? " document-ready" : ""}`}
                   onClick={item.open}
                 >
-                  <Icon
-                    name={documentReadiness.valid[item.kind] ? "check" : "activity"}
-                    size={20}
-                  />
+                  {documentReadiness.valid[item.kind] && <Icon name="check" size={20} />}
                   <span>{documentReadiness.valid[item.kind] ? item.saved : item.label}</span>
                 </button>
               ))}

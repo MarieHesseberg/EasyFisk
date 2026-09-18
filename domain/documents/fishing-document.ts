@@ -35,6 +35,10 @@ export interface FishingDocument {
   attachment?: Blob;
   attachmentName?: string;
   purchaseId?: string;
+  forOtherPerson?: boolean;
+  ownerEmail?: string;
+  derivedAccess?: boolean;
+  accessGrants?: AccessGrant[];
   verification?: DocumentVerification;
 }
 
@@ -46,3 +50,14 @@ export const documentTitles: Record<DocumentKind, string> = {
 
 export const documentAttachmentTypes = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 export const maximumDocumentBytes = 10 * 1024 * 1024;
+
+export type AccessGrant = {
+  id: string;
+  recipientName: string;
+  recipientEmail: string;
+  role: "guest" | "warden";
+  startsAt: string;
+  endsAt: string;
+  createdAt: number;
+  revokedAt?: number;
+};

@@ -19,7 +19,9 @@
   font-weight: bold;
 }
 .catch-modal h2 {
-  font: 700 24px Georgia;
+  font:
+    600 24px Arial,
+    sans-serif;
   margin: 4px 0 17px;
 }
 .catch-modal > label,

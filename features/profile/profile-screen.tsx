@@ -65,16 +65,6 @@ export function ProfileScreen({
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
-        <button onClick={() => setDetail("messages")}>
-          <span>
-            <Icon name="bell" />
-          </span>
-          <p>
-            <b>{t("feedback.mine")}</b>
-            <small>{t("feedback.historyDescription")}</small>
-          </p>
-          <Icon name="chevron" size={18} />
-        </button>
         <button onClick={() => setDetail("control-card")}>
           <span>
             <Icon name="shield" />
@@ -125,6 +115,26 @@ export function ProfileScreen({
           <p>
             <b>{t("copy.statlig.fiskeravgift.ed960f5")}</b>
             <small>{t("copy.registrer.kvittering.eller.fritak.6c23476")}</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
+        <button onClick={() => setDetail("messages")}>
+          <span>
+            <Icon name="bell" />
+          </span>
+          <p>
+            <b>{t("feedback.mine")}</b>
+            <small>{t("feedback.historyDescription")}</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
+        <button onClick={() => setDetail("reset-data")}>
+          <span>
+            <Icon name="settings" />
+          </span>
+          <p>
+            <b>{t("reset.title")}</b>
+            <small>{t("reset.description")}</small>
           </p>
           <Icon name="chevron" size={18} />
         </button>

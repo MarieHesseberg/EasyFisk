@@ -118,14 +118,20 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     return result;
   }
   function selectDemoStatus(status: typeof demoStatus) {
-    navigation.actions.setDemoStatus(status);
+    navigation.actions.setSelectedDemoStatus(status);
   }
   function startStatusTest() {
-    const stopResult = session.actions.stop();
-    if (!stopResult.ok) {
-      showToast(t(stopResult.error));
+    if (active) {
+      showToast(
+        selectLocalized(
+          language,
+          "Avslutt den aktive fisketuren før du aktiverer en testsituasjon.",
+          "Finish your active fishing trip before activating a test scenario.",
+        ),
+      );
       return false;
     }
+    navigation.actions.setDemoStatus(navigation.state.selectedDemoStatus);
     navigation.actions.setIsStatusTestMode(true);
     navigation.actions.closeFlow();
     return true;
@@ -165,11 +171,19 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       openSessionFlow: () => navigation.actions.setFlow(active ? "stop" : "start"),
       resolveBlockedStatus: (status = demoStatus) => {
         navigation.actions.closeFlow();
-        navigation.actions.openDetail(getStatusResolution(status));
+        if (status === "dailyQuota" || status === "seasonQuota")
+          navigation.actions.navigate("rules");
+        else navigation.actions.openDetail(getStatusResolution(status));
       },
       selectDemoStatus,
       startStatusTest,
-      useActualStatus: () => navigation.actions.setIsStatusTestMode(false),
+      useActualStatus: () => {
+        navigation.actions.setIsStatusTestMode(false);
+        navigation.actions.setDemoStatus("allMissing");
+        navigation.actions.setSelectedDemoStatus("allMissing");
+        navigation.actions.setPaymentOutcome("approved");
+        navigation.actions.closeFlow();
+      },
       useZone,
     },
   };

@@ -1,9 +1,11 @@
+import { currentRuleVersion } from "../fishing-rules/rule-acceptance.ts";
 import type { CatchRecord } from "./catch";
 import { isReportLate } from "@/domain/catches/reporting-deadline";
 
 export function completeCatchRecord(record: CatchRecord, id: string, submittedAt: number) {
   return {
     ...record,
+    rulesVersion: record.rulesVersion ?? currentRuleVersion,
     id,
     imageId: record.imageData ? id : record.imageId,
     submittedAt,

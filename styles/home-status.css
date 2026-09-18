@@ -17,7 +17,7 @@
   place-items: center;
   background: var(--color-danger-strong);
   color: var(--color-surface);
-  font: 700 12px Arial;
+  font: 600 12px Arial;
   font-style: normal;
 }
 .home-status.warning > i {

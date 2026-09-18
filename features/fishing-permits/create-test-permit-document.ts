@@ -19,15 +19,15 @@ export function createTestPermitDocument(
   product: PrototypePermitProduct,
   selectedDate: string,
   now = getAppNow(),
-  purchase?: Pick<PermitPurchase, "id" | "buyer">,
+  purchase?: Pick<PermitPurchase, "id" | "buyer" | "fisher">,
 ): FishingDocument {
   const { startsAt, endsAt } = calculatePermitValidity(product, selectedDate);
   return {
-    id: `${testPurchaseDocumentPrefix}${product.id}-${now}`,
+    id: `${testPurchaseDocumentPrefix}${product.id}-${purchase?.id ?? now}-${selectedDate}`,
     kind: "permit",
     updatedAt: now,
     values: {
-      holder: purchase?.buyer.fullName ?? "Fisker",
+      holder: (purchase?.fisher ?? purchase?.buyer)?.fullName ?? "Fisker",
       reference: `TEST-${product.id.toUpperCase()}-${now}`,
       issuer: "EasyFisk testkjøp – ikke eksternt verifisert",
       category: categories[product.type],
@@ -36,6 +36,7 @@ export function createTestPermitDocument(
       endsAt,
     },
     purchaseId: purchase?.id,
+    forOtherPerson: !!purchase?.fisher,
     verification: { method: "permit-purchase", verifiedAt: now },
   };
 }

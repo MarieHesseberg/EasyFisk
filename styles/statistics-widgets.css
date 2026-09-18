@@ -25,7 +25,7 @@
   border: 0;
   background: transparent;
   color: var(--color-text);
-  font-weight: 800;
+  font-weight: 600;
 }
 .hero-stat {
   background: var(--color-primary);
@@ -41,7 +41,9 @@
   opacity: 0.7;
 }
 .hero-stat strong {
-  font: 700 54px Georgia;
+  font:
+    600 54px Arial,
+    sans-serif;
   display: block;
 }
 .hero-stat div {
@@ -69,7 +71,9 @@
   color: var(--color-text-muted);
 }
 .stat-grid b {
-  font: 700 22px Georgia;
+  font:
+    600 22px Arial,
+    sans-serif;
   color: var(--color-text);
 }
 .chart-card {
@@ -79,7 +83,9 @@
   margin-top: 12px;
 }
 .chart-card h3 {
-  font: 700 16px Georgia;
+  font:
+    600 16px Arial,
+    sans-serif;
   margin: 0 0 16px;
 }
 .bar-chart {

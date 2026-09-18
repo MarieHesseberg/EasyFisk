@@ -18,6 +18,10 @@ export type PermitPurchase = {
   orderNumber: string;
   productId: string;
   documentId?: string;
+  documentIds?: string[];
+  fishingDates?: string[];
+  fisher?: PermitBuyer;
+  rulesVersion?: string;
   buyer: PermitBuyer;
   coFishers: string[];
   fishingDate: string;
@@ -37,6 +41,9 @@ export type PermitPurchase = {
 };
 export type PermitCheckoutForm = PermitBuyer & {
   coFishersText: string;
+  fishingDates?: string[];
+  buyForOther?: boolean;
+  fisher?: PermitBuyer;
   acceptsRules: boolean;
   acceptsTerms: boolean;
   confirmsDetails: boolean;
@@ -60,14 +67,15 @@ export function parseCoFishers(value: string) {
 }
 export function getPermitPriceSummary(
   product: PrototypePermitProduct,
-  form: Pick<PermitCheckoutForm, "coFishersText">,
+  form: Pick<PermitCheckoutForm, "coFishersText" | "fishingDates">,
 ) {
-  const basePriceNok = product.price.amountNok ?? 0;
+  const quantity = product.type === "day" ? Math.max(1, new Set(form.fishingDates).size) : 1;
+  const basePriceNok = (product.price.amountNok ?? 0) * quantity;
   const administrationFeeNok = 0;
   return {
     basePriceNok,
     administrationFeeNok,
-    permitQuantity: 1,
+    permitQuantity: quantity,
     participantCount: parseCoFishers(form.coFishersText).length + 1,
     totalNok: basePriceNok + administrationFeeNok,
   };
@@ -84,6 +92,11 @@ export function validatePermitParticipants(
   product: PrototypePermitProduct,
   form: PermitCheckoutForm,
 ) {
+  if (form.buyForOther) {
+    if (!form.fisher) return "Oppgi hvem som skal fiske.";
+    const error = validatePermitBuyer({ ...form, ...form.fisher, buyForOther: false });
+    if (error) return `Fisker: ${error}`;
+  }
   const coFishers = parseCoFishers(form.coFishersText);
   if (product.type === "group" && coFishers.length === 0)
     return "Registrer minst én medfisker på gruppekortet.";
@@ -115,6 +128,22 @@ export function isPermitPurchase(value: unknown): value is PermitPurchase {
     typeof record.productId === "string" &&
     record.productId.length > 0 &&
     optionalString(record.documentId) &&
+    (record.documentIds === undefined ||
+      (Array.isArray(record.documentIds) &&
+        record.documentIds.every((id) => typeof id === "string"))) &&
+    (record.fishingDates === undefined ||
+      (Array.isArray(record.fishingDates) &&
+        record.fishingDates.length > 0 &&
+        record.fishingDates.every(
+          (date) => typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date),
+        ))) &&
+    (record.fisher === undefined ||
+      (!!record.fisher &&
+        typeof record.fisher === "object" &&
+        ["fullName", "birthDate", "email", "phone"].every(
+          (key) => typeof (record.fisher as Record<string, unknown>)[key] === "string",
+        ))) &&
+    optionalString(record.rulesVersion) &&
     !!buyer &&
     typeof buyer.fullName === "string" &&
     typeof buyer.birthDate === "string" &&

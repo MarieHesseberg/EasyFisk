@@ -1,5 +1,9 @@
 "use client";
 import { selectLocalized } from "@/locales";
+import {
+  acceptCurrentRules,
+  hasPreviousRuleAcceptance,
+} from "@/domain/fishing-rules/rule-acceptance";
 import { useState } from "react";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { ZoneId } from "@/domain/zones/zone";
@@ -16,6 +20,7 @@ export function RulesStep({
 }) {
   const { language, t } = useLanguage();
   const [confirmed, setConfirmed] = useState(false);
+  const [error, setError] = useState("");
   const { quota, reporting } = activeFishingRules;
   return (
     <>
@@ -29,6 +34,23 @@ export function RulesStep({
         )}
         text={t("copy.bekreft.at.du.har.lest.de.viktigste.reglene.for..ae65cba")}
       />
+      {hasPreviousRuleAcceptance() && (
+        <p role="alert">
+          {selectLocalized(
+            language,
+            "Fiskereglene er endret siden sist. Les og bekreft den nye versjonen før du starter.",
+            "The fishing rules have changed. Read and accept the new version before starting.",
+          )}
+        </p>
+      )}
+      <p>
+        {selectLocalized(language, "Regelversjon", "Rule version")}:{" "}
+        {activeFishingRules.metadata.versionLabel}
+      </p>
+      <a href={activeFishingRules.sources.localRules} target="_blank" rel="noreferrer">
+        {selectLocalized(language, "Les alle lokale regler", "Read all local rules")}
+      </a>
+      {error && <p role="alert">{error}</p>}
       <div className="session-rules">
         <p>
           <b>{t("copy.redskap.48ea2b4")}</b>
@@ -70,7 +92,20 @@ export function RulesStep({
       <button
         className="primary start-final"
         disabled={!confirmed}
-        onClick={() => finish(selectedZone)}
+        onClick={() => {
+          try {
+            acceptCurrentRules();
+            finish(selectedZone);
+          } catch {
+            setError(
+              selectLocalized(
+                language,
+                "Bekreftelsen kunne ikke lagres. Prøv igjen.",
+                "Could not save acceptance. Please try again.",
+              ),
+            );
+          }
+        }}
       >
         {selectLocalized(language, "Start fiske i Sone", "Start fishing in Zone")} {selectedZone}
       </button>

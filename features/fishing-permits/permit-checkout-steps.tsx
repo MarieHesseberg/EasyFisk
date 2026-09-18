@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { hasAcceptedCurrentRules } from "@/domain/fishing-rules/rule-acceptance";
 import { Icon } from "@/components/ui/icon";
 import { selectLocalized } from "@/locales";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
@@ -14,6 +16,7 @@ type UpdateForm = <Key extends keyof PermitCheckoutForm>(
 ) => void;
 export function PermitBuyerStep({
   embedded = false,
+  multipleDates = false,
   selectedDate,
   form,
   updateForm,
@@ -21,29 +24,86 @@ export function PermitBuyerStep({
   next,
 }: {
   embedded?: boolean;
+  multipleDates?: boolean;
   selectedDate: string;
   form: PermitCheckoutForm;
   updateForm: UpdateForm;
   availability: PrototypePermitAvailability;
   next: () => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const [extraDate, setExtraDate] = useState("");
   return (
     <div className="permit-checkout-step">
       <h3>{t("copy.fiskedato.og.kortinnehaver.74acf27")}</h3>
-      <p>{t("copy.kortet.utstedes.til.personen.som.skal.v.re.ansva.40aeadd")}</p>
+
       <div className="permit-checkout-date-summary">
         <b>{t("copy.valgt.fiskedato.cee5357")}</b>
         <span>{selectedDate.split("-").reverse().join(".")}</span>
         <small>{t("copy.datoen.kan.endres.pa.produktsiden.5b5d923")}</small>
       </div>
-      <div
-        className={`permit-availability ${availability.status}`}
-        role={["available", "low"].includes(availability.status) ? "status" : "alert"}
-        aria-live="polite"
-      >
-        {t(availability.label)}
-      </div>
+      {availability.label && (
+        <div
+          className={`permit-availability ${availability.status}`}
+          role={["available", "low"].includes(availability.status) ? "status" : "alert"}
+          aria-live="polite"
+        >
+          {t(availability.label)}
+        </div>
+      )}
+      {multipleDates && (
+        <fieldset>
+          <legend>
+            {selectLocalized(language, "Velg flere enkeltdager", "Choose additional days")}
+          </legend>
+          <p>
+            {selectLocalized(
+              language,
+              "Ett døgnkort per dato, samlet i én bestilling. Du trenger ikke ukeskort.",
+              "One day permit per date, in one order.",
+            )}
+          </p>
+          <label>
+            {selectLocalized(language, "Legg til fiskedato", "Add fishing date")}
+            <input type="date" value={extraDate} onChange={(e) => setExtraDate(e.target.value)} />
+          </label>
+          <button
+            type="button"
+            className="secondary"
+            disabled={!extraDate}
+            onClick={() => {
+              updateForm(
+                "fishingDates",
+                [...new Set([selectedDate, ...(form.fishingDates ?? []), extraDate])].sort(),
+              );
+              setExtraDate("");
+            }}
+          >
+            {selectLocalized(language, "Legg til dato", "Add date")}
+          </button>
+          <ul>
+            {(form.fishingDates ?? [selectedDate]).map((date) => (
+              <li key={date}>
+                {date.split("-").reverse().join(".")}{" "}
+                {date !== selectedDate && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      updateForm(
+                        "fishingDates",
+                        form.fishingDates?.filter((item) => item !== date),
+                      )
+                    }
+                  >
+                    {selectLocalized(language, "Fjern", "Remove")}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      )}
+      <h3>{selectLocalized(language, "Kjøper", "Buyer")}</h3>
       <label>
         {t("copy.fullt.navn.f714eec")}
         <input
@@ -79,6 +139,51 @@ export function PermitBuyerStep({
           onChange={(event) => updateForm("phone", event.target.value)}
         />
       </label>
+      <label className="permit-consent">
+        <input
+          type="checkbox"
+          checked={!!form.buyForOther}
+          onChange={(e) => updateForm("buyForOther", e.target.checked)}
+        />
+        {selectLocalized(language, "Kjøp til noen andre", "Buy for someone else")}
+      </label>
+      {form.buyForOther && (
+        <fieldset>
+          <legend>
+            {selectLocalized(
+              language,
+              "Fisker – kortet gjelder denne personen",
+              "Angler – permit holder",
+            )}
+          </legend>
+          {(
+            [
+              ["fullName", "Fullt navn", "Full name", "text"],
+              ["birthDate", "Fødselsdato", "Date of birth", "date"],
+              ["email", "E-post", "Email", "email"],
+              ["phone", "Telefon", "Phone", "tel"],
+            ] as const
+          ).map(([key, no, en, type]) => (
+            <label key={key}>
+              {selectLocalized(language, no, en)}
+              <input
+                type={type}
+                value={form.fisher?.[key] ?? ""}
+                onChange={(e) =>
+                  updateForm("fisher", {
+                    fullName: "",
+                    birthDate: "",
+                    email: "",
+                    phone: "",
+                    ...form.fisher,
+                    [key]: e.target.value,
+                  })
+                }
+              />
+            </label>
+          ))}
+        </fieldset>
+      )}
       {!embedded && (
         <button
           className="primary"
@@ -135,14 +240,16 @@ export function PermitRequirementsStep({
       <a href={product.source.url} target="_blank" rel="noreferrer">
         {t("copy.se.original.produktkilde.hos.inatur.4b67735")}
       </a>
-      <label className="permit-consent">
-        <input
-          type="checkbox"
-          checked={form.acceptsRules}
-          onChange={(event) => updateForm("acceptsRules", event.target.checked)}
-        />
-        {t("copy.jeg.har.lest.og.forstatt.fiskereglene.for.mandal.8457e64")}
-      </label>
+      {!hasAcceptedCurrentRules() && (
+        <label className="permit-consent">
+          <input
+            type="checkbox"
+            checked={form.acceptsRules}
+            onChange={(event) => updateForm("acceptsRules", event.target.checked)}
+          />
+          {t("copy.jeg.har.lest.og.forstatt.fiskereglene.for.mandal.8457e64")}
+        </label>
+      )}
       <label className="permit-consent">
         <input
           type="checkbox"
@@ -189,6 +296,18 @@ export function PermitReviewStep({
     <div className="permit-checkout-step">
       <h3>{t("copy.kontroller.bestillingen.1bd9bf4")}</h3>
       <dl className="permit-order-summary">
+        <div>
+          <dt>{selectLocalized(language, "Kjøper", "Buyer")}</dt>
+          <dd>{form.fullName}</dd>
+        </div>
+        <div>
+          <dt>{selectLocalized(language, "Fisker", "Angler")}</dt>
+          <dd>{form.buyForOther ? form.fisher?.fullName : form.fullName}</dd>
+        </div>
+        <div>
+          <dt>{selectLocalized(language, "Fiskedatoer", "Fishing dates")}</dt>
+          <dd>{(form.fishingDates ?? [selectedDate]).join(", ")}</dd>
+        </div>
         <div>
           <dt>{t("copy.kort.12ed908")}</dt>
           <dd>{t(product.title)}</dd>
@@ -271,6 +390,18 @@ export function PermitConfirmationStep({
       <h3>{t("payment.approved")}</h3>
       <p>{t("payment.saved")}</p>
       <dl className="permit-order-summary">
+        <div>
+          <dt>{selectLocalized(language, "Kjøper", "Buyer")}</dt>
+          <dd>{purchase.buyer.fullName}</dd>
+        </div>
+        <div>
+          <dt>{selectLocalized(language, "Fisker", "Angler")}</dt>
+          <dd>{(purchase.fisher ?? purchase.buyer).fullName}</dd>
+        </div>
+        <div>
+          <dt>{selectLocalized(language, "Fiskedatoer", "Fishing dates")}</dt>
+          <dd>{(purchase.fishingDates ?? [purchase.fishingDate]).join(", ")}</dd>
+        </div>
         <div>
           <dt>{t("copy.kort.12ed908")}</dt>
           <dd>{t(product.title)}</dd>

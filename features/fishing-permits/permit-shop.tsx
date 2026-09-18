@@ -121,6 +121,7 @@ export function PermitShop({
         documents={documents.documents}
         back={() => setIsProductActionOpen(false)}
         save={documents.save}
+        saveMany={documents.saveMany}
         savePurchase={purchases.save}
         onPurchased={onPermitPurchased}
         onOpenPermits={onOpenPermits}
@@ -155,7 +156,6 @@ export function PermitShop({
   }
   return (
     <section className="permit-shop" aria-label={t("copy.fiskekortbutikk.14d464f")}>
-      <p>{t("copy.utforsk.fiskekort.for.mandalselva.dette.er.en.kj.8614835")}</p>
       <fieldset>
         <legend>{t("copy.velg.hovedsone.05c8f59")}</legend>
         <div className="permit-shop-zones">

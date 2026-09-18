@@ -1,3 +1,4 @@
+import { selectLocalized } from "@/locales";
 import { useLanguage } from "@/components/localization/language-provider";
 import { Icon } from "@/components/ui/icon";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
@@ -19,7 +20,7 @@ export function PermitVippsPayment({
   approve: () => void;
   cancel: () => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const price = getPermitPriceSummary(product, form);
   return (
     <section
@@ -33,7 +34,17 @@ export function PermitVippsPayment({
       </h3>
       <p className="permit-vipps-merchant">{product.seller.organization}</p>
       <strong className="permit-vipps-amount">{price.totalNok} kr</strong>
-      <p>{t(product.title)}</p>
+      <p>
+        {t(product.title)} · {price.permitQuantity} {selectLocalized(language, "kort", "permits")}
+      </p>
+      {form.fishingDates && (
+        <p>{form.fishingDates.map((date) => date.split("-").reverse().join(".")).join(", ")}</p>
+      )}
+      {form.buyForOther && (
+        <p>
+          {selectLocalized(language, "Fisker", "Angler")}: {form.fisher?.fullName}
+        </p>
+      )}
       <div className="permit-vipps-account">
         <Icon name="shield" size={24} />
         <span>

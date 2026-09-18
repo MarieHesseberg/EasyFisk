@@ -25,6 +25,8 @@ export type PrototypePermitValidity = {
   endsAt?: string;
   seasonStartsOn?: string;
   seasonEndsOn?: string;
+  excludedDates?: readonly string[];
+  allowedWeekdays?: readonly number[]; // 0 = Sunday, 6 = Saturday
 };
 
 export type PrototypePermitCapacity = {

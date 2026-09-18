@@ -67,8 +67,21 @@ test("purchase, documents and a completed trip share the same date without statu
   await expect(dialog.getByRole("heading", { name: "Test Fisker" })).toBeVisible();
   await page.getByRole("button", { name: "Hjem", exact: true }).click();
   await page.reload();
+  await page.evaluate(() =>
+    localStorage.setItem(
+      "easyfisk-rule-acceptances-v1",
+      JSON.stringify([
+        { person: "local-profile", version: "previous-test-version", acceptedAt: 1 },
+      ]),
+    ),
+  );
   await page.getByRole("button", { name: "START FISKE", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
+  await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "Fiskereglene er endret siden sist" }),
+  ).toBeVisible();
+  await page.getByLabel("Jeg har lest og forstått reglene").check();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
   await page.reload();

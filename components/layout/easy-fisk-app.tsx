@@ -1,7 +1,7 @@
 "use client";
 
 import { usePermitJourney } from "@/features/fishing-permits/use-permit-journey";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
@@ -35,12 +35,22 @@ export function EasyFiskApp() {
   const [navigationRevision, setNavigationRevision] = useState(0);
   const [catchReportOpen, setCatchReportOpen] = useState(false);
   const { state, actions } = useEasyFiskController();
-  const { documents } = useDocuments();
+  useEffect(() => {
+    const home = () => {
+      setCatchReportOpen(false);
+      actions.dismissCatchFlow();
+      actions.navigate("home");
+    };
+    window.addEventListener("easyfisk-home", home);
+    return () => window.removeEventListener("easyfisk-home", home);
+  }, [actions]);
+  const { documents, loading: documentsLoading } = useDocuments();
   const documentCheckTime = useCurrentTime();
   const {
     active,
     catches,
     demoStatus,
+    selectedDemoStatus,
     elapsed,
     finishAfterCatch,
     flow,
@@ -67,7 +77,8 @@ export function EasyFiskApp() {
   }
   const demoStatuses = fishingContentRepository.getDemoScenarios();
   const zones = fishingContentRepository.getZones();
-  const selectedDemo = findDemoStatus(demoStatus, demoStatuses);
+  const selectedDemo = findDemoStatus(selectedDemoStatus, demoStatuses);
+  const activeDemo = findDemoStatus(demoStatus, demoStatuses);
   const quotaStatus = getFishingStartQuotaStatus(catches);
   const displayedQuotaStatus = getDisplayedQuotaStatus(quotaStatus, demoStatus, isStatusTestMode);
   const contextZone = active ? sessionZone : zone;
@@ -75,12 +86,12 @@ export function EasyFiskApp() {
   const validPermitZoneIds = getValidPermitZoneIds(documents, documentCheckTime);
   const effectiveStatus = resolveStatusEngine(
     actualDocumentReadiness,
-    selectedDemo,
+    activeDemo,
     isStatusTestMode,
     quotaStatus,
   );
   return (
-    <main className="prototype-shell">
+    <main className="prototype-shell" data-ready={!documentsLoading}>
       <div className="phone-app">
         <Fragment key={navigationRevision}>
           {screen === "home" && (
@@ -174,7 +185,7 @@ export function EasyFiskApp() {
           )}{" "}
           {screen === "more" && (
             <ProfileScreen
-              demoStatus={demoStatus}
+              demoStatus={selectedDemoStatus}
               documentReadiness={effectiveStatus.readiness}
               isStatusTestMode={isStatusTestMode}
               selectDemoStatus={actions.selectDemoStatus}

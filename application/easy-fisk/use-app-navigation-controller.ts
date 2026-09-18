@@ -10,6 +10,7 @@ import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-pu
 export function useAppNavigationController() {
   const [screen, setScreen] = useState<Screen>("home");
   const [flow, setFlow] = useState<FlowMode | null>(null);
+  const [selectedDemoStatus, setSelectedDemoStatus] = useState<DemoStatus>("allMissing");
   const [demoStatus, setDemoStatus] = useState<DemoStatus>("allMissing");
   const [isStatusTestMode, setIsStatusTestMode] = useState(false);
   const [globalDetail, setGlobalDetail] = useState<DetailDestination | null>(null);
@@ -29,6 +30,7 @@ export function useAppNavigationController() {
   return {
     state: {
       demoStatus,
+      selectedDemoStatus,
       flow,
       globalDetail,
       isStatusTestMode,
@@ -54,6 +56,7 @@ export function useAppNavigationController() {
       },
       openDetail: setGlobalDetail,
       setDemoStatus,
+      setSelectedDemoStatus,
       setIsStatusTestMode,
       setPaymentOutcome,
       setFlow,

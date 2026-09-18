@@ -1,7 +1,13 @@
 "use client";
 
+import { documentsForLocalProfile } from "@/domain/documents/access-grants";
+import { readProfile } from "@/features/profile/local-profile";
+import { getAppNow } from "@/domain/shared/app-clock";
 import { useCallback, useEffect, useState } from "react";
-import { createBrowserDocumentsRepository } from "@/data/local-storage/create-browser-documents-repository";
+import {
+  createBrowserDocumentsRepository,
+  saveDocumentsAtomically,
+} from "@/data/local-storage/create-browser-documents-repository";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 
 const repository = createBrowserDocumentsRepository();
@@ -14,7 +20,7 @@ export function useDocuments() {
   const reload = useCallback(async () => {
     const result = await repository.list();
     if (result.ok) {
-      setDocuments(result.value);
+      setDocuments(documentsForLocalProfile(result.value, readProfile().email, getAppNow()));
       setError("");
     } else setError(result.error);
     setLoading(false);
@@ -24,7 +30,8 @@ export function useDocuments() {
     let active = true;
     repository.list().then((result) => {
       if (!active) return;
-      if (result.ok) setDocuments(result.value);
+      if (result.ok)
+        setDocuments(documentsForLocalProfile(result.value, readProfile().email, getAppNow()));
       else setError(result.error);
       setLoading(false);
     });
@@ -32,9 +39,11 @@ export function useDocuments() {
       void reload();
     };
     window.addEventListener(changedEvent, refresh);
+    window.addEventListener("easyfisk-profile-changed", refresh);
     return () => {
       active = false;
       window.removeEventListener(changedEvent, refresh);
+      window.removeEventListener("easyfisk-profile-changed", refresh);
     };
   }, [reload]);
 
@@ -48,5 +57,10 @@ export function useDocuments() {
     if (result.ok) window.dispatchEvent(new Event(changedEvent));
     return result;
   }
-  return { documents, loading, error, reload, save, remove };
+  async function saveMany(items: FishingDocument[]) {
+    const result = await saveDocumentsAtomically(items);
+    if (result.ok) window.dispatchEvent(new Event(changedEvent));
+    return result;
+  }
+  return { documents, loading, error, reload, save, saveMany, remove };
 }

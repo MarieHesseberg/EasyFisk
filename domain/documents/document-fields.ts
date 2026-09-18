@@ -27,7 +27,7 @@ export const documentFields: Record<DocumentKind, DocumentFieldDefinition[]> = {
       key: "category",
       label: "Korttype",
       required: true,
-      options: ["Døgnkort", "Ukekort", "Sesongkort", "Gruppekort", "Annet"],
+      options: ["Døgnkort", "Ukekort", "Sesongkort", "Gruppekort", "Grunneierkort", "Annet"],
     },
     { key: "area", label: "Vassdrag, sone og eventuell delsone", required: true },
     { key: "startsAt", label: "Gyldig fra (norsk tid)", type: "datetime-local", required: true },

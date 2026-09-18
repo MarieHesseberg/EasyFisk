@@ -30,10 +30,12 @@
 .home-feedback-card small {
   font-size: 8px;
   letter-spacing: 1px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .home-feedback-card b {
-  font: 700 15px Georgia;
+  font:
+    600 15px Arial,
+    sans-serif;
   color: var(--color-warning-text);
 }
 .home-feedback-card p {
@@ -67,7 +69,9 @@
   color: var(--palette-blue-050);
 }
 .more-feedback-card h3 {
-  font: 700 20px Georgia;
+  font:
+    600 20px Arial,
+    sans-serif;
   margin: 6px 0;
 }
 .more-feedback-card p {

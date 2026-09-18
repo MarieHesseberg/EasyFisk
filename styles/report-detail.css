@@ -68,7 +68,7 @@
   flex-direction: column;
   gap: 7px;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .correction-field textarea {
   min-height: 85px;

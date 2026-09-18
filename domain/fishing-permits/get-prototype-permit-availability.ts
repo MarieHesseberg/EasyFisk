@@ -106,8 +106,14 @@ function getAvailability(
     };
   }
 
+  const weekday = new Date(`${fishingDate}T12:00:00Z`).getUTCDay();
+  if (
+    product.validity.excludedDates?.includes(fishingDate) ||
+    (product.validity.allowedWeekdays && !product.validity.allowedWeekdays.includes(weekday))
+  )
+    return { status: "no-fishing-date", label: "Ikke fiskedag i denne sonen", remainingUnits: 0 };
   const capacity = product.capacity.permitsPerFishingDay;
-  if (capacity) {
+  if (capacity !== undefined) {
     const sold = new Set(
       purchases
         .filter((purchase) => {
@@ -117,11 +123,13 @@ function getAvailability(
           )
             return false;
           try {
-            const validity = calculatePermitValidity(product, purchase.fishingDate);
-            return (
-              calculatePermitValidity(product, fishingDate).startsAt <= validity.endsAt &&
-              calculatePermitValidity(product, fishingDate).endsAt >= validity.startsAt
-            );
+            return (purchase.fishingDates ?? [purchase.fishingDate]).some((date) => {
+              const validity = calculatePermitValidity(product, date);
+              return (
+                calculatePermitValidity(product, fishingDate).startsAt <= validity.endsAt &&
+                calculatePermitValidity(product, fishingDate).endsAt >= validity.startsAt
+              );
+            });
           } catch {
             return false;
           }
@@ -143,12 +151,21 @@ function getAvailability(
     };
   }
 
-  const simulatedState = stableNumber(`${product.id}:${fishingDate}`) % 10;
-  if (simulatedState === 0)
-    return { status: "sold-out", label: "Utsolgt denne datoen", remainingUnits: 0 };
-  if (simulatedState === 1)
-    return { status: "low", label: "Få kort igjen denne datoen", remainingUnits: null };
-  return { status: "available", label: "Ledig denne datoen", remainingUnits: null };
+  const seasonCapacity = product.capacity.permitsPerSeason;
+  if (seasonCapacity !== undefined) {
+    const sold = purchases.filter(
+      (p) =>
+        p.productId === product.id &&
+        ["completed", "payment-approved", "issuance-failed"].includes(p.status),
+    ).length;
+    const remainingUnits = Math.max(0, seasonCapacity - sold);
+    return {
+      status: remainingUnits ? "available" : "sold-out",
+      label: remainingUnits ? `${remainingUnits} kort igjen` : "Utsolgt",
+      remainingUnits,
+    };
+  }
+  return { status: "available", label: "", remainingUnits: null };
 }
 
 export function canSelectPrototypePermit(availability: PrototypePermitAvailability) {

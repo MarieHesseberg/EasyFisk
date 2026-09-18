@@ -67,3 +67,9 @@
 .catch-entry-form .input-row label {
   font-size: 1rem;
 }
+
+.home-preparation-actions .start-button,
+.permit-checkout label,
+.landowner-access label {
+  font-weight: 400;
+}

@@ -3,6 +3,7 @@
 import { useDraft, useDraftState } from "@/hooks/use-draft";
 import { useRef, useState } from "react";
 
+import { getLocalDeliveryGuidance } from "@/domain/catches/local-delivery-guidance";
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
 import type { CatchOutcome, CatchRecord, FishSpecies } from "@/domain/catches/catch";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
@@ -100,6 +101,7 @@ export function useCatchReportController({
 
   return {
     state: {
+      deliveryGuidance: getLocalDeliveryGuidance(activeZone),
       comment,
       imageData: image.data,
       imageName: image.name,

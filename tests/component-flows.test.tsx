@@ -45,6 +45,7 @@ import { LanguageSwitcher } from "../components/localization/language-switcher";
 afterEach(() => {
   cleanup();
   localStorage.removeItem("easyfisk-permit-journey-v1");
+  localStorage.removeItem("easyfisk-rule-acceptances-v1");
 });
 
 async function completePermitCheckoutDetails(user: ReturnType<typeof userEvent.setup>) {
@@ -431,13 +432,14 @@ test("produktregisteret dekker alle soner og bruker dokumenterte Inatur-priser",
     new Map([
       [1, 3],
       [2, 30],
-      [3, 3],
+      [3, 2],
       [4, 8],
     ]),
   );
   expect(permitCatalogRepository.findProduct("zone-2-fuskeland-group")?.price.amountNok).toBe(2400);
   expect(permitCatalogRepository.findProduct("zone-3-day")?.price.amountNok).toBe(455);
-  expect(permitCatalogRepository.findProduct("zone-3-week")?.price.amountNok).toBe(2280);
+  expect(products.some((product) => product.type === "week")).toBe(false);
+  expect(permitCatalogRepository.findProduct("zone-3-week")?.price.amountNok).toBe(2280); // Historical receipts remain readable.
   expect(permitCatalogRepository.findProduct("zone-3-season")?.price.amountNok).toBe(7980);
   expect(permitCatalogRepository.findProduct("zone-4-lakseosen-day")?.price.amountNok).toBe(600);
   expect(permitCatalogRepository.findProduct("zone-1-piren-day")?.price.status).toBe(

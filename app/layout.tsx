@@ -1,4 +1,5 @@
 import "@/styles/drafts.css";
+import "@/styles/reset.css";
 import type { Metadata } from "next";
 import "leaflet/dist/leaflet.css";
 import "@/styles/foundations.css";

@@ -89,15 +89,15 @@
 .map-zone-popup small {
   color: var(--color-primary-accent);
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 1.2px;
 }
 
 .map-zone-popup h2 {
   margin: var(--space-2) 34px var(--space-2) 0;
   font:
-    700 20px Georgia,
-    serif;
+    600 20px Arial,
+    sans-serif;
 }
 
 .map-zone-popup p {

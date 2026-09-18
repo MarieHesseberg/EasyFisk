@@ -63,6 +63,7 @@ function DocumentFormContent({
     setSaving(true);
     try {
       const result = await save({
+        ...initial,
         id: initial?.id ?? createLocalId(),
         kind,
         values,

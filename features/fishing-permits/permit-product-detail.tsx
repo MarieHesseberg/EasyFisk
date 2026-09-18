@@ -99,9 +99,11 @@ export function PermitProductDetail({
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
           />
-          <strong className={`permit-availability ${availability.status}`} aria-live="polite">
-            {t(availability.label)}
-          </strong>
+          {availability.label && (
+            <strong className={`permit-availability ${availability.status}`} aria-live="polite">
+              {t(availability.label)}
+            </strong>
+          )}
           <p className="permit-fishing-day-time">
             {selectLocalized(language, "Fiskedøgnet", "Fishing day")}: {t(product.validity.label)}
           </p>

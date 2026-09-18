@@ -59,6 +59,16 @@ export function CatchReportDetail({
             </div>
           </div>
           <p>{t("prototype.localOnly")}</p>
+          {report.rulesVersion && (
+            <p>
+              {selectLocalized(
+                language,
+                "Regelversjon ved registrering",
+                "Rule version at registration",
+              )}
+              : {report.rulesVersion}
+            </p>
+          )}
           {report.imageData && (
             // Bildet er lokalt valgt av brukeren og finnes som en data-URL, ikke som en optimaliserbar fil.
             // eslint-disable-next-line @next/next/no-img-element

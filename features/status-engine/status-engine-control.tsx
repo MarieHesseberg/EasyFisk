@@ -27,6 +27,13 @@ export function StatusEngineControl({
   const { language, t } = useLanguage();
   return (
     <>
+      <p>
+        {selectLocalized(
+          language,
+          "Velg en testsituasjon og trykk «Bruk valgt situasjon» for å aktivere den. Testmodus endrer ikke lagrede dokumenter eller fangster. Gyldige dokumenter kan løse simulerte dokumentmangler. GPS testes ved vanlig sonevalg.",
+          "Choose a scenario and press ‘Use selected scenario’ to activate it. Test mode does not change saved documents or catches. Valid documents can resolve simulated missing documents. GPS is tested through normal zone selection.",
+        )}
+      </p>
       <label className="demo-select-label" htmlFor={id}>
         {t("copy.situasjon.526cb92")}
       </label>
@@ -50,7 +57,7 @@ export function StatusEngineControl({
       <button className="demo-start" onClick={startTest}>
         {t("content.f9050db5beb7")}
       </button>
-      {isTestMode && (
+      {(isTestMode || paymentOutcome !== "approved") && (
         <button className="secondary" onClick={useActualStatus}>
           {t("copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b")}
         </button>

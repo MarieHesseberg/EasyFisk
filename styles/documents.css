@@ -20,7 +20,7 @@
   display: grid;
   gap: var(--space-2);
   margin-block: var(--space-5);
-  font-weight: 700;
+  font-weight: 600;
 }
 .document-form input,
 .document-form select {
@@ -53,7 +53,7 @@
 }
 .document-verifier-card small {
   color: var(--color-primary);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.08em;
 }
 .document-verifier-card h3 {
@@ -142,7 +142,7 @@
   border-radius: 14px;
   background: var(--color-surface);
   color: var(--color-primary);
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 .document-more-information {
@@ -155,7 +155,7 @@
   padding: 14px;
   min-height: 48px;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
 }
 .document-more-information p {

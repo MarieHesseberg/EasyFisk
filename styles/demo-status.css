@@ -51,7 +51,9 @@
   color: var(--color-text-muted);
 }
 .detail-page h2 {
-  font: 700 27px Georgia;
+  font:
+    600 27px Arial,
+    sans-serif;
   margin: 5px 0 20px;
 }
 .rule-list {

@@ -30,6 +30,15 @@ export function DocumentCard({
   return (
     <article className="document-card">
       <h3>{document.values.holder}</h3>
+      {document.forOtherPerson && (
+        <p>
+          {selectLocalized(
+            language,
+            "Kortet gjelder en annen fisker.",
+            "This permit belongs to another angler.",
+          )}
+        </p>
+      )}
       <p className="document-status">
         {isMock
           ? t("content.d31c8b0c7d5d")
@@ -74,12 +83,14 @@ export function DocumentCard({
       ) : (
         <p>{t("copy.ingen.kopi.vedlagt.ta.med.original.dokumentasjon.f0ae45e")}</p>
       )}
-      {!isMock && document.verification?.method !== "permit-purchase" && (
-        <button className="secondary" onClick={edit}>
-          {t("copy.endre.opplysninger.f0acacc")}
-        </button>
-      )}
-      {!isMock && confirm ? (
+      {!isMock &&
+        !document.derivedAccess &&
+        document.verification?.method !== "permit-purchase" && (
+          <button className="secondary" onClick={edit}>
+            {t("copy.endre.opplysninger.f0acacc")}
+          </button>
+        )}
+      {!isMock && !document.derivedAccess && confirm ? (
         <div>
           <p>{t("copy.slette.denne.lokale.kopien.originalen.hos.utsted.b1f3850")}</p>
           <button
@@ -95,7 +106,7 @@ export function DocumentCard({
           </button>
           <button onClick={() => setConfirm(false)}>{t("copy.behold.e8381c0")}</button>
         </div>
-      ) : !isMock ? (
+      ) : !isMock && !document.derivedAccess ? (
         <button onClick={() => setConfirm(true)}>{t("copy.slett.lokal.kopi.a720013")}</button>
       ) : null}
     </article>

@@ -71,6 +71,26 @@ export function isFishingDocument(value: unknown): value is FishingDocument {
     typeof record.values !== "object"
   )
     return false;
+  if (record.forOtherPerson !== undefined && typeof record.forOtherPerson !== "boolean")
+    return false;
+  if (record.ownerEmail !== undefined && typeof record.ownerEmail !== "string") return false;
+  if (
+    record.accessGrants !== undefined &&
+    (!Array.isArray(record.accessGrants) ||
+      !record.accessGrants.every(
+        (grant) =>
+          grant &&
+          typeof grant.id === "string" &&
+          typeof grant.recipientName === "string" &&
+          typeof grant.recipientEmail === "string" &&
+          ["guest", "warden"].includes(grant.role) &&
+          typeof grant.startsAt === "string" &&
+          typeof grant.endsAt === "string" &&
+          Number.isFinite(grant.createdAt) &&
+          (grant.revokedAt === undefined || Number.isFinite(grant.revokedAt)),
+      ))
+  )
+    return false;
   const fields = record.values as Record<string, unknown>;
   const kind = record.kind as DocumentKind;
   if (

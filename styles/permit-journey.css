@@ -77,7 +77,7 @@
   cursor: pointer;
   min-height: 44px;
   align-content: center;
-  font-weight: 700;
+  font-weight: 600;
 }
 .permit-checkout-step dd {
   overflow-wrap: anywhere;

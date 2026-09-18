@@ -5,7 +5,18 @@ import { ruleSections } from "@/data/mock/rule-sections";
 import { mockFishingDocuments } from "@/data/mock/mock-fishing-documents";
 
 export const mockFishingContentRepository: FishingContentRepository = {
-  getDemoScenarios: () => demoStatuses,
+  getDemoScenarios: () =>
+    demoStatuses.filter(
+      (scenario) =>
+        ![
+          "otherRiver",
+          "zoneInside",
+          "zoneOutside",
+          "zoneBorder",
+          "lateReport",
+          "wrongZone",
+        ].includes(scenario.id),
+    ),
   getDemoDocuments: () => mockFishingDocuments,
   getRuleSections: () => ruleSections,
   getZones: () => zones,

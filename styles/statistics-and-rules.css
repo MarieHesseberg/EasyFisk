@@ -15,7 +15,7 @@
   padding: 10px 7px;
   font-size: 10px;
   line-height: 1.2;
-  font-weight: 800;
+  font-weight: 600;
 }
 .stats-tabs button.selected {
   background: var(--color-surface);
@@ -64,12 +64,14 @@
 .general-rules-heading small {
   font-size: 1rem;
   letter-spacing: 0.025em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--color-text-muted);
 }
 .personal-rules-title h2,
 .general-rules-heading h2 {
-  font: 700 1.5rem/1.25 Georgia;
+  font:
+    600 1.5rem/1.25 Arial,
+    sans-serif;
   margin: 3px 0 0;
 }
 .personal-rules > p {
@@ -84,7 +86,7 @@
   background: var(--color-primary);
   color: var(--color-surface);
   padding: 13px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
   min-height: 48px;
 }

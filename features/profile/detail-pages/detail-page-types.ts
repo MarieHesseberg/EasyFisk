@@ -1,6 +1,7 @@
 import type { DetailDestination } from "@/domain/navigation/navigation";
 
 export const detailTitles: Record<DetailDestination, string> = {
+  "reset-data": "reset.title",
   permits: "Mine fiskekort",
   "permit-shop": "Fiskekort og kjøp",
   disinfection: "Desinfisering",

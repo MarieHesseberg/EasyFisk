@@ -45,7 +45,7 @@
   border: 1px solid transparent;
   border-radius: 12px;
   text-align: left;
-  font-weight: 700;
+  font-weight: 600;
 }
 .home-screen .preparing .preparation-disinfection,
 .home-screen .preparing .preparation-fee,
@@ -93,7 +93,7 @@
 .home-screen .home-past-session-button b,
 .home-screen .home-feedback-card b {
   font:
-    700 15px/1.35 Arial,
+    600 15px/1.35 Arial,
     sans-serif;
   color: var(--color-text);
 }

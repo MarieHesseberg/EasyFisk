@@ -1,5 +1,9 @@
 import type { TranslationCatalog } from "./no.ts";
 export const en = {
+  "reset.title": "Delete and reset",
+  "reset.description": "Clear your data or start from scratch",
+
+  "documents.landownerPermit": "Landowner permit",
   "draft.loading": "Loading draft …",
   "draft.saving": "Saving draft …",
   "draft.saved": "Draft saved",
@@ -28,7 +32,7 @@ export const en = {
   "feedback.imageAlt": "Attached image",
   "feedback.addPosition": "Add my location",
   "feedback.removePosition": "Remove location",
-  "feedback.historyDescription": "View reports and receipt status",
+  "feedback.historyDescription": "Observations and feedback to the river association",
 
   "permit.pastDate": "This date has passed. Choose a new fishing date.",
   "permit.salesClosed": "Permit sales have closed for the season.",
@@ -208,7 +212,7 @@ export const en = {
   "copy.art.308e17d": "Species",
   "copy.avbryt.d10c9f7": "Cancel",
   "copy.avlivet.laks.5088826": "Harvested salmon",
-  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b": "Use registered documents",
+  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b": "Exit test mode and use my data",
   "copy.behandler.testbetaling.384e9f3": "Processing payment…",
   "copy.behold.e8381c0": "Keep",
   "copy.beregnet.fra.dine.lokale.data.ecd8e12": "CALCULATED FROM YOUR LOCAL DATA",

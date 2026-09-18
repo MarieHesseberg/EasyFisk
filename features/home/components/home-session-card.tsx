@@ -86,7 +86,7 @@ export function HomeSessionCard({
       )}
       {children ?? (
         <button className={active ? "stop-button" : "start-button"} onClick={openFlow}>
-          <Icon name={active ? "clock" : "activity"} size={20} />
+          {active && <Icon name="clock" size={20} />}
           {actionLabel ??
             (active
               ? t("content.3efcc8d2e861")

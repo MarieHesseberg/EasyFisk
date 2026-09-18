@@ -22,11 +22,13 @@
 .detail-alert small {
   font-size: 8px;
   letter-spacing: 1px;
-  font-weight: 800;
+  font-weight: 600;
 }
 .detail-hero h3,
 .detail-alert h3 {
-  font: 700 17px Georgia;
+  font:
+    600 17px Arial,
+    sans-serif;
   margin: 3px 0;
 }
 .detail-hero p,
@@ -67,7 +69,9 @@
   color: var(--color-success);
 }
 .detail-subtitle {
-  font: 700 16px Georgia;
+  font:
+    600 16px Arial,
+    sans-serif;
   margin: 6px 1px 0;
 }
 .detail-warning {
@@ -140,7 +144,9 @@
   padding: 16px;
 }
 .profile-detail h3 {
-  font: 700 17px Georgia;
+  font:
+    600 17px Arial,
+    sans-serif;
   margin: 0;
 }
 .profile-detail p {

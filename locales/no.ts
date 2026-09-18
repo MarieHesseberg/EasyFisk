@@ -1,4 +1,8 @@
 export const no = {
+  "reset.title": "Slett og tilbakestill",
+  "reset.description": "Rydd i dataene dine eller start helt på nytt",
+
+  "documents.landownerPermit": "Grunneierkort",
   "draft.loading": "Henter kladd …",
   "draft.saving": "Lagrer kladd …",
   "draft.saved": "Kladd lagret",
@@ -10,23 +14,23 @@ export const no = {
     "Posisjon krever en sikker tilkobling (HTTPS). Du kan lagre meldingen uten posisjon.",
   "feedback.locationError":
     "Kunne ikke hente posisjonen. Prøv igjen, eller lagre meldingen uten posisjon.",
-  "feedback.openHistory": "Åpne Mine meldinger",
+  "feedback.openHistory": "Åpne Mine innmeldinger",
 
-  "feedback.mine": "Mine meldinger",
-  "feedback.new": "Ny melding",
+  "feedback.mine": "Mine innmeldinger",
+  "feedback.new": "Ny innmelding",
   "feedback.received": "Mottatt – simulert",
   "feedback.localNotice":
     "Lagret på denne enheten. Mottaksstatusen er simulert; meldingen er ikke sendt til elveeigarlaget.",
   "feedback.savedAt": "Lagret",
-  "feedback.loading": "Henter meldingene …",
-  "feedback.loadError": "Kunne ikke hente meldingene. Prøv igjen.",
+  "feedback.loading": "Henter innmeldingene …",
+  "feedback.loadError": "Kunne ikke hente innmeldingene. Prøv igjen.",
   "feedback.saveError": "Kunne ikke lagre meldingen. Opplysningene er bevart. Prøv igjen.",
-  "feedback.empty": "Du har ingen lagrede meldinger ennå.",
+  "feedback.empty": "Du har ingen lagrede innmeldinger ennå.",
   "feedback.emptyImage": "Bildet er tomt. Velg et annet bilde.",
   "feedback.imageAlt": "Vedlagt bilde",
   "feedback.addPosition": "Legg til min posisjon",
   "feedback.removePosition": "Fjern posisjon",
-  "feedback.historyDescription": "Se meldinger og mottaksstatus",
+  "feedback.historyDescription": "Observasjoner og tilbakemeldinger til elveeigarlaget",
 
   "permit.pastDate": "Datoen er passert. Velg en ny fiskedato.",
   "permit.salesClosed": "Fiskekortsalget er avsluttet for sesongen.",
@@ -204,7 +208,8 @@ export const no = {
   "copy.art.308e17d": "Art",
   "copy.avbryt.d10c9f7": "Avbryt",
   "copy.avlivet.laks.5088826": "Avlivet laks",
-  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b": "Bruk registrerte dokumenter",
+  "copy.avslutt.testmodus.bruk.registrerte.dokumenter.c2e2f6b":
+    "Avslutt testmodus og bruk mine data",
   "copy.behandler.testbetaling.384e9f3": "Behandler betaling …",
   "copy.behold.e8381c0": "Behold",
   "copy.beregnet.fra.dine.lokale.data.ecd8e12": "BEREGNET FRA DINE LOKALE DATA",

@@ -3,6 +3,14 @@ import { expect, test, type Page } from "@playwright/test";
 test.use({ viewport: { width: 390, height: 664 } });
 
 async function openStart(page: Page, scenario = "ok") {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "easyfisk-rule-acceptances-v1",
+      JSON.stringify([
+        { person: "local-profile", version: "mandalselva-2026-08-01", acceptedAt: 1 },
+      ]),
+    ),
+  );
   await page.goto("/");
   await page.getByRole("button", { name: "Mer", exact: true }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
@@ -22,7 +30,16 @@ test("inside-zone test suggests zone and starts without other confirmation scree
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  const dialog = await openStart(page, "zoneInside");
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "geolocation", {
+      configurable: true,
+      value: {
+        getCurrentPosition: (success: PositionCallback) =>
+          success({ coords: { latitude: 58.24, longitude: 7.512 } } as GeolocationPosition),
+      },
+    }),
+  );
+  const dialog = await openStart(page);
   await page.screenshot({ path: "tmp/pdfs/preview/start-single-page.png" });
   await dialog.getByRole("button", { name: "Tillat og finn sone" }).click();
   await expect(dialog.getByRole("status")).toHaveText("Posisjonsforslag: Sone 3");
@@ -38,7 +55,16 @@ test("inside-zone test suggests zone and starts without other confirmation scree
 test("outside-zone test warns and requires a manual selection on the same page", async ({
   page,
 }) => {
-  const dialog = await openStart(page, "zoneOutside");
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "geolocation", {
+      configurable: true,
+      value: {
+        getCurrentPosition: (success: PositionCallback) =>
+          success({ coords: { latitude: 59.91, longitude: 10.75 } } as GeolocationPosition),
+      },
+    }),
+  );
+  const dialog = await openStart(page);
   await dialog.getByRole("button", { name: "Tillat og finn sone" }).click();
   await expect(dialog.getByRole("alert")).toContainText("utenfor de registrerte fiskesonene");
   await expect(dialog.getByLabel("Hovedsone")).toHaveValue("");

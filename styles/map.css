@@ -27,7 +27,9 @@
   border-radius: var(--radius-round);
   display: grid;
   place-items: center;
-  font: bold 19px Georgia;
+  font:
+    600 19px Arial,
+    sans-serif;
 }
 .zone-title small {
   font-size: 9px;
@@ -36,7 +38,9 @@
   letter-spacing: 1.4px;
 }
 .zone-title h2 {
-  font: 700 21px Georgia;
+  font:
+    600 21px Arial,
+    sans-serif;
   margin: 3px 0;
 }
 .zone-facts {

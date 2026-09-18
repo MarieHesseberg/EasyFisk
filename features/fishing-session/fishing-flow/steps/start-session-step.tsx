@@ -1,3 +1,5 @@
+import { RulesStep } from "./rules-step";
+import { hasAcceptedCurrentRules } from "@/domain/fishing-rules/rule-acceptance";
 import { useState } from "react";
 import { selectLocalized } from "@/locales";
 import { useLanguage } from "@/components/localization/language-provider";
@@ -28,7 +30,6 @@ export function StartSessionStep({
   demoStatus,
   scenario,
   documentReadiness,
-  isStatusTestMode,
   quotaStatus,
   resolveBlock,
   openPermitShop,
@@ -51,14 +52,13 @@ export function StartSessionStep({
   const [selection, setSelection] = useState<"none" | "manual" | "located">("none");
   const [hasChosen, setHasChosen] = useState(false);
   const [notice, setNotice] = useState("");
+  const [showRules, setShowRules] = useState(false);
   const zones = fishingContentRepository.getZones();
   const outsideMessage = selectLocalized(
     language,
     "Posisjonen er utenfor de registrerte fiskesonene. Velg sone manuelt.",
     "Your location is outside the registered fishing zones. Choose a zone manually.",
   );
-  const simulated =
-    isStatusTestMode && ["zoneInside", "zoneOutside", "zoneBorder"].includes(demoStatus);
   function acceptPosition(zone?: ZoneId) {
     setSubzone("");
     setHasChosen(zone !== undefined);
@@ -95,18 +95,18 @@ export function StartSessionStep({
     setHasChosen(false);
     setSelection("none");
     setNotice("");
-    if (simulated) {
-      acceptPosition(demoStatus === "zoneInside" ? 3 : undefined);
-      if (demoStatus === "zoneBorder")
-        setNotice(
-          selectLocalized(
-            language,
-            "Testposisjonen er nær en sonegrense. Kontroller skiltingen og velg sone manuelt.",
-            "The test location is near a zone boundary. Check the signs and choose a zone manually.",
-          ),
-        );
-    } else location.locate();
+    location.locate();
   }
+  if (showRules)
+    return (
+      <RulesStep
+        selectedZone={selectedZone}
+        back={() => setShowRules(false)}
+        finish={() => {
+          if (canStart) finish(selectedZone, subzone || undefined);
+        }}
+      />
+    );
   return (
     <>
       <FlowTitle
@@ -232,7 +232,10 @@ export function StartSessionStep({
           className="primary start-trip-action"
           disabled={!canStart}
           onClick={() => {
-            if (canStart) finish(selectedZone, subzone || undefined);
+            if (canStart) {
+              if (hasAcceptedCurrentRules()) finish(selectedZone, subzone || undefined);
+              else setShowRules(true);
+            }
           }}
         >
           {hasChosen

@@ -45,9 +45,9 @@ export function validateCatch(
         : "Valgene er innenfor størrelsesreglene";
 
   const ruleText = tooSmall
-    ? `Minstemålet for laks og sjøørret er ${catchSize.minimumCm} cm. Denne ${species.toLowerCase()}en er ${length} cm og skulle vært gjenutsatt. Registrer likevel det som faktisk skjedde. Rapporten merkes som et mulig regelbrudd.`
+    ? `Minstemålet for laks og sjøørret er ${catchSize.minimumCm} cm. Denne ${species.toLowerCase()}en er ${length} cm og skulle vært gjenutsatt. Dette er ikke lovlig, men vi vet at uhell skjer. Vi setter pris på at du rapporterer det som faktisk skjedde.`
     : tooLarge
-      ? `Fra ${metadata.shortVersionLabel} kan bare én laks på opptil ${catchSize.largeSalmonMaximumCm} cm avlives. Denne laksen er ${length} cm. Registrer det som faktisk skjedde; rapporten merkes som et mulig regelbrudd.`
+      ? `Fra ${metadata.shortVersionLabel} kan bare én laks på opptil ${catchSize.largeSalmonMaximumCm} cm avlives. Denne laksen er ${length} cm. Dette er ikke lovlig, men vi vet at uhell skjer. Vi setter pris på at du rapporterer det som faktisk skjedde.`
       : largeSalmon
         ? `Fra ${metadata.shortVersionLabel} kan én av sesongens avlivede laks være opptil ${catchSize.largeSalmonMaximumCm} cm. Unntaket er tilgjengelig og blir brukt ved innsending. De øvrige må være under ${catchSize.regularSalmonMaximumCm} cm.`
         : killed && regulatedSpecies

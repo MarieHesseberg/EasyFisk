@@ -26,6 +26,9 @@ async function transaction<T>(
   }
 }
 export const feedbackRepository = {
+  async remove(id: string) {
+    await transaction("readwrite", (store) => store.delete(id));
+  },
   async list(): Promise<FeedbackMessage[]> {
     const records: unknown[] = await transaction("readonly", (store) => store.getAll());
     if (!records.every(isFeedbackMessage)) throw new Error("Invalid saved message");
