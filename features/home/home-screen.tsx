@@ -11,8 +11,6 @@ import type { FishingStartQuotaStatus } from "@/domain/quotas/get-fishing-start-
 import type { CatchRecord } from "@/domain/catches/catch";
 import { useLanguage } from "@/components/localization/language-provider";
 import { localizeText } from "@/domain/localization/localized-text";
-import type { FishingDocument } from "@/domain/documents/fishing-document";
-import { isPermitValid } from "@/domain/documents/get-permit-zones";
 
 const documentStatuses: DemoStatus[] = [
   "allMissing",
@@ -41,8 +39,7 @@ export function HomeScreen({
   documentReadiness,
   isStatusTestMode,
   quotaStatus,
-  ownedPermit,
-  now,
+  hasPermits,
 }: {
   zoneName: string;
   onStart: () => void;
@@ -61,8 +58,7 @@ export function HomeScreen({
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   quotaStatus: FishingStartQuotaStatus;
-  ownedPermit?: FishingDocument;
-  now: number;
+  hasPermits: boolean;
 }) {
   const { language, t } = useLanguage();
   const screenRef = useRef<HTMLDivElement>(null);
@@ -101,39 +97,11 @@ export function HomeScreen({
         >
           {preparing ? (
             <div className="home-preparation-actions">
+              <button className="start-button preparation-permit" onClick={onBuyPermit}>
+                {t("copy.kj.p.fiskekort.d32ea04")}
+              </button>
               {(
                 [
-                  {
-                    kind: "permit",
-                    label: ownedPermit
-                      ? isPermitValid(ownedPermit, now)
-                        ? selectLocalized(
-                            language,
-                            "Fiskekort registrert",
-                            "Fishing permit registered",
-                          )
-                        : new Date(ownedPermit.values.startsAt ?? "").getTime() > now
-                          ? selectLocalized(
-                              language,
-                              "Fiskekort kjøpt · kommende",
-                              "Permit purchased · upcoming",
-                            )
-                          : selectLocalized(
-                              language,
-                              "Fiskekort kjøpt · utløpt",
-                              "Permit purchased · expired",
-                            )
-                      : t("copy.kj.p.fiskekort.d32ea04"),
-                    saved: selectLocalized(
-                      language,
-                      "Fiskekort registrert",
-                      "Fishing permit registered",
-                    ),
-                    open:
-                      documentReadiness.valid.permit || ownedPermit
-                        ? () => onDocument("permits")
-                        : onBuyPermit,
-                  },
                   {
                     kind: "disinfection",
                     label: selectLocalized(
@@ -177,6 +145,17 @@ export function HomeScreen({
           ) : undefined}
         </HomeSessionCard>
       )}
+
+      <div className="home-permit-actions">
+        {(active || !preparing) && (
+          <button onClick={onBuyPermit}>{t("copy.kj.p.fiskekort.d32ea04")}</button>
+        )}
+        {hasPermits && (
+          <button onClick={() => onDocument("permits")}>
+            {selectLocalized(language, "Mine fiskekort", "My permits")}
+          </button>
+        )}
+      </div>
 
       {showActiveWarning && (
         <section className="home-journey-warning" role="status">

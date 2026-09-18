@@ -156,3 +156,25 @@
     padding-bottom: 16px;
   }
 }
+
+.home-permit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.home-permit-actions:empty {
+  display: none;
+}
+
+.home-permit-actions button {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 400;
+}

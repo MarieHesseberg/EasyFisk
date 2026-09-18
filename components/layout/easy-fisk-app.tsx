@@ -26,7 +26,7 @@ import {
   getDisplayedQuotaStatus,
   getFishingStartQuotaStatus,
 } from "@/domain/quotas/get-fishing-start-quota-status";
-import { getDisplayedPermit, getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
+import { getValidPermitZoneIds } from "@/domain/documents/get-permit-zones";
 import { useCurrentTime } from "@/hooks/use-current-time";
 import { useLanguage } from "@/components/localization/language-provider";
 
@@ -103,7 +103,14 @@ export function EasyFiskApp() {
               onRules={() => actions.navigate("rules")}
               onDocument={actions.openDetail}
               onPastSession={actions.openPastSession}
-              onBuyPermit={openPermitShop}
+              onBuyPermit={() => {
+                setPermitJourney((previous) => ({
+                  ...previous,
+                  selectedProductId: null,
+                  isProductActionOpen: false,
+                }));
+                openPermitShop();
+              }}
               zoneName={findZoneName(contextZone, zones, active ? sessionSubzone : undefined)}
               active={active}
               elapsed={elapsed}
@@ -111,8 +118,7 @@ export function EasyFiskApp() {
               demoStatus={effectiveStatus.status}
               scenario={effectiveStatus.scenario}
               documentReadiness={effectiveStatus.readiness}
-              ownedPermit={getDisplayedPermit(documents, documentCheckTime, contextZone)}
-              now={documentCheckTime}
+              hasPermits={documents.some((document) => document.kind === "permit")}
               isStatusTestMode={isStatusTestMode}
               quotaStatus={displayedQuotaStatus}
             />
