@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>EasyFisk – tre stilforslag</title>
+    <title>EasyFisk – fire nye utseender</title>
     <style>
       * {
         box-sizing: border-box;
@@ -17,110 +17,264 @@
           sans-serif;
       }
       main {
-        max-width: 1100px;
+        max-width: 860px;
         margin: auto;
-        padding: 24px 16px 64px;
+        padding: 28px 18px 64px;
       }
       h1 {
-        font-size: clamp(28px, 5vw, 40px);
-        line-height: 1.2;
+        font-size: clamp(30px, 6vw, 44px);
+        line-height: 1.15;
+        font-weight: 650;
       }
       h2 {
-        font-size: 24px;
-        margin-bottom: 8px;
+        font-size: clamp(25px, 5vw, 32px);
+        line-height: 1.25;
+      }
+      h3 {
+        font-size: 21px;
       }
       p {
         max-width: 65ch;
-      }
-      nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin: 24px 0;
       }
       a {
         color: #155e75;
         text-underline-offset: 4px;
       }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #234dc3;
+        outline-offset: 5px;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 24px 0;
+      }
       nav a,
       .full {
-        display: inline-block;
-        padding: 12px 16px;
+        display: inline-flex;
+        align-items: center;
         min-height: 48px;
+        padding: 10px 16px;
         border: 1px solid #52616a;
-        border-radius: 12px;
+        border-radius: 10px;
         background: white;
       }
-      a:focus-visible {
-        outline: 3px solid #234dc3;
-        outline-offset: 4px;
-      }
       section {
-        margin: 36px 0;
-        scroll-margin-top: 16px;
+        border-top: 1px solid #c8d3d9;
+        padding-top: 30px;
+        margin: 40px 0;
+        scroll-margin-top: 18px;
+      }
+      figure {
+        margin: 24px 0 16px;
+        max-width: 600px;
       }
       img {
         display: block;
         width: 100%;
         height: auto;
-        margin: 16px 0;
-        border-radius: 12px;
+        border-radius: 8px;
       }
+      figcaption,
       .note {
         color: #52616a;
+      }
+      figcaption {
+        padding-top: 10px;
+        font-size: 16px;
+      }
+      li {
+        margin: 8px 0;
+      }
+      summary {
+        cursor: pointer;
+        min-height: 48px;
+        padding: 12px 0;
+        font-size: 20px;
+      }
+      details {
+        border-top: 1px solid #c8d3d9;
+        margin-top: 44px;
+        padding-top: 16px;
+      }
+      .old {
+        padding: 20px 0;
+      }
+      .old img {
+        max-width: 720px;
       }
     </style>
   </head>
   <body>
     <main>
-      <h1>Tre stilforslag for EasyFisk</h1>
+      <p>EasyFisk · Nye stilforslag</p>
+      <h1>Fire nye oppsett</h1>
       <p>
-        Hvert bilde viser hjemskjermen og kjøpssiden. Dette er forslag du kan velge mellom. Appens
-        utseende er ikke endret.
+        Denne runden endrer <strong>skrift, bokser og oppsett</strong>. Fargene er bevisst nesten
+        like, så det er lettere å vurdere selve utformingen.
       </p>
-      <p>Trykk på et bilde for å åpne det i full størrelse. Du kan zoome med to fingre.</p>
-      <nav aria-label="Stilforslag">
-        <a href="#a">A · Elveblå</a><a href="#b">B · Natur</a><a href="#c">C · Lys</a>
+      <p>
+        Hvert bilde viser én hjemskjerm. Trykk på bildet for full størrelse, og zoom med to fingre.
+        Forslagene er ikke lagt inn i appen.
+      </p>
+      <nav aria-label="Velg stilforslag">
+        <a href="#d">D · Åpen</a><a href="#e">E · Rutenett</a><a href="#f">F · Veiviser</a
+        ><a href="#g">G · Kart</a>
       </nav>
-      <section id="a">
-        <h2>A – Klar elveblå</h2>
-        <p>Rolig petrolblå, lyse flater og tydelig typografi. Anbefalt videreføring av EasyFisk.</p>
-        <a href="A-klar-elvebla.png"
-          ><img
-            src="A-klar-elvebla.png"
-            width="1536"
-            height="1024"
-            alt="Forslag A: hjem og kjøpsside med petrolblå hovedknapper, lyse flater og enkle handlingsrader."
-        /></a>
-        <a class="full" href="A-klar-elvebla.png">Åpne bilde A i full størrelse</a>
+      <section id="d">
+        <h2>D – Åpen og typografisk</h2>
+        <p>
+          Store overskrifter, få bokser og enkle rader. Kjøpsknappen ligger nederst, nær tommelen.
+        </p>
+        <figure>
+          <a href="D-apen-typografisk.png"
+            ><img
+              src="D-apen-typografisk.png"
+              width="1024"
+              height="1536"
+              alt="Stilforslag D: Store overskrifter, få bokser og enkle rader. Kjøpsknappen ligger nederst, nær tommelen."
+              fetchpriority="high"
+          /></a>
+          <figcaption>D – Åpen og typografisk. Trykk for full størrelse.</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Skrift:</strong> Humanistisk sans-serif med stor, lett overskrift.</li>
+          <li><strong>Oppsett:</strong> Åpen liste med skillelinjer og kjøpsknapp nederst.</li>
+        </ul>
+
+        <a class="full" href="D-apen-typografisk.png">Åpne bilde D</a>
+        <p>Rolig og oversiktlig. Lange lister trenger tydelig gruppering.</p>
       </section>
-      <section id="b">
-        <h2>B – Nordisk natur</h2>
-        <p>Skoggrønt, varm hvit og mykere former gir et tydeligere friluftspreg.</p>
-        <a href="B-nordisk-natur.png"
-          ><img
-            src="B-nordisk-natur.png"
-            width="1536"
-            height="1024"
-            alt="Forslag B: hjem og kjøpsside med skoggrønne knapper, varm hvit bakgrunn og myke former."
-        /></a>
-        <a class="full" href="B-nordisk-natur.png">Åpne bilde B i full størrelse</a>
+      <section id="e">
+        <h2>E – Modulær oversikt</h2>
+        <p>Avrundede flater og store snarveier i rutenett. Fiskekortene får et eget område.</p>
+        <figure>
+          <a href="E-modulaer-oversikt.png"
+            ><img
+              src="E-modulaer-oversikt.png"
+              width="1024"
+              height="1536"
+              alt="Stilforslag E: Avrundede flater og store snarveier i rutenett. Fiskekortene får et eget område."
+              loading="lazy"
+          /></a>
+          <figcaption>E – Modulær oversikt. Trykk for full størrelse.</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Skrift:</strong> Mykere, avrundet sans-serif.</li>
+          <li><strong>Oppsett:</strong> Eget kortområde og fire store snarveier i rutenett.</li>
+        </ul>
+
+        <a class="full" href="E-modulaer-oversikt.png">Åpne bilde E</a>
+        <p>Lett å kjenne igjen handlinger. Ved stor tekst må rutenettet bli én kolonne.</p>
       </section>
-      <section id="c">
-        <h2>C – Presis og lys</h2>
-        <p>Hvit, koksgrå og klar blå. Et strammere og mer nøytralt uttrykk.</p>
-        <a href="C-presis-og-lys.png"
-          ><img
-            src="C-presis-og-lys.png"
-            width="1536"
-            height="1024"
-            alt="Forslag C: hjem og kjøpsside med klare blå knapper, hvit bakgrunn og nøytrale grå grupperinger."
-        /></a>
-        <a class="full" href="C-presis-og-lys.png">Åpne bilde C i full størrelse</a>
+      <section id="f">
+        <h2>F – Rolig veiviser</h2>
+        <p>
+          En samlet sjekkliste viser hva som gjenstår før fisket. Hvert punkt kan åpnes direkte.
+        </p>
+        <figure>
+          <a href="F-rolig-veiviser.png"
+            ><img
+              src="F-rolig-veiviser.png"
+              width="1024"
+              height="1536"
+              alt="Stilforslag F: En samlet sjekkliste viser hva som gjenstår før fisket. Hvert punkt kan åpnes direkte."
+              loading="lazy"
+          /></a>
+          <figcaption>F – Rolig veiviser. Trykk for full størrelse.</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Skrift:</strong> Humanistisk sans-serif med tydelige bokstavformer.</li>
+          <li><strong>Oppsett:</strong> Én samlet sjekkliste, med nummererte punkter.</li>
+        </ul>
+
+        <a class="full" href="F-rolig-veiviser.png">Åpne bilde F</a>
+        <p>Passer nye brukere. Punktene kan åpnes i valgfri rekkefølge.</p>
       </section>
+      <section id="g">
+        <h2>G – Elva i sentrum</h2>
+        <p>
+          Et enkelt kart gir stedskontekst. Kortkjøp og dokumenter samles i et tydelig panel under.
+        </p>
+        <figure>
+          <a href="G-elva-i-sentrum.png"
+            ><img
+              src="G-elva-i-sentrum.png"
+              width="1024"
+              height="1536"
+              alt="Stilforslag G: Et enkelt kart gir stedskontekst. Kortkjøp og dokumenter samles i et tydelig panel under."
+              loading="lazy"
+          /></a>
+          <figcaption>G – Elva i sentrum. Trykk for full størrelse.</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Skrift:</strong> Nøytral systemskrift.</li>
+          <li><strong>Oppsett:</strong> Kart øverst, handlinger i et panel under.</li>
+        </ul>
+
+        <a class="full" href="G-elva-i-sentrum.png">Åpne bilde G</a>
+        <p>Gir stedskontekst. Kartet må suppleres med tekst og vanlig sonevalg.</p>
+      </section>
+      <section aria-labelledby="sammenlign">
+        <h2 id="sammenlign">Hva passer best?</h2>
+        <p>
+          Jeg ville startet med <strong>D</strong> for et rolig uttrykk, eller
+          <strong>E</strong> hvis du foretrekker store, tydelige snarveier.
+          <strong>F</strong> prioriterer veiledning. <strong>G</strong> prioriterer stedet du
+          fisker.
+        </p>
+        <p>
+          Du kan kombinere oppsettet fra ett forslag med skriften og formene fra et annet. Svar med
+          D, E, F eller G og hva du liker eller vil endre.
+        </p>
+        <p class="note">
+          Alle retningene sikter mot tydelig kontrast, stor tekst, romslige trykkflater og status
+          som forklares med mer enn farge. Bildene er konseptskisser, ikke ferdig
+          tilgjengelighetstestede grensesnitt. Tekstforstørrelse, omflyting, tastatur og skjermleser
+          må testes ved implementering.
+        </p>
+      </section>
+      <details>
+        <summary>Se de første fargeforslagene A–C</summary>
+        <div class="old">
+          <h3>A – Klar elveblå</h3>
+          <a href="A-klar-elvebla.png"
+            ><img
+              loading="lazy"
+              src="A-klar-elvebla.png"
+              width="1536"
+              height="1024"
+              alt="Tidligere forslag A, Klar elveblå: hjem og kjøpsside." /></a
+          ><a class="full" href="A-klar-elvebla.png">Åpne bilde A</a>
+        </div>
+        <div class="old">
+          <h3>B – Nordisk natur</h3>
+          <a href="B-nordisk-natur.png"
+            ><img
+              loading="lazy"
+              src="B-nordisk-natur.png"
+              width="1536"
+              height="1024"
+              alt="Tidligere forslag B, Nordisk natur: hjem og kjøpsside." /></a
+          ><a class="full" href="B-nordisk-natur.png">Åpne bilde B</a>
+        </div>
+        <div class="old">
+          <h3>C – Presis og lys</h3>
+          <a href="C-presis-og-lys.png"
+            ><img
+              loading="lazy"
+              src="C-presis-og-lys.png"
+              width="1536"
+              height="1024"
+              alt="Tidligere forslag C, Presis og lys: hjem og kjøpsside." /></a
+          ><a class="full" href="C-presis-og-lys.png">Åpne bilde C</a>
+        </div>
+      </details>
       <p class="note">
-        Konseptbilder laget med KI. Datoer og priser er eksempelinnhold. Endelig tilgjengelighet og
-        oppførsel kontrolleres når valgt stil implementeres.
+        Konseptbilder laget med innebygd imagegen. Innhold og kart er illustrerende.
+        <a href="bildeprompter.txt">Bildeprompter for denne runden (engelsk)</a>.
       </p>
     </main>
   </body>
