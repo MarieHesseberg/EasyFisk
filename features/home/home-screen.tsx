@@ -151,8 +151,12 @@ export function HomeScreen({
           <button onClick={onBuyPermit}>{t("copy.kj.p.fiskekort.d32ea04")}</button>
         )}
         {hasPermits && (
-          <button onClick={() => onDocument("permits")}>
-            {selectLocalized(language, "Mine fiskekort", "My permits")}
+          <button className="home-owned-permits" onClick={() => onDocument("permits")}>
+            <span className="home-permit-icon">
+              <Icon name="ticket" size={24} />
+            </span>
+            <span>{selectLocalized(language, "Mine fiskekort", "My permits")}</span>
+            <Icon name="chevron" size={18} />
           </button>
         )}
       </div>
