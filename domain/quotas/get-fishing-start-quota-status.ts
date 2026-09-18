@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { CatchRecord, CatchOutcome } from "../catches/catch.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 import { getNorwegianCalendarDate } from "./get-quota-status.ts";
@@ -14,7 +15,7 @@ export type FishingStartQuotaStatus = {
 
 export function getFishingStartQuotaStatus(
   catches: CatchRecord[],
-  now = Date.now(),
+  now = getAppNow(),
 ): FishingStartQuotaStatus {
   const currentDay = getNorwegianCalendarDate(now);
   const seasonCatches = catches.filter((record) => {

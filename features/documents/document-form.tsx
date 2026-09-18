@@ -1,4 +1,8 @@
 "use client";
+import { DraftScope, DraftControls, useDraft, useDraftState } from "@/hooks/use-draft";
+import { getAppNow, getAppDate, getAppDateTime } from "@/domain/shared/app-clock";
+
+import { createLocalId } from "@/lib/create-local-id";
 import { useState } from "react";
 import { documentFields } from "@/domain/documents/document-fields";
 import {
@@ -12,7 +16,7 @@ import { attachmentError, validateDocument } from "@/domain/documents/validate-d
 import type { OperationResult } from "@/domain/shared/operation-result";
 import { useLanguage } from "@/components/localization/language-provider";
 import { localizeDocumentError } from "@/lib/localize-document-error";
-export function DocumentForm({
+function DocumentFormContent({
   kind,
   initial,
   save,
@@ -25,10 +29,25 @@ export function DocumentForm({
   cancel: () => void;
   verification?: DocumentVerification;
 }) {
+  const draft = useDraft();
   const { language, t } = useLanguage();
-  const [values, setValues] = useState<DocumentValues>(initial?.values ?? {});
-  const [attachment, setAttachment] = useState<Blob | undefined>(initial?.attachment);
-  const [attachmentName, setAttachmentName] = useState(initial?.attachmentName);
+  const [values, setValues] = useDraftState<DocumentValues>(
+    "values",
+    initial?.values ??
+      (kind === "fee"
+        ? { year: getAppDate().slice(0, 4), paidAt: getAppDate() }
+        : kind === "disinfection"
+          ? { performedAt: getAppDateTime() }
+          : {}),
+  );
+  const [attachment, setAttachment] = useDraftState<Blob | undefined>(
+    "attachment",
+    initial?.attachment,
+  );
+  const [attachmentName, setAttachmentName] = useDraftState(
+    "attachmentName",
+    initial?.attachmentName,
+  );
   const [error, setError] = useState("");
   const [fileError, setFileError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -43,16 +62,17 @@ export function DocumentForm({
     setSaving(true);
     try {
       const result = await save({
-        id: initial?.id ?? crypto.randomUUID(),
+        id: initial?.id ?? createLocalId(),
         kind,
         values,
         attachment,
         attachmentName,
-        updatedAt: Date.now(),
+        updatedAt: getAppNow(),
         purchaseId: initial?.purchaseId,
         verification: initial?.verification ?? verification ?? { method: "manual" },
       });
       if (!result.ok) setError(t(result.error));
+      else await draft?.complete();
     } catch {
       setError("error.storage.write");
     } finally {
@@ -66,6 +86,7 @@ export function DocumentForm({
       aria-label={t("copy.registrer.dokument.40d160f")}
       aria-busy={saving}
     >
+      <DraftControls disabled={saving} />
       <fieldset disabled={saving}>
         <legend>{initial ? t("content.d3b307e58e8b") : t("content.85d2c744960e")}</legend>
         {documentFields[kind].map((field) => (
@@ -147,5 +168,14 @@ export function DocumentForm({
         </button>
       </fieldset>
     </form>
+  );
+}
+
+export function DocumentForm(props: Parameters<typeof DocumentFormContent>[0]) {
+  const id = `document:${props.kind}:${props.initial?.id ?? "new"}`;
+  return (
+    <DraftScope key={id} id={id}>
+      <DocumentFormContent {...props} />
+    </DraftScope>
   );
 }

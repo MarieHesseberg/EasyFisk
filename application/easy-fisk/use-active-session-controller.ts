@@ -1,4 +1,5 @@
 "use client";
+import { getAppNow } from "@/domain/shared/app-clock";
 
 import { useEffect, useState } from "react";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
@@ -31,7 +32,7 @@ export function useActiveSessionController(repository: FishingLogRepository) {
   }, [repository]);
 
   function start(selectedZone: ZoneId, subzone?: string) {
-    const now = Date.now();
+    const now = getAppNow();
     const result = repository.saveActiveSession({
       startTime: now,
       zone: selectedZone,
@@ -54,7 +55,7 @@ export function useActiveSessionController(repository: FishingLogRepository) {
 
   function requestCatchBeforeFinish() {
     setFinishAfterCatch(true);
-    setRequestedCatchTime(Date.now());
+    setRequestedCatchTime(getAppNow());
   }
 
   return {

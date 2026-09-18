@@ -1,14 +1,15 @@
-import { appContentRepository } from "@/data/repositories/app-content";
+import { FeedbackImage } from "../feedback-message-detail";
 import { FormError } from "@/components/ui/form-error";
 import type { FeedbackController } from "@/features/feedback/hooks/use-feedback-controller";
 import { useLanguage } from "@/components/localization/language-provider";
-const { feedback } = appContentRepository.getContent();
 export function FeedbackReviewStep({ controller }: { controller: FeedbackController }) {
   const { t } = useLanguage();
   const {
     category,
     description,
     hasPosition,
+    position,
+    image,
     imageName,
     isConfirmed,
     isSubmitting,
@@ -36,11 +37,12 @@ export function FeedbackReviewStep({ controller }: { controller: FeedbackControl
           <small>{t("copy.posisjon.7733e25")}</small>
           <b>
             {hasPosition
-              ? `${t(feedback.positionLabel)} · ${t("copy.lagt.ved.med.samtykke.f86e73d")}`
+              ? `${position?.map((n) => n.toFixed(5)).join(", ")} · ${t("copy.lagt.ved.med.samtykke.f86e73d")}`
               : t("copy.ikke.lagt.ved.5c53303")}
           </b>
         </p>
       </div>
+      <FeedbackImage image={image} name={imageName} />
       <label className="privacy-confirm">
         <input
           type="checkbox"
@@ -53,7 +55,7 @@ export function FeedbackReviewStep({ controller }: { controller: FeedbackControl
         {t(isSubmitting ? "prototype.saving" : "prototype.testMessage")}
       </button>
       <FormError message={submissionError ? t(submissionError) : undefined} />
-      <button className="secondary" onClick={() => setStep(1)}>
+      <button className="secondary" disabled={isSubmitting} onClick={() => setStep(1)}>
         {t("copy.tilbake.og.endre.7334721")}
       </button>
     </>

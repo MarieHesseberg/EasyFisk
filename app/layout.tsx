@@ -1,3 +1,4 @@
+import "@/styles/drafts.css";
 import type { Metadata } from "next";
 import "leaflet/dist/leaflet.css";
 import "@/styles/foundations.css";
@@ -32,6 +33,7 @@ import "@/styles/report-detail.css";
 import "@/styles/report.css";
 import "@/styles/rule-center.css";
 import "@/styles/rules.css";
+import "@/styles/personal-rules.css";
 import "@/styles/violation.css";
 import "@/styles/mobile-shell.css";
 import "@/styles/responsive.css";
@@ -48,6 +50,7 @@ import "@/styles/permit-terms.css";
 import "@/styles/navigation-access.css";
 import "@/styles/vertical-scroll.css";
 import "@/styles/permit-payment.css";
+import "@/styles/feedback-history.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

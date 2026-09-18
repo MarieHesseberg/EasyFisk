@@ -1,6 +1,7 @@
 "use client";
+import { DraftScope, DraftControls, useDraftState } from "@/hooks/use-draft";
+import { getAppNow } from "@/domain/shared/app-clock";
 
-import { useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { CatchRecord } from "@/domain/catches/catch";
@@ -13,7 +14,7 @@ import { CatchSelectionStep } from "@/features/catch-report/steps/catch-selectio
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { useLanguage } from "@/components/localization/language-provider";
 
-export function CatchReportModal({
+function CatchReportModalContent({
   activeZone,
   catches,
   finishAfterCatch,
@@ -33,7 +34,7 @@ export function CatchReportModal({
   startTime: number | null;
 }) {
   const { t } = useLanguage();
-  const [caughtAt] = useState(() => requestedCatchTime || Date.now());
+  const [caughtAt] = useDraftState("caughtAt", () => requestedCatchTime || getAppNow());
   const portalTarget = document.querySelector<HTMLElement>(".phone-app") ?? document.body;
   const controller = useCatchReportController({
     activeZone,
@@ -69,6 +70,7 @@ export function CatchReportModal({
           ×
         </button>
         <div className="sheet-handle" />
+        {step < 4 && <DraftControls disabled={controller.state.isSubmitting} />}
         <div className="steps four">
           <span className={step >= 1 ? "on" : ""}>1</span>
           <i />
@@ -95,5 +97,14 @@ export function CatchReportModal({
       </div>
     </div>,
     portalTarget,
+  );
+}
+
+export function CatchReportModal(props: Parameters<typeof CatchReportModalContent>[0]) {
+  const id = `catch:${props.startTime ?? "past"}:${props.activeZone}`;
+  return (
+    <DraftScope key={id} id={id}>
+      <CatchReportModalContent {...props} />
+    </DraftScope>
   );
 }

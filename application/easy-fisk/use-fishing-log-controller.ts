@@ -1,4 +1,5 @@
 "use client";
+import { getAppNow } from "@/domain/shared/app-clock";
 
 import { useEffect, useState } from "react";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
@@ -41,7 +42,7 @@ export function useFishingLogController(
   }, [imageRepository, repository]);
 
   async function saveCatch(record: CatchRecord) {
-    const submittedAt = Date.now();
+    const submittedAt = getAppNow();
     const completed = completeCatchRecord(record, `ME-${submittedAt}`, submittedAt);
     const imageResult = await saveCatchImages([completed], imageRepository);
     if (!imageResult.ok) return imageResult;
@@ -64,7 +65,7 @@ export function useFishingLogController(
     records: CatchRecord[] = [],
     clearActiveSession = true,
   ) {
-    const submittedAt = Date.now();
+    const submittedAt = getAppNow();
     const completed = records.map((record, index) =>
       completeCatchRecord(
         record,

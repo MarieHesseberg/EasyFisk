@@ -1,3 +1,4 @@
+import { getAppNow } from "@/domain/shared/app-clock";
 import type { PrototypePermitProduct } from "@/domain/fishing-permits/prototype-permit-product";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
@@ -17,7 +18,7 @@ const categories = {
 export function createTestPermitDocument(
   product: PrototypePermitProduct,
   selectedDate: string,
-  now = Date.now(),
+  now = getAppNow(),
   purchase?: Pick<PermitPurchase, "id" | "buyer">,
 ): FishingDocument {
   const { startsAt, endsAt } = calculatePermitValidity(product, selectedDate);

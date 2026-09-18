@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { FishingDocument } from "./fishing-document.ts";
 import type { ZoneId } from "../zones/zone.ts";
 
@@ -7,7 +8,7 @@ export function getPermitZoneId(document: FishingDocument): ZoneId | undefined {
   return match ? (Number(match[1]) as ZoneId) : undefined;
 }
 
-export function isPermitValid(document: FishingDocument, now = Date.now()) {
+export function isPermitValid(document: FishingDocument, now = getAppNow()) {
   if (document.kind !== "permit") return false;
   const startsAt = new Date(document.values.startsAt ?? "").getTime();
   const endsAt = new Date(document.values.endsAt ?? "").getTime();
@@ -37,7 +38,7 @@ export function getDisplayedPermit(
   )[0];
 }
 
-export function getValidPermitZoneIds(documents: FishingDocument[], now = Date.now()) {
+export function getValidPermitZoneIds(documents: FishingDocument[], now = getAppNow()) {
   return Array.from(
     new Set(
       documents

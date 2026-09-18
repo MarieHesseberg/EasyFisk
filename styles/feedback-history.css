@@ -1,0 +1,100 @@
+.feedback-view-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.feedback-view-switcher button {
+  flex: 1;
+  min-height: 48px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.feedback-view-switcher button[aria-pressed="true"] {
+  background: var(--color-menu-primary);
+  color: var(--color-surface);
+}
+.feedback-history-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-content);
+  background: var(--color-surface);
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+.feedback-history-item summary {
+  cursor: pointer;
+  padding: 16px;
+  color: var(--color-primary-dark);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.feedback-history-item summary span {
+  display: block;
+}
+.feedback-message-detail {
+  padding: 16px;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.feedback-message-detail dl > div {
+  margin-block: 12px;
+}
+.feedback-message-detail dt {
+  font-weight: 700;
+}
+.feedback-message-detail dd {
+  margin: 0;
+}
+.feedback-description {
+  white-space: pre-wrap;
+}
+.feedback-message-status {
+  color: var(--color-menu-primary);
+  font-weight: 700;
+}
+.feedback-saved-image {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: var(--radius-content);
+  margin-block: 12px;
+}
+.feedback-form .feedback-review small,
+.feedback-form .feedback-review b,
+.feedback-form .privacy-confirm,
+.feedback-form .feedback-confirmation > small,
+.feedback-form .feedback-categories button,
+.feedback-form .form-intro p,
+.feedback-form .position-card small {
+  font-size: 1rem !important;
+  line-height: 1.5;
+}
+.feedback-form button {
+  min-height: 44px;
+}
+.feedback-form .position-card {
+  flex-wrap: wrap;
+}
+.feedback-view-switcher button:focus-visible,
+.feedback-history-item summary:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+.feedback-form .position-card > button {
+  float: none;
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  font-size: 1rem;
+}
+.feedback-form .position-card b,
+.feedback-form .position-card > p {
+  font-size: 1rem;
+  line-height: 1.5;
+}

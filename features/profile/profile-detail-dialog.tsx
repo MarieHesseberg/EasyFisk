@@ -47,8 +47,8 @@ export function ProfileDetailDialog({
           ‹ {t("copy.tilbake.4fb8dc1")}
         </button>
         <h2 id="detail-title">{title}</h2>
-        {destination === "feedback" ? (
-          <FeedbackForm />
+        {destination === "feedback" || destination === "messages" ? (
+          <FeedbackForm initialView={destination === "messages" ? "history" : "new"} />
         ) : (
           <ProfileDetailContent
             destination={destination}

@@ -1,4 +1,6 @@
 "use client";
+import { emptyPermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
+import { DraftScope, DraftControls } from "@/hooks/use-draft";
 import { useEffect, useRef } from "react";
 import type { PermitReceipt } from "./permit-journey";
 import type { PermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
@@ -23,7 +25,7 @@ import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-pu
 import { useLanguage } from "@/components/localization/language-provider";
 import { PermitVippsPayment } from "./permit-vipps-payment";
 const stepNumbers = { buyer: 1, review: 2, payment: 2, confirmation: 3 } as const;
-export function PermitCheckout({
+function PermitCheckoutContent({
   product,
   documents = [],
   back,
@@ -95,6 +97,7 @@ export function PermitCheckout({
       className="permit-checkout"
       aria-label={t("copy.kj.p.fiskekort.d32ea04")}
     >
+      {checkout.step !== "confirmation" && <DraftControls disabled={checkout.isSubmitting} />}
       {checkout.step !== "confirmation" && checkout.step !== "payment" && (
         <button className="back" type="button" onClick={back} disabled={checkout.isSubmitting}>
           {t("copy.tilbake.til.fiskekort.bcb4b52")}
@@ -176,5 +179,14 @@ export function PermitCheckout({
         </p>
       )}
     </section>
+  );
+}
+
+export function PermitCheckout(props: Parameters<typeof PermitCheckoutContent>[0]) {
+  const id = `purchase:${props.product.id}:${props.initialSelectedDate ?? "default"}`;
+  return (
+    <DraftScope key={id} id={id} onDiscard={() => props.onFormChange?.(emptyPermitCheckoutForm)}>
+      <PermitCheckoutContent {...props} />
+    </DraftScope>
   );
 }

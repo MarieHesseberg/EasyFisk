@@ -1,3 +1,4 @@
+import { FeedbackImage } from "../feedback-message-detail";
 import { Icon } from "@/components/ui/icon";
 import { FormError } from "@/components/ui/form-error";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
@@ -7,13 +8,22 @@ import { useLanguage } from "@/components/localization/language-provider";
 const { feedback } = appContentRepository.getContent();
 export function FeedbackDetailsStep({ controller }: { controller: FeedbackController }) {
   const { t } = useLanguage();
-  const { category, description, hasPosition, imageError, imageName, isTouched, isValid } =
-    controller.state;
+  const {
+    category,
+    description,
+    hasPosition,
+    imageError,
+    imageName,
+    isTouched,
+    isValid,
+    image,
+    position,
+    location,
+  } = controller.state;
   const { setCategory, setDescription, setHasPosition, selectImage, setIsTouched, setStep } =
     controller.actions;
   return (
     <>
-      <p>{t("prototype.feedbackNotice")}</p>
       <div className="form-intro">
         <Icon name="bell" />
         <div>
@@ -64,6 +74,7 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         imageName={imageName}
         selectImage={selectImage}
       />
+      <FeedbackImage image={image} name={imageName} />
       <div className="position-card">
         <div>
           <Icon name="pin" />
@@ -75,18 +86,39 @@ export function FeedbackDetailsStep({ controller }: { controller: FeedbackContro
         <button
           className={hasPosition ? "active" : ""}
           aria-pressed={hasPosition}
+          disabled={location.isLoading}
           onClick={() => setHasPosition(!hasPosition)}
         >
-          {t(hasPosition ? "Lagt til" : "Legg til")}
+          {t(
+            location.isLoading
+              ? "location.loading"
+              : hasPosition
+                ? "feedback.removePosition"
+                : "feedback.addPosition",
+          )}
         </button>
         {hasPosition && (
           <p>
-            <Icon name="check" size={14} /> {t(feedback.positionLabel)} ·{" "}
+            <Icon name="check" size={14} /> {position?.map((n) => n.toFixed(5)).join(", ")} ·{" "}
             {t("copy.posisjon.hentet.med.samtykke.e779358")}
           </p>
         )}
       </div>
+      {location.message && !hasPosition && (
+        <p role="status">
+          {location.isLoading
+            ? location.message
+            : t(
+                location.state === "permission-denied"
+                  ? "feedback.locationDenied"
+                  : location.state === "insecure"
+                    ? "feedback.locationInsecure"
+                    : "feedback.locationError",
+              )}
+        </p>
+      )}
       <button
+        disabled={location.isLoading}
         className="primary"
         onClick={() => {
           setIsTouched(true);

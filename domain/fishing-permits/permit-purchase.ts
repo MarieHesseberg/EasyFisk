@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
 
 export const permitTermsVersion = "easyfisk-prototype-2026-08-31";
@@ -74,7 +75,7 @@ export function getPermitPriceSummary(
 export function validatePermitBuyer(form: PermitCheckoutForm) {
   if (form.fullName.trim().length < 3) return "Oppgi fullt navn på kortinnehaveren.";
   const birthDate = Date.parse(`${form.birthDate}T12:00:00`);
-  if (!Number.isFinite(birthDate) || birthDate > Date.now()) return "Oppgi en gyldig fødselsdato.";
+  if (!Number.isFinite(birthDate) || birthDate > getAppNow()) return "Oppgi en gyldig fødselsdato.";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
     return "Oppgi en gyldig e-postadresse.";
   if (form.phone.replaceAll(/\D/g, "").length < 8) return "Oppgi et gyldig telefonnummer.";

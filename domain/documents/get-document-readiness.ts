@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { DocumentKind, FishingDocument } from "./fishing-document.ts";
 import type { ZoneId } from "../zones/zone.ts";
 import { getPermitZoneId, isPermitValid } from "./get-permit-zones.ts";
@@ -20,7 +21,7 @@ function norwegianYear(now: number) {
 
 export function getDocumentReadiness(
   documents: FishingDocument[],
-  now = Date.now(),
+  now = getAppNow(),
   requiredZone?: ZoneId,
 ): DocumentReadiness {
   const valid = {

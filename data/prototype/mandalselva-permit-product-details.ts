@@ -17,6 +17,7 @@ const commonDetails: PrototypePermitProductDetails = {
 const detailsByProductId: Partial<Record<string, Partial<PrototypePermitProductDetails>>> = {
   ...additionalPermitDetails,
   "zone-1-boat-day": {
+    localRules: ["Kortet tillater inntil to stenger fra båt."],
     equipmentAndFacilities: [
       "Kortet tillater inntil to stenger fra båt.",
       "Båtleie inngår ikke i fiskekortet.",
@@ -26,6 +27,10 @@ const detailsByProductId: Partial<Record<string, Partial<PrototypePermitProductD
     equipmentAndFacilities: ["Båt kan leies separat hos Sandnes Camping."],
   },
   "zone-2-fuskeland-group": {
+    localRules: [
+      "Gruppekortet tillater inntil tre stenger.",
+      "Alle medfiskere skal registreres med navn.",
+    ],
     equipmentAndFacilities: [
       "Gruppekortet tillater inntil tre stenger.",
       "Alle medfiskere skal registreres med navn.",

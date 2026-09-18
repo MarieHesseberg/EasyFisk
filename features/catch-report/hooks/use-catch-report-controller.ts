@@ -1,5 +1,6 @@
 "use client";
 
+import { useDraft, useDraftState } from "@/hooks/use-draft";
 import { useState } from "react";
 
 import { parseMeasurement, validateCatch } from "@/domain/catches/validate-catch";
@@ -22,7 +23,8 @@ export function useCatchReportController({
   onCatch: (record: CatchRecord) => AsyncOperationResult<unknown>;
   sessionStart: number;
 }) {
-  const [step, setStep] = useState(1);
+  const draft = useDraft();
+  const [step, setStep] = useDraftState("step", 1);
   const form = useFormFields<{
     comment: string;
     length: string;
@@ -71,6 +73,7 @@ export function useCatchReportController({
       }),
     );
     if (succeeded) {
+      await draft?.complete();
       setSubmitted(true);
       setStep(4);
     }

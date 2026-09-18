@@ -1,6 +1,6 @@
 "use client";
 
-import { createPermitJourney } from "@/features/fishing-permits/permit-journey";
+import { usePermitJourney } from "@/features/fishing-permits/use-permit-journey";
 import { Fragment, useState } from "react";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
@@ -59,19 +59,8 @@ export function EasyFiskApp() {
     toast,
     zone,
   } = state;
-  const [permitJourney, setPermitJourney] = useState(() => createPermitJourney(zone));
+  const [permitJourney, setPermitJourney] = usePermitJourney(zone);
   function openPermitShop() {
-    setPermitJourney((previous) =>
-      previous.selectedZone === zone
-        ? previous
-        : {
-            ...previous,
-            selectedZone: zone,
-            selectedArea: "all",
-            selectedProductId: null,
-            isProductActionOpen: false,
-          },
-    );
     actions.closeDetail();
     actions.closeFlow();
     actions.navigate("permits");
@@ -118,7 +107,24 @@ export function EasyFiskApp() {
             />
           )}{" "}
           {screen === "map" && (
-            <MapScreen selected={zone} setSelected={actions.setZone} onBuyPermit={openPermitShop} />
+            <MapScreen
+              selected={zone}
+              setSelected={actions.setZone}
+              onBuyPermit={() => {
+                setPermitJourney((previous) =>
+                  previous.selectedZone === zone
+                    ? previous
+                    : {
+                        ...previous,
+                        selectedZone: zone,
+                        selectedArea: "all",
+                        selectedProductId: null,
+                        isProductActionOpen: false,
+                      },
+                );
+                openPermitShop();
+              }}
+            />
           )}{" "}
           {screen === "permits" && (
             <PermitShopScreen

@@ -6,6 +6,7 @@ export type DetailDestination =
   | "disinfection"
   | "fee"
   | "notifications"
+  | "messages"
   | "feedback"
   | "control-card"
   | "profile-privacy";

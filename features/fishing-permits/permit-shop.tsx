@@ -1,4 +1,5 @@
 "use client";
+import { usePermitJourney } from "./use-permit-journey";
 import { selectLocalized } from "@/locales";
 import { useState } from "react";
 import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
@@ -13,10 +14,9 @@ import { permitReportingOutcomeLabels } from "@/domain/fishing-permits/permit-re
 import { canPurchasePrototypePermit } from "@/domain/fishing-permits/prototype-permit-product";
 import type { PrototypePaymentOutcome } from "@/domain/fishing-permits/permit-purchase";
 import { PermitProductDetail } from "./permit-product-detail";
-import { getPrototypePermitDateRange } from "@/domain/fishing-permits/get-prototype-permit-availability";
 import { useLanguage } from "@/components/localization/language-provider";
 const zones: readonly ZoneId[] = [1, 2, 3, 4];
-import { createPermitJourney, type PermitJourneyProps, type PermitJourney } from "./permit-journey";
+import { type PermitJourneyProps, type PermitJourney } from "./permit-journey";
 export function PermitShop({
   journey,
   setJourney,
@@ -37,7 +37,7 @@ export function PermitShop({
   onRegisterFee?: () => void;
   onRegisterDisinfection?: () => void;
 }) {
-  const [localJourney, setLocalJourney] = useState(() => createPermitJourney(initialZone));
+  const [localJourney, setLocalJourney] = usePermitJourney(initialZone, !journey);
   const current = journey ?? localJourney;
   const update = setJourney ?? setLocalJourney;
   const { selectedZone, selectedArea, selectedProductId, isProductActionOpen, selectedDate } =
@@ -142,6 +142,9 @@ export function PermitShop({
         onReceipt={(receipt) =>
           update((previous) => ({
             ...previous,
+            drafts: Object.fromEntries(
+              Object.entries(previous.drafts).filter(([id]) => id !== selectedProduct.id),
+            ),
             receipts: { ...previous.receipts, [`${selectedProduct.id}:${selectedDate}`]: receipt },
           }))
         }
@@ -202,17 +205,6 @@ export function PermitShop({
               type="button"
               aria-describedby={`permit-title-${product.id}`}
               onClick={() => {
-                const range = getPrototypePermitDateRange(product);
-                const today = selectedDate;
-                setSelectedDate(
-                  product.type === "season"
-                    ? range.startsOn
-                    : today < range.startsOn
-                      ? range.startsOn
-                      : today > range.endsOn
-                        ? range.endsOn
-                        : today,
-                );
                 update((previous) => ({
                   ...previous,
                   isProductActionOpen: false,

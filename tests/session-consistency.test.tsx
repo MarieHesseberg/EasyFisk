@@ -209,7 +209,7 @@ test("rules display actual permit type, area and validity instead of the mock da
       ]}
     />,
   );
-  expect(screen.getByText(/Sesongkort · gyldig til 2026-09-15/)).toBeTruthy();
+  expect(screen.getByText(/Sesongkort · gyldig til 15.09.2026/)).toBeTruthy();
   expect(screen.getByRole("heading", { name: /Regler for Sone 4/ })).toBeTruthy();
   expect(screen.queryByText(/Døgnkort · gyldig til/)).toBeNull();
 });

@@ -63,6 +63,7 @@ export type PrototypePermitSeller = {
 
 export type PrototypePermitProductDetails = {
   ageRule: string;
+  localRules?: readonly string[];
   equipmentAndFacilities: readonly string[];
   reportingRule: string;
 };

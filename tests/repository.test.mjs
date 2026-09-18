@@ -57,7 +57,7 @@ test("regelverdier hentes fra ett versjonert regelgrunnlag", async () => {
     "domain/catches/reporting-deadline.ts",
     "domain/quotas/get-quota-status.ts",
     "data/mock/rule-sections.ts",
-    "features/rules/rules-screen.tsx",
+    "features/rules/personal-permit-rules.tsx",
     "features/rules/rule-center.tsx",
     "features/catch-report/steps/catch-review-step.tsx",
   ];

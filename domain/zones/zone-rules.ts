@@ -57,9 +57,11 @@ export function isDateWithinZoneSeason(date: string, zoneId: number, subzone = "
   return date >= activeFishingRules.season.startDate && date <= getZoneSeasonEnd(zoneId, subzone);
 }
 
-export function getZoneSeasonLabel(zoneId: number) {
+export function getZoneSeasonLabel(zoneId: number, subzone = "") {
   const { season } = activeFishingRules;
-  return zoneId === season.extendedZoneId ? season.extendedZoneLabel : season.standardZoneLabel;
+  return getZoneSeasonEnd(zoneId, subzone) === season.extendedEndDate
+    ? season.extendedZoneLabel
+    : season.standardZoneLabel;
 }
 
 export function getSubzones(zoneId: number) {

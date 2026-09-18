@@ -1,4 +1,6 @@
 "use client";
+import { getAppNow } from "@/domain/shared/app-clock";
+
 import { selectLocalized } from "@/locales";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
@@ -53,7 +55,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
       return;
     }
     if (flow === "stop") {
-      const end = Date.now();
+      const end = getAppNow();
       const startedAt = startTime ?? end;
       const completed = createSessionRecord(
         startedAt,
@@ -79,7 +81,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
   }
   async function addCatch(record: CatchRecord) {
     if (finishAfterCatch) {
-      const end = Date.now();
+      const end = getAppNow();
       const completedSession = createSessionRecord(
         startTime ?? end,
         end,

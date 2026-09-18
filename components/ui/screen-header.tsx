@@ -1,5 +1,7 @@
 "use client";
 
+import { getAppDate } from "@/domain/shared/app-clock";
+import { activeFishingRules } from "@/domain/fishing-rules/mandalselva-2026";
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { appContentRepository } from "@/data/repositories/app-content";
@@ -41,11 +43,17 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
           </button>
           <small>{t("copy.varsler.9c9660c")}</small>
           <h3>{t("copy.kontrollerte.meldinger.og.eksempelvarsler.3bed6fe")}</h3>
-          {headerAlerts.map((alert) => (
-            <p key={alert.message}>
-              <Icon name={alert.icon} size={15} /> {t(alert.message)}
-            </p>
-          ))}
+          {headerAlerts
+            .filter(
+              (alert) =>
+                alert.message !== activeFishingRules.currentNotice.title ||
+                getAppDate() >= activeFishingRules.currentNotice.publishedDate,
+            )
+            .map((alert) => (
+              <p key={alert.message}>
+                <Icon name={alert.icon} size={15} /> {t(alert.message)}
+              </p>
+            ))}
         </div>
       )}
     </header>

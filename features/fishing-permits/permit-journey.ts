@@ -1,3 +1,4 @@
+import { getAppDate } from "@/domain/shared/app-clock";
 import type { PermitReportingOutcome } from "@/domain/fishing-permits/permit-reporting-day";
 import type { Dispatch, SetStateAction } from "react";
 import type { ZoneId } from "@/domain/zones/zone";
@@ -25,7 +26,7 @@ export function createPermitJourney(zone: ZoneId = 3): PermitJourney {
     selectedArea: "all",
     selectedProductId: null,
     isProductActionOpen: false,
-    selectedDate: new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
+    selectedDate: getAppDate(),
     drafts: {},
     receipts: {},
     reportingDrafts: {},

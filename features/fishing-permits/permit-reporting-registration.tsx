@@ -1,4 +1,5 @@
 "use client";
+import { getAppDate } from "@/domain/shared/app-clock";
 import { selectLocalized } from "@/locales";
 import { useMemo, useState } from "react";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
@@ -32,11 +33,7 @@ export function PermitReportingRegistration({
   save: (record: PermitReportingDay) => OperationResult<void>;
 }) {
   const { language, t } = useLanguage();
-  const [fishingDate, setFishingDate] = useState(
-    () =>
-      initialSelectedDate ??
-      new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date()),
-  );
+  const [fishingDate, setFishingDate] = useState(() => initialSelectedDate ?? getAppDate());
   const [outcome, setOutcome] = useState<PermitReportingOutcome>(initialOutcome ?? "pending");
   const [message, setMessage] = useState("");
   const seasonPermit = useMemo(

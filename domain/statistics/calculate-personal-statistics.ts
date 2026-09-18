@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { CatchRecord, CatchOutcome, FishSpecies } from "../catches/catch.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 import { getNorwegianCalendarDate } from "../quotas/get-quota-status.ts";
@@ -30,7 +31,7 @@ export type PersonalStatistics = {
 export function calculatePersonalStatistics(
   catches: CatchRecord[],
   sessions: SessionRecord[],
-  now = Date.now(),
+  now = getAppNow(),
 ): PersonalStatistics {
   const fishingSeconds = sessions.reduce((total, session) => total + session.duration, 0);
   const sessionStartsWithCatch = new Set(catches.map((catchRecord) => catchRecord.sessionStart));

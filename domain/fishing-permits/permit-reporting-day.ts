@@ -1,3 +1,4 @@
+import { getAppNow } from "../shared/app-clock.ts";
 import type { FishingDocument } from "../documents/fishing-document.ts";
 import { getPermitZoneId } from "../documents/get-permit-zones.ts";
 import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
@@ -71,7 +72,7 @@ export function createPermitReportingDay(
   product: PrototypePermitProduct,
   fishingDate: string,
   seasonPermitDocumentId: string,
-  now = Date.now(),
+  now = getAppNow(),
 ): PermitReportingDay {
   if (product.action !== "register-reporting-day" || !product.requirements.requiresSeasonPermit)
     throw new TypeError("Produktet er ikke et rapporteringskort for sesongkort.");

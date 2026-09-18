@@ -550,6 +550,7 @@ export const additionalPermitDetails: Record<string, Partial<PrototypePermitProd
     reportingRule: "Rapporter fangst eller nullfangst etter fiskedøgnet.",
   },
   "zone-2-nedre-noding-day": {
+    localRules: ["Maksimalt to fiskedøgn per person per uke."],
     equipmentAndFacilities: [
       "Maksimalt to fiskedøgn per person per uke.",
       "Følg skiltingen for grensene til delsonen.",
@@ -578,6 +579,9 @@ export const additionalPermitDetails: Record<string, Partial<PrototypePermitProd
     reportingRule: "Rapporter fangst eller nullfangst etter fiskedøgnet.",
   },
   "zone-4-steinshylen-day": {
+    localRules: [
+      "Fiske er forbudt forbi bebyggelsen sør for Bjåhylen. Ingen ferdsel på øvre del av østre elvebredd.",
+    ],
     equipmentAndFacilities: [
       "Godt egnet for fluefiske. Følg skiltingen mellom Bjåhylen og Klevelandsbroa.",
       "Fiske er forbudt forbi bebyggelsen sør for Bjåhylen. Ingen ferdsel på øvre del av østre elvebredd.",
@@ -606,6 +610,10 @@ export const additionalPermitDetails: Record<string, Partial<PrototypePermitProd
     reportingRule: "Rapporter fangst eller nullfangst etter fiskedøgnet.",
   },
   "zone-4-laksehylen-day": {
+    localRules: [
+      "Fiskeforbud 50 meter ovenfor og nedenfor terskelen.",
+      "Adkomst til østsiden via Haugedalsbroa. Ingen gjennomkjøring ved Kleveland.",
+    ],
     equipmentAndFacilities: [
       "Stryk og dype kulper sør for dammen ved Manflåvann.",
       "Fiskeforbud 50 meter ovenfor og nedenfor terskelen.",
@@ -614,6 +622,9 @@ export const additionalPermitDetails: Record<string, Partial<PrototypePermitProd
     reportingRule: "Rapporter fangst eller nullfangst etter fiskedøgnet.",
   },
   "zone-4-felles-nord-manflavann-day": {
+    localRules: [
+      "Stryk, fosser og dype kulper. Kortet dekker ikke de separate delsonene nedenfor dammen.",
+    ],
     equipmentAndFacilities: [
       "Kortet dekker hovedsonen oppstrøms dam Manflå, til Kavfossen og lakseførende del av Kosåna.",
       "Stryk, fosser og dype kulper. Kortet dekker ikke de separate delsonene nedenfor dammen.",

@@ -1,3 +1,4 @@
+import { getAppNow } from "@/domain/shared/app-clock";
 import { selectLocalized } from "@/locales";
 import { Icon } from "@/components/ui/icon";
 import type { CatchRecord } from "@/domain/catches/catch";
@@ -27,7 +28,7 @@ export function CatchConfirmationStep({
   const quotaStatus = getQuotaStatus(catches, []);
   const catchDay = sentCatch
     ? getNorwegianCalendarDate(sentCatch.caughtAt)
-    : getNorwegianCalendarDate(Date.now());
+    : getNorwegianCalendarDate(getAppNow());
   const dailyRemaining = Math.max(
     0,
     quota.killedSalmonPerDay - countKilledSalmonForDay(catches, catchDay),

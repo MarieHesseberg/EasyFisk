@@ -1,8 +1,10 @@
 "use client";
+import { getAppNow, getAppDate } from "@/domain/shared/app-clock";
 
 import type { PermitReceipt } from "./permit-journey";
 import { useLanguage } from "@/components/localization/language-provider";
 import { selectLocalized } from "@/locales";
+import { useDraft, useDraftState } from "@/hooks/use-draft";
 import { useRef, useState } from "react";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
@@ -26,13 +28,12 @@ import { createLocalId } from "@/lib/create-local-id";
 import {
   canSelectPrototypePermit,
   getPrototypePermitAvailability,
-  getPrototypePermitDateRange,
 } from "@/domain/fishing-permits/get-prototype-permit-availability";
 
 export type CheckoutStep = "buyer" | "review" | "payment" | "confirmation";
 
 function todayInNorway() {
-  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Oslo" }).format(new Date());
+  return getAppDate();
 }
 
 export function usePermitCheckoutController({
@@ -58,17 +59,20 @@ export function usePermitCheckoutController({
   initialReceipt?: PermitReceipt;
   onReceipt?: (receipt: PermitReceipt) => void;
 }) {
+  const draft = useDraft();
   const { language } = useLanguage();
-  const [step, setStep] = useState<CheckoutStep>(initialReceipt ? "confirmation" : "buyer");
+  const [step, setStep] = useDraftState<CheckoutStep>(
+    "step",
+    initialReceipt ? "confirmation" : "buyer",
+  );
   const [selectedDate] = useState(() => {
     if (initialSelectedDate) return initialSelectedDate;
-    const today = todayInNorway();
-    const range = getPrototypePermitDateRange(product);
-    if (product.type === "season" || today < range.startsOn) return range.startsOn;
-    if (today > range.endsOn) return range.endsOn;
-    return today;
+    return todayInNorway();
   });
-  const [form, setForm] = useState<PermitCheckoutForm>(initialForm ?? emptyPermitCheckoutForm);
+  const [form, setForm] = useDraftState<PermitCheckoutForm>(
+    "form",
+    draft?.discarded ? emptyPermitCheckoutForm : (initialForm ?? emptyPermitCheckoutForm),
+  );
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receipt, setReceipt] = useState<{
@@ -132,7 +136,7 @@ export function usePermitCheckoutController({
     try {
       const key = JSON.stringify([product.id, selectedDate, form]);
       if (attempt.current?.key !== key)
-        attempt.current = { key, now: Date.now(), id: `permit-purchase-${createLocalId()}` };
+        attempt.current = { key, now: getAppNow(), id: `permit-purchase-${createLocalId()}` };
       const { now, id: purchaseId } = attempt.current;
       const orderNumber = `EF-${String(now).slice(-8)}`;
       const paymentReference = `EF-TEST-${now}`;
@@ -194,11 +198,12 @@ export function usePermitCheckoutController({
         ...approvedPurchase,
         status: "completed",
         documentId: document.id,
-        completedAt: Date.now(),
+        completedAt: getAppNow(),
       };
       const completed = savePurchase(completedPurchase);
       if (!completed.ok) return paymentError(completed.error);
       const receipt = { document, purchase: completedPurchase };
+      await draft?.complete();
       setReceipt(receipt);
       onReceipt?.(receipt);
       setError("");

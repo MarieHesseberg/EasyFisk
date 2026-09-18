@@ -1,4 +1,5 @@
 "use client";
+import { DraftScope, DraftControls } from "@/hooks/use-draft";
 
 import type { RefObject } from "react";
 import type { CatchRecord } from "@/domain/catches/catch";
@@ -13,7 +14,7 @@ import { SessionDetailsStep } from "@/features/history/past-session/session-deta
 import { useDialogAccessibility } from "@/hooks/use-dialog-accessibility";
 import { useLanguage } from "@/components/localization/language-provider";
 
-export function PastSessionForm({
+function PastSessionFormContent({
   onClose,
   onSave,
   existingCatches,
@@ -47,6 +48,7 @@ export function PastSessionForm({
           >
             ×
           </button>
+          {step < 4 && <DraftControls disabled={controller.state.isSubmitting} />}
           <div className="steps four">
             <span className={step >= 1 ? "on" : ""}>1</span>
             <i />
@@ -63,5 +65,14 @@ export function PastSessionForm({
         </div>
       </div>
     </AppDialogPortal>
+  );
+}
+
+export function PastSessionForm(props: Parameters<typeof PastSessionFormContent>[0]) {
+  const id = "past-session";
+  return (
+    <DraftScope key={id} id={id}>
+      <PastSessionFormContent {...props} />
+    </DraftScope>
   );
 }

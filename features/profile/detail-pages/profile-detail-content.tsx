@@ -21,7 +21,7 @@ export function ProfileDetailContent({
   onGoHome,
   paymentOutcome,
 }: {
-  destination: Exclude<DetailDestination, "feedback">;
+  destination: Exclude<DetailDestination, "feedback" | "messages">;
   testReadiness?: DocumentReadiness;
   openPermitShop?: () => void;
   selectedZone?: ZoneId;

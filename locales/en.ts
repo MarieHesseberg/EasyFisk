@@ -1,5 +1,37 @@
 import type { TranslationCatalog } from "./no.ts";
 export const en = {
+  "draft.loading": "Loading draft …",
+  "draft.saving": "Saving draft …",
+  "draft.saved": "Draft saved",
+  "draft.error": "Could not save the draft. Keep this page open to retain your details.",
+  "draft.discard": "Discard draft",
+
+  "feedback.locationDenied":
+    "Location access was denied. You can save the report without a location.",
+  "feedback.locationInsecure":
+    "Location requires a secure connection (HTTPS). You can save the report without a location.",
+  "feedback.locationError":
+    "Could not get your location. Try again, or save the report without a location.",
+  "feedback.openHistory": "Open My reports",
+
+  "feedback.mine": "My reports",
+  "feedback.new": "New report",
+  "feedback.received": "Received – simulated",
+  "feedback.localNotice":
+    "Saved on this device. Receipt is simulated; the report has not been sent to the river association.",
+  "feedback.savedAt": "Saved",
+  "feedback.loading": "Loading reports …",
+  "feedback.loadError": "Could not load reports. Try again.",
+  "feedback.saveError": "Could not save the report. Your details have been kept. Try again.",
+  "feedback.empty": "You have no saved reports yet.",
+  "feedback.emptyImage": "The image is empty. Choose another image.",
+  "feedback.imageAlt": "Attached image",
+  "feedback.addPosition": "Add my location",
+  "feedback.removePosition": "Remove location",
+  "feedback.historyDescription": "View reports and receipt status",
+
+  "permit.pastDate": "This date has passed. Choose a new fishing date.",
+  "permit.salesClosed": "Permit sales have closed for the season.",
   "payment.vipps": "Vipps",
   "payment.payWithVipps": "Pay with Vipps",
   "payment.approveTitle": "Approve payment",
@@ -76,10 +108,10 @@ export const en = {
     "Your browser requires a secure address (HTTPS) for location access. Choose a zone manually here.",
   "settings.autoSave": "Changes are saved automatically on this device.",
   "prototype.localOnly": "Saved on this device. Not sent to the river association.",
-  "prototype.feedbackComplete": "Report reviewed",
+  "prototype.feedbackComplete": "Report saved",
   "prototype.feedbackNotice": "No report has been sent or saved.",
   "prototype.feedbackConsent": "I confirm that the information is correct.",
-  "prototype.testMessage": "Complete report",
+  "prototype.testMessage": "Save report",
   "prototype.saveCatch": "Save catch",
   "prototype.saveActualCatch": "Save actual catch",
   "prototype.saving": "Saving …",

@@ -59,6 +59,16 @@ export function ProfileScreen({
         <Icon name="chevron" />
       </button>
       <div className="menu-list">
+        <button onClick={() => setDetail("messages")}>
+          <span>
+            <Icon name="bell" />
+          </span>
+          <p>
+            <b>{t("feedback.mine")}</b>
+            <small>{t("feedback.historyDescription")}</small>
+          </p>
+          <Icon name="chevron" size={18} />
+        </button>
         <button onClick={() => setDetail("control-card")}>
           <span>
             <Icon name="shield" />

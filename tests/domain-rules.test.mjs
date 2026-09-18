@@ -75,7 +75,12 @@ test("simulert korttilgjengelighet følger valgt dato og fiskesesong", () => {
   };
 
   const beforeSeason = getPrototypePermitAvailability(product, "2026-05-31");
-  const duringSeason = getPrototypePermitAvailability(product, "2026-07-15");
+  const duringSeason = getPrototypePermitAvailability(
+    product,
+    "2026-07-15",
+    "no",
+    Date.parse("2026-07-15T12:00:00+02:00"),
+  );
   const afterSeason = getPrototypePermitAvailability(product, "2026-09-01");
   const futureSale = getPrototypePermitAvailability(product, "2027-06-01");
 

@@ -1,0 +1,21 @@
+.draft-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-primary-dark);
+}
+.draft-controls button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  font: inherit;
+  font-weight: 600;
+}

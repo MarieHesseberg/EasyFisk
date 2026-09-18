@@ -192,7 +192,7 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
   await dialog.getByRole("button", { name: "Review report" }).click();
   await expect(dialog.getByRole("heading", { name: "Is the information correct?" })).toBeVisible();
   await dialog.getByRole("checkbox").check();
-  await dialog.getByRole("button", { name: "Complete report" }).click();
+  await dialog.getByRole("button", { name: "Save report" }).click();
   await expect(dialog.getByRole("heading", { name: "Thank you for reporting this" })).toBeVisible();
   await expect(dialog).not.toContainText(
     /MELDINGEN|meldte fra|REFERANSE|Send en ny melding|KATEGORI|BESKRIVELSE|POSISJON/,

@@ -1,3 +1,4 @@
+import { getAppDate, getAppNow } from "../shared/app-clock.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 import { getZoneSeasonEnd } from "../zones/zone-rules.ts";
 import { t, translateContent, type AppLanguage } from "../../locales/index.ts";
@@ -34,8 +35,18 @@ export function getPrototypePermitAvailability(
   product: PrototypePermitProduct,
   fishingDate: string,
   language: AppLanguage = "no",
+  now = getAppNow(),
 ): PrototypePermitAvailability {
   const result = getAvailability(product, fishingDate);
+  const today = getAppDate(now);
+  const seasonEnd = getPrototypePermitDateRange(product).endsOn;
+  if (
+    !["no-fishing-date", "not-on-sale"].includes(result.status) &&
+    (seasonEnd < today || (product.type !== "season" && fishingDate < today))
+  )
+    return { status: "no-fishing-date", label: t(language, "permit.pastDate"), remainingUnits: 0 };
+  if (today >= activeFishingRules.currentNotice.publishedDate)
+    return { status: "not-on-sale", label: t(language, "permit.salesClosed"), remainingUnits: 0 };
   if (language === "no") return result;
   const season = getPrototypePermitDateRange(product);
   let label = translateContent(language, result.label);

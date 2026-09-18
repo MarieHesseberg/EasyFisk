@@ -6,6 +6,7 @@ export const detailTitles: Record<DetailDestination, string> = {
   disinfection: "Desinfisering",
   fee: "Statlig fiskeravgift",
   notifications: "Varsler og stengninger",
+  messages: "feedback.mine",
   feedback: "Tilbakemelding",
   "control-card": "Kontrollkort",
   "profile-privacy": "Profil og personvern",

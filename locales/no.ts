@@ -1,4 +1,35 @@
 export const no = {
+  "draft.loading": "Henter kladd …",
+  "draft.saving": "Lagrer kladd …",
+  "draft.saved": "Kladd lagret",
+  "draft.error": "Kunne ikke lagre kladden. Hold siden åpen for å beholde opplysningene.",
+  "draft.discard": "Forkast kladd",
+
+  "feedback.locationDenied": "Posisjonstilgang ble avslått. Du kan lagre meldingen uten posisjon.",
+  "feedback.locationInsecure":
+    "Posisjon krever en sikker tilkobling (HTTPS). Du kan lagre meldingen uten posisjon.",
+  "feedback.locationError":
+    "Kunne ikke hente posisjonen. Prøv igjen, eller lagre meldingen uten posisjon.",
+  "feedback.openHistory": "Åpne Mine meldinger",
+
+  "feedback.mine": "Mine meldinger",
+  "feedback.new": "Ny melding",
+  "feedback.received": "Mottatt – simulert",
+  "feedback.localNotice":
+    "Lagret på denne enheten. Mottaksstatusen er simulert; meldingen er ikke sendt til elveeigarlaget.",
+  "feedback.savedAt": "Lagret",
+  "feedback.loading": "Henter meldingene …",
+  "feedback.loadError": "Kunne ikke hente meldingene. Prøv igjen.",
+  "feedback.saveError": "Kunne ikke lagre meldingen. Opplysningene er bevart. Prøv igjen.",
+  "feedback.empty": "Du har ingen lagrede meldinger ennå.",
+  "feedback.emptyImage": "Bildet er tomt. Velg et annet bilde.",
+  "feedback.imageAlt": "Vedlagt bilde",
+  "feedback.addPosition": "Legg til min posisjon",
+  "feedback.removePosition": "Fjern posisjon",
+  "feedback.historyDescription": "Se meldinger og mottaksstatus",
+
+  "permit.pastDate": "Datoen er passert. Velg en ny fiskedato.",
+  "permit.salesClosed": "Fiskekortsalget er avsluttet for sesongen.",
   "payment.vipps": "Vipps",
   "payment.payWithVipps": "Betal med Vipps",
   "payment.approveTitle": "Godkjenn betaling",
@@ -74,10 +105,10 @@ export const no = {
     "Nettleseren krever en sikker adresse (HTTPS) for posisjon. Velg sone manuelt her.",
   "settings.autoSave": "Endringer lagres automatisk på denne enheten.",
   "prototype.localOnly": "Lagret på denne enheten. Ikke sendt til elveeigarlaget.",
-  "prototype.feedbackComplete": "Meldingen er gjennomgått",
+  "prototype.feedbackComplete": "Meldingen er lagret",
   "prototype.feedbackNotice": "Ingen melding er sendt eller lagret.",
   "prototype.feedbackConsent": "Jeg bekrefter at opplysningene er riktige.",
-  "prototype.testMessage": "Fullfør melding",
+  "prototype.testMessage": "Lagre melding",
   "prototype.saveCatch": "Lagre fangst",
   "prototype.saveActualCatch": "Lagre faktisk fangst",
   "prototype.saving": "Lagrer …",

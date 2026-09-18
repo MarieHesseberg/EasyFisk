@@ -1,0 +1,63 @@
+.rules-disclosure {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-content);
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.rules-disclosure > summary {
+  padding: 16px;
+  min-height: 52px;
+  cursor: pointer;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-menu-primary);
+}
+.rules-disclosure > summary:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+  border-radius: var(--radius-content);
+}
+.rules-disclosure[open] > summary {
+  border-bottom: 1px solid var(--color-border);
+}
+.rules-disclosure > :not(summary) {
+  margin: 16px;
+}
+.personal-rule-details a {
+  display: block;
+  min-height: 44px;
+  color: var(--color-primary-dark);
+  text-underline-offset: 3px;
+}
+.personal-local-rules {
+  padding: 16px;
+  margin-block: 16px;
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-content);
+  background: var(--color-warning-surface-pale);
+  color: var(--color-warning-text);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.personal-local-rules p {
+  margin: 8px 0 0;
+}
+.personal-reporting-rule {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.rule-updates .rule-version,
+.rule-updates .season-alert,
+.rule-updates .rule-sources {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--color-text);
+}
+.rule-updates .rule-version small,
+.rule-updates .rule-version p {
+  color: var(--color-text-muted);
+}

@@ -1,5 +1,7 @@
 "use client";
+import { getAppNow } from "@/domain/shared/app-clock";
 
+import { useDraft, useDraftState } from "@/hooks/use-draft";
 import { useState } from "react";
 
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
@@ -24,11 +26,12 @@ export function usePastSessionController({
   existingCatches: CatchRecord[];
   onSave: (record: SessionRecord, catches?: CatchRecord[]) => AsyncOperationResult<unknown>;
 }) {
+  const draft = useDraft();
   const zones = fishingContentRepository.getZones();
-  const [openedAt] = useState(() => Date.now());
+  const [openedAt] = useDraftState("openedAt", () => getAppNow());
   const today = getNorwegianCalendarDate(openedAt);
   const suggestedPastDate = getNorwegianCalendarDate(openedAt - 24 * 60 * 60 * 1000);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useDraftState("step", 1);
   const sessionForm = useFormFields<{
     caught: boolean;
     date: string;
@@ -36,14 +39,17 @@ export function usePastSessionController({
     subzone: string;
     to: string;
     zone: ZoneId;
-  }>({
-    caught: false,
-    date: suggestedPastDate,
-    from: "17:00",
-    subzone: "",
-    to: "19:00",
-    zone: fishingContentRepository.getSuggestedZoneId(),
-  });
+  }>(
+    {
+      caught: false,
+      date: suggestedPastDate,
+      from: "17:00",
+      subzone: "",
+      to: "19:00",
+      zone: fishingContentRepository.getSuggestedZoneId(),
+    },
+    "sessionFields",
+  );
   const catchForm = useFormFields<{
     catchAt: string;
     comment: string;
@@ -51,17 +57,20 @@ export function usePastSessionController({
     outcome: CatchOutcome;
     species: FishSpecies;
     weight: string;
-  }>({
-    catchAt: "18:00",
-    comment: "",
-    length: "",
-    outcome: "Gjenutsatt",
-    species: "Laks",
-    weight: "",
-  });
+  }>(
+    {
+      catchAt: "18:00",
+      comment: "",
+      length: "",
+      outcome: "Gjenutsatt",
+      species: "Laks",
+      weight: "",
+    },
+    "catchFields",
+  );
   const image = useImageSelection({ includeData: true });
   const submission = useFormSubmission("Kunne ikke lagre fisketuren. Prøv igjen.");
-  const [reports, setReports] = useState<CatchRecord[]>([]);
+  const [reports, setReports] = useDraftState<CatchRecord[]>("reports", []);
   const [touched, setTouched] = useState(false);
   const { caught, date, from, subzone, to, zone } = sessionForm.fields;
   const { catchAt, comment, length, outcome, species, weight } = catchForm.fields;
@@ -119,7 +128,10 @@ export function usePastSessionController({
     const succeeded = await submission.run(() =>
       onSave(createSessionRecord(start, end, zoneName, result), reports),
     );
-    if (succeeded) setStep(4);
+    if (succeeded) {
+      await draft?.complete();
+      setStep(4);
+    }
   }
 
   function removeCatch(id: string) {
