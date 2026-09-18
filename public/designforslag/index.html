@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EasyFisk – tre stilforslag</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f7f9fa;
+        color: #172c36;
+        font:
+          17px/1.6 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1100px;
+        margin: auto;
+        padding: 24px 16px 64px;
+      }
+      h1 {
+        font-size: clamp(28px, 5vw, 40px);
+        line-height: 1.2;
+      }
+      h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      p {
+        max-width: 65ch;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 24px 0;
+      }
+      a {
+        color: #155e75;
+        text-underline-offset: 4px;
+      }
+      nav a,
+      .full {
+        display: inline-block;
+        padding: 12px 16px;
+        min-height: 48px;
+        border: 1px solid #52616a;
+        border-radius: 12px;
+        background: white;
+      }
+      a:focus-visible {
+        outline: 3px solid #234dc3;
+        outline-offset: 4px;
+      }
+      section {
+        margin: 36px 0;
+        scroll-margin-top: 16px;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 16px 0;
+        border-radius: 12px;
+      }
+      .note {
+        color: #52616a;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Tre stilforslag for EasyFisk</h1>
+      <p>
+        Hvert bilde viser hjemskjermen og kjøpssiden. Dette er forslag du kan velge mellom. Appens
+        utseende er ikke endret.
+      </p>
+      <p>Trykk på et bilde for å åpne det i full størrelse. Du kan zoome med to fingre.</p>
+      <nav aria-label="Stilforslag">
+        <a href="#a">A · Elveblå</a><a href="#b">B · Natur</a><a href="#c">C · Lys</a>
+      </nav>
+      <section id="a">
+        <h2>A – Klar elveblå</h2>
+        <p>Rolig petrolblå, lyse flater og tydelig typografi. Anbefalt videreføring av EasyFisk.</p>
+        <a href="A-klar-elvebla.png"
+          ><img
+            src="A-klar-elvebla.png"
+            width="1536"
+            height="1024"
+            alt="Forslag A: hjem og kjøpsside med petrolblå hovedknapper, lyse flater og enkle handlingsrader."
+        /></a>
+        <a class="full" href="A-klar-elvebla.png">Åpne bilde A i full størrelse</a>
+      </section>
+      <section id="b">
+        <h2>B – Nordisk natur</h2>
+        <p>Skoggrønt, varm hvit og mykere former gir et tydeligere friluftspreg.</p>
+        <a href="B-nordisk-natur.png"
+          ><img
+            src="B-nordisk-natur.png"
+            width="1536"
+            height="1024"
+            alt="Forslag B: hjem og kjøpsside med skoggrønne knapper, varm hvit bakgrunn og myke former."
+        /></a>
+        <a class="full" href="B-nordisk-natur.png">Åpne bilde B i full størrelse</a>
+      </section>
+      <section id="c">
+        <h2>C – Presis og lys</h2>
+        <p>Hvit, koksgrå og klar blå. Et strammere og mer nøytralt uttrykk.</p>
+        <a href="C-presis-og-lys.png"
+          ><img
+            src="C-presis-og-lys.png"
+            width="1536"
+            height="1024"
+            alt="Forslag C: hjem og kjøpsside med klare blå knapper, hvit bakgrunn og nøytrale grå grupperinger."
+        /></a>
+        <a class="full" href="C-presis-og-lys.png">Åpne bilde C i full størrelse</a>
+      </section>
+      <p class="note">
+        Konseptbilder laget med KI. Datoer og priser er eksempelinnhold. Endelig tilgjengelighet og
+        oppførsel kontrolleres når valgt stil implementeres.
+      </p>
+    </main>
+  </body>
+</html>
