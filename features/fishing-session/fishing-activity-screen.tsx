@@ -5,6 +5,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
 import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import type { SessionRecord } from "@/domain/sessions/session";
+import { operationSucceeded } from "@/domain/shared/operation-result";
 import type { AsyncOperationResult } from "@/domain/shared/operation-result";
 import { CatchReportDetail } from "@/features/catch-report/catch-report-detail";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
@@ -45,7 +46,7 @@ export function FishingActivityScreen({
   onCorrectCatch: (
     id: string,
     note: string | CatchEdit,
-  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
+  ) => import("@/domain/shared/operation-result").AsyncOperationResult<void> | void;
   onShowRules: () => void;
   elapsed: number;
   startTime: number | null;
@@ -131,11 +132,11 @@ export function FishingActivityScreen({
         <CatchReportDetail
           report={selectedCatch}
           onClose={() => setSelectedCatch(null)}
-          onCorrect={(note) => {
-            const result = onCorrectCatch(selectedCatch.id, note);
+          onCorrect={async (note) => {
+            const result = await onCorrectCatch(selectedCatch.id, note);
             if (result && !result.ok) return result;
             setSelectedCatch(correctCatchRecord(selectedCatch, note));
-            return result;
+            return result ?? operationSucceeded(undefined);
           }}
         />
       )}

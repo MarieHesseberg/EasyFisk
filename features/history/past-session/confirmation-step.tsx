@@ -24,6 +24,7 @@ export function ConfirmationStep({
         <small>{t("copy.kt.2f297d2")}</small>
         <b>
           {new Intl.DateTimeFormat(selectLocalized(language, "nb-NO", "en-GB"), {
+            timeZone: "Europe/Oslo",
             day: "2-digit",
             month: "long",
           }).format(new Date(start))}{" "}

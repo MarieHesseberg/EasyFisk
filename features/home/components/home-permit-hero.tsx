@@ -1,3 +1,4 @@
+import { parseRiverDateTime } from "@/domain/shared/river-time";
 import Image from "next/image";
 import river from "@/public/illustrations/river.png";
 import landscape from "@/public/illustrations/permit-landscape.png";
@@ -37,8 +38,8 @@ export function HomePermitHero({
     selectLocalized(language, "Mitt fiskekort", "My fishing permit")
   ).split(/\s*·\s*/);
 
-  const startsAt = new Date(permit?.values.startsAt ?? "").getTime();
-  const endsAt = new Date(permit?.values.endsAt ?? "").getTime();
+  const startsAt = parseRiverDateTime(permit?.values.startsAt ?? "");
+  const endsAt = parseRiverDateTime(permit?.values.endsAt ?? "");
   const badge = !permit
     ? selectLocalized(language, "Testvisning", "Test preview")
     : startsAt > now

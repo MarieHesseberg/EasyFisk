@@ -1,7 +1,11 @@
 "use client";
+import { createId } from "@/domain/shared/create-id";
+import { zoneIdFromLegacyLabel } from "@/domain/zones/zone-identity";
 import { getAppNow } from "@/domain/shared/app-clock";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import type { AsyncRepository } from "@/data/contracts/async-repository";
+import { technicalOperationFailed } from "@/domain/shared/operation-result";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
 import type { CatchEdit, CatchRecord } from "@/domain/catches/catch";
 import { completeCatchRecord } from "@/domain/catches/complete-catch-record";
@@ -9,33 +13,46 @@ import type { SessionRecord } from "@/domain/sessions/session";
 import { operationFailed, operationSucceeded } from "@/domain/shared/operation-result";
 import { logger } from "@/lib/logger";
 import type { CatchImageRepository } from "@/data/contracts/catch-image-repository";
-import { catchImageRepository } from "@/data/repositories/catch-images";
+import { useAppServices } from "@/data/runtime/services-provider";
 
 export function useFishingLogController(
-  repository: FishingLogRepository,
-  imageRepository: CatchImageRepository = catchImageRepository,
+  repository: FishingLogRepository | AsyncRepository<FishingLogRepository>,
+  images?: CatchImageRepository,
 ) {
+  const services = useAppServices();
+  const imageRepository = images ?? services.catchImages;
+  const generation = useRef(0);
+  const writing = useRef(false);
+  const [logLoading, setLoading] = useState(true);
+  const [logError, setError] = useState("");
   const [catches, setCatches] = useState<CatchRecord[]>([]);
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
 
   useEffect(() => {
     let isMounted = true;
+    const request = ++generation.current;
     queueMicrotask(() => {
-      if (!isMounted) return;
-      const storedCatches = repository.listCatches();
-      setCatches(storedCatches);
-      setSessions(repository.listSessions());
-      void hydrateCatchImages(storedCatches, imageRepository).then((hydrated) => {
-        if (!isMounted) return;
-        const hydratedById = new Map(hydrated.map((record) => [record.id, record]));
-        setCatches((current) =>
-          current.map((record) => {
-            const stored = hydratedById.get(record.id);
-            return stored?.imageData ? { ...record, imageData: stored.imageData } : record;
-          }),
-        );
-      });
+      if (isMounted) setLoading(true);
     });
+    Promise.all([
+      Promise.resolve().then(() => repository.listCatches()),
+      Promise.resolve().then(() => repository.listSessions()),
+    ])
+      .then(async ([storedCatches, storedSessions]) => {
+        if (!isMounted || request !== generation.current) return;
+        setError("");
+        setCatches(storedCatches);
+        setSessions(storedSessions);
+        const hydrated = await hydrateCatchImages(storedCatches, imageRepository);
+        if (!isMounted || request !== generation.current) return;
+        setCatches(hydrated);
+      })
+      .catch(() => {
+        if (isMounted && request === generation.current) setError("error.storage.read");
+      })
+      .finally(() => {
+        if (isMounted && request === generation.current) setLoading(false);
+      });
     return () => {
       isMounted = false;
     };
@@ -43,10 +60,10 @@ export function useFishingLogController(
 
   async function saveCatch(record: CatchRecord) {
     const submittedAt = getAppNow();
-    const completed = completeCatchRecord(record, `ME-${submittedAt}`, submittedAt);
+    const completed = completeCatchRecord(record, `ME-${createId()}`, submittedAt);
     const imageResult = await saveCatchImages([completed], imageRepository);
     if (!imageResult.ok) return imageResult;
-    const result = repository.saveCatch(completed);
+    const result = await captureWrite(() => repository.saveCatch(completed));
     if (!result.ok) {
       await removeCatchImages(imageResult.value, imageRepository);
       logger.error(result.error, { cause: result.cause });
@@ -66,16 +83,22 @@ export function useFishingLogController(
     clearActiveSession = true,
   ) {
     const submittedAt = getAppNow();
-    const completed = records.map((record, index) =>
+    const completed = records.map((record) =>
       completeCatchRecord(
-        record,
-        record.id === "pending" ? `ME-${submittedAt}-${index + 1}` : record.id,
+        {
+          ...record,
+          sessionId: session.id,
+          zoneId: session.zoneId ?? zoneIdFromLegacyLabel(record.zone),
+        },
+        record.id === "pending" ? `ME-${createId()}` : record.id,
         submittedAt,
       ),
     );
     const imageResult = await saveCatchImages(completed, imageRepository);
     if (!imageResult.ok) return imageResult;
-    const result = repository.saveCompletedSession(session, completed, clearActiveSession);
+    const result = await captureWrite(() =>
+      repository.saveCompletedSession(session, completed, clearActiveSession),
+    );
     if (!result.ok) {
       await removeCatchImages(imageResult.value, imageRepository);
       logger.error(result.error, { cause: result.cause });
@@ -86,25 +109,45 @@ export function useFishingLogController(
     return operationSucceeded(completed);
   }
 
-  function correctCatch(id: string, note: string | CatchEdit) {
-    const result = repository.updateCatchCorrection(id, note);
+  async function correctCatch(id: string, note: string | CatchEdit) {
+    const result = await repository.updateCatchCorrection(id, note);
     if (!result.ok) {
       logger.error(result.error, { cause: result.cause });
       return result;
     }
+    const stored = await repository.listCatches();
     setCatches((current) =>
       current.map((record) =>
-        record.id === id
-          ? { ...record, ...repository.listCatches().find((saved) => saved.id === id) }
-          : record,
+        record.id === id ? { ...record, ...stored.find((saved) => saved.id === id) } : record,
       ),
     );
     return result;
   }
 
+  async function guarded<T>(action: () => Promise<T>) {
+    if (logLoading || logError) return operationFailed("error.storage.read");
+    if (writing.current) return operationFailed("error.storage.write");
+    writing.current = true;
+    generation.current += 1;
+    try {
+      return await action();
+    } catch (cause) {
+      return technicalOperationFailed("storage.write", cause);
+    } finally {
+      writing.current = false;
+    }
+  }
   return {
-    state: { catches, lastSession: sessions[0] ?? null, sessions },
-    actions: { correctCatch, saveCatch, saveCompletedSession, savePastSession },
+    state: { logLoading, logError, catches, lastSession: sessions[0] ?? null, sessions },
+    actions: {
+      correctCatch: (...args: Parameters<typeof correctCatch>) =>
+        guarded(() => correctCatch(...args)),
+      saveCatch: (...args: Parameters<typeof saveCatch>) => guarded(() => saveCatch(...args)),
+      saveCompletedSession: (...args: Parameters<typeof saveCompletedSession>) =>
+        guarded(() => saveCompletedSession(...args)),
+      savePastSession: (...args: Parameters<typeof savePastSession>) =>
+        guarded(() => savePastSession(...args)),
+    },
   };
 }
 
@@ -137,4 +180,14 @@ async function saveCatchImages(records: CatchRecord[], repository: CatchImageRep
 
 async function removeCatchImages(ids: string[], repository: CatchImageRepository) {
   await Promise.all(ids.map((id) => repository.remove(id)));
+}
+
+async function captureWrite(
+  action: () => import("@/domain/shared/operation-result").AsyncOperationResult<void>,
+) {
+  try {
+    return await action();
+  } catch (cause) {
+    return technicalOperationFailed("storage.write", cause);
+  }
 }

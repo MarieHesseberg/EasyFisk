@@ -1,4 +1,6 @@
 "use client";
+import { parseRiverDateTime } from "@/domain/shared/river-time";
+
 import { usePermitPurchases } from "./use-permit-purchases";
 import { emptyPermitCheckoutForm } from "@/domain/fishing-permits/permit-purchase";
 import { DraftScope, DraftControls } from "@/hooks/use-draft";
@@ -50,7 +52,9 @@ function PermitCheckoutContent({
   back: () => void;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   saveMany?: (documents: FishingDocument[]) => Promise<OperationResult<void>>;
-  savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
+  savePurchase: (
+    purchase: PermitPurchase,
+  ) => OperationResult<void> | Promise<OperationResult<void>>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   onOpenPermits?: () => void;
   onGoHome?: () => void;
@@ -98,7 +102,9 @@ function PermitCheckoutContent({
   }
   const readiness = getDocumentReadiness(
     documents,
-    validity ? Date.parse(validity.startsAt) : Date.parse(`${checkout.selectedDate}T12:00:00`),
+    validity
+      ? parseRiverDateTime(validity.startsAt)
+      : parseRiverDateTime(`${checkout.selectedDate}T12:00:00`),
     product.zoneId,
   ).valid;
   return (

@@ -19,12 +19,15 @@ export function createTestPermitDocument(
   product: PrototypePermitProduct,
   selectedDate: string,
   now = getAppNow(),
-  purchase?: Pick<PermitPurchase, "id" | "buyer" | "fisher">,
+  purchase?: Pick<PermitPurchase, "id" | "buyer" | "fisher" | "rulesVersion">,
 ): FishingDocument {
   const { startsAt, endsAt } = calculatePermitValidity(product, selectedDate);
   return {
     id: `${testPurchaseDocumentPrefix}${product.id}-${purchase?.id ?? now}-${selectedDate}`,
     kind: "permit",
+    zoneId: product.zoneId,
+    productId: product.id,
+    rulesVersion: purchase?.rulesVersion,
     updatedAt: now,
     values: {
       holder: (purchase?.fisher ?? purchase?.buyer)?.fullName ?? "Fisker",

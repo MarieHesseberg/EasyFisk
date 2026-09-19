@@ -1,4 +1,6 @@
 "use client";
+import { catchBelongsToSession } from "@/domain/sessions/catch-belongs-to-session";
+import { riverDate } from "@/domain/shared/river-time";
 import { localizeZoneName } from "@/lib/localize-zone-name";
 import { localizeSessionResult } from "@/lib/localize-session-result";
 
@@ -24,6 +26,7 @@ export function SessionHistoryList({
 }) {
   const { language, t } = useLanguage();
   const monthFormatter = new Intl.DateTimeFormat(selectLocalized(language, "nb-NO", "en-GB"), {
+    timeZone: "Europe/Oslo",
     month: "short",
   });
   const [selectedSession, setSelectedSession] = useState<SessionRecord | null>(null);
@@ -51,7 +54,7 @@ export function SessionHistoryList({
           return (
             <FishingHistoryCard
               key={session.id}
-              day={String(date.getDate()).padStart(2, "0")}
+              day={riverDate(session.end).slice(8, 10)}
               month={monthFormatter.format(date).replace(".", "").toUpperCase()}
               title={localizeZoneName(session.zone, language)}
               time={`${formatClock(session.start, language)}–${formatClock(session.end, language)} · ${formatLongDuration(session.duration, language)}`}
@@ -65,7 +68,7 @@ export function SessionHistoryList({
       {selectedSession && (
         <SessionHistoryDetail
           session={selectedSession}
-          catches={catches.filter((record) => record.sessionStart === selectedSession.start)}
+          catches={catches.filter((record) => catchBelongsToSession(record, selectedSession))}
           onClose={() => setSelectedSession(null)}
         />
       )}

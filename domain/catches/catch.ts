@@ -9,11 +9,13 @@ export type CatchRecord = {
   caughtAt: number;
   submittedAt: number;
   sessionStart: number;
+  sessionId?: string;
   species: FishSpecies;
   result: CatchOutcome;
   length: number;
   weight: number;
   zone: string;
+  zoneId?: import("../zones/zone").ZoneId;
   violation: boolean;
   late: boolean;
   imageName?: string;

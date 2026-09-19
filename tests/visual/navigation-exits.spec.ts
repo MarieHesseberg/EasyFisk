@@ -1,3 +1,4 @@
+import { appClockStart } from "../../data/prototype/demo-clock";
 import { expect, test, type Page } from "@playwright/test";
 
 const tabs = ["Hjem", "Kart", "Fiskekort", "Regler", "Mer"];
@@ -55,16 +56,18 @@ test("past trip close, keyboard exit and bottom navigation work", async ({ page 
 });
 
 test("catch close works at every step and navigation keeps the active trip", async ({ page }) => {
-  await page.addInitScript(() =>
-    localStorage.setItem(
-      "easyfisk:fishing-log:v1",
-      JSON.stringify({
-        version: 2,
-        activeSession: { startTime: Date.now() - 60000, zone: 3 },
-        sessions: [],
-        catches: [],
-      }),
-    ),
+  await page.addInitScript(
+    (now) =>
+      localStorage.setItem(
+        "easyfisk:fishing-log:v1",
+        JSON.stringify({
+          version: 2,
+          activeSession: { startTime: now - 60000, zone: 3 },
+          sessions: [],
+          catches: [],
+        }),
+      ),
+    appClockStart,
   );
   await page.goto("/");
   for (const step of [1, 2, 3]) {
@@ -80,38 +83,40 @@ test("catch close works at every step and navigation keeps the active trip", asy
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
   await tab(page, "Regler");
   await tab(page, "Hjem");
-  await expect(page.locator(".active-session-compact")).toBeVisible();
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await expect(page.locator(".home-active-trip")).toBeVisible();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Lukk", exact: true }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await tab(page, "Kart");
   await tab(page, "Hjem");
-  await expect(page.locator(".active-session-compact")).toBeVisible();
+  await expect(page.locator(".home-active-trip")).toBeVisible();
 });
 
 test("missing catch before finish can be dismissed without ending the trip", async ({ page }) => {
-  await page.addInitScript(() =>
-    localStorage.setItem(
-      "easyfisk:fishing-log:v1",
-      JSON.stringify({
-        version: 2,
-        activeSession: { startTime: Date.now() - 60000, zone: 3 },
-        sessions: [],
-        catches: [],
-      }),
-    ),
+  await page.addInitScript(
+    (now) =>
+      localStorage.setItem(
+        "easyfisk:fishing-log:v1",
+        JSON.stringify({
+          version: 2,
+          activeSession: { startTime: now - 60000, zone: 3 },
+          sessions: [],
+          catches: [],
+        }),
+      ),
+    appClockStart,
   );
   await page.goto("/");
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Registrer manglende fangst", exact: true }).click();
   await page.getByRole("button", { name: "Lukk fangstrapport" }).click();
   await expect(page.getByRole("dialog", { name: "Avslutt økt" })).toBeVisible();
   await page.getByRole("button", { name: "Registrer manglende fangst", exact: true }).click();
   await tab(page, "Hjem");
-  await expect(page.locator(".active-session-compact")).toBeVisible();
+  await expect(page.locator(".home-active-trip")).toBeVisible();
   await page.reload();
-  await expect(page.locator(".active-session-compact")).toBeVisible();
+  await expect(page.locator(".home-active-trip")).toBeVisible();
 });
 
 test("map and notification close buttons respond to actual clicks", async ({ page }) => {
@@ -120,6 +125,8 @@ test("map and notification close buttons respond to actual clicks", async ({ pag
   await page.getByRole("button", { name: "Lukk varsler" }).click();
   await expect(page.locator(".header-alert-panel")).toHaveCount(0);
   await tab(page, "Kart");
+  // Vent på Leaflets klikkbare soner, ikke bare Reacts tomme kartbeholder.
+  await expect(page.locator(".leaflet-map-canvas .leaflet-interactive")).toHaveCount(4);
   await page.getByRole("button", { name: "Sone 2", exact: true }).click();
   await page.locator(".leaflet-map-canvas").click({ position: { x: 20, y: 30 } });
   await expect(page.locator(".map-zone-popup")).toHaveCount(0);

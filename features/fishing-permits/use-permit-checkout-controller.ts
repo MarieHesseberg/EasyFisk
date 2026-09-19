@@ -1,10 +1,10 @@
 "use client";
-import { createLocalStoragePermitPurchaseRepository } from "@/data/local-storage/create-local-storage-permit-purchase-repository";
+import { useAppServices } from "@/data/runtime/services-provider";
 import {
   acceptCurrentRules,
   hasAcceptedCurrentRules,
   currentRuleVersion,
-} from "@/domain/fishing-rules/rule-acceptance";
+} from "@/application/rules/rule-acceptance";
 import { readProfile } from "@/features/profile/local-profile";
 import { getAppNow, getAppDate } from "@/domain/shared/app-clock";
 
@@ -12,7 +12,7 @@ import type { PermitReceipt } from "./permit-journey";
 import { useLanguage } from "@/components/localization/language-provider";
 import { selectLocalized } from "@/locales";
 import { useDraft, useDraftState } from "@/hooks/use-draft";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { calculatePermitValidity } from "@/domain/fishing-permits/calculate-permit-validity";
 import {
@@ -59,7 +59,9 @@ export function usePermitCheckoutController({
   product: PrototypePermitProduct;
   save: (document: FishingDocument) => Promise<OperationResult<void>>;
   saveMany?: (documents: FishingDocument[]) => Promise<OperationResult<void>>;
-  savePurchase: (purchase: PermitPurchase) => OperationResult<void>;
+  savePurchase: (
+    purchase: PermitPurchase,
+  ) => OperationResult<void> | Promise<OperationResult<void>>;
   onPurchased?: (zoneId: PrototypePermitProduct["zoneId"]) => void;
   paymentOutcome: PrototypePaymentOutcome;
   initialSelectedDate?: string;
@@ -68,6 +70,7 @@ export function usePermitCheckoutController({
   initialReceipt?: PermitReceipt;
   onReceipt?: (receipt: PermitReceipt) => void;
 }) {
+  const services = useAppServices();
   const draft = useDraft();
   const { language } = useLanguage();
   const [step, setStep] = useDraftState<CheckoutStep>(
@@ -95,6 +98,13 @@ export function usePermitCheckoutController({
     purchase: PermitPurchase;
   } | null>(initialReceipt ?? null);
   const submissionLock = useRef(false);
+  const validationRequest = useRef(0);
+  useEffect(
+    () => () => {
+      validationRequest.current += 1;
+    },
+    [],
+  );
   const [attempt, setAttempt] = useDraftState<{ key: string; now: number; id: string } | null>(
     "purchaseAttempt",
     null,
@@ -105,8 +115,8 @@ export function usePermitCheckoutController({
       ? [...new Set([selectedDate, ...(form.fishingDates ?? [])])].sort()
       : [selectedDate];
   const pricedForm = { ...form, fishingDates };
-  function currentAvailability() {
-    const result = createLocalStoragePermitPurchaseRepository(window.localStorage).list();
+  async function currentAvailability() {
+    const result = await services.purchases.list();
     if (!result.ok)
       return { status: "not-on-sale" as const, label: result.error, remainingUnits: 0 };
     const results = fishingDates.map((date) =>
@@ -133,13 +143,15 @@ export function usePermitCheckoutController({
     key: Key,
     value: PermitCheckoutForm[Key],
   ) {
+    validationRequest.current += 1;
     const updated = { ...form, [key]: value };
     setForm(updated);
     onFormChange?.(updated);
     setError("");
   }
 
-  function continueFromBuyer() {
+  async function continueFromBuyer() {
+    const request = ++validationRequest.current;
     if (!canPurchasePrototypePermit(product))
       return setError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
     const buyerError = validatePermitBuyer(form);
@@ -149,7 +161,13 @@ export function usePermitCheckoutController({
     } catch {
       return setError("Velg en gyldig fiskedato for dette kortet.");
     }
-    const availability = currentAvailability();
+    let availability;
+    try {
+      availability = await currentAvailability();
+    } catch {
+      return setError("Kunne ikke hente tilgjengelighet. Prøv igjen.");
+    }
+    if (request !== validationRequest.current) return;
     if (!canSelectPrototypePermit(availability)) return setError(availability.label);
     setError("");
     const participantError = validatePermitParticipants(product, {
@@ -167,6 +185,8 @@ export function usePermitCheckoutController({
 
   async function submit() {
     if (submissionLock.current || receipt) return;
+    if (services.mode !== "demo")
+      return paymentError("Testbetaling er bare tilgjengelig i demonstrasjonsmodus.");
     const validationError =
       validatePermitBuyer(form) ||
       validatePermitParticipants(product, {
@@ -184,11 +204,11 @@ export function usePermitCheckoutController({
     }
     if (!canPurchasePrototypePermit(product))
       return paymentError("Dette kortet kan ikke kjøpes før prisen er bekreftet hos selger.");
-    const availability = currentAvailability();
-    if (!canSelectPrototypePermit(availability)) return paymentError(availability.label);
     submissionLock.current = true;
     setIsSubmitting(true);
     try {
+      const availability = await currentAvailability();
+      if (!canSelectPrototypePermit(availability)) return paymentError(availability.label);
       const key = JSON.stringify([product.id, selectedDate, form]);
       const currentAttempt =
         attempt?.key === key
@@ -228,7 +248,7 @@ export function usePermitCheckoutController({
           status: paymentOutcome,
           ...(paymentOutcome === "cancelled" ? { cancelledAt: now } : {}),
         };
-        const stored = savePurchase(purchase);
+        const stored = await savePurchase(purchase);
         setIsSubmitting(false);
         if (!stored.ok) return paymentError(stored.error);
         return paymentError(
@@ -243,7 +263,7 @@ export function usePermitCheckoutController({
         paidAt: now,
         paymentReference,
       };
-      const purchaseStored = savePurchase(approvedPurchase);
+      const purchaseStored = await savePurchase(approvedPurchase);
       if (!purchaseStored.ok) {
         setIsSubmitting(false);
         return paymentError(purchaseStored.error);
@@ -254,14 +274,14 @@ export function usePermitCheckoutController({
       if (saveMany) {
         const result = await saveMany(issuedDocuments);
         if (!result.ok) {
-          savePurchase({ ...approvedPurchase, status: "issuance-failed" });
+          await savePurchase({ ...approvedPurchase, status: "issuance-failed" });
           return paymentError(result.error);
         }
       } else
         for (const issuedDocument of issuedDocuments) {
           const result = await save(issuedDocument);
           if (!result.ok) {
-            savePurchase({ ...approvedPurchase, status: "issuance-failed" });
+            await savePurchase({ ...approvedPurchase, status: "issuance-failed" });
             return paymentError(result.error);
           }
         }
@@ -275,7 +295,7 @@ export function usePermitCheckoutController({
         documentIds: issuedDocuments.map((item) => item.id),
         completedAt: getAppNow(),
       };
-      const completed = savePurchase(completedPurchase);
+      const completed = await savePurchase(completedPurchase);
       if (!completed.ok) return paymentError(completed.error);
       const receipt = { document, purchase: completedPurchase };
       await draft?.complete();
@@ -326,6 +346,7 @@ export function usePermitCheckoutController({
       );
     },
     backTo: (target: CheckoutStep) => {
+      validationRequest.current += 1;
       setError("");
       setStep(target);
     },

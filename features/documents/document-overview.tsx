@@ -1,4 +1,5 @@
 "use client";
+import { dateForDisplay, parseRiverDateTime } from "@/domain/shared/river-time";
 import { selectLocalized } from "@/locales";
 import {
   documentTitles,
@@ -24,13 +25,17 @@ const mockSummaries: Record<DocumentKind, string> = {
 function documentSummary(kind: DocumentKind, documents: FishingDocument[], language: "no" | "en") {
   const document = documents
     .filter((entry) => entry.kind === kind)
-    .sort((left, right) => (right.values.endsAt ?? "").localeCompare(left.values.endsAt ?? ""))[0];
+    .sort(
+      (left, right) =>
+        parseRiverDateTime(right.values.endsAt ?? "") -
+        parseRiverDateTime(left.values.endsAt ?? ""),
+    )[0];
   if (kind !== "permit" || !document) return undefined;
   const validUntil = new Intl.DateTimeFormat(selectLocalized(language, "nb-NO", "en-GB"), {
     dateStyle: "short",
     timeStyle: "short",
     timeZone: "Europe/Oslo",
-  }).format(new Date(document.values.endsAt ?? ""));
+  }).format(dateForDisplay(document.values.endsAt ?? ""));
   return selectLocalized(
     language,
     `${document.values.area} · gyldig til ${validUntil}`,

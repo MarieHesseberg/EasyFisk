@@ -1,3 +1,4 @@
+import { parseRiverDateTime } from "../shared/river-time.ts";
 import { getAppNow } from "../shared/app-clock.ts";
 import type { DocumentKind, FishingDocument } from "./fishing-document.ts";
 import type { ZoneId } from "../zones/zone.ts";
@@ -32,7 +33,7 @@ export function getDocumentReadiness(
     ),
     disinfection: documents.some((document) => {
       if (document.kind !== "disinfection" || document.values.otherRiverAt) return false;
-      const performedAt = new Date(document.values.performedAt ?? "").getTime();
+      const performedAt = parseRiverDateTime(document.values.performedAt ?? "");
       return performedAt <= now && performedAt + 20 * 24 * 60 * 60 * 1000 >= now;
     }),
     fee: documents.some(

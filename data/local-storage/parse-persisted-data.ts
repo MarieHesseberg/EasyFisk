@@ -1,9 +1,11 @@
+import { isIdentifier, isTimestamp } from "../../domain/shared/validation.ts";
+import { isZoneId } from "../../domain/zones/zone-identity.ts";
 import type { CatchRecord } from "@/domain/catches/catch";
 import type { UserPreferences } from "@/domain/preferences/preferences";
 import type { ActiveSessionSnapshot, SessionRecord } from "@/domain/sessions/session";
 
 export type StoredFishingLog = {
-  version: 2;
+  version: 3;
   catches: CatchRecord[];
   sessions: SessionRecord[];
   activeSession: ActiveSessionSnapshot | null;
@@ -31,25 +33,32 @@ function isEditableCatch(value: unknown) {
     ["Laks", "Sjøørret", "Annen art"].includes(String(value.species)) &&
     ["Gjenutsatt", "Avlivet"].includes(String(value.result)) &&
     isFiniteNumber(value.length) &&
+    value.length >= 0 &&
     isFiniteNumber(value.weight) &&
+    value.weight >= 0 &&
     isOptionalString(value.comment)
   );
 }
 
-function isCatchRecord(value: unknown): value is CatchRecord {
+export function isCatchRecord(value: unknown): value is CatchRecord {
   if (!isObject(value)) return false;
   const species = value.species;
   const result = value.result;
   return (
-    typeof value.id === "string" &&
-    isFiniteNumber(value.caughtAt) &&
-    isFiniteNumber(value.submittedAt) &&
-    isFiniteNumber(value.sessionStart) &&
+    isIdentifier(value.id) &&
+    isTimestamp(value.caughtAt) &&
+    isTimestamp(value.submittedAt) &&
+    isTimestamp(value.sessionStart) &&
+    (value.sessionId === undefined || isIdentifier(value.sessionId)) &&
+    isOptionalString(value.rulesVersion) &&
     (species === "Laks" || species === "Sjøørret" || species === "Annen art") &&
     (result === "Gjenutsatt" || result === "Avlivet") &&
     isFiniteNumber(value.length) &&
+    value.length >= 0 &&
     isFiniteNumber(value.weight) &&
+    value.weight >= 0 &&
     typeof value.zone === "string" &&
+    (value.zoneId === undefined || isZoneId(value.zoneId)) &&
     typeof value.violation === "boolean" &&
     typeof value.late === "boolean" &&
     isOptionalString(value.imageName) &&
@@ -70,14 +79,17 @@ function isCatchRecord(value: unknown): value is CatchRecord {
   );
 }
 
-function isSessionRecord(value: unknown): value is SessionRecord {
+export function isSessionRecord(value: unknown): value is SessionRecord {
   return (
     isObject(value) &&
-    typeof value.id === "string" &&
-    isFiniteNumber(value.start) &&
-    isFiniteNumber(value.end) &&
+    isIdentifier(value.id) &&
+    isTimestamp(value.start) &&
+    isTimestamp(value.end) &&
+    value.end >= value.start &&
     isFiniteNumber(value.duration) &&
+    value.duration >= 0 &&
     typeof value.zone === "string" &&
+    (value.zoneId === undefined || isZoneId(value.zoneId)) &&
     typeof value.result === "string" &&
     isOptionalString(value.subzone)
   );
@@ -86,10 +98,13 @@ function isSessionRecord(value: unknown): value is SessionRecord {
 function isLegacySessionRecord(value: unknown): value is LegacySessionRecord {
   return (
     isObject(value) &&
-    isFiniteNumber(value.start) &&
-    isFiniteNumber(value.end) &&
+    isTimestamp(value.start) &&
+    isTimestamp(value.end) &&
+    value.end >= value.start &&
     isFiniteNumber(value.duration) &&
+    value.duration >= 0 &&
     typeof value.zone === "string" &&
+    (value.zoneId === undefined || isZoneId(value.zoneId)) &&
     typeof value.result === "string" &&
     isOptionalString(value.subzone)
   );
@@ -99,10 +114,11 @@ function addSessionId(session: LegacySessionRecord): SessionRecord {
   return { ...session, id: `EF-OKT-${session.start}-${session.end}` };
 }
 
-function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
+export function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
   return (
     isObject(value) &&
-    isFiniteNumber(value.startTime) &&
+    isTimestamp(value.startTime) &&
+    (value.id === undefined || isIdentifier(value.id)) &&
     (value.zone === 1 || value.zone === 2 || value.zone === 3 || value.zone === 4) &&
     isOptionalString(value.subzone)
   );
@@ -110,13 +126,19 @@ function isActiveSession(value: unknown): value is ActiveSessionSnapshot {
 
 export function parseStoredFishingLog(value: unknown): StoredFishingLog | null {
   if (!isObject(value) || !Array.isArray(value.catches)) return null;
-  if (!value.catches.every(isCatchRecord)) return null;
+  if (
+    !value.catches.every(isCatchRecord) ||
+    new Set(value.catches.map((record) => record.id)).size !== value.catches.length
+  )
+    return null;
   const activeSession = value.activeSession ?? null;
   if (activeSession !== null && !isActiveSession(activeSession)) return null;
 
-  if (value.version === 2) {
+  if (value.version === 2 || value.version === 3) {
     if (!Array.isArray(value.sessions) || !value.sessions.every(isSessionRecord)) return null;
-    return { version: 2, catches: value.catches, sessions: value.sessions, activeSession };
+    if (new Set(value.sessions.map((record) => record.id)).size !== value.sessions.length)
+      return null;
+    return { version: 3, catches: value.catches, sessions: value.sessions, activeSession };
   }
 
   if (value.version !== 1) return null;
@@ -124,7 +146,7 @@ export function parseStoredFishingLog(value: unknown): StoredFishingLog | null {
   if (latestSession !== null && !isLegacySessionRecord(latestSession)) return null;
 
   return {
-    version: 2,
+    version: 3,
     catches: value.catches,
     sessions: latestSession ? [addSessionId(latestSession)] : [],
     activeSession,

@@ -2,7 +2,7 @@
 import { usePermitJourney } from "./use-permit-journey";
 import { selectLocalized } from "@/locales";
 import { useState } from "react";
-import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
+import { usePermitCatalog } from "./use-permit-catalog";
 import type { ZoneId } from "@/domain/zones/zone";
 import { useDocuments } from "@/features/documents/use-documents";
 import { PermitCheckout } from "./permit-checkout";
@@ -58,14 +58,15 @@ export function PermitShop({
   const documents = useDocuments();
   const reportingDays = usePermitReportingDays();
   const purchases = usePermitPurchases();
-  const zoneProducts = permitCatalogRepository.listProductsByZone(selectedZone);
+  const catalog = usePermitCatalog();
+  const zoneProducts = catalog.data.filter((product) => product.zoneId === selectedZone);
   const areas = Array.from(new Set(zoneProducts.map((product) => product.areaName)));
   const products =
     selectedArea === "all"
       ? zoneProducts
       : zoneProducts.filter((product) => product.areaName === selectedArea);
   const selectedProduct = selectedProductId
-    ? permitCatalogRepository.findProduct(selectedProductId)
+    ? catalog.data.find((product) => product.id === selectedProductId)
     : undefined;
   const testPurchases = documents.documents.filter((document) =>
     document.id.startsWith(testPurchaseDocumentPrefix),
@@ -78,13 +79,26 @@ export function PermitShop({
         return;
       }
     }
-    const purchaseResult = purchases.clear();
+    const purchaseResult = await purchases.clear();
     if (!purchaseResult.ok) {
       setResetMessage(purchaseResult.error);
       return;
     }
     setResetMessage(t("permit.testPurchasesRemoved"));
   }
+  if (catalog.loading)
+    return (
+      <p role="status">{selectLocalized(language, "Laster fiskekort …", "Loading permits …")}</p>
+    );
+  if (catalog.error)
+    return (
+      <div role="alert">
+        {t(catalog.error)}{" "}
+        <button onClick={() => void catalog.reload()}>
+          {selectLocalized(language, "Prøv igjen", "Try again")}
+        </button>
+      </div>
+    );
   if (selectedProduct) {
     if (!isProductActionOpen)
       return (

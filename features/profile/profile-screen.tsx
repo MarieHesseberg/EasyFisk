@@ -1,4 +1,5 @@
 "use client";
+import { useAppServices } from "@/data/runtime/services-provider";
 
 import { useState } from "react";
 import { ScreenHeader } from "@/components/ui/screen-header";
@@ -43,6 +44,7 @@ export function ProfileScreen({
 }) {
   const [detail, setDetail] = useState<ProfileDestination | null>(null);
   const { t } = useLanguage();
+  const { mode } = useAppServices();
   const profile = useLocalProfile();
   const scenarios = fishingContentRepository.getDemoScenarios();
   const selectedScenario = findDemoStatus(demoStatus, scenarios);
@@ -138,16 +140,18 @@ export function ProfileScreen({
           </p>
           <Icon name="chevron" size={18} />
         </button>
-        <button onClick={() => setDetail("status-engine")}>
-          <span>
-            <Icon name="stats" />
-          </span>
-          <p>
-            <b>{t("copy.statusmotor.9cef87d")}</b>
-            <small>{t("copy.velg.situasjon.for.prototypens.statuskontroll.5bd6f62")}</small>
-          </p>
-          <Icon name="chevron" size={18} />
-        </button>
+        {mode === "demo" && (
+          <button onClick={() => setDetail("status-engine")}>
+            <span>
+              <Icon name="stats" />
+            </span>
+            <p>
+              <b>{t("copy.statusmotor.9cef87d")}</b>
+              <small>{t("copy.velg.situasjon.for.prototypens.statuskontroll.5bd6f62")}</small>
+            </p>
+            <Icon name="chevron" size={18} />
+          </button>
+        )}
       </div>
       <section className="more-feedback-card">
         <small>{t("copy.tilbakemelding.og.observasjon.874b945")}</small>
@@ -159,7 +163,7 @@ export function ProfileScreen({
         EasyFisk · {t("copy.innhold.kontrollert.f924dee")}{" "}
         {activeFishingRules.metadata.numericSourcesCheckedLabel}
       </p>
-      {detail === "status-engine" && (
+      {mode === "demo" && detail === "status-engine" && (
         <StatusEngineSettingsDialog
           close={() => setDetail(null)}
           scenarios={scenarios}

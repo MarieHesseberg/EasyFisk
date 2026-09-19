@@ -1,4 +1,7 @@
-import { getAppDateTime } from "../shared/app-clock.ts";
+import { isZoneId } from "../zones/zone-identity.ts";
+import { isRecord, isTimestamp, isIdentifier } from "../shared/validation.ts";
+import { isCalendarDate, parseRiverDateTime } from "../shared/river-time.ts";
+import { getAppDateTime, getAppNow } from "../shared/app-clock.ts";
 import { documentFields } from "./document-fields.ts";
 import {
   documentAttachmentTypes,
@@ -19,18 +22,25 @@ export function validateDocument(
     if (value && value.length > 500) return `${field.label} er for langt (maks 500 tegn).`;
     if (value && field.options && !field.options.includes(value))
       return `Velg ${field.label.toLowerCase()}.`;
-    if (value && field.type?.includes("date") && !Number.isFinite(Date.parse(value)))
+    if (
+      value &&
+      ((field.type === "date" && !isCalendarDate(value)) ||
+        (field.type === "datetime-local" && !Number.isFinite(parseRiverDateTime(value))))
+    )
       return `Kontroller ${field.label.toLowerCase()}.`;
   }
-  if (kind === "permit" && (values.startsAt ?? "") >= (values.endsAt ?? ""))
+  if (
+    kind === "permit" &&
+    parseRiverDateTime(values.startsAt ?? "") >= parseRiverDateTime(values.endsAt ?? "")
+  )
     return "Sluttid må være etter starttid.";
   if (kind === "disinfection") {
-    if (checkDate && (values.performedAt ?? "") > getAppDateTime())
+    if (checkDate && parseRiverDateTime(values.performedAt ?? "") > getAppNow())
       return "Desinfisering kan ikke være utført i fremtiden.";
     if (
       values.otherRiverAt &&
-      (values.otherRiverAt < (values.performedAt ?? "") ||
-        (checkDate && values.otherRiverAt > getAppDateTime()))
+      (parseRiverDateTime(values.otherRiverAt) < parseRiverDateTime(values.performedAt ?? "") ||
+        (checkDate && parseRiverDateTime(values.otherRiverAt) > getAppNow()))
     )
       return "Besøket må være etter desinfiseringen og ikke i fremtiden.";
   }
@@ -55,7 +65,7 @@ export function attachmentError(file: Blob): string | undefined {
 }
 
 export function isFishingDocument(value: unknown): value is FishingDocument {
-  if (!value || typeof value !== "object") return false;
+  if (!isRecord(value)) return false;
   const record = value as Record<string, unknown>;
   if (
     typeof record.id !== "string" ||
@@ -63,12 +73,31 @@ export function isFishingDocument(value: unknown): value is FishingDocument {
     !["permit", "disinfection", "fee"].includes(String(record.kind))
   )
     return false;
-  if (record.purchaseId !== undefined && typeof record.purchaseId !== "string") return false;
+  if (
+    ["purchaseId", "productId", "rulesVersion"].some(
+      (key) => record[key] !== undefined && !isIdentifier(record[key]),
+    )
+  )
+    return false;
+  if (record.zoneId !== undefined && (record.kind !== "permit" || !isZoneId(record.zoneId)))
+    return false;
+  if (record.derivedAccess !== undefined && typeof record.derivedAccess !== "boolean") return false;
+  if (record.verification !== undefined) {
+    const verification = record.verification;
+    if (!isRecord(verification)) return false;
+    if (verification.method !== "manual") {
+      if (!isTimestamp(verification.verifiedAt)) return false;
+      if (verification.method === "disinfector-approved") {
+        if (!isIdentifier(verification.verifierName) || !isIdentifier(verification.verifierRole))
+          return false;
+      } else if (verification.method !== "permit-purchase") return false;
+    }
+  }
   if (
     typeof record.updatedAt !== "number" ||
-    !Number.isFinite(record.updatedAt) ||
+    !isTimestamp(record.updatedAt) ||
     !record.values ||
-    typeof record.values !== "object"
+    !isRecord(record.values)
   )
     return false;
   if (record.forOtherPerson !== undefined && typeof record.forOtherPerson !== "boolean")
@@ -80,14 +109,15 @@ export function isFishingDocument(value: unknown): value is FishingDocument {
       !record.accessGrants.every(
         (grant) =>
           grant &&
-          typeof grant.id === "string" &&
+          isIdentifier(grant.id) &&
           typeof grant.recipientName === "string" &&
           typeof grant.recipientEmail === "string" &&
           ["guest", "warden"].includes(grant.role) &&
           typeof grant.startsAt === "string" &&
           typeof grant.endsAt === "string" &&
-          Number.isFinite(grant.createdAt) &&
-          (grant.revokedAt === undefined || Number.isFinite(grant.revokedAt)),
+          parseRiverDateTime(grant.startsAt) < parseRiverDateTime(grant.endsAt) &&
+          isTimestamp(grant.createdAt) &&
+          (grant.revokedAt === undefined || isTimestamp(grant.revokedAt)),
       ))
   )
     return false;

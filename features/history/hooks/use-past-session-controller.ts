@@ -1,4 +1,7 @@
 "use client";
+import { createId } from "@/domain/shared/create-id";
+import { parseRiverDateTime, addCalendarDays } from "@/domain/shared/river-time";
+
 import { getAppNow } from "@/domain/shared/app-clock";
 
 import { useDraft, useDraftState } from "@/hooks/use-draft";
@@ -28,9 +31,10 @@ export function usePastSessionController({
 }) {
   const draft = useDraft();
   const zones = fishingContentRepository.getZones();
+  const [sessionId] = useDraftState("sessionId", () => `EF-OKT-${createId()}`);
   const [openedAt] = useDraftState("openedAt", () => getAppNow());
   const today = getNorwegianCalendarDate(openedAt);
-  const suggestedPastDate = getNorwegianCalendarDate(openedAt - 24 * 60 * 60 * 1000);
+  const suggestedPastDate = addCalendarDays(today, -1);
   const [step, setStep] = useDraftState("step", 1);
   const sessionForm = useFormFields<{
     caught: boolean;
@@ -75,9 +79,9 @@ export function usePastSessionController({
   const { caught, date, from, subzone, to, zone } = sessionForm.fields;
   const { catchAt, comment, length, outcome, species, weight } = catchForm.fields;
 
-  const start = new Date(`${date}T${from}`).getTime();
-  const end = new Date(`${date}T${to}`).getTime();
-  const caughtAt = new Date(`${date}T${catchAt}`).getTime();
+  const start = parseRiverDateTime(`${date}T${from}`);
+  const end = parseRiverDateTime(`${date}T${to}`);
+  const caughtAt = parseRiverDateTime(`${date}T${catchAt}`);
   const validTime = Boolean(date && from && to && isValidSessionTime(start, end, openedAt));
   const validCatchTime = isCatchWithinSession(caughtAt, start, end);
   const lengthNumber = parseMeasurement(length);
@@ -100,10 +104,12 @@ export function usePastSessionController({
     if (!catchValid) return;
     const violation = validateCatch(species, outcome, lengthNumber, weightNumber).blocked;
     const record: CatchRecord = {
-      id: `ME-ETTER-${openedAt}-${reports.length + 1}`,
+      id: `ME-ETTER-${createId()}`,
       caughtAt,
       submittedAt: openedAt,
       sessionStart: start,
+      sessionId,
+      zoneId: zone,
       species,
       result: outcome,
       length: lengthNumber,
@@ -126,7 +132,10 @@ export function usePastSessionController({
       ? `${reports.length} fangst${reports.length === 1 ? "" : "er"} · etterregistrert`
       : "Nullfangst · etterregistrert";
     const succeeded = await submission.run(() =>
-      onSave(createSessionRecord(start, end, zoneName, result), reports),
+      onSave(
+        createSessionRecord(start, end, zoneName, result, subzone || undefined, sessionId, zone),
+        reports,
+      ),
     );
     if (succeeded) {
       await draft?.complete();

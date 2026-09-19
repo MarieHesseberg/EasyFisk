@@ -1,3 +1,4 @@
+import { isCalendarDate, parseRiverDateTime } from "../shared/river-time.ts";
 import { getAppNow } from "../shared/app-clock.ts";
 import type { FishingDocument } from "../documents/fishing-document.ts";
 import { getPermitZoneId } from "../documents/get-permit-zones.ts";
@@ -48,8 +49,10 @@ export function findQualifyingSeasonPermit(
       document.values.category === "Sesongkort" &&
       getPermitZoneId(document) === product.zoneId &&
       normalized(document.values.area ?? "").includes(areaName) &&
-      (document.values.startsAt ?? "") <= reportingPeriod.startsAt &&
-      (document.values.endsAt ?? "") >= reportingPeriod.endsAt,
+      parseRiverDateTime(document.values.startsAt ?? "") <=
+        parseRiverDateTime(reportingPeriod.startsAt) &&
+      parseRiverDateTime(document.values.endsAt ?? "") >=
+        parseRiverDateTime(reportingPeriod.endsAt),
   );
 }
 
@@ -96,12 +99,14 @@ export function isPermitReportingDay(value: unknown): value is PermitReportingDa
   const record = value as Record<string, unknown>;
   return (
     typeof record.id === "string" &&
+    record.id.length > 0 &&
     typeof record.productId === "string" &&
-    [1, 2, 3, 4].includes(Number(record.zoneId)) &&
+    [1, 2, 3, 4].includes(record.zoneId as number) &&
     typeof record.areaName === "string" &&
-    /^\d{4}-\d{2}-\d{2}$/.test(String(record.fishingDate)) &&
+    isCalendarDate(record.fishingDate) &&
     typeof record.startsAt === "string" &&
     typeof record.endsAt === "string" &&
+    parseRiverDateTime(record.startsAt) < parseRiverDateTime(record.endsAt) &&
     typeof record.seasonPermitDocumentId === "string" &&
     ["pending", "catch", "no-catch"].includes(String(record.outcome)) &&
     typeof record.updatedAt === "number" &&

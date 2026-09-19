@@ -1,36 +1,28 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { createLocalStoragePermitReportingRepository } from "@/data/local-storage/create-local-storage-permit-reporting-repository";
+import { useCallback, useState } from "react";
+import { useAppServices } from "@/data/runtime/services-provider";
+import { useRepositoryQuery } from "@/hooks/use-repository-query";
 import type { PermitReportingDay } from "@/domain/fishing-permits/permit-reporting-day";
-
+import { technicalOperationFailed } from "@/domain/shared/operation-result";
 export function usePermitReportingDays() {
-  const [records, setRecords] = useState<PermitReportingDay[]>([]);
+  const { reportingDays: repository } = useAppServices();
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    let active = true;
-    Promise.resolve().then(() => {
-      if (!active) return;
-      const result = createLocalStoragePermitReportingRepository(window.localStorage).list();
-      if (result.ok) setRecords(result.value);
-      else setError(result.error);
-    });
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  function save(record: PermitReportingDay) {
-    const repository = createLocalStoragePermitReportingRepository(window.localStorage);
-    const result = repository.save(record);
-    if (result.ok) {
-      const refreshed = repository.list();
-      if (refreshed.ok) setRecords(refreshed.value);
-      setError("");
-    } else setError(result.error);
-    return result;
+  const read = useCallback(async () => {
+    const result = await repository.list();
+    if (!result.ok) throw new Error(result.error);
+    return result.value;
+  }, [repository]);
+  const query = useRepositoryQuery<PermitReportingDay[]>(read, []);
+  async function save(record: PermitReportingDay) {
+    try {
+      const result = await repository.save(record);
+      setError(result.ok ? "" : result.error);
+      if (result.ok) await query.reload();
+      return result;
+    } catch (cause) {
+      setError("error.storage.write");
+      return technicalOperationFailed("storage.write", cause);
+    }
   }
-
-  return { records, error, save };
+  return { records: query.data, error: error || query.error, loading: query.loading, save };
 }

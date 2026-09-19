@@ -83,10 +83,10 @@ test("purchase, documents and a completed trip share the same date without statu
   ).toBeVisible();
   await page.getByLabel("Jeg har lest og forstått reglene").check();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
-  await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
+  await expect(page.getByText("Fiske pågår", { exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await expect(page.getByText("Fiske pågår", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Avslutt uten fangst", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Økt fullført" })).toBeVisible();
 });

@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "vitest";
-import { act, cleanup, renderHook } from "@testing-library/react";
+import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { storageKeysForReset } from "../data/local-storage/reset-local-data";
 import { parseReadNotices } from "../features/notifications/use-header-notices";
 import { useEasyFiskController } from "../application/easy-fisk/use-easy-fisk-controller";
@@ -23,7 +23,8 @@ test("malformed read receipts never hide unread notifications", () => {
   expect(parseReadNotices('["rules:v1",null,5]')).toEqual(["rules:v1"]);
 });
 test("preview remains separate from active scenario and normal mode resets payment simulation", () => {
-  const { result } = renderHook(() => useEasyFiskController(createMemoryFishingLogRepository()));
+  const repository = createMemoryFishingLogRepository();
+  const { result } = renderHook(() => useEasyFiskController(repository));
   act(() => result.current.actions.selectDemoStatus("ok"));
   expect(result.current.state.selectedDemoStatus).toBe("ok");
   expect(result.current.state.demoStatus).toBe("allMissing");
@@ -41,6 +42,7 @@ test("preview remains separate from active scenario and normal mode resets payme
 test("activating a test cannot silently discard an active fishing trip", async () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() => expect(result.current.state.sessionLoading).toBe(false));
   act(() => result.current.actions.setFlow("start"));
   await act(async () => result.current.actions.finishSessionFlow(undefined, 3));
   const session = repository.getActiveSession();

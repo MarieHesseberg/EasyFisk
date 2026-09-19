@@ -1,3 +1,4 @@
+import { isCalendarDate, addCalendarDays } from "../shared/river-time.ts";
 import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
 
 export type PermitValidityPeriod = {
@@ -6,28 +7,7 @@ export type PermitValidityPeriod = {
 };
 
 function parseCalendarDate(value: string) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!match) throw new RangeError("Fiskedatoen må ha formatet ÅÅÅÅ-MM-DD.");
-
-  const [, yearText, monthText, dayText] = match;
-  const year = Number(yearText);
-  const month = Number(monthText);
-  const day = Number(dayText);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  if (
-    date.getUTCFullYear() !== year ||
-    date.getUTCMonth() !== month - 1 ||
-    date.getUTCDate() !== day
-  )
-    throw new RangeError("Fiskedatoen finnes ikke i kalenderen.");
-
-  return date;
-}
-
-function addCalendarDays(value: string, days: number) {
-  const date = parseCalendarDate(value);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString().slice(0, 10);
+  if (!isCalendarDate(value)) throw new RangeError("Fiskedatoen finnes ikke i kalenderen.");
 }
 
 /** Beregner kortets lokale gyldighetstid i Mandalselva uten å være avhengig av enhetens tidssone. */

@@ -17,7 +17,7 @@ export function CatchReportDetail({
   onClose: () => void;
   onCorrect: (
     note: string | CatchEdit,
-  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
+  ) => import("@/domain/shared/operation-result").AsyncOperationResult<void> | void;
 }) {
   const { language, t } = useLanguage();
   const [editing, setEditing] = useState(false);
@@ -134,6 +134,7 @@ export function CatchReportDetail({
                   <b>
                     {new Date(revision.changedAt).toLocaleString(
                       language === "no" ? "nb-NO" : "en-GB",
+                      { timeZone: "Europe/Oslo" },
                     )}
                   </b>
                   <p>

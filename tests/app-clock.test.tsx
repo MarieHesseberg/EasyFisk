@@ -1,12 +1,8 @@
+import { appClockStart, appClockStorageKey } from "../data/prototype/demo-clock";
 import { afterEach, expect, test, vi } from "vitest";
-import {
-  appClockStart,
-  appClockStorageKey,
-  getAppNow,
-  getAppDate,
-} from "../domain/shared/app-clock";
+import { getAppNow, getAppDate } from "../domain/shared/app-clock";
 import { getPrototypePermitAvailability } from "../domain/fishing-permits/get-prototype-permit-availability";
-import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { prototypePermitCatalogRepository as permitCatalogRepository } from "../data/prototype/prototype-permit-catalog-repository";
 import { isFishingDocument, validateDocument } from "../domain/documents/validate-document";
 
 afterEach(() => vi.useRealTimers());

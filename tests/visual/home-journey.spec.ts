@@ -1,10 +1,11 @@
+import { appClockStart } from "../../data/prototype/demo-clock";
 import { expect, test, type Page } from "@playwright/test";
 
 async function restoreActiveTrip(page: Page, language = "no", withCatch = false) {
   await page.addInitScript(
-    ({ language, withCatch }) => {
+    ({ language, withCatch, now }) => {
       if (localStorage.getItem("easyfisk:fishing-log:v1")) return;
-      const startTime = Date.now() - 30 * 60 * 1000;
+      const startTime = now - 30 * 60 * 1000;
       localStorage.setItem("easyfisk-language", language);
       localStorage.setItem(
         "easyfisk:fishing-log:v1",
@@ -32,7 +33,7 @@ async function restoreActiveTrip(page: Page, language = "no", withCatch = false)
         }),
       );
     },
-    { language, withCatch },
+    { language, withCatch, now: appClockStart },
   );
   await page.goto("/");
   await expect(page.locator(".home-active-trip")).toContainText("Bjåhylen");

@@ -1,3 +1,4 @@
+import { decodeDocument, encodeDocument } from "./stored-document";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import type { DocumentsRepository } from "@/data/contracts/documents-repository";
 import { isFishingDocument } from "@/domain/documents/validate-document";
@@ -36,12 +37,12 @@ async function transaction<T>(
 
 export function createBrowserDocumentsRepository(): DocumentsRepository {
   return {
+    saveMany: saveDocumentsAtomically,
     async list() {
       try {
         const records: unknown[] = await transaction("readonly", (store) => store.getAll());
-        if (!records.every(isFishingDocument))
-          return technicalOperationFailed("storage.invalid-data");
-        return operationSucceeded(records.sort((a, b) => b.updatedAt - a.updatedAt));
+        const documents = records.map(decodeDocument);
+        return operationSucceeded(documents.sort((a, b) => b.updatedAt - a.updatedAt));
       } catch (cause) {
         logger.error("Dokumentlageret kunne ikke leses.");
         return technicalOperationFailed("storage.read", cause);
@@ -50,7 +51,7 @@ export function createBrowserDocumentsRepository(): DocumentsRepository {
     async save(document) {
       try {
         if (!isFishingDocument(document)) return technicalOperationFailed("storage.invalid-data");
-        await transaction("readwrite", (store) => store.put(document));
+        await transaction("readwrite", (store) => store.put(encodeDocument(document)));
         return operationSucceeded(undefined);
       } catch (cause) {
         logger.error("Dokumentlagring mislyktes.");
@@ -69,7 +70,11 @@ export function createBrowserDocumentsRepository(): DocumentsRepository {
 }
 
 export async function saveDocumentsAtomically(documents: FishingDocument[]) {
-  if (!documents.length || !documents.every(isFishingDocument))
+  if (
+    !documents.length ||
+    !documents.every(isFishingDocument) ||
+    new Set(documents.map((document) => document.id)).size !== documents.length
+  )
     return technicalOperationFailed("storage.invalid-data");
   try {
     const database = await openDatabase();
@@ -79,7 +84,7 @@ export async function saveDocumentsAtomically(documents: FishingDocument[]) {
         tx.oncomplete = () => resolve();
         tx.onabort = () => reject(tx.error);
         tx.onerror = () => reject(tx.error);
-        for (const document of documents) tx.objectStore("documents").put(document);
+        for (const document of documents) tx.objectStore("documents").put(encodeDocument(document));
       });
       return operationSucceeded(undefined);
     } finally {

@@ -1,6 +1,7 @@
+import { parseRiverDateTime } from "@/domain/shared/river-time";
 import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/localization/language-provider";
-import { permitCatalogRepository } from "@/data/repositories/permit-catalog";
+import { usePermitCatalog } from "@/features/fishing-permits/use-permit-catalog";
 import { getPrototypePermitProductDetails } from "@/data/prototype/mandalselva-permit-product-details";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { isPermitValid } from "@/domain/documents/get-permit-zones";
@@ -12,12 +13,22 @@ import { selectLocalized } from "@/locales";
 
 export function PersonalPermitRules({ permit, now }: { permit: FishingDocument; now: number }) {
   const { language, t } = useLanguage();
-  const context = getPersonalPermitContext(permit, permitCatalogRepository.listProducts());
+  const catalog = usePermitCatalog();
+  const context = getPersonalPermitContext(permit, catalog.data);
+  if (catalog.error)
+    return (
+      <p role="alert">
+        {t(catalog.error)}{" "}
+        <button onClick={() => void catalog.reload()}>
+          {selectLocalized(language, "Prøv igjen", "Try again")}
+        </button>
+      </p>
+    );
   if (!context) return null;
   const details = context.product ? getPrototypePermitProductDetails(context.product) : undefined;
   const localRules = details?.localRules ?? [];
   const { quota, reporting } = activeFishingRules;
-  const future = new Date(permit.values.startsAt ?? "").getTime() > now;
+  const future = parseRiverDateTime(permit.values.startsAt ?? "") > now;
   const valid = isPermitValid(permit, now);
   const label = valid
     ? selectLocalized(language, "Gyldig til", "Valid until")

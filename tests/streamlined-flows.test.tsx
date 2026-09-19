@@ -4,7 +4,7 @@ import { correctCatchRecord } from "../domain/catches/correct-catch";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
 import { getFishingStartQuotaStatus } from "../domain/quotas/get-fishing-start-quota-status";
 import { getPrototypePermitAvailability } from "../domain/fishing-permits/get-prototype-permit-availability";
-import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { prototypePermitCatalogRepository as permitCatalogRepository } from "../data/prototype/prototype-permit-catalog-repository";
 import type { CatchRecord } from "../domain/catches/catch";
 import type { PermitPurchase } from "../domain/fishing-permits/permit-purchase";
 const now = Date.parse("2026-08-20T18:05:00+02:00");

@@ -91,7 +91,6 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await shop.getByLabel("Phone").fill("98765432");
   await shop.getByLabel(/I have read and understood/).check();
   await shop.getByLabel(/I accept the terms/).check();
-  await shop.getByRole("button", { name: "Next · review" }).click();
   await shop.getByRole("button", { name: "Pay with Vipps", exact: true }).click();
   await shop.getByRole("button", { name: "Approve 455 kr", exact: true }).click();
   await expect(shop.getByRole("status")).toContainText(
@@ -100,7 +99,7 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
   await expect(shop).not.toContainText(
     /Fiskedato|Kortinnehaver|Fødselsdato|Deltakere|fiskekrav|Kontroller bestillingen|Grunnpris|Totalt beløp|Testbetaling godkjent|Bestillingsnummer|Gyldig fra|Utsteder/,
   );
-  await shop.getByRole("button", { name: "Back to home" }).click();
+  await shop.locator(".permit-checkout").getByRole("button", { name: "Back to home" }).click();
 
   await page.getByRole("button", { name: "More", exact: true }).click();
   await expect(page.getByRole("heading", { name: "More" })).toBeVisible();
@@ -160,11 +159,8 @@ test("tilbakemelding og profildetaljer er fullstendig på engelsk", async ({ pag
 
   await page.getByRole("button", { name: /Angler profile/ }).click();
   let dialog = page.getByRole("dialog", { name: "Profile and privacy" });
-  await expect(dialog.getByText("Name", { exact: true })).toBeVisible();
-  await expect(dialog.getByText("English", { exact: true })).toBeVisible();
-  await expect(dialog.getByRole("status")).toHaveText(
-    "Changes are saved automatically on this device.",
-  );
+  await expect(dialog.getByLabel("Full name", { exact: true })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Save profile" })).toBeVisible();
   await expect(dialog).not.toContainText(
     /Fiskerprofil|Navn|Telefon|Språk|Personvern|Brukes bare|Innstillingene/,
   );
@@ -265,22 +261,20 @@ test("oppstart og juridisk status er fullstendig på engelsk", async ({ page }) 
   );
   await flow.getByRole("button", { name: "Start fishing in Zone 3" }).click();
 
+  await page.getByLabel("I have read and understood the rules", { exact: true }).check();
+  await page.getByRole("button", { name: "Start fishing in Zone 3" }).click();
   await expect(page.getByText("The fishing session has started in Zone 3")).toBeVisible();
-  await expect(page.getByText("ACTIVE FISHING SESSION")).toBeVisible();
-  await expect(page.locator(".active-session")).not.toContainText(
+  await expect(page.getByText("Fishing in progress", { exact: true })).toBeVisible();
+  await expect(page.locator(".home-active-trip")).not.toContainText(
     /AKTIV FISKEØKT|Startet i dag|Registrer fangst|Sone og regler|Stopp ·/,
   );
 
   await page.getByRole("button", { name: "Register catch" }).click();
   const catchDialog = page.getByRole("dialog", { name: "Register catch" });
-  await expect(catchDialog.getByRole("heading", { name: "What did you catch?" })).toBeVisible();
-  await catchDialog.getByRole("button", { name: "Next · size" }).click();
+  await expect(catchDialog.getByRole("button", { name: "Save catch" })).toBeVisible();
   await catchDialog.getByPlaceholder("cm").fill("55");
   await catchDialog.getByPlaceholder("kg").fill("2.4");
-  await catchDialog.getByRole("button", { name: "Next · rule check" }).click();
-  await expect(
-    catchDialog.getByRole("heading", { name: "The report has been checked" }),
-  ).toBeVisible();
+  await expect(catchDialog.getByRole("button", { name: "Save catch" })).toBeEnabled();
   await expect(catchDialog).not.toContainText(
     /Fangst|Gjenutsatt|Størrelsesregler|Minstemål|Tilbake og endre/,
   );

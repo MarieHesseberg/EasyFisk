@@ -1,3 +1,4 @@
+import { riverDate } from "../shared/river-time.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
 
 type QuotaCatch = {
@@ -6,15 +7,8 @@ type QuotaCatch = {
   caughtAt?: number;
 };
 
-const norwegianDateFormatter = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Europe/Oslo",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
-
 export function getNorwegianCalendarDate(timestamp: number) {
-  return norwegianDateFormatter.format(new Date(timestamp));
+  return riverDate(timestamp);
 }
 
 export function countKilledSalmonForDay(catches: QuotaCatch[], day: string) {

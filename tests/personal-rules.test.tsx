@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "vitest";
-import { cleanup, render, screen, fireEvent } from "@testing-library/react";
-import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { cleanup, render, waitFor, screen, fireEvent } from "@testing-library/react";
+import { prototypePermitCatalogRepository as permitCatalogRepository } from "../data/prototype/prototype-permit-catalog-repository";
 import { createTestPermitDocument } from "../features/fishing-permits/create-test-permit-document";
 import { RulesScreen } from "../features/rules/rules-screen";
 import { getPersonalPermitContext } from "../domain/fishing-rules/get-personal-permit-context";
@@ -33,7 +33,7 @@ for (const [id, end] of [
     );
   });
 }
-test("local restrictions stay visible while optional information and sources are collapsed", () => {
+test("local restrictions stay visible while optional information and sources are collapsed", async () => {
   render(
     <RulesScreen
       demoStatus="ok"
@@ -42,6 +42,7 @@ test("local restrictions stay visible while optional information and sources are
       onRegisterPermit={() => {}}
     />,
   );
+  await waitFor(() => expect(document.querySelector(".personal-local-rules")).not.toBeNull());
   expect(document.querySelector(".personal-local-rules")?.textContent).toContain(
     "Fiskeforbud 50 meter",
   );

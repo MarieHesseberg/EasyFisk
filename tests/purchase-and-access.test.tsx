@@ -17,7 +17,7 @@ import {
   readRuleAcceptances,
   ruleVersions,
   currentRuleVersion,
-} from "../domain/fishing-rules/rule-acceptance";
+} from "../application/rules/rule-acceptance";
 import { operationSucceeded } from "../domain/shared/operation-result";
 import type { FishingDocument, AccessGrant } from "../domain/documents/fishing-document";
 

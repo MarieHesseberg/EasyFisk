@@ -1,4 +1,6 @@
-import { getAppNow } from "../shared/app-clock.ts";
+import { isTimestamp, isRecord } from "../shared/validation.ts";
+import { isCalendarDate } from "../shared/river-time.ts";
+import { getAppDate } from "../shared/app-clock.ts";
 import type { PrototypePermitProduct } from "./prototype-permit-product.ts";
 
 export const permitTermsVersion = "easyfisk-prototype-2026-08-31";
@@ -82,8 +84,8 @@ export function getPermitPriceSummary(
 }
 export function validatePermitBuyer(form: PermitCheckoutForm) {
   if (form.fullName.trim().length < 3) return "Oppgi fullt navn på kortinnehaveren.";
-  const birthDate = Date.parse(`${form.birthDate}T12:00:00`);
-  if (!Number.isFinite(birthDate) || birthDate > getAppNow()) return "Oppgi en gyldig fødselsdato.";
+  if (!isCalendarDate(form.birthDate) || form.birthDate > getAppDate())
+    return "Oppgi en gyldig fødselsdato.";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
     return "Oppgi en gyldig e-postadresse.";
   if (form.phone.replaceAll(/\D/g, "").length < 8) return "Oppgi et gyldig telefonnummer.";
@@ -106,7 +108,7 @@ export function validatePermitParticipants(
   if (!form.acceptsTerms) return "Godta vilkårene for testkjøpet.";
 }
 export function isPermitPurchase(value: unknown): value is PermitPurchase {
-  if (!value || typeof value !== "object") return false;
+  if (!isRecord(value)) return false;
   const record = value as Record<string, unknown>;
   const buyer = record.buyer as Record<string, unknown> | undefined;
   const statuses: PermitPurchaseStatus[] = [
@@ -117,8 +119,7 @@ export function isPermitPurchase(value: unknown): value is PermitPurchase {
     "issuance-failed",
     "refunded",
   ];
-  const optionalNumber = (field: unknown) =>
-    field === undefined || (typeof field === "number" && Number.isFinite(field));
+  const optionalNumber = (field: unknown) => field === undefined || isTimestamp(field);
   const optionalString = (field: unknown) => field === undefined || typeof field === "string";
   return (
     typeof record.id === "string" &&
@@ -130,13 +131,13 @@ export function isPermitPurchase(value: unknown): value is PermitPurchase {
     optionalString(record.documentId) &&
     (record.documentIds === undefined ||
       (Array.isArray(record.documentIds) &&
-        record.documentIds.every((id) => typeof id === "string"))) &&
+        record.documentIds.every((id) => typeof id === "string" && id.length > 0) &&
+        new Set(record.documentIds).size === record.documentIds.length)) &&
     (record.fishingDates === undefined ||
       (Array.isArray(record.fishingDates) &&
         record.fishingDates.length > 0 &&
-        record.fishingDates.every(
-          (date) => typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date),
-        ))) &&
+        record.fishingDates.every((date) => isCalendarDate(date)) &&
+        new Set(record.fishingDates).size === record.fishingDates.length)) &&
     (record.fisher === undefined ||
       (!!record.fisher &&
         typeof record.fisher === "object" &&
@@ -144,27 +145,29 @@ export function isPermitPurchase(value: unknown): value is PermitPurchase {
           (key) => typeof (record.fisher as Record<string, unknown>)[key] === "string",
         ))) &&
     optionalString(record.rulesVersion) &&
-    !!buyer &&
+    isRecord(buyer) &&
     typeof buyer.fullName === "string" &&
-    typeof buyer.birthDate === "string" &&
+    isCalendarDate(buyer.birthDate) &&
     typeof buyer.email === "string" &&
     typeof buyer.phone === "string" &&
     Array.isArray(record.coFishers) &&
     record.coFishers.every((name) => typeof name === "string") &&
-    typeof record.fishingDate === "string" &&
+    isCalendarDate(record.fishingDate) &&
     (record.priceNok === null ||
-      (typeof record.priceNok === "number" && Number.isFinite(record.priceNok))) &&
+      (typeof record.priceNok === "number" &&
+        Number.isFinite(record.priceNok) &&
+        record.priceNok >= 0)) &&
     statuses.includes(record.status as PermitPurchaseStatus) &&
     typeof record.createdAt === "number" &&
-    Number.isFinite(record.createdAt) &&
+    isTimestamp(record.createdAt) &&
     optionalNumber(record.paidAt) &&
     optionalNumber(record.completedAt) &&
     optionalNumber(record.cancelledAt) &&
     optionalNumber(record.refundedAt) &&
     optionalString(record.refundReason) &&
     typeof record.termsVersion === "string" &&
-    typeof record.acceptedRulesAt === "number" &&
-    typeof record.acceptedTermsAt === "number" &&
+    isTimestamp(record.acceptedRulesAt) &&
+    isTimestamp(record.acceptedTermsAt) &&
     optionalString(record.paymentReference) &&
     typeof record.issuer === "string" &&
     record.issuer.length > 0

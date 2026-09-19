@@ -217,7 +217,9 @@ test("ødelagt localStorage-data gir trygge standardverdier", () => {
   const storage = createStorage();
   storage.setItem("easyfisk:fishing-log:v1", "ikke gyldig JSON");
 
-  assert.deepEqual(createLocalStorageFishingLogRepository(storage).listCatches(), []);
+  assert.throws(() => createLocalStorageFishingLogRepository(storage).listCatches());
+  assert.equal(createLocalStorageFishingLogRepository(storage).saveCatch(catchRecord).ok, false);
+  assert.equal(storage.getItem("easyfisk:fishing-log:v1"), "ikke gyldig JSON");
 });
 
 test("syntaktisk gyldig JSON med ugyldige domenedata avvises", () => {
@@ -232,8 +234,8 @@ test("syntaktisk gyldig JSON med ugyldige domenedata avvises", () => {
   );
 
   const repository = createLocalStorageFishingLogRepository(storage);
-  assert.deepEqual(repository.listCatches(), []);
-  assert.deepEqual(repository.listSessions(), []);
+  assert.throws(() => repository.listCatches());
+  assert.throws(() => repository.listSessions());
 });
 
 test("eldre localStorage-data migreres til øktliste med stabil ID", () => {

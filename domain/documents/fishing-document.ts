@@ -35,6 +35,9 @@ export interface FishingDocument {
   attachment?: Blob;
   attachmentName?: string;
   purchaseId?: string;
+  zoneId?: import("../zones/zone").ZoneId;
+  productId?: string;
+  rulesVersion?: string;
   forOtherPerson?: boolean;
   ownerEmail?: string;
   derivedAccess?: boolean;

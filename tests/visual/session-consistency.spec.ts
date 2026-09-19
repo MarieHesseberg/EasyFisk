@@ -19,17 +19,20 @@ test("manual zone and subzone survive refresh and map exploration on mobile", as
   await expect(page.getByRole("button", { name: "Start fiske i Sone 4" })).toBeDisabled();
   await page.getByLabel("Delsone", { exact: true }).selectOption("Bjåhylen");
   await page.getByRole("button", { name: "Start fiske i Sone 4" }).click();
+  await page.getByLabel("Jeg har lest og forstått reglene", { exact: true }).check();
+  await page.getByRole("button", { name: "Start fiske i Sone 4" }).click();
+  await expect(page.locator(".home-active-trip")).toContainText("Bjåhylen");
   await page.reload();
-  await expect(page.locator(".active-session")).toContainText("Bjåhylen");
-  await expect(page.locator(".active-session")).toContainText("Sone 4");
+  await expect(page.locator(".home-active-trip")).toContainText("Bjåhylen");
+  await expect(page.locator(".home-active-trip")).toContainText("Sone 4");
   await page.getByRole("button", { name: "Kart", exact: true }).click();
   await page.getByRole("button", { name: "Sone 1", exact: true }).click();
   await expect(page.getByRole("button", { name: "Bruk sone 1 i fiskeøkten" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Start fiske" })).toHaveCount(0);
   // The development toolbar overlaps the center of Home on this mobile viewport.
   await page.getByRole("button", { name: "Hjem", exact: true }).press("Enter");
-  await expect(page.locator(".active-session")).toContainText("Bjåhylen");
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await expect(page.locator(".home-active-trip")).toContainText("Bjåhylen");
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("Bjåhylen");
   await page.screenshot({ path: "tmp/pdfs/ux-step2/mobile-stop.png" });
   expect(pageErrors).toEqual([]);

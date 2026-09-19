@@ -16,7 +16,7 @@ import { PositionStep } from "../features/fishing-session/fishing-flow/steps/pos
 import { StopSessionStep } from "../features/fishing-session/fishing-flow/stop-session-step";
 import { RulesScreen } from "../features/rules/rules-screen";
 import { PermitReportingRegistration } from "../features/fishing-permits/permit-reporting-registration";
-import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { prototypePermitCatalogRepository as permitCatalogRepository } from "../data/prototype/prototype-permit-catalog-repository";
 import { createTestPermitDocument } from "../features/fishing-permits/create-test-permit-document";
 import { operationSucceeded } from "../domain/shared/operation-result";
 import type { CatchRecord } from "../domain/catches/catch";
@@ -112,14 +112,14 @@ test("selected subzone survives storage and a fresh controller while old snapsho
   };
   const repository = createLocalStorageFishingLogRepository(storage);
   const first = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() => expect(first.result.current.state.sessionLoading).toBe(false));
   act(() => first.result.current.actions.setFlow("start"));
   await act(async () => {
     await first.result.current.actions.finishSessionFlow(undefined, 4, "Bjåhylen");
   });
   first.unmount();
-  const restored = renderHook(() =>
-    useEasyFiskController(createLocalStorageFishingLogRepository(storage)),
-  );
+  const restoredRepository = createLocalStorageFishingLogRepository(storage);
+  const restored = renderHook(() => useEasyFiskController(restoredRepository));
   await waitFor(() => expect(restored.result.current.state.sessionSubzone).toBe("Bjåhylen"));
   expect(
     parseStoredFishingLog({

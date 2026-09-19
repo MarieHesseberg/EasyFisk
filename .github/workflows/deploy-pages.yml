@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install browser for user flow tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify user flows before publishing
+        run: npm run test:visual
+
       - name: Verify and build static site
         run: npm run check
         env:

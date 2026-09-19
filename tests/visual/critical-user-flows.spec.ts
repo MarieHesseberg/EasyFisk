@@ -30,7 +30,9 @@ async function startFishing(page: Page) {
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByLabel("Hovedsone").selectOption("3");
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
-  await expect(page.getByText("Aktiv fiskeøkt")).toBeVisible();
+  await page.getByLabel("Jeg har lest og forstått reglene", { exact: true }).check();
+  await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
+  await expect(page.getByText("Fiske pågår", { exact: true })).toBeVisible();
 }
 
 async function completeCatchReport(page: Page) {
@@ -140,7 +142,9 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
   await expect(shop.getByRole("status")).toContainText("EF-TEST-");
   await expect(shop.getByRole("status")).toContainText("2400 kr");
   await expect(shop.getByRole("button", { name: "Åpne fiskekort" })).toBeVisible();
-  await expect(shop.getByRole("button", { name: "Tilbake til hjem" })).toBeVisible();
+  await expect(
+    shop.locator(".permit-checkout").getByRole("button", { name: "Tilbake til hjem" }),
+  ).toBeVisible();
   await expect(shop.getByRole("button", { name: "Registrer fiskeravgift" })).toBeVisible();
   await expect(shop.getByRole("button", { name: "Registrer desinfisering" })).toBeVisible();
   await shop.getByRole("button", { name: "Registrer fiskeravgift" }).click();
@@ -171,10 +175,12 @@ test("testkjøpt gruppekort oppdaterer status og overlever refresh", async ({ pa
       .getByRole("region", { name: "Interaktivt kart over Mandalselva" })
       .getByRole("button", { name: "Kjøp fiskekort i sone 4" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Hjem" }).click();
+  await page.getByRole("button", { name: "Hjem", exact: true }).click();
 });
 
-test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async ({ page }) => {
+test("ubegrenset kortsalg, testdato og avbrutt eller feilet betaling håndteres", async ({
+  page,
+}) => {
   await selectPaymentOutcome(page, "cancelled");
   await page.getByRole("button", { name: "Fiskekort", exact: true }).click();
   const shop = page.locator(".permit-shop-screen");
@@ -182,7 +188,7 @@ test("utsolgt kort, testdato og avbrutt eller feilet betaling håndteres", async
 
   const soldOut = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
   await soldOut.getByRole("button", { name: "Kjøp fiskekort" }).click();
-  await expect(shop.getByRole("button", { name: /25\. august 2026: Utsolgt/ })).toBeDisabled();
+  await expect(shop.getByRole("button", { name: /25\. august 2026/ })).toBeEnabled();
   await shop.getByRole("button", { name: /Tilbake til fiskekort/ }).click();
 
   const dayPermit = shop.locator("article").filter({ hasText: "Sone 3 døgnkort" });
@@ -369,7 +375,7 @@ test("statusmotoren kan endres fra innstillinger på mobil", async ({ page }) =>
   await expect(readyDialog.getByRole("status")).toContainText("Oppstart tillatt");
   await readyDialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
-  await expect(page.getByText("Dokumentkrav registrert i appen")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start fiske", exact: true })).toBeVisible();
   await expect(page.locator(".document-overview")).toHaveCount(0);
 });
 
@@ -378,8 +384,8 @@ test("start fiske bruker ett steg og aktiv økt overlever refresh", async ({ pag
 
   await page.reload();
 
-  await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Avslutt tur", exact: true })).toBeVisible();
+  await expect(page.getByText("Fiske pågår", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Avslutt fisketuren", exact: true })).toBeVisible();
 });
 
 test("fangst registreres gjennom hele skjemaet og kan korrigeres i dialogen", async ({ page }) => {
@@ -438,12 +444,12 @@ test("fangstskjemaet kan lukkes med X på en lav mobilskjerm", async ({ page }) 
   await dialog.getByRole("button", { name: "Lukk fangstrapport" }).click();
 
   await expect(dialog).toHaveCount(0);
-  await expect(page.getByText("AKTIV FISKEØKT")).toBeVisible();
+  await expect(page.getByText("Fiske pågår", { exact: true })).toBeVisible();
 });
 
 test("stopp økt med fangst fullfører rapporten før økten avsluttes", async ({ page }) => {
   await startFishing(page);
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Registrer manglende fangst" }).click();
 
   const dialog = await completeCatchReport(page);
@@ -453,7 +459,7 @@ test("stopp økt med fangst fullfører rapporten før økten avsluttes", async (
   await expect(summary.getByRole("heading", { name: "Takk for rapporteringen" })).toBeVisible();
   await summary.getByRole("button", { name: "Tilbake til oversikten" }).click();
   await expect(page.getByRole("button", { name: "Start fiske" })).toBeVisible();
-  await expect(page.getByText("AKTIV FISKEØKT")).toHaveCount(0);
+  await expect(page.getByText("Fiske pågår", { exact: true })).toHaveCount(0);
 });
 
 test("tidligere økt med fangst kan registreres gjennom hele skjemaet", async ({ page }) => {

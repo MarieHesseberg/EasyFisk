@@ -1,22 +1,16 @@
 import type { PermitBuyer } from "@/domain/fishing-permits/permit-purchase";
-export const emptyProfile: PermitBuyer = { fullName: "", birthDate: "", email: "", phone: "" };
-export const profileKey = "easyfisk-profile-v1";
+import { getDefaultAppServices } from "@/data/runtime/services";
+import { emptyProfile } from "@/data/local-storage/local-profile";
+export { emptyProfile, profileKey } from "@/data/local-storage/local-profile";
+// Synchronous draft prefill uses the local profile; it is not an authenticated account.
 export function readProfile(): PermitBuyer {
   try {
-    const value = JSON.parse(localStorage.getItem(profileKey) ?? "null");
-    if (value && Object.keys(emptyProfile).every((key) => typeof value[key] === "string"))
-      return {
-        fullName: value.fullName,
-        birthDate: value.birthDate,
-        email: value.email,
-        phone: value.phone,
-      };
+    return getDefaultAppServices().profile.read();
   } catch {
-    /* An empty profile does not block registration. */
+    return { ...emptyProfile };
   }
-  return { ...emptyProfile };
 }
 export function saveProfile(profile: PermitBuyer) {
-  localStorage.setItem(profileKey, JSON.stringify(profile));
+  getDefaultAppServices().profile.save(profile);
   window.dispatchEvent(new Event("easyfisk-profile-changed"));
 }

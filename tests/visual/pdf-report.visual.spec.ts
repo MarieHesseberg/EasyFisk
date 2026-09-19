@@ -9,9 +9,9 @@ test.beforeEach(async ({ page }) => {
 test("PDF 1–2: notification contents and missing-document checks are English", async ({ page }) => {
   await page.getByRole("button", { name: "Notifications", exact: true }).click();
   const alerts = page.locator(".header-alert-panel");
-  await expect(alerts).toContainText("Fishing permit sales have ended for 2026");
-  await expect(alerts).toContainText("The example permit expires today at 17:59.");
-  await expect(alerts).toContainText("The rules were updated on 1 August.");
+  await expect(alerts).toContainText("Updated fishing rules");
+  await expect(alerts).toContainText("Rule version 2026-08-01");
+  await expect(alerts).not.toContainText("The example permit expires");
   await page.getByRole("button", { name: "Close notifications" }).click();
   await page.getByRole("button", { name: "Map", exact: true }).click();
   await page

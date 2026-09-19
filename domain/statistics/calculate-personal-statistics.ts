@@ -1,3 +1,4 @@
+import { catchBelongsToSession } from "../sessions/catch-belongs-to-session.ts";
 import { getAppNow } from "../shared/app-clock.ts";
 import type { CatchRecord, CatchOutcome, FishSpecies } from "../catches/catch.ts";
 import { activeFishingRules } from "../fishing-rules/mandalselva-2026.ts";
@@ -34,14 +35,14 @@ export function calculatePersonalStatistics(
   now = getAppNow(),
 ): PersonalStatistics {
   const fishingSeconds = sessions.reduce((total, session) => total + session.duration, 0);
-  const sessionStartsWithCatch = new Set(catches.map((catchRecord) => catchRecord.sessionStart));
 
   return {
     sessionCount: sessions.length,
     fishingSeconds,
     catchCount: catches.length,
-    zeroCatchSessionCount: sessions.filter((session) => !sessionStartsWithCatch.has(session.start))
-      .length,
+    zeroCatchSessionCount: sessions.filter(
+      (session) => !catches.some((record) => catchBelongsToSession(record, session)),
+    ).length,
     killedCount: countCatches(catches, undefined, "Avlivet"),
     releasedCount: countCatches(catches, undefined, "Gjenutsatt"),
     salmonCount: countCatches(catches, "Laks"),

@@ -9,8 +9,8 @@ Fiskeøkter, fangster og valgte profilinnstillinger lagres lokalt i nettleseren.
 dokumentvedlegg lagres separat i IndexedDB, slik at de ikke fyller localStorage. Hele
 økthistorikken, inkludert fangstbilder, overlever oppdatering av siden.
 
-Dette er fortsatt en prototype. Betaling, GPS, fiskekortkontroll, varsler og innsending til
-elveeigarlaget er demonstrasjonsdata og simulerte handlinger.
+Dette er fortsatt en prototype. Betaling, fiskekortkontroll, varsler og innsending til elveeigarlaget er fortsatt
+demonstrasjonsdata eller lokale handlinger. Kartets posisjonsforespørsel bruker faktisk GPS når brukeren gir tilgang.
 
 ## Fiskekort og testkjøp
 
@@ -117,3 +117,9 @@ I GitHub skal **Settings → Pages → Source** være satt til **GitHub Actions*
 Publisert app:
 
 <https://mariehesseberg.github.io/EasyFisk/>
+
+## Fundament for videreutvikling
+
+Se [arbeidspakke 1–3](docs/development-foundation.md) for tjenestevalg, asynkrone datagrensesnitt, demo/lokal modus og avgrensninger. Kjør `npm run check:all` for både kodekontroll og nettlesertester før endringer deles.
+
+Se også [arbeidspakke 4–5](docs/data-and-time-foundation.md) for dataversjoner, ID-er, bakoverkompatibilitet og norsk tidsbehandling.

@@ -1,8 +1,9 @@
+import { dateForDisplay, riverTimeZone } from "../domain/shared/river-time.ts";
 import type { AppLanguage, TranslationKey, TranslationVariables } from "../locales/index.ts";
 import { t } from "../locales/index.ts";
 
 const localeTags: Record<AppLanguage, string> = { no: "nb-NO", en: "en-GB" };
-const defaultTimeZone = "Europe/Oslo";
+const defaultTimeZone = riverTimeZone;
 
 export function getLocaleTag(language: AppLanguage) {
   return localeTags[language];
@@ -83,5 +84,9 @@ function formatUnit(value: number, unit: "hour" | "minute" | "second", language:
 }
 
 function asDate(value: Date | number | string) {
-  return value instanceof Date ? value : new Date(value);
+  return typeof value === "string"
+    ? dateForDisplay(value)
+    : value instanceof Date
+      ? value
+      : new Date(value);
 }

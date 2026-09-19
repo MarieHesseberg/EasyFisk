@@ -1,5 +1,5 @@
 import { RulesStep } from "./rules-step";
-import { hasAcceptedCurrentRules } from "@/domain/fishing-rules/rule-acceptance";
+import { hasAcceptedCurrentRules } from "@/application/rules/rule-acceptance";
 import { useState } from "react";
 import { selectLocalized } from "@/locales";
 import { useLanguage } from "@/components/localization/language-provider";

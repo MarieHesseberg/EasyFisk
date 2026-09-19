@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { OperationResult } from "@/domain/shared/operation-result";
 
 export function useFormSubmission(errorMessage: string) {
+  const locked = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   async function run(
     action: () => void | OperationResult<unknown> | Promise<void | OperationResult<unknown>>,
   ) {
-    if (isSubmitting) return false;
+    if (locked.current) return false;
+    locked.current = true;
     setIsSubmitting(true);
     setError("");
     try {
@@ -24,6 +26,7 @@ export function useFormSubmission(errorMessage: string) {
       setError(errorMessage);
       return false;
     } finally {
+      locked.current = false;
       setIsSubmitting(false);
     }
   }

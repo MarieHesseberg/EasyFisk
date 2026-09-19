@@ -1,3 +1,4 @@
+import { catchBelongsToSession } from "@/domain/sessions/catch-belongs-to-session";
 import { useEffect, useRef } from "react";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
 import { HomePermitHero } from "./components/home-permit-hero";
@@ -37,6 +38,7 @@ export function HomeScreen({
   active,
   elapsed,
   startTime,
+  sessionId,
   demoStatus,
   scenario,
   documentReadiness,
@@ -56,6 +58,7 @@ export function HomeScreen({
   active: boolean;
   elapsed: number;
   startTime: number | null;
+  sessionId?: string;
   demoStatus: DemoStatus;
   scenario: DemoScenario;
   documentReadiness: DocumentReadiness;
@@ -70,7 +73,11 @@ export function HomeScreen({
     screenRef.current?.scrollTo({ top: 0 });
   }, [active]);
   const preparing = !documentReadiness.complete && documentStatuses.includes(demoStatus);
-  const sessionCatchCount = catches.filter((record) => record.sessionStart === startTime).length;
+  const sessionCatchCount = catches.filter(
+    (record) =>
+      startTime !== null &&
+      catchBelongsToSession(record, { id: sessionId ?? "", start: startTime }),
+  ).length;
   const dailyReached = quotaStatus.dailyReached;
   const showActiveWarning = active && (dailyReached || scenario.level !== "ok");
 

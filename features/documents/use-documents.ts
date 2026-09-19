@@ -1,66 +1,48 @@
 "use client";
-
+import { useCallback, useEffect } from "react";
+import { useAppServices } from "@/data/runtime/services-provider";
+import { useRepositoryQuery } from "@/hooks/use-repository-query";
 import { documentsForLocalProfile } from "@/domain/documents/access-grants";
 import { readProfile } from "@/features/profile/local-profile";
-import { getAppNow } from "@/domain/shared/app-clock";
-import { useCallback, useEffect, useState } from "react";
-import {
-  createBrowserDocumentsRepository,
-  saveDocumentsAtomically,
-} from "@/data/local-storage/create-browser-documents-repository";
 import type { FishingDocument } from "@/domain/documents/fishing-document";
-
-const repository = createBrowserDocumentsRepository();
+import { technicalOperationFailed } from "@/domain/shared/operation-result";
 const changedEvent = "easyfisk-documents-changed";
-
 export function useDocuments() {
-  const [documents, setDocuments] = useState<FishingDocument[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const reload = useCallback(async () => {
+  const { documents: repository, clock } = useAppServices();
+  const read = useCallback(async () => {
     const result = await repository.list();
-    if (result.ok) {
-      setDocuments(documentsForLocalProfile(result.value, readProfile().email, getAppNow()));
-      setError("");
-    } else setError(result.error);
-    setLoading(false);
-  }, []);
-
+    if (!result.ok) throw new Error(result.error);
+    return documentsForLocalProfile(result.value, readProfile().email, clock.now());
+  }, [repository, clock]);
+  const query = useRepositoryQuery<FishingDocument[]>(read, []);
+  const { reload } = query;
   useEffect(() => {
-    let active = true;
-    repository.list().then((result) => {
-      if (!active) return;
-      if (result.ok)
-        setDocuments(documentsForLocalProfile(result.value, readProfile().email, getAppNow()));
-      else setError(result.error);
-      setLoading(false);
-    });
     const refresh = () => {
       void reload();
     };
     window.addEventListener(changedEvent, refresh);
     window.addEventListener("easyfisk-profile-changed", refresh);
     return () => {
-      active = false;
       window.removeEventListener(changedEvent, refresh);
       window.removeEventListener("easyfisk-profile-changed", refresh);
     };
   }, [reload]);
-
-  async function save(document: FishingDocument) {
-    const result = await repository.save(document);
-    if (result.ok) window.dispatchEvent(new Event(changedEvent));
-    return result;
+  async function write(action: () => ReturnType<typeof repository.save>) {
+    try {
+      const result = await action();
+      if (result.ok) window.dispatchEvent(new Event(changedEvent));
+      return result;
+    } catch (cause) {
+      return technicalOperationFailed("storage.write", cause);
+    }
   }
-  async function remove(id: string) {
-    const result = await repository.remove(id);
-    if (result.ok) window.dispatchEvent(new Event(changedEvent));
-    return result;
-  }
-  async function saveMany(items: FishingDocument[]) {
-    const result = await saveDocumentsAtomically(items);
-    if (result.ok) window.dispatchEvent(new Event(changedEvent));
-    return result;
-  }
-  return { documents, loading, error, reload, save, saveMany, remove };
+  return {
+    documents: query.data,
+    loading: query.loading,
+    error: query.error,
+    reload,
+    save: (document: FishingDocument) => write(() => repository.save(document)),
+    saveMany: (items: FishingDocument[]) => write(() => repository.saveMany(items)),
+    remove: (id: string) => write(() => repository.remove(id)),
+  };
 }

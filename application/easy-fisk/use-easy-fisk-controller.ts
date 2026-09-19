@@ -1,10 +1,12 @@
 "use client";
+import { catchBelongsToSession } from "@/domain/sessions/catch-belongs-to-session";
 import { getAppNow } from "@/domain/shared/app-clock";
 
 import { selectLocalized } from "@/locales";
 import type { FishingLogRepository } from "@/data/contracts/fishing-log-repository";
 import { fishingContentRepository } from "@/data/repositories/fishing-content";
-import { fishingLogRepository } from "@/data/repositories/fishing-log";
+import { useAppServices } from "@/data/runtime/services-provider";
+import type { AsyncRepository } from "@/data/contracts/async-repository";
 import type { CatchRecord } from "@/domain/catches/catch";
 import { getStatusResolution } from "@/domain/fishing-rules/status-checks";
 import { createSessionRecord } from "@/domain/sessions/create-session-record";
@@ -20,18 +22,23 @@ function sessionResult(count: number) {
   return count ? `${count} fangst${count === 1 ? "" : "er"}` : "Nullfangst registrert";
 }
 
-export function useEasyFiskController(repository: FishingLogRepository = fishingLogRepository) {
+export function useEasyFiskController(
+  source?: FishingLogRepository | AsyncRepository<FishingLogRepository>,
+) {
+  const services = useAppServices();
+  const repository = source ?? services.fishingLog;
   const { language, t } = useLanguage();
   const navigation = useAppNavigationController();
   const session = useActiveSessionController(repository);
   const log = useFishingLogController(repository);
   const { message: toast, showToast } = useTimedToast();
   const { demoStatus, flow, zone } = navigation.state;
-  const { active, finishAfterCatch, sessionZone, sessionSubzone, startTime } = session.state;
+  const { active, finishAfterCatch, sessionZone, sessionSubzone, startTime, sessionId } =
+    session.state;
   async function finishSessionFlow(caught?: boolean, selectedZone?: ZoneId, subzone?: string) {
     if (flow === "start") {
       const selected = selectedZone ?? zone;
-      const result = session.actions.start(selected, subzone);
+      const result = await session.actions.start(selected, subzone);
       if (!result.ok) {
         showToast(t(result.error));
         return;
@@ -62,9 +69,13 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         end,
         findZoneName(sessionZone, fishingContentRepository.getZones(), sessionSubzone),
         sessionResult(
-          log.state.catches.filter((record) => record.sessionStart === startedAt).length,
+          log.state.catches.filter((record) =>
+            catchBelongsToSession(record, { id: sessionId ?? "", start: startedAt }),
+          ).length,
         ),
         sessionSubzone,
+        sessionId,
+        sessionZone,
       );
       const result = await log.actions.saveCompletedSession(completed, [], true);
       if (!result.ok) {
@@ -80,6 +91,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     navigation.actions.setScreen("home");
   }
   async function addCatch(record: CatchRecord) {
+    record = { ...record, sessionId, zoneId: sessionZone };
     if (finishAfterCatch) {
       const end = getAppNow();
       const completedSession = createSessionRecord(
@@ -87,9 +99,13 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
         end,
         record.zone,
         sessionResult(
-          log.state.catches.filter((existing) => existing.sessionStart === startTime).length + 1,
+          log.state.catches.filter((existing) =>
+            catchBelongsToSession(existing, { id: sessionId ?? "", start: startTime ?? end }),
+          ).length + 1,
         ),
         sessionSubzone,
+        sessionId,
+        sessionZone,
       );
       const completedResult = await log.actions.saveCompletedSession(
         completedSession,
@@ -121,6 +137,7 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     navigation.actions.setSelectedDemoStatus(status);
   }
   function startStatusTest() {
+    if (services.mode !== "demo") return false;
     if (active) {
       showToast(
         selectLocalized(
@@ -152,7 +169,13 @@ export function useEasyFiskController(repository: FishingLogRepository = fishing
     navigation.actions.setFlow("start");
   }
   return {
-    state: { ...navigation.state, ...session.state, ...log.state, toast },
+    state: {
+      ...navigation.state,
+      ...session.state,
+      ...log.state,
+      toast,
+      demoEnabled: services.mode === "demo",
+    },
     actions: {
       ...navigation.actions,
       dismissCatchFlow: () => session.actions.setFinishAfterCatch(false),

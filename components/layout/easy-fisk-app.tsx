@@ -1,6 +1,7 @@
 "use client";
 
 import { usePermitJourney } from "@/features/fishing-permits/use-permit-journey";
+import { selectLocalized } from "@/locales";
 import { Fragment, useState, useEffect } from "react";
 import { CatchReportModal } from "@/features/catch-report/catch-report-modal";
 import { useEasyFiskController } from "@/application/easy-fisk/use-easy-fisk-controller";
@@ -31,7 +32,7 @@ import { useCurrentTime } from "@/hooks/use-current-time";
 import { useLanguage } from "@/components/localization/language-provider";
 
 export function EasyFiskApp() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [navigationRevision, setNavigationRevision] = useState(0);
   const [catchReportOpen, setCatchReportOpen] = useState(false);
   const { state, actions } = useEasyFiskController();
@@ -44,7 +45,7 @@ export function EasyFiskApp() {
     window.addEventListener("easyfisk-home", home);
     return () => window.removeEventListener("easyfisk-home", home);
   }, [actions]);
-  const { documents, loading: documentsLoading } = useDocuments();
+  const { documents, loading: documentsLoading, error: documentsError } = useDocuments();
   const documentCheckTime = useCurrentTime();
   const {
     active,
@@ -91,11 +92,24 @@ export function EasyFiskApp() {
     quotaStatus,
   );
   return (
-    <main className="prototype-shell" data-ready={!documentsLoading}>
+    <main
+      className="prototype-shell"
+      inert={documentsLoading || state.logLoading || state.sessionLoading}
+      data-ready={!documentsLoading && !state.logLoading && !state.sessionLoading}
+    >
       <div className={screen === "map" ? "phone-app" : "phone-app visual-refresh"}>
+        {(documentsError || state.logError || state.sessionError) && (
+          <p role="alert">
+            {t(documentsError || state.logError || state.sessionError)}{" "}
+            <button onClick={() => window.location.reload()}>
+              {selectLocalized(language, "Prøv igjen", "Try again")}
+            </button>
+          </p>
+        )}
         <Fragment key={navigationRevision}>
           {screen === "home" && (
             <HomeScreen
+              sessionId={state.sessionId}
               onStart={actions.openSessionFlow}
               onRegisterCatch={() => setCatchReportOpen(true)}
               onHistory={actions.openMyHistory}
@@ -290,19 +304,21 @@ export function EasyFiskApp() {
         )}
         <ScrollIndicator />
       </div>
-      <DemoControlPanel
-        scenarios={demoStatuses}
-        selected={selectedDemo}
-        isTestMode={isStatusTestMode}
-        selectStatus={actions.selectDemoStatus}
-        useActualStatus={actions.useActualStatus}
-        paymentOutcome={paymentOutcome}
-        setPaymentOutcome={actions.setPaymentOutcome}
-        startTest={() => {
-          if (!actions.startStatusTest()) return;
-          actions.navigate("home");
-        }}
-      />
+      {state.demoEnabled && (
+        <DemoControlPanel
+          scenarios={demoStatuses}
+          selected={selectedDemo}
+          isTestMode={isStatusTestMode}
+          selectStatus={actions.selectDemoStatus}
+          useActualStatus={actions.useActualStatus}
+          paymentOutcome={paymentOutcome}
+          setPaymentOutcome={actions.setPaymentOutcome}
+          startTest={() => {
+            if (!actions.startStatusTest()) return;
+            actions.navigate("home");
+          }}
+        />
+      )}
     </main>
   );
 }

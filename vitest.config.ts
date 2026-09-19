@@ -3,5 +3,9 @@ import path from "node:path";
 
 export default defineConfig({
   resolve: { alias: { "@": path.resolve(import.meta.dirname) } },
-  test: { environment: "jsdom", include: ["tests/**/*.test.tsx"] },
+  test: {
+    setupFiles: ["./tests/setup-clock.ts"],
+    environment: "jsdom",
+    include: ["tests/**/*.test.tsx"],
+  },
 });

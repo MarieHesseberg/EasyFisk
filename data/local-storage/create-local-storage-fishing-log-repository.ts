@@ -10,20 +10,18 @@ import { parseStoredFishingLog, type StoredFishingLog } from "./parse-persisted-
 const defaultStorageKey = "easyfisk:fishing-log:v1";
 
 const emptyLog: StoredFishingLog = {
-  version: 2,
+  version: 3,
   catches: [],
   sessions: [],
   activeSession: null,
 };
 
 function readLog(storage: KeyValueStorage, key: string): StoredFishingLog {
-  try {
-    const value = storage.getItem(key);
-    if (!value) return emptyLog;
-    return parseStoredFishingLog(JSON.parse(value)) ?? emptyLog;
-  } catch {
-    return emptyLog;
-  }
+  const value = storage.getItem(key);
+  if (!value) return emptyLog;
+  const parsed = parseStoredFishingLog(JSON.parse(value));
+  if (!parsed) throw new Error("Invalid saved fishing log");
+  return parsed;
 }
 
 export function createLocalStorageFishingLogRepository(
@@ -32,7 +30,9 @@ export function createLocalStorageFishingLogRepository(
 ): FishingLogRepository {
   const update = (change: (current: StoredFishingLog) => StoredFishingLog) => {
     try {
-      storage.setItem(key, JSON.stringify(change(readLog(storage, key))));
+      const updated = change(readLog(storage, key));
+      if (!parseStoredFishingLog(updated)) return technicalOperationFailed("storage.invalid-data");
+      storage.setItem(key, JSON.stringify(updated));
       return operationSucceeded(undefined);
     } catch (cause) {
       return technicalOperationFailed("storage.write", cause);

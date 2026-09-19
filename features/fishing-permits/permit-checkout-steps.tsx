@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { hasAcceptedCurrentRules } from "@/domain/fishing-rules/rule-acceptance";
+import { hasAcceptedCurrentRules } from "@/application/rules/rule-acceptance";
 import { Icon } from "@/components/ui/icon";
 import { selectLocalized } from "@/locales";
 import type { FishingDocument } from "@/domain/documents/fishing-document";

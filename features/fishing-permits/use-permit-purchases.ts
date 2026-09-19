@@ -1,48 +1,48 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { createLocalStoragePermitPurchaseRepository } from "@/data/local-storage/create-local-storage-permit-purchase-repository";
+import { useCallback, useEffect, useState } from "react";
+import { useAppServices } from "@/data/runtime/services-provider";
+import { useRepositoryQuery } from "@/hooks/use-repository-query";
 import type { PermitPurchase } from "@/domain/fishing-permits/permit-purchase";
-
+import { technicalOperationFailed } from "@/domain/shared/operation-result";
 export function usePermitPurchases() {
-  const [purchases, setPurchases] = useState<PermitPurchase[]>([]);
-  const [error, setError] = useState("");
+  const { purchases: repository } = useAppServices();
+  const [writeError, setWriteError] = useState("");
+  const read = useCallback(async () => {
+    const result = await repository.list();
+    if (!result.ok) throw new Error(result.error);
+    return result.value;
+  }, [repository]);
+  const query = useRepositoryQuery<PermitPurchase[]>(read, []);
+  const { reload } = query;
   useEffect(() => {
-    let active = true;
     const refresh = () => {
-      if (!active) return;
-      const result = createLocalStoragePermitPurchaseRepository(window.localStorage).list();
-      if (result.ok) setPurchases(result.value);
-      else setError(result.error);
+      void reload();
     };
-    Promise.resolve().then(refresh);
     window.addEventListener("easyfisk-purchases-changed", refresh);
     window.addEventListener("storage", refresh);
     return () => {
-      active = false;
       window.removeEventListener("easyfisk-purchases-changed", refresh);
       window.removeEventListener("storage", refresh);
     };
-  }, []);
-  function save(purchase: PermitPurchase) {
-    const repository = createLocalStoragePermitPurchaseRepository(window.localStorage);
-    const result = repository.save(purchase);
-    if (result.ok) {
-      const refreshed = repository.list();
-      if (refreshed.ok) setPurchases(refreshed.value);
-      setError("");
-      window.dispatchEvent(new Event("easyfisk-purchases-changed"));
-    } else setError(result.error);
-    return result;
+  }, [reload]);
+  async function write(action: () => ReturnType<typeof repository.clear>) {
+    try {
+      const result = await action();
+      setWriteError(result.ok ? "" : result.error);
+      if (result.ok) window.dispatchEvent(new Event("easyfisk-purchases-changed"));
+      return result;
+    } catch (cause) {
+      const result = technicalOperationFailed("storage.write", cause);
+      if (!result.ok) setWriteError(result.error);
+      return result;
+    }
   }
-  function clear() {
-    const result = createLocalStoragePermitPurchaseRepository(window.localStorage).clear();
-    if (result.ok) {
-      setPurchases([]);
-      setError("");
-      window.dispatchEvent(new Event("easyfisk-purchases-changed"));
-    } else setError(result.error);
-    return result;
-  }
-  return { purchases, error, save, clear };
+  return {
+    purchases: query.data,
+    error: writeError || query.error,
+    loading: query.loading,
+    reload,
+    save: (purchase: PermitPurchase) => write(() => repository.save(purchase)),
+    clear: () => write(() => repository.clear()),
+  };
 }

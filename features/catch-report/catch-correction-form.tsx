@@ -18,7 +18,7 @@ function CatchCorrectionFormContent({
   onCancel,
 }: {
   report: CatchRecord;
-  onSave: (edit: CatchEdit) => OperationResult<void> | void;
+  onSave: (edit: CatchEdit) => OperationResult<void> | void | Promise<OperationResult<void> | void>;
   onCancel: () => void;
 }) {
   const { language, t } = useLanguage();
@@ -39,7 +39,7 @@ function CatchCorrectionFormContent({
       onSubmit={async (e) => {
         e.preventDefault();
         if (!validation.detailsValid || reason.trim().length < 5) return;
-        const result = onSave({ values, reason });
+        const result = await onSave({ values, reason });
         if (result && !result.ok) setError(t(result.error));
         else {
           await draft?.complete();

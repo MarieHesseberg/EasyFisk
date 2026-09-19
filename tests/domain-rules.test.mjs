@@ -74,15 +74,30 @@ test("simulert korttilgjengelighet følger valgt dato og fiskesesong", () => {
     capacity: { label: "To kort", permitsPerFishingDay: 2 },
   };
 
-  const beforeSeason = getPrototypePermitAvailability(product, "2026-05-31");
+  const beforeSeason = getPrototypePermitAvailability(
+    product,
+    "2026-05-31",
+    "no",
+    Date.parse("2026-08-20T12:00:00Z"),
+  );
   const duringSeason = getPrototypePermitAvailability(
     product,
     "2026-07-15",
     "no",
     Date.parse("2026-07-15T12:00:00+02:00"),
   );
-  const afterSeason = getPrototypePermitAvailability(product, "2026-09-01");
-  const futureSale = getPrototypePermitAvailability(product, "2027-06-01");
+  const afterSeason = getPrototypePermitAvailability(
+    product,
+    "2026-09-01",
+    "no",
+    Date.parse("2026-08-20T12:00:00Z"),
+  );
+  const futureSale = getPrototypePermitAvailability(
+    product,
+    "2027-06-01",
+    "no",
+    Date.parse("2026-08-20T12:00:00Z"),
+  );
 
   assert.equal(beforeSeason.status, "no-fishing-date");
   assert.match(beforeSeason.label, /starter/);

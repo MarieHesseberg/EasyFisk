@@ -1,9 +1,6 @@
 "use client";
 import { selectLocalized } from "@/locales";
-import {
-  acceptCurrentRules,
-  hasPreviousRuleAcceptance,
-} from "@/domain/fishing-rules/rule-acceptance";
+import { acceptCurrentRules, hasPreviousRuleAcceptance } from "@/application/rules/rule-acceptance";
 import { useState } from "react";
 import { FlowTitle } from "@/components/ui/flow-title";
 import type { ZoneId } from "@/domain/zones/zone";

@@ -17,7 +17,7 @@ async function openStart(page: Page, scenario = "ok") {
   const settings = page.getByRole("dialog", { name: "Statusmotor" });
   await settings.getByLabel("Situasjon").selectOption(scenario);
   await settings.getByRole("button", { name: /bruk valgt situasjon/i }).click();
-  await page.locator(".status-card button").click();
+  await page.getByRole("button", { name: "Start fiske", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Start fiske" });
   await expect(dialog.getByRole("heading", { name: "Finn riktig fiskesone" })).toBeVisible();
   await expect(dialog.getByRole("checkbox")).toHaveCount(0);
@@ -48,7 +48,7 @@ test("inside-zone test suggests zone and starts without other confirmation scree
   await page.screenshot({ path: "tmp/pdfs/preview/start-zone-found.png" });
   await start.click();
   await expect(dialog).toHaveCount(0);
-  await expect(page.locator(".active-session")).toContainText("Sone 3");
+  await expect(page.locator(".home-active-trip")).toContainText("Sone 3");
   expect(errors).toEqual([]);
 });
 
@@ -72,7 +72,7 @@ test("outside-zone test warns and requires a manual selection on the same page",
   await page.screenshot({ path: "tmp/pdfs/preview/start-outside-zone.png" });
   await dialog.getByLabel("Hovedsone").selectOption("3");
   await dialog.getByRole("button", { name: "Start fiske i Sone 3" }).click();
-  await expect(page.locator(".active-session")).toContainText("Sone 3");
+  await expect(page.locator(".home-active-trip")).toContainText("Sone 3");
 });
 
 for (const code of [1, 2, 3]) {
@@ -97,7 +97,7 @@ for (const code of [1, 2, 3]) {
     await expect(dialog.getByRole("alert")).toBeVisible();
     await dialog.getByLabel("Hovedsone").selectOption("3");
     await dialog.getByRole("button", { name: "Start fiske i Sone 3" }).click();
-    await expect(page.locator(".active-session")).toContainText("Sone 3");
+    await expect(page.locator(".home-active-trip")).toContainText("Sone 3");
   });
 }
 
@@ -121,7 +121,7 @@ test("real GPS suggestion outside permit coverage cannot start a trip", async ({
   await expect(dialog.getByRole("button", { name: "Start fiske i Sone 4" })).toBeDisabled();
   await dialog.getByLabel("Hovedsone").selectOption("3");
   await dialog.getByRole("button", { name: "Start fiske i Sone 3" }).click();
-  await expect(page.locator(".active-session")).toContainText("Sone 3");
+  await expect(page.locator(".home-active-trip")).toContainText("Sone 3");
 });
 
 test("switching to manual selection ignores a late GPS response", async ({ page }) => {

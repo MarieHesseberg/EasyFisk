@@ -19,6 +19,7 @@ export function SessionHistoryDetail({
 }) {
   const { language, t } = useLanguage();
   const dateFormatter = new Intl.DateTimeFormat(selectLocalized(language, "nb-NO", "en-GB"), {
+    timeZone: "Europe/Oslo",
     day: "numeric",
     month: "long",
     year: "numeric",

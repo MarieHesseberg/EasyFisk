@@ -86,6 +86,8 @@ test("catch draft resumes its step and measurements, then clears on completion",
   await page.getByRole("button", { name: "Start fiske", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
+  await page.getByLabel("Jeg har lest og forstått reglene", { exact: true }).check();
+  await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Registrer fangst" });
   await dialog.getByPlaceholder("cm").fill("65");

@@ -141,7 +141,7 @@ export function StatisticsScreen({
   onCorrectCatch: (
     id: string,
     note: string | CatchEdit,
-  ) => import("@/domain/shared/operation-result").OperationResult<void> | void;
+  ) => import("@/domain/shared/operation-result").AsyncOperationResult<void> | void;
   onShowRules: () => void;
   openMine: boolean;
   openPastSession: boolean;

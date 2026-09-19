@@ -29,7 +29,7 @@ import { calculatePersonalStatistics } from "../domain/statistics/calculate-pers
 import { useFishingLogController } from "../application/easy-fisk/use-fishing-log-controller";
 import { createMemoryCatchImageRepository } from "../data/memory/create-memory-catch-image-repository";
 import { createLocalStorageFishingLogRepository } from "../data/local-storage/create-local-storage-fishing-log-repository";
-import { permitCatalogRepository } from "../data/repositories/permit-catalog";
+import { prototypePermitCatalogRepository as permitCatalogRepository } from "../data/prototype/prototype-permit-catalog-repository";
 import { PermitShop } from "../features/fishing-permits/permit-shop";
 import { PermitCheckout } from "../features/fishing-permits/permit-checkout";
 import { PermitReportingRegistration } from "../features/fishing-permits/permit-reporting-registration";
@@ -283,7 +283,9 @@ test("fiskekortkatalogen tilbyr strukturerte produktdata gjennom repositoryet", 
 test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", async () => {
   render(<PermitShop initialZone={2} />);
 
-  expect(screen.getByRole("button", { name: "Sone 2" }).getAttribute("aria-pressed")).toBe("true");
+  expect((await screen.findByRole("button", { name: "Sone 2" })).getAttribute("aria-pressed")).toBe(
+    "true",
+  );
   expect(screen.getByRole("heading", { name: "Holmegård dagskort" })).toBeTruthy();
   expect(screen.getByRole("heading", { name: "Holmegård sesongkort" })).toBeTruthy();
 
@@ -299,14 +301,16 @@ test("fiskekortbutikken viser valgt sone og bruker én felles produktkatalog", a
 test("fiskekort uten dokumentert pris viser informasjon uten å åpne kjøpsflyten", async () => {
   render(<PermitShop initialZone={1} />);
 
-  const product = screen.getByRole("heading", { name: "Båtkort sone 1" }).closest("article");
+  const product = (await screen.findByRole("heading", { name: "Båtkort sone 1" })).closest(
+    "article",
+  );
   if (!product) throw new Error("Produktkort mangler");
 
   expect(product.textContent).toContain("Pris ikke offentliggjort");
   const detailButton = product.querySelector("button");
   if (!detailButton) throw new Error("Knapp for produktdetaljer mangler");
   await userEvent.setup().click(detailButton);
-  expect(screen.getByRole("heading", { name: "Båtkort sone 1" })).toBeTruthy();
+  expect(await screen.findByRole("heading", { name: "Båtkort sone 1" })).toBeTruthy();
   expect(screen.getByRole("link", { name: /Se original produktkilde hos Inatur/ })).toBeTruthy();
   expect(screen.getAllByText("Pris ikke offentliggjort").length).toBeGreaterThan(0);
   expect(screen.getByText("Kjøp via selger")).toBeTruthy();
@@ -633,7 +637,7 @@ test("tom fangsthistorikk forklarer at ingen fangster er registrert", () => {
   expect(screen.getByText("Ingen fangster registrert")).toBeTruthy();
 });
 
-test("feil ved lagring av innstillinger blir tilgjengelig for brukergrensesnittet", () => {
+test("feil ved lagring av innstillinger blir tilgjengelig for brukergrensesnittet", async () => {
   const repository = {
     getPreferences: () => ({
       notifications: {
@@ -649,8 +653,11 @@ test("feil ved lagring av innstillinger blir tilgjengelig for brukergrensesnitte
     savePreferences: () => operationFailed("Kunne ikke lagre innstillingene på enheten."),
   };
   const { result } = renderHook(() => usePreferencesController(repository));
+  await waitFor(() => expect(result.current.loading).toBe(false));
 
-  act(() => result.current.setPositionSuggestions(false));
+  await act(async () => {
+    await result.current.setPositionSuggestions(false);
+  });
 
   expect(result.current.error).toBe("Kunne ikke lagre innstillingene på enheten.");
   expect(result.current.preferences.positionSuggestions).toBe(true);
@@ -673,6 +680,9 @@ test("profildialog kan lukkes med Escape", async () => {
 test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", async () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() =>
+    expect(result.current.state.logLoading || result.current.state.sessionLoading).toBe(false),
+  );
   act(() => {
     result.current.actions.setFlow("start");
   });
@@ -699,8 +709,8 @@ test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", async () => {
   });
   expect(result.current.state.catches).toHaveLength(1);
   const catchId = result.current.state.catches[0].id;
-  act(() => {
-    result.current.actions.correctCatch(catchId, "Kontrollert");
+  await act(async () => {
+    await result.current.actions.correctCatch(catchId, "Kontrollert");
   });
   expect(result.current.state.catches[0].correction).toBe("Kontrollert");
 
@@ -717,6 +727,9 @@ test("fiskeøkt kan startes, få fangst, korrigeres og stoppes", async () => {
 test("tidligere økt og fangst kan etterregistreres", async () => {
   const repository = createMemoryFishingLogRepository();
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() =>
+    expect(result.current.state.logLoading || result.current.state.sessionLoading).toBe(false),
+  );
   const session = {
     id: "EF-OKT-1000-4000",
     start: 1_000,
@@ -753,6 +766,9 @@ test("mislykket sluttlagring lar aktiv økt stå åpen for nytt forsøk", async 
     saveCompletedSession: () => operationFailed("Kunne ikke lagre fiskedata på enheten."),
   };
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() =>
+    expect(result.current.state.logLoading || result.current.state.sessionLoading).toBe(false),
+  );
 
   act(() => result.current.actions.setFlow("start"));
   await act(async () => void (await result.current.actions.finishSessionFlow(undefined, 3)));
@@ -772,6 +788,9 @@ test("mislykket fangstlagring returneres til fangstskjemaet", async () => {
     saveCatch: () => operationFailed("Kunne ikke lagre fangsten."),
   };
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() =>
+    expect(result.current.state.logLoading || result.current.state.sessionLoading).toBe(false),
+  );
 
   let saveResult: Awaited<ReturnType<typeof result.current.actions.addCatch>> | undefined;
   await act(async () => {
@@ -801,6 +820,9 @@ test("mislykket etterregistrering returneres til skjemaet", async () => {
     saveCompletedSession: () => operationFailed("Kunne ikke lagre fisketuren."),
   };
   const { result } = renderHook(() => useEasyFiskController(repository));
+  await waitFor(() =>
+    expect(result.current.state.logLoading || result.current.state.sessionLoading).toBe(false),
+  );
 
   let saveResult: Awaited<ReturnType<typeof result.current.actions.addPastSession>> | undefined;
   await act(async () => {
@@ -827,6 +849,7 @@ test("fangstbilde hentes tilbake fra bildelager etter ny controller", async () =
   const fishingLog = createLocalStorageFishingLogRepository(storage);
   const images = createMemoryCatchImageRepository();
   const first = renderHook(() => useFishingLogController(fishingLog, images));
+  await waitFor(() => expect(first.result.current.state.logLoading).toBe(false));
 
   await act(async () => {
     await first.result.current.actions.saveCatch({

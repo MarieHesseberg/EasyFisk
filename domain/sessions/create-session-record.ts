@@ -1,3 +1,6 @@
+import type { ZoneId } from "../zones/zone.ts";
+import { createId } from "../shared/create-id.ts";
+import { zoneIdFromLegacyLabel } from "../zones/zone-identity.ts";
 import type { SessionRecord } from "./session";
 
 export function createSessionRecord(
@@ -6,9 +9,12 @@ export function createSessionRecord(
   zone: string,
   result: string,
   subzone?: string,
+  id = `EF-OKT-${createId()}`,
+  zoneId: ZoneId | undefined = zoneIdFromLegacyLabel(zone),
 ): SessionRecord {
   return {
-    id: `EF-OKT-${start}-${end}`,
+    id,
+    zoneId,
     start,
     end,
     duration: Math.max(1, Math.floor((end - start) / 1000)),

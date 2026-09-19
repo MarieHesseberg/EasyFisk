@@ -1,3 +1,4 @@
+import { decodeRecords, encodeRecords } from "./versioned-records.ts";
 import type { KeyValueStorage } from "../contracts/key-value-storage.ts";
 import type { PermitPurchaseRepository } from "../contracts/permit-purchase-repository.ts";
 import { isPermitPurchase } from "../../domain/fishing-permits/permit-purchase.ts";
@@ -8,9 +9,7 @@ import {
 const defaultStorageKey = "easyfisk:permit-purchases:v1";
 function read(storage: KeyValueStorage, key: string) {
   const value: unknown = JSON.parse(storage.getItem(key) ?? "[]");
-  if (!Array.isArray(value) || !value.every(isPermitPurchase))
-    throw new TypeError("Lagrede fiskekortkjøp er ugyldige.");
-  return value;
+  return decodeRecords(value, isPermitPurchase);
 }
 export function createLocalStoragePermitPurchaseRepository(
   storage: KeyValueStorage,
@@ -28,7 +27,10 @@ export function createLocalStoragePermitPurchaseRepository(
       try {
         if (!isPermitPurchase(purchase)) return technicalOperationFailed("storage.invalid-data");
         const purchases = read(storage, key).filter((entry) => entry.id !== purchase.id);
-        storage.setItem(key, JSON.stringify([purchase, ...purchases]));
+        storage.setItem(
+          key,
+          JSON.stringify(encodeRecords([purchase, ...purchases], isPermitPurchase)),
+        );
         return operationSucceeded(undefined);
       } catch (cause) {
         return technicalOperationFailed("storage.write", cause);
@@ -36,7 +38,7 @@ export function createLocalStoragePermitPurchaseRepository(
     },
     clear() {
       try {
-        storage.setItem(key, "[]");
+        storage.setItem(key, JSON.stringify(encodeRecords([], isPermitPurchase)));
         return operationSucceeded(undefined);
       } catch (cause) {
         return technicalOperationFailed("storage.clear", cause);

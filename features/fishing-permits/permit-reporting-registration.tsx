@@ -30,7 +30,7 @@ export function PermitReportingRegistration({
   onOutcomeChange?: (outcome: PermitReportingOutcome) => void;
   documents: FishingDocument[];
   back: () => void;
-  save: (record: PermitReportingDay) => OperationResult<void>;
+  save: (record: PermitReportingDay) => OperationResult<void> | Promise<OperationResult<void>>;
 }) {
   const { language, t } = useLanguage();
   const [fishingDate, setFishingDate] = useState(() => initialSelectedDate ?? getAppDate());
@@ -40,13 +40,13 @@ export function PermitReportingRegistration({
     () => findQualifyingSeasonPermit(documents, product, fishingDate),
     [documents, fishingDate, product],
   );
-  function submit() {
+  async function submit() {
     if (!seasonPermit) return;
     const record = {
       ...createPermitReportingDay(product, fishingDate, seasonPermit.id),
       outcome,
     };
-    const result = save(record);
+    const result = await save(record);
     setMessage(
       result.ok
         ? selectLocalized(

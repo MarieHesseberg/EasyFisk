@@ -1,3 +1,4 @@
+import { parseRiverDateTime } from "../shared/river-time.ts";
 import type { AccessGrant, FishingDocument } from "./fishing-document.ts";
 export function validateAccessGrant(
   parent: FishingDocument,
@@ -16,25 +17,27 @@ export function validateAccessGrant(
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(grant.recipientEmail)
   )
     return "Oppgi navn og e-post på mottakeren.";
-  const start = Date.parse(grant.startsAt),
-    end = Date.parse(grant.endsAt);
+  const start = parseRiverDateTime(grant.startsAt),
+    end = parseRiverDateTime(grant.endsAt);
   if (
+    !Number.isFinite(parseRiverDateTime(parent.values.startsAt ?? "")) ||
+    !Number.isFinite(parseRiverDateTime(parent.values.endsAt ?? "")) ||
     !Number.isFinite(start) ||
     !Number.isFinite(end) ||
     start >= end ||
-    start < Date.parse(parent.values.startsAt ?? "") ||
-    end > Date.parse(parent.values.endsAt ?? "")
+    start < parseRiverDateTime(parent.values.startsAt ?? "") ||
+    end > parseRiverDateTime(parent.values.endsAt ?? "")
   )
     return "Tilgangen må ligge innenfor grunneierkortets gyldighetstid.";
 }
 export function isAccessGrantActive(parent: FishingDocument, grant: AccessGrant, now: number) {
   return (
-    !grant.revokedAt &&
+    grant.revokedAt === undefined &&
     !validateAccessGrant(parent, grant, parent.ownerEmail ?? "") &&
-    Date.parse(grant.startsAt) <= now &&
-    now <= Date.parse(grant.endsAt) &&
-    Date.parse(parent.values.startsAt ?? "") <= now &&
-    now <= Date.parse(parent.values.endsAt ?? "")
+    parseRiverDateTime(grant.startsAt) <= now &&
+    now <= parseRiverDateTime(grant.endsAt) &&
+    parseRiverDateTime(parent.values.startsAt ?? "") <= now &&
+    now <= parseRiverDateTime(parent.values.endsAt ?? "")
   );
 }
 
@@ -54,13 +57,16 @@ export function documentsForLocalProfile(
           identity &&
           grant.role === "guest" &&
           grant.recipientEmail.toLowerCase() === identity &&
-          !grant.revokedAt &&
+          grant.revokedAt === undefined &&
           !validateAccessGrant(parent, grant, parent.ownerEmail ?? "") &&
-          (isAccessGrantActive(parent, grant, now) || now < Date.parse(grant.startsAt)),
+          (isAccessGrantActive(parent, grant, now) || now < parseRiverDateTime(grant.startsAt)),
       )
       .map((grant) => ({
         id: `guest-access-${grant.id}`,
         kind: "permit" as const,
+        zoneId: parent.zoneId,
+        productId: parent.productId,
+        rulesVersion: parent.rulesVersion,
         updatedAt: grant.createdAt,
         derivedAccess: true,
         values: {

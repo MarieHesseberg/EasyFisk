@@ -1,3 +1,4 @@
+import { isCalendarDate } from "../shared/river-time.ts";
 import type { PermitPurchase } from "./permit-purchase.ts";
 import { calculatePermitValidity } from "./calculate-permit-validity.ts";
 import { getAppDate, getAppNow } from "../shared/app-clock.ts";
@@ -8,12 +9,6 @@ import type {
   PrototypePermitAvailability,
   PrototypePermitProduct,
 } from "./prototype-permit-product.ts";
-
-function isCalendarDate(value: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
-  const date = new Date(`${value}T12:00:00Z`);
-  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
-}
 
 function stableNumber(value: string) {
   return Array.from(value).reduce((total, character) => total + character.charCodeAt(0), 0);
