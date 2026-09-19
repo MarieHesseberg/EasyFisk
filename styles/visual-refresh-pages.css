@@ -1,0 +1,102 @@
+.visual-refresh :is(.more-profile-card) {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  border-radius: 20px;
+  padding: 20px;
+}
+.visual-refresh .more-profile-card h2 {
+  font-size: 21px;
+}
+.visual-refresh .more-profile-card p {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+.visual-refresh .avatar {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+.visual-refresh .menu-list {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 20px;
+}
+.visual-refresh .menu-list button {
+  min-height: 88px;
+  gap: 14px;
+  padding: 16px 0;
+  color: var(--color-text);
+}
+.visual-refresh .menu-list button > span {
+  border-radius: 50%;
+}
+.visual-refresh .menu-list button:nth-child(3n + 2) > span {
+  background: var(--color-sage);
+}
+.visual-refresh .menu-list b {
+  font-size: 17px;
+  font-weight: 650;
+}
+.visual-refresh .menu-list small {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.visual-refresh .permit-shop {
+  gap: 20px;
+}
+.visual-refresh .permit-shop-list {
+  gap: 16px;
+}
+.visual-refresh .permit-shop-list article {
+  padding: 18px;
+}
+.visual-refresh .permit-shop-list h3 {
+  font-size: 21px;
+}
+.visual-refresh .permit-shop-list :is(small, a),
+.visual-refresh .permit-availability {
+  font-size: 14px;
+}
+.visual-refresh .permit-shop-zones button {
+  min-height: 48px;
+  border-radius: 24px;
+}
+.visual-refresh .rule-version {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  border-radius: 20px;
+}
+.visual-refresh .rule-version :is(small, p) {
+  color: var(--color-text-muted);
+}
+.visual-refresh .rule-version > span {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+.visual-refresh .rule-center article {
+  border-radius: 18px;
+}
+.visual-refresh .rule-center article > button {
+  padding: 18px 14px;
+}
+.visual-refresh .rule-center article > button > span {
+  border-radius: 50%;
+}
+.visual-refresh :is(.document-status, .document-verifier-card, .permit-reporting-summary) {
+  border-radius: 16px;
+  padding: 16px;
+}
+.visual-refresh :is(.documents-panel, .document-overview) {
+  font-size: 16px;
+}
+.visual-refresh :is(.document-card dt, .document-overview small, .version) {
+  font-size: 14px;
+}
+.visual-refresh .document-overview b {
+  font-size: 17px;
+}
+.visual-refresh :is(.history-card, .report-card, .profile-info-card, .stats-card) {
+  border-radius: 18px;
+  box-shadow: none;
+}

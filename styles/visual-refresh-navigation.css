@@ -1,0 +1,105 @@
+.brand-logo,
+.language-short {
+  display: none;
+}
+.visual-refresh .brand-logo {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+.visual-refresh :is(.brand-mark, .language-full, .language-switcher > svg) {
+  display: none;
+}
+.visual-refresh .language-short {
+  display: inline;
+}
+.visual-refresh .app-header {
+  padding-top: 20px;
+  padding-bottom: 24px;
+}
+.visual-refresh .brand-home {
+  min-height: 44px;
+  gap: 6px;
+}
+.visual-refresh .wordmark {
+  font-size: 28px;
+  font-weight: 850;
+  letter-spacing: -1px;
+}
+.visual-refresh .app-header h1 {
+  font-size: 29px;
+  font-weight: 750;
+  line-height: 1.2;
+  margin-top: 26px;
+}
+.visual-refresh .app-header-actions {
+  top: 20px;
+  gap: 10px !important;
+}
+.visual-refresh .language-switcher {
+  min-width: 54px;
+  min-height: 44px;
+  justify-content: center;
+  padding: 0 12px;
+  border-color: var(--color-border);
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 650;
+}
+.visual-refresh .app-header-actions > .round-btn {
+  width: 44px;
+  height: 44px;
+  flex-basis: 44px;
+  color: var(--color-text);
+}
+.visual-refresh .round-btn > svg {
+  width: 25px;
+  height: 25px;
+}
+.visual-refresh .bottom-nav {
+  height: calc(82px + env(safe-area-inset-bottom, 0px));
+  padding: 8px 8px calc(10px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--color-border);
+  box-shadow: none;
+  background: var(--color-surface);
+}
+.visual-refresh .bottom-nav button {
+  border-radius: 19px;
+  padding: 6px 1px;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+.visual-refresh .bottom-nav svg {
+  width: 25px;
+  height: 25px;
+}
+.visual-refresh .bottom-nav button.selected {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 750;
+}
+.visual-refresh .bottom-nav button:nth-child(3) svg {
+  transform: rotate(-18deg);
+}
+.visual-refresh .bottom-nav button:first-child.selected svg {
+  fill: var(--color-primary);
+}
+.visual-refresh .screen {
+  padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+}
+@media (max-width: 360px) {
+  .visual-refresh .brand-logo {
+    width: 34px;
+    height: 34px;
+  }
+  .visual-refresh .wordmark {
+    font-size: 24px;
+  }
+  .visual-refresh .app-header-actions {
+    gap: 4px !important;
+  }
+}

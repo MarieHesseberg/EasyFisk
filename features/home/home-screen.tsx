@@ -1,9 +1,12 @@
 import { useEffect, useRef } from "react";
+import type { FishingDocument } from "@/domain/documents/fishing-document";
+import { HomePermitHero } from "./components/home-permit-hero";
 import { selectLocalized } from "@/locales";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Icon } from "@/components/ui/icon";
-import { HomeSessionCard } from "@/features/home/components/home-session-card";
-import { ActiveSessionCard } from "@/features/fishing-session/components/active-session-card";
+import { HomeActionRow } from "./components/home-action-row";
+import { HomePreparation } from "./components/home-preparation";
+import { HomeActiveTrip } from "./components/home-active-trip";
 import type { DemoScenario, DemoStatus } from "@/domain/fishing-rules/rule";
 import type { DetailDestination } from "@/domain/navigation/navigation";
 import type { DocumentReadiness } from "@/domain/documents/get-document-readiness";
@@ -39,7 +42,7 @@ export function HomeScreen({
   documentReadiness,
   isStatusTestMode,
   quotaStatus,
-  hasPermits,
+  permit,
 }: {
   zoneName: string;
   onStart: () => void;
@@ -58,7 +61,7 @@ export function HomeScreen({
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
   quotaStatus: FishingStartQuotaStatus;
-  hasPermits: boolean;
+  permit?: FishingDocument;
 }) {
   const { language, t } = useLanguage();
   const screenRef = useRef<HTMLDivElement>(null);
@@ -71,95 +74,87 @@ export function HomeScreen({
   const dailyReached = quotaStatus.dailyReached;
   const showActiveWarning = active && (dailyReached || scenario.level !== "ok");
 
+  const ready = !preparing && scenario.level === "ok";
+
   return (
     <div ref={screenRef} className="screen home-screen">
       <ScreenHeader title={t("copy.din.fiskeoversikt.68cb7f9")} />
       {active ? (
-        <ActiveSessionCard
-          activeZone={zoneName}
-          elapsed={elapsed}
-          startTime={startTime}
-          registerCatch={onRegisterCatch}
-          showRules={onRules}
-          stop={onStart}
-          compact
-        />
+        <>
+          <HomeActiveTrip
+            zoneName={zoneName}
+            elapsed={elapsed}
+            startTime={startTime}
+            onRegisterCatch={onRegisterCatch}
+            onStop={onStart}
+          />
+          <HomeActionRow
+            icon="ticket"
+            title={selectLocalized(language, "Mine fiskekort", "My permits")}
+            detail={selectLocalized(language, "Kort og dokumentasjon", "Permits and documentation")}
+            onClick={() => onDocument("permits")}
+          />
+          <HomeActionRow
+            icon="document"
+            title={selectLocalized(language, "Regler for denne sonen", "Rules for this zone")}
+            onClick={onRules}
+          />
+        </>
       ) : (
-        <HomeSessionCard
-          active={false}
-          elapsed={elapsed}
-          startTime={startTime}
-          scenario={scenario}
-          isTestMode={isStatusTestMode}
-          zone={zoneName}
-          preparing={preparing}
-          openFlow={onStart}
-        >
-          {preparing ? (
-            <div className="home-preparation-actions">
-              <button className="start-button preparation-permit" onClick={onBuyPermit}>
-                {t("copy.kj.p.fiskekort.d32ea04")}
-              </button>
-              {(
-                [
-                  {
-                    kind: "disinfection",
-                    label: selectLocalized(
-                      language,
-                      "Registrer desinfisering",
-                      "Register disinfection",
-                    ),
-                    saved: selectLocalized(
-                      language,
-                      "Desinfisering registrert",
-                      "Disinfection registered",
-                    ),
-                    open: () => onDocument("disinfection"),
-                  },
-                  {
-                    kind: "fee",
-                    label: selectLocalized(
-                      language,
-                      "Registrer statlig fiskeravgift",
-                      "Register national fishing fee",
-                    ),
-                    saved: selectLocalized(
-                      language,
-                      "Statlig fiskeravgift registrert",
-                      "National fishing fee registered",
-                    ),
-                    open: () => onDocument("fee"),
-                  },
-                ] as const
-              ).map((item) => (
-                <button
-                  key={item.kind}
-                  className={`start-button preparation-${item.kind}${documentReadiness.valid[item.kind] ? " document-ready" : ""}`}
-                  onClick={item.open}
-                >
-                  {documentReadiness.valid[item.kind] && <Icon name="check" size={20} />}
-                  <span>{documentReadiness.valid[item.kind] ? item.saved : item.label}</span>
+        <>
+          <HomePermitHero
+            permit={permit}
+            previewZone={isStatusTestMode && documentReadiness.valid.permit ? zoneName : undefined}
+            openPermits={() => onDocument("permits")}
+          />
+          <section className={preparing ? "home-preparation-actions" : "home-start-actions"}>
+            {!preparing && (
+              <>
+                {!ready && (
+                  <div className="home-journey-warning" role="status">
+                    <b>{t(localizeText(scenario.title, language))}</b>
+                    <p>{t(localizeText(scenario.detail, language))}</p>
+                  </div>
+                )}
+                <button className="primary home-start-button" onClick={onStart}>
+                  {ready
+                    ? selectLocalized(language, "Start fiske", "Start fishing")
+                    : scenario.level === "blocked"
+                      ? t("content.46e6fa1c44cc")
+                      : t("content.1f04327c989d")}
                 </button>
-              ))}
-            </div>
-          ) : undefined}
-        </HomeSessionCard>
+              </>
+            )}
+            <button
+              className={preparing ? "primary home-buy-button" : "secondary home-buy-button"}
+              onClick={onBuyPermit}
+            >
+              {t("copy.kj.p.fiskekort.d32ea04")}
+            </button>
+            {preparing ? (
+              <HomePreparation documentReadiness={documentReadiness} onDocument={onDocument} />
+            ) : (
+              documentReadiness.complete && (
+                <HomeActionRow
+                  icon="shield"
+                  tone="sage"
+                  title={selectLocalized(
+                    language,
+                    "Dokumentene er på plass",
+                    "Your documents are ready",
+                  )}
+                  detail={selectLocalized(
+                    language,
+                    "Se fiskekort, desinfisering og avgift",
+                    "View permits, disinfection and fee",
+                  )}
+                  onClick={() => onDocument("control-card")}
+                />
+              )
+            )}
+          </section>
+        </>
       )}
-
-      <div className="home-permit-actions">
-        {(active || !preparing) && (
-          <button onClick={onBuyPermit}>{t("copy.kj.p.fiskekort.d32ea04")}</button>
-        )}
-        {hasPermits && (
-          <button className="home-owned-permits" onClick={() => onDocument("permits")}>
-            <span className="home-permit-icon">
-              <Icon name="ticket" size={24} />
-            </span>
-            <span>{selectLocalized(language, "Mine fiskekort", "My permits")}</span>
-            <Icon name="chevron" size={18} />
-          </button>
-        )}
-      </div>
 
       {showActiveWarning && (
         <section className="home-journey-warning" role="status">
@@ -178,7 +173,7 @@ export function HomeScreen({
         </section>
       )}
 
-      {active && (
+      {active && sessionCatchCount > 0 && (
         <button className="home-trip-summary" onClick={onHistory}>
           <Icon name="fish" size={19} />
           <span>
@@ -192,40 +187,25 @@ export function HomeScreen({
         </button>
       )}
 
-      {!active && documentReadiness.complete && (
-        <p className="home-document-status">
-          <Icon name="check" size={16} />
-          {selectLocalized(
+      {!active && (
+        <HomeActionRow
+          className="home-past-session-button"
+          icon="hook"
+          tone="gray"
+          title={selectLocalized(
             language,
-            "Dokumentkrav registrert i appen",
-            "Document requirements recorded in the app",
+            "Registrer tidligere fisketur",
+            "Register a previous fishing trip",
           )}
-        </p>
+          onClick={onPastSession}
+        />
       )}
-
-      <button className="home-past-session-button" onClick={onPastSession}>
-        <span className="home-shortcut-icon">
-          <Icon name="clock" size={22} />
-        </span>
-        <span className="home-shortcut-copy">
-          <b>{selectLocalized(language, "Glemt å trykke start?", "Forgot to press start?")}</b>
-          <small>
-            {selectLocalized(
-              language,
-              "Registrer en tidligere fisketur",
-              "Register a previous fishing trip",
-            )}
-          </small>
-        </span>
-        <Icon name="chevron" size={20} />
-      </button>
       <button className="home-feedback-card" onClick={() => onDocument("feedback")}>
-        <span>
-          <Icon name="bell" />
+        <span className="home-shortcut-icon">
+          <Icon name="people" size={25} />
         </span>
         <div>
           <b>{t("copy.meld.fra.til.elveeigarlaget.c011953")}</b>
-          <p>{t("copy.rapporter.feil.fors.pling.syk.fisk.eller.mistenk.f156eef")}</p>
         </div>
         <Icon name="chevron" size={18} />
       </button>

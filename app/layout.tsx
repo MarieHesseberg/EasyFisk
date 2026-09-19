@@ -54,6 +54,13 @@ import "@/styles/permit-payment.css";
 import "@/styles/feedback-history.css";
 
 import "@/styles/streamlined-forms.css";
+import "@/styles/visual-refresh-theme.css";
+import "@/styles/visual-refresh-navigation.css";
+import "@/styles/visual-refresh-home.css";
+import "@/styles/visual-refresh-tickets.css";
+import "@/styles/visual-refresh-pages.css";
+import "@/styles/visual-refresh-details.css";
+import "@/styles/home-proposal-states.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

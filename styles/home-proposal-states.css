@@ -1,0 +1,110 @@
+.visual-refresh .home-start-actions {
+  display: grid;
+  gap: 12px;
+}
+.visual-refresh .home-screen :is(.home-buy-button, .home-start-button) {
+  margin: 0;
+  min-height: 52px;
+  font-size: 17px;
+  border-radius: 28px;
+}
+.visual-refresh .home-screen .secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-strong);
+}
+.visual-refresh .home-screen .home-shortcut-icon.sage {
+  background: var(--color-sage);
+}
+.visual-refresh .home-screen .home-shortcut-icon.gray {
+  background: var(--color-menu-icon-surface);
+}
+.visual-refresh .home-active-trip {
+  margin: 8px 0 16px;
+}
+.visual-refresh .home-fishing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-sage);
+  color: var(--color-text);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.visual-refresh .home-active-trip h2 {
+  margin: 24px 0 10px;
+  font-size: 29px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+.visual-refresh .home-active-zone {
+  margin: 0 0 18px;
+  color: var(--color-text-muted);
+  font-size: 16px;
+}
+.visual-refresh .home-time-card {
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 18px;
+  background: var(--color-surface-cool);
+  margin-bottom: 16px;
+}
+.visual-refresh .home-time-card p {
+  margin: 0 0 18px;
+  color: var(--color-text-muted);
+  font-size: 16px;
+}
+.visual-refresh .home-trip-timer {
+  font-size: 42px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+.visual-refresh .home-time-card small {
+  display: block;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+}
+.visual-refresh .home-active-trip > button {
+  margin: 0 0 12px;
+  font-size: 17px;
+  min-height: 52px;
+}
+@media (max-height: 700px) and (max-width: 599px) {
+  .visual-refresh .home-screen:has(.home-active-trip) .app-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .visual-refresh .home-screen:has(.home-active-trip) .app-header-actions {
+    top: 10px;
+  }
+  .visual-refresh .home-active-trip {
+    margin-top: 0;
+  }
+  .visual-refresh .home-active-trip h2 {
+    font-size: 25px;
+    margin: 12px 0 4px;
+  }
+  .visual-refresh .home-active-zone {
+    margin-bottom: 12px;
+  }
+  .visual-refresh .home-time-card {
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+  .visual-refresh .home-time-card p {
+    margin-bottom: 4px;
+  }
+  .visual-refresh .home-trip-timer {
+    font-size: 34px;
+  }
+  .visual-refresh .home-active-trip > button {
+    min-height: 48px;
+    margin-bottom: 8px;
+  }
+}

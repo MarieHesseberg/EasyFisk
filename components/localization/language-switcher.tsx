@@ -15,7 +15,12 @@ export function LanguageSwitcher() {
       translate="no"
     >
       <Icon name="language" size={17} />
-      <span>{t(isNorwegian ? "language.english" : "language.norwegian")}</span>
+      <span className="language-full">
+        {t(isNorwegian ? "language.english" : "language.norwegian")}
+      </span>
+      <span className="language-short" aria-hidden="true">
+        {isNorwegian ? "EN" : "NO"}
+      </span>
     </button>
   );
 }

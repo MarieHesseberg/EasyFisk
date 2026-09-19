@@ -92,7 +92,7 @@ export function EasyFiskApp() {
   );
   return (
     <main className="prototype-shell" data-ready={!documentsLoading}>
-      <div className="phone-app">
+      <div className={screen === "map" ? "phone-app" : "phone-app visual-refresh"}>
         <Fragment key={navigationRevision}>
           {screen === "home" && (
             <HomeScreen
@@ -118,7 +118,7 @@ export function EasyFiskApp() {
               demoStatus={effectiveStatus.status}
               scenario={effectiveStatus.scenario}
               documentReadiness={effectiveStatus.readiness}
-              hasPermits={documents.some((document) => document.kind === "permit")}
+              permit={documents.find((document) => document.kind === "permit")}
               isStatusTestMode={isStatusTestMode}
               quotaStatus={displayedQuotaStatus}
             />

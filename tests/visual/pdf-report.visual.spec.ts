@@ -23,7 +23,7 @@ test("PDF 1–2: notification contents and missing-document checks are English",
   ).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Buy permits in zone 3" })).toBeVisible();
   await page.getByRole("button", { name: "Home", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Before you go" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Buy fishing permit", exact: true })).toBeVisible();
 });
 
@@ -60,13 +60,13 @@ for (const zone of [1, 2, 3, 4]) {
 test("English mobile home stays within the viewport and switches back to Norwegian", async ({
   page,
 }, testInfo) => {
-  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Before you go" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
   await page.screenshot({ path: testInfo.outputPath("english-home.png"), fullPage: true });
   await page.getByRole("button", { name: "Bytt til norsk" }).click();
-  await expect(page.getByRole("heading", { name: "Gjør deg klar til å fiske" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Før du drar" })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "no");

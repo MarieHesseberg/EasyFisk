@@ -27,7 +27,7 @@ test("språkvalget følger brukeren mellom faner og etter refresh", async ({ pag
 
   await page.getByRole("button", { name: "Switch to English" }).click();
   await expect(page.getByRole("heading", { name: "Your fishing overview" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Get ready to fish" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Before you go" })).toBeVisible();
   await expect(page.locator(".home-preparation-actions button")).toHaveCount(3);
   await expect(page.getByRole("button", { name: "Bytt til norsk" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Permits", exact: true })).toBeVisible();

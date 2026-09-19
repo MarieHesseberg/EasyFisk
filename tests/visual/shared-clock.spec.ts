@@ -75,7 +75,7 @@ test("purchase, documents and a completed trip share the same date without statu
       ]),
     ),
   );
-  await page.getByRole("button", { name: "START FISKE", exact: true }).click();
+  await page.getByRole("button", { name: "Start fiske", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await expect(

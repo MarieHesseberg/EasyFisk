@@ -43,7 +43,7 @@ test("every More menu detail closes and same-tab navigation dismisses it", async
 test("past trip close, keyboard exit and bottom navigation work", async ({ page }) => {
   await page.goto("/");
   for (const exit of ["close", "keyboard", "navigation"]) {
-    await page.getByRole("button", { name: /Glemt å trykke start/ }).click();
+    await page.getByRole("button", { name: /Registrer tidligere fisketur/ }).click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     if (exit === "close") await dialog.getByRole("button", { name: "Lukk registrering" }).click();

@@ -2,6 +2,26 @@ import type React from "react";
 
 export function Icon({ name, size = 22 }: { name: string; size?: number }) {
   const p: Record<string, React.ReactNode> = {
+    hook: (
+      <>
+        <circle cx="14" cy="4" r="2" />
+        <path d="M14 6v11a5 5 0 0 1-10 0v-4l3 3" />
+      </>
+    ),
+    drop: <path d="M12 2C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-13Z" />,
+    document: (
+      <>
+        <path d="M5 3h9l5 5v13H5Z" />
+        <path d="M9 9h3M9 13h6M9 17h6" />
+      </>
+    ),
+    people: (
+      <>
+        <circle cx="12" cy="6" r="3" />
+        <path d="M8 21v-5a4 4 0 0 1 8 0v5M5 4a3 3 0 0 0 0 6M19 4a3 3 0 0 1 0 6M5 13a3 3 0 0 0-3 3v3M19 13a3 3 0 0 1 3 3v3" />
+      </>
+    ),
+    menu: <path d="M3 5h18M3 12h18M3 19h18" />,
     home: (
       <>
         <path d="m3 11 9-7 9 7" />

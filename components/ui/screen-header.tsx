@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import salmonLogo from "@/public/brand/salmon.png";
 import { Icon } from "@/components/ui/icon";
 import { useHeaderNotices } from "@/features/notifications/use-header-notices";
 import { selectLocalized } from "@/locales";
@@ -23,6 +25,7 @@ export function ScreenHeader({ title, eyebrow }: { title: string; eyebrow?: stri
           <span className="brand-mark">
             <Icon name="fish" size={19} />
           </span>
+          <Image className="brand-logo" src={salmonLogo} width={44} height={44} alt="" />
           <span className="wordmark">easyfisk</span>
         </button>
       </div>

@@ -28,7 +28,7 @@ export function DocumentCard({
     };
   }, [url]);
   return (
-    <article className="document-card">
+    <article className="document-card" data-kind={document.kind}>
       <h3>{document.values.holder}</h3>
       {document.forOtherPerson && (
         <p>

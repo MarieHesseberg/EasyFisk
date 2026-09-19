@@ -29,7 +29,17 @@ export function BottomNavigation({
           className={selectedScreen === id ? "selected" : ""}
           aria-current={selectedScreen === id ? "page" : undefined}
         >
-          <Icon name={icon} />
+          <Icon
+            name={
+              activeScreen === "map"
+                ? icon
+                : id === "rules"
+                  ? "document"
+                  : id === "more"
+                    ? "menu"
+                    : icon
+            }
+          />
           <span>{t(labelKey)}</span>
         </button>
       ))}

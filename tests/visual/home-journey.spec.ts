@@ -35,7 +35,7 @@ async function restoreActiveTrip(page: Page, language = "no", withCatch = false)
     { language, withCatch },
   );
   await page.goto("/");
-  await expect(page.locator(".active-session-compact")).toContainText("Bjåhylen");
+  await expect(page.locator(".home-active-trip")).toContainText("Bjåhylen");
 }
 
 for (const viewport of [
@@ -53,7 +53,7 @@ for (const viewport of [
       await restoreActiveTrip(page, language);
       const navigation = await page.locator(".bottom-nav").boundingBox();
       for (const name of language === "no"
-        ? ["Registrer fangst", "Avslutt tur"]
+        ? ["Registrer fangst", "Avslutt fisketuren"]
         : ["Register catch", "Finish trip"]) {
         const button = page.getByRole("button", { name, exact: true });
         await expect(button).toBeInViewport();
@@ -71,7 +71,7 @@ test("finish preserves recorded catches without a last-trip card on home", async
   await page.setViewportSize({ width: 390, height: 664 });
   await restoreActiveTrip(page, "no", true);
   await expect(page.getByText("1 fangst registrert på turen")).toBeVisible();
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "1 fangst registrert", exact: true }),
   ).toBeVisible();
@@ -95,7 +95,7 @@ test("finish preserves recorded catches without a last-trip card on home", async
 test("cancel missing catch returns to finish choice and keeps trip active", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   await restoreActiveTrip(page);
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Registrer manglende fangst" }).click();
   await page.getByRole("button", { name: "Lukk fangstrapport" }).click();
   await expect(page.getByRole("heading", { name: "Avslutte uten fangst?" })).toBeVisible();
@@ -104,8 +104,8 @@ test("cancel missing catch returns to finish choice and keeps trip active", asyn
     page.getByRole("button", { name: "Registrer fangst", exact: true }),
   ).toBeInViewport();
   await page.reload();
-  await expect(page.locator(".active-session")).toBeVisible();
-  await page.getByRole("button", { name: "Avslutt tur", exact: true }).click();
+  await expect(page.locator(".home-active-trip")).toBeVisible();
+  await page.getByRole("button", { name: "Avslutt fisketuren", exact: true }).click();
   await page.getByRole("button", { name: "Avslutt uten fangst", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Økt fullført" })).toContainText(
     "Nullfangst registrert",
@@ -115,19 +115,19 @@ test("cancel missing catch returns to finish choice and keeps trip active", asyn
 test("home groups preparation actions, then offers start", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Gjør deg klar til å fiske" })).toBeVisible();
-  await expect(page.locator(".status-card button")).toHaveText([
+  await expect(page.getByRole("heading", { name: "Før du drar" })).toBeVisible();
+  await expect(page.locator(".home-preparation-actions button")).toHaveText([
     "Kjøp fiskekort",
-    "Registrer desinfisering",
-    "Registrer statlig fiskeravgift",
+    "DesinfiseringRegistrer",
+    "Statlig fiskeravgiftRegistrer",
   ]);
   await expect(page.getByText("Dette trenger du")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /Glemt å trykke start/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Registrer tidligere fisketur/ })).toBeVisible();
   await page.screenshot({ path: "tmp/pdfs/ux-step2/preparing.png" });
   for (const [scenario, action] of [
     ["expiredDisinfection", "Registrer desinfisering"],
     ["noFee", "Registrer statlig fiskeravgift"],
-    ["ok", "START FISKE"],
+    ["ok", "Start fiske"],
   ]) {
     await page.getByRole("button", { name: "Mer", exact: true }).click();
     await page.getByRole("button", { name: /Statusmotor/ }).click();
@@ -135,17 +135,24 @@ test("home groups preparation actions, then offers start", async ({ page }) => {
     await dialog.getByLabel("Situasjon").selectOption(scenario);
     await dialog.getByRole("button", { name: /bruk valgt situasjon|valgt testsituasjon/i }).click();
     await expect(
-      page.locator(".status-card").getByRole("button", { name: action, exact: true }),
+      page.locator(".home-screen").getByRole("button", { name: action, exact: true }),
     ).toBeVisible();
   }
   await expect(page.locator(".document-overview")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Mine dokumenter", exact: true })).toHaveCount(0);
+  await expect(page.locator(".home-ticket")).toContainText("Testvisning");
+  await expect(page.locator(".home-screen .status-card")).toHaveCount(0);
+  await expect(page.locator(".home-river")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Dokumentene er på plass/ })).toBeVisible();
   await page.screenshot({ path: "tmp/pdfs/ux-step2/ready.png" });
-  await page.getByRole("button", { name: "START FISKE", exact: true }).click();
+  await page.getByRole("button", { name: "Start fiske", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.locator(".home-screen").evaluate((element) => {
     element.scrollTop = element.scrollHeight;
   });
+  await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
+  // The existing start flow requires accepting the current rule version.
+  await page.getByRole("checkbox", { name: "Jeg har lest og forstått reglene" }).check();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await expect
     .poll(() => page.locator(".home-screen").evaluate((element) => element.scrollTop))

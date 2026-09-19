@@ -235,7 +235,7 @@ test("delte farger bruker semantiske designtokens", async () => {
   }
 });
 
-test("grensesnittet bruker bare den godkjente blåpaletten og semantiske varselfarger", async () => {
+test("grensesnittet bruker bare de godkjente designpalettene og semantiske varselfarger", async () => {
   const entries = await readdir(new URL("../styles/", import.meta.url), { withFileTypes: true });
   const sources = await Promise.all([
     ...entries
@@ -251,6 +251,16 @@ test("grensesnittet bruker bare den godkjente blåpaletten og semantiske varself
       .toLowerCase()
       .match(/#[0-9a-f]{6}(?:[0-9a-f]{2})?/g) ?? [];
   const approvedBases = [
+    // Approved river/ticket design, scoped away from the existing map.
+    "#153542",
+    "#526875",
+    "#176079",
+    "#e1f1f7",
+    "#cce5ef",
+    "#d9e4e8",
+    "#6d8995",
+    "#deecdf",
+    "#e1f3fa",
     // Muted blue and warm shortcut colors requested for the mobile redesign.
     "#f4f8fa",
     "#d1e1e7",

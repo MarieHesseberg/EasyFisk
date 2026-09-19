@@ -174,7 +174,7 @@ test("status menu excludes irrelevant simulations and previewing does not activa
   await page.getByRole("button", { name: "Mer", exact: true }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   await settings.getByRole("button", { name: /bruk valgt situasjon/i }).click();
-  await expect(page.getByRole("button", { name: "START FISKE", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start fiske", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Mer", exact: true }).click();
   await page.getByRole("button", { name: /Statusmotor/ }).click();
   await settings.getByRole("button", { name: /Avslutt testmodus/ }).click();

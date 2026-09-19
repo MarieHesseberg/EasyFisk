@@ -1,0 +1,107 @@
+@font-face {
+  font-family: "EasyFisk Nunito";
+  src: url("../public/fonts/nunito-sans.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* This theme is deliberately absent from the map screen. */
+.visual-refresh {
+  --font-app: "EasyFisk Nunito", Arial, sans-serif;
+  --color-text: #153542;
+  --color-text-muted: #526875;
+  --color-text-soft: var(--color-text-muted);
+  --color-primary: #176079;
+  --color-primary-dark: var(--color-text);
+  --color-primary-soft: #e1f1f7;
+  --color-primary-surface: var(--color-primary-soft);
+  --color-primary-surface-strong: #cce5ef;
+  --color-background: var(--palette-white);
+  --color-border: #d9e4e8;
+  --color-border-subtle: var(--color-border);
+  --color-border-faint: var(--color-border);
+  --color-border-strong: #6d8995;
+  --color-border-control: var(--color-border-strong);
+  --color-border-input: var(--color-border-strong);
+  --color-border-field: var(--color-border-strong);
+  --color-info-surface: var(--color-primary-soft);
+  --color-info-surface-muted: var(--color-surface);
+  --color-info-surface-strong: var(--color-primary-surface-strong);
+  --color-menu-primary: var(--color-primary);
+  --color-menu-border: var(--color-border);
+  --color-menu-icon-surface: var(--color-primary-soft);
+  --color-menu-description: var(--color-text-muted);
+  --color-menu-hover: var(--color-primary-soft);
+  --color-sage: #deecdf;
+  --color-ticket: #e1f3fa;
+  --shadow-small: none;
+  --shadow-card: none;
+  --radius-card: 18px;
+  --radius-card-large: 20px;
+  --radius-control: 12px;
+  font-family: var(--font-app);
+  font-size: 16px;
+  color: var(--color-text);
+}
+.phone-app.visual-refresh
+  :is(h1, h2, h3, h4, b, strong, small, button, input, select, textarea, .big-time, .timer) {
+  font-family: var(--font-app);
+}
+.visual-refresh :is(h2, h3, h4, b, strong, legend) {
+  font-weight: 700;
+}
+.visual-refresh :is(p, li, dd) {
+  line-height: 1.5;
+}
+.visual-refresh :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+.visual-refresh :is(.primary, .start-button, .home-permit-actions > button) {
+  min-height: 52px;
+  border-radius: 28px;
+  padding: 13px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+.visual-refresh :is(.secondary, .outline-danger) {
+  min-height: 48px;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 650;
+  padding: 11px 16px;
+}
+.visual-refresh :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  font-size: 16px;
+  border-radius: 12px;
+  min-height: 48px;
+}
+.visual-refresh :is(.catch-modal, .detail-dialog, .flow-panel) {
+  background: var(--color-surface);
+}
+.visual-refresh :is(.catch-modal h2, .detail-dialog h2, .flow-panel h2) {
+  font-size: 25px;
+  line-height: 1.25;
+}
+.visual-refresh :is(.header-alert-panel, .document-card, .permit-shop-list article) {
+  border-color: var(--color-border);
+  border-radius: 18px;
+}
+.visual-refresh .header-alert-panel {
+  box-shadow: 0 8px 24px var(--color-text-shadow-subtle);
+}
+.visual-refresh .header-alert-panel :is(h4, p) {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.visual-refresh input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 10px 12px;
+}

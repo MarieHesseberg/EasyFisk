@@ -1,0 +1,149 @@
+.visual-refresh .stat-grid article {
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  padding: 16px 12px;
+  min-width: 0;
+}
+.visual-refresh .stat-grid b {
+  grid-column: 1 / -1;
+  font-size: 26px;
+  line-height: 1.25;
+}
+.visual-refresh .stat-grid small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.visual-refresh
+  :is(
+    .filter-row > span,
+    .filter-row label,
+    .hero-stat small,
+    .hero-stat div,
+    .privacy-note,
+    .bar-chart small
+  ) {
+  font-size: 13px;
+  opacity: 1;
+}
+.visual-refresh .hero-stat small {
+  letter-spacing: 0.04em;
+}
+.visual-refresh .stats-tabs button {
+  font-size: 14px;
+  min-height: 48px;
+  line-height: 1.4;
+}
+.visual-refresh .chart-card {
+  border: 1px solid var(--color-border);
+  padding: 18px;
+}
+.visual-refresh .chart-card h3 {
+  font-size: 18px;
+}
+.visual-refresh
+  :is(
+    .toggle-list b,
+    .detail-lead,
+    .detail-data p,
+    .detail-list p,
+    .detail-warning b,
+    .detail-warning span,
+    .profile-detail p
+  ) {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.visual-refresh
+  :is(
+    .toggle-list small,
+    .detail-hero small,
+    .detail-hero p,
+    .detail-alert small,
+    .flow-checks small,
+    .personal-statistics .section-head small,
+    .personal-catch-summary,
+    .personal-quota-row
+  ) {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.visual-refresh .toggle-list input {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+}
+.visual-refresh .toggle-list label {
+  min-height: 56px;
+}
+.visual-refresh :is(.detail-page, .flow-modal) > h2 {
+  font-size: 27px;
+  font-weight: 750;
+}
+.visual-refresh :is(.back, .flow-checks b, .start-zone-fields label) {
+  font-size: 16px;
+}
+.visual-refresh :is(.personal-rules > button, .session-actions button) {
+  border-radius: 26px;
+  min-height: 48px;
+  font-size: 16px;
+}
+.visual-refresh :is(.more-feedback-card) {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  box-shadow: none;
+  border-radius: 20px;
+}
+.visual-refresh .more-feedback-card :is(p, small) {
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+.visual-refresh .more-feedback-card button {
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 25px;
+  font-size: 16px;
+}
+.visual-refresh .more-feedback-card::after {
+  display: none;
+}
+.visual-refresh
+  :is(
+    .feedback-form > label,
+    .form-intro b,
+    .feedback-upload b,
+    .upload-box b,
+    .report-summary b,
+    .rule-result b
+  ) {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.visual-refresh
+  :is(
+    .feedback-form label em,
+    .character-count,
+    .feedback-upload small,
+    .upload-box small,
+    .field-error,
+    .rule-warning,
+    .report-summary small,
+    .rule-result p,
+    .input-row label em,
+    .comment-label em,
+    .selection-recap,
+    .toast
+  ) {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.visual-refresh :is(.feedback-steps, .steps) span:not(.on) {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+}
+.visual-refresh :is(.feedback-steps, .steps) span {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}

@@ -1,0 +1,100 @@
+.visual-refresh .home-ticket {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 10px 0 18px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--color-ticket);
+  color: var(--color-text);
+  text-align: left;
+  overflow: hidden;
+  position: relative;
+}
+.visual-refresh .home-ticket-main {
+  display: flex;
+  align-items: flex-start;
+  min-height: 170px;
+  position: relative;
+  padding: 18px 18px 22px;
+}
+.visual-refresh .home-ticket-landscape {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 88%;
+  width: 54%;
+  opacity: 0.86;
+  mix-blend-mode: multiply;
+  object-fit: cover;
+  object-position: right;
+  mask-image: linear-gradient(to right, transparent, black 18%);
+}
+.visual-refresh .home-ticket-copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+  gap: 0;
+  overflow-wrap: anywhere;
+}
+.visual-refresh .home-ticket-label {
+  background: var(--color-primary-surface-strong);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 17px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.visual-refresh .home-ticket-copy strong {
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 750;
+  margin-bottom: 2px;
+}
+.visual-refresh .home-ticket-copy > span:not(.home-ticket-label) {
+  font-size: 16px;
+}
+.visual-refresh .home-ticket-copy small {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+.visual-refresh .home-ticket-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  min-height: 56px;
+  padding: 15px 18px;
+  border-top: 1px dashed var(--color-primary-surface-strong);
+  font-size: 17px;
+  font-weight: 750;
+}
+.visual-refresh .home-ticket::before,
+.visual-refresh .home-ticket::after {
+  content: "";
+  position: absolute;
+  top: 110px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  z-index: 1;
+}
+.visual-refresh .home-ticket::before {
+  left: -11px;
+}
+.visual-refresh .home-ticket::after {
+  right: -11px;
+}
+.visual-refresh .document-card[data-kind="permit"] {
+  background: var(--color-ticket);
+  border-color: transparent;
+  border-radius: 20px;
+}
+.visual-refresh .document-card[data-kind="permit"] dl {
+  padding-bottom: 16px;
+  border-bottom: 2px dashed var(--color-primary-surface-strong);
+}

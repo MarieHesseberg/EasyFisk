@@ -83,7 +83,7 @@ test("catch draft resumes its step and measurements, then clears on completion",
     .getByRole("dialog", { name: "Statusmotor" })
     .getByRole("button", { name: /bruk valgt situasjon/i })
     .click();
-  await page.getByRole("button", { name: "START FISKE", exact: true }).click();
+  await page.getByRole("button", { name: "Start fiske", exact: true }).click();
   await page.getByRole("button", { name: "Velg sone manuelt" }).click();
   await page.getByRole("button", { name: "Start fiske i Sone 3" }).click();
   await page.getByRole("button", { name: "Registrer fangst", exact: true }).click();
@@ -105,7 +105,8 @@ test("catch draft resumes its step and measurements, then clears on completion",
 });
 test("past trip retains date and area across reload", async ({ page }) => {
   await page.goto("/");
-  const open = async () => page.getByRole("button", { name: /Glemt å trykke start/ }).click();
+  const open = async () =>
+    page.getByRole("button", { name: /Registrer tidligere fisketur/ }).click();
   await open();
   const dialog = page.getByRole("dialog");
   await dialog.locator("input[type=date]").fill("2026-08-18");

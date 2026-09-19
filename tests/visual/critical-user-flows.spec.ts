@@ -19,7 +19,7 @@ async function selectAllOkayStatus(page: Page, startTest = true) {
   await dialog.getByLabel("Situasjon").selectOption("ok");
   if (startTest) {
     await dialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
-    await page.getByRole("button", { name: "START FISKE" }).click();
+    await page.getByRole("button", { name: "Start fiske" }).click();
   } else {
     await dialog.getByRole("button", { name: /bruk valgt situasjon/i }).click();
   }
@@ -228,7 +228,7 @@ for (const viewport of [
 
 test("tidligere fisketur er tilgjengelig uten å starte fiske", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
-  await page.getByRole("button", { name: /Registrer en tidligere fisketur/ }).click();
+  await page.getByRole("button", { name: /Registrer tidligere fisketur/ }).click();
 
   const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
   const nextButton = dialog.getByRole("button", { name: "Neste · regelkontroll" });
@@ -314,7 +314,7 @@ test("hjemskjermen viser en rulleindikator når innholdet krever rulling", async
 });
 
 test("fiskestart blokkeres når nødvendig dokumentasjon mangler", async ({ page }) => {
-  await expect(page.getByRole("heading", { name: "Gjør deg klar til å fiske" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Før du drar" })).toBeVisible();
   await page.getByRole("button", { name: "Kart", exact: true }).click();
   await page
     .locator(".map-zone-switcher")
@@ -323,13 +323,13 @@ test("fiskestart blokkeres når nødvendig dokumentasjon mangler", async ({ page
   await expect(page.getByRole("button", { name: "Bruk sone 3 i fiskeøkten" })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Start fiske" })).toHaveCount(0);
   await page.getByRole("button", { name: "Hjem", exact: true }).click();
-  await expect(page.getByRole("button", { name: "START FISKE", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Start fiske", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Kjøp fiskekort", exact: true })).toBeVisible();
 });
 
 test("etterregistrering kan lukkes med X på mobil", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
-  await page.getByRole("button", { name: /Registrer en tidligere fisketur/ }).click();
+  await page.getByRole("button", { name: /Registrer tidligere fisketur/ }).click();
 
   const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
   await dialog.getByRole("button", { name: "Lukk registrering" }).click();
@@ -452,12 +452,12 @@ test("stopp økt med fangst fullfører rapporten før økten avsluttes", async (
   const summary = page.getByRole("dialog", { name: "Økt fullført" });
   await expect(summary.getByRole("heading", { name: "Takk for rapporteringen" })).toBeVisible();
   await summary.getByRole("button", { name: "Tilbake til oversikten" }).click();
-  await expect(page.getByRole("button", { name: "START FISKE" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start fiske" })).toBeVisible();
   await expect(page.getByText("AKTIV FISKEØKT")).toHaveCount(0);
 });
 
 test("tidligere økt med fangst kan registreres gjennom hele skjemaet", async ({ page }) => {
-  await page.getByRole("button", { name: /Registrer en tidligere fisketur/ }).click();
+  await page.getByRole("button", { name: /Registrer tidligere fisketur/ }).click();
 
   const dialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
   await dialog.getByLabel("Dato påkrevd").fill("2026-08-19");
@@ -509,7 +509,7 @@ test("lagringsfeil vises i fangstskjemaet uten falsk bekreftelse", async ({ page
 
 test("dialoger holder tastaturfokus og kan lukkes med Escape", async ({ page }) => {
   await selectAllOkayStatus(page, false);
-  const trigger = page.getByRole("button", { name: "START FISKE" });
+  const trigger = page.getByRole("button", { name: "Start fiske" });
   await trigger.focus();
   await trigger.press("Enter");
   const startDialog = page.getByRole("dialog", { name: "Start fiske" });
@@ -522,7 +522,7 @@ test("dialoger holder tastaturfokus og kan lukkes med Escape", async ({ page }) 
   await expect(startDialog).toHaveCount(0);
   await expect(trigger).toBeFocused();
 
-  const pastTrigger = page.getByRole("button", { name: /Registrer en tidligere fisketur/ });
+  const pastTrigger = page.getByRole("button", { name: /Registrer tidligere fisketur/ });
   await pastTrigger.click();
   const pastDialog = page.getByRole("dialog", { name: "Registrer tidligere fisketur" });
   await expect(pastDialog.getByRole("button", { name: "Lukk registrering" })).toBeFocused();
