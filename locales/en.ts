@@ -1,5 +1,73 @@
 import type { TranslationCatalog } from "./no.ts";
 export const en = {
+  "testGuide.progress": "Testing guide · {step} of 4",
+  "testGuide.welcome": "Help me improve EasyFisk",
+  "testGuide.intro":
+    "Thanks for trying the app! EasyFisk brings together fishing permits, rules and catch reporting for Mandalselva. Try it as if you were planning a fishing trip.",
+  "testGuide.prototype":
+    "This is a prototype. No money is charged, test permits are not valid for fishing, and reports are not submitted. Your entries are stored in this browser. Feel free to use fictional test details.",
+  "testGuide.noExperience":
+    "You do not need to know anything about fishing. If something is hard to understand, that is exactly what I want to find out.",
+  "testGuide.find": "Try different situations",
+  "testGuide.engine":
+    "The status engine is a testing control. It lets you try how the app responds when everything is ready, something is missing, or fishing must stop.",
+  "testGuide.route": "More → Status engine",
+  "testGuide.findHelp":
+    "On mobile: tap More in the bottom menu and scroll down to Status engine. I will show you where it is before you continue.",
+  "testGuide.showLocation": "Show me where",
+  "testGuide.desktopHint": "On a computer, the same controls are in the panel beside the app.",
+  "testGuide.here": "Here is the status engine",
+  "testGuide.locationCaption":
+    "You are now looking at More. Status engine is highlighted below. Come back here to change the test scenario later.",
+  "testGuide.panelTitle": "Try a fishing trip",
+  "testGuide.panelIntro":
+    "Explore EasyFisk in the phone view. Use these controls to see how the app responds to different situations.",
+  "testGuide.panelBadge": "EasyFisk · test version",
+  "testGuide.panelTasks": "Things to try",
+  "testGuide.panelTaskBuy": "Buy a test permit and find it under My fishing permits.",
+  "testGuide.panelTaskTrip": "Start a trip, record a catch or zero catch, and check the history.",
+  "testGuide.panelTaskExplore": "Explore the map, rules and documents. Try switching language too.",
+  "testGuide.panelFeedback":
+    "What was easy? Where were you unsure? Make a note and send it to the person who shared the link.",
+  "testGuide.panelLimits":
+    "No real payments or submissions. Test data is stored locally in your browser.",
+  "testGuide.open": "How to test the app",
+  "testGuide.back": "Previous",
+  "testGuide.next": "Next",
+  "testGuide.start": "Test the app",
+  "testGuide.try": "What you can test",
+  "testGuide.activate":
+    "Choose a scenario and press “Use selected scenario”. The app returns home with that test status. Then try the actions there.",
+  "testGuide.ready": "Everything is ready",
+  "testGuide.readyHelp":
+    "Start fishing, choose a zone and record a catch. Finish the trip. Also try a trip with no catches.",
+  "testGuide.missing": "Something is missing",
+  "testGuide.missingHelp":
+    "Try a missing permit, an unpaid fishing fee or expired disinfection. Is it clear what you need to do next?",
+  "testGuide.limits": "Quotas and closures",
+  "testGuide.limitsHelp":
+    "Choose a reached quota, high water temperature or closed zone. Are the explanation and next action clear?",
+  "testGuide.payment": "Purchases and payment",
+  "testGuide.paymentHelp":
+    "Choose whether the next test payment succeeds, is cancelled or fails. Buy a test permit and see what happens. No money is charged.",
+  "testGuide.actualData":
+    "Scenarios do not delete trips or documents. Valid documents can resolve a simulated missing requirement. “Exit test mode and use my data” returns to your registered information. Finish an active trip before changing scenarios.",
+  "testGuide.reset":
+    "Want a fresh start? Under More → Delete and reset, you can delete test data. A full reset also shows this guide again.",
+  "testGuide.feedback": "All feedback helps",
+  "testGuide.feedbackIntro":
+    "The app is being tested, not you. I would love to hear both what works and what feels difficult, odd or unnecessary.",
+  "testGuide.questionTask": "What were you trying to do, and what did you expect to happen?",
+  "testGuide.questionConfused":
+    "Where did you feel confused or get stuck? Which button or text was unclear?",
+  "testGuide.questionDesign": "Was anything hard to read, find or tap? What did you like?",
+  "testGuide.sendFeedback":
+    "Feel free to take a screenshot and note your phone and browser. Send your notes to the person who gave you the app link.",
+  "testGuide.localFeedback":
+    "“Report to the river association” inside the app is also a test. What you write there is only stored locally, so testing feedback must be sent outside the app.",
+  "testGuide.reopenHint":
+    "Find this guide again under More → How to test the app. Now it is your turn!",
+
   "reset.title": "Delete and reset",
   "reset.description": "Clear your data or start from scratch",
 

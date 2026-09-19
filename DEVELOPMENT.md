@@ -2,6 +2,23 @@
 
 Se [prosjektloggen](PROSJEKTLOGG.md) for daterte milepæler, designvalg og større feilrettinger. Oppdater den ved større endringer, sammen med relevante tekniske notater.
 
+## Veiledning for prototypetestere
+
+I demomodus viser `features/test-guide/` en obligatorisk introduksjon før appen kan brukes.
+Fullføring lagres per nettleser under `easyfisk-test-guide-completed`. Endre
+`TEST_GUIDE_VERSION` i `guide-version.ts` når eksisterende testere skal se en vesentlig
+oppdatert veiledning. Ikke øk versjonen for hver smårettelse. Delvis gjennomgang regnes
+ikke som fullført. Ved utilgjengelig lagring kan brukeren fortsatt fullføre for dette besøket.
+
+«Vis meg hvor» åpner Mer og markerer den faktiske statusmotor-knappen uten å aktivere en
+testsituasjon eller endre fiskedata. Resten av appen er inaktiv til siste «Test appen».
+Veiledningen kan åpnes igjen fra Mer eller PC-panelet. Full tilbakestilling fjerner også
+fullføringen; selektiv sletting av fiskedata gjør ikke det. `local`-modus viser ikke testveiledning.
+
+De ordinære nettlesertestene bruker en nettleserprofil som har fullført introduksjonen.
+`tests/visual/test-guide.spec.ts` bruker tom profil og kontrollerer introduksjon, oppdatering,
+gjenåpning, tastatur, engelsk, liten skjerm og lagringsfeil. Tilbakestilling testes separat.
+
 EasyFisk er en mobiltilpasset prototype for fiske i Mandalselva. Appen samler statuskontroll, sonevalg, fiskeøkter, fangstrapportering, kvoter, historikk, regler og tilbakemeldinger i én oversiktlig brukeropplevelse.
 
 Researchgrunnlaget for en framtidig fiskekortprototype ligger i

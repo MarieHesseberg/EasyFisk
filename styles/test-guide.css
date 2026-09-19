@@ -1,0 +1,195 @@
+.app-content {
+  height: 100%;
+}
+.test-guide {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #153542;
+  font-family: "EasyFisk Nunito", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow: auto;
+}
+.test-guide-header {
+  padding: max(20px, env(safe-area-inset-top)) 24px 12px;
+  background: #fff;
+  flex: none;
+}
+.test-guide-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.test-guide-topline > span {
+  font-size: 14px;
+  color: #526875;
+}
+.test-guide .language-switcher {
+  position: static;
+  min-height: 44px;
+  padding: 8px 12px;
+  box-shadow: none;
+}
+.test-guide-progress {
+  display: flex;
+  gap: 6px;
+  margin: 16px 0 20px;
+}
+.test-guide-progress span {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: #d9e4e8;
+}
+.test-guide-progress .is-read {
+  background: #176079;
+}
+.test-guide h2 {
+  font:
+    700 28px/1.2 "EasyFisk Nunito",
+    Arial,
+    sans-serif;
+  margin: 0;
+}
+.test-guide h2:focus {
+  outline: none;
+}
+.test-guide p {
+  margin: 0 0 18px;
+}
+.test-guide-header > p {
+  margin: 12px 0 0;
+}
+.test-guide-body {
+  padding: 12px 24px 24px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.test-guide-symbol {
+  display: grid;
+  place-items: center;
+  background: #deecdf;
+  border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  margin: 8px 0 20px;
+}
+.test-guide-note {
+  background: #e1f1f7;
+  padding: 16px;
+  border-radius: 16px;
+}
+.test-guide-route {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #176079;
+  font-weight: 700;
+}
+.test-guide-examples {
+  padding: 0;
+  margin: 0 0 22px;
+  list-style: none;
+}
+.test-guide-examples li {
+  padding: 16px 0;
+  border-bottom: 1px solid #d9e4e8;
+}
+.test-guide-examples li:first-child {
+  padding-top: 0;
+}
+.test-guide-examples b {
+  font-weight: 700;
+}
+.test-guide-examples p {
+  margin: 4px 0 0;
+}
+.test-guide-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px max(20px, env(safe-area-inset-bottom));
+  border-top: 1px solid #d9e4e8;
+  background: #fff;
+  flex: none;
+}
+.test-guide-primary,
+.test-guide-back {
+  min-height: 48px;
+  border-radius: 26px;
+  padding: 12px 20px;
+  font: inherit;
+  border: 1px solid #176079;
+  font-weight: 700;
+}
+.test-guide-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #176079;
+  color: #fff;
+  flex: 1;
+}
+.test-guide-body > .test-guide-primary {
+  width: 100%;
+  margin: 22px 0;
+}
+.test-guide-back {
+  color: #176079;
+  background: #fff;
+}
+.test-guide--location {
+  background: transparent;
+}
+.test-guide-location-window {
+  flex: 1;
+  min-height: 160px;
+  background: rgb(225 241 247 / 12%);
+}
+.test-guide-highlight {
+  outline: 3px solid #176079;
+  outline-offset: -3px;
+  background: #e1f1f7 !important;
+  border-radius: 16px;
+}
+.test-guide-reopen {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #d9e4e8;
+  border-radius: 16px;
+  background: #e1f1f7;
+  color: #176079;
+  font: inherit;
+  text-align: left;
+  margin: 0 0 20px;
+}
+.test-guide-reopen span {
+  flex: 1;
+}
+.test-guide-reopen svg {
+  flex: none;
+}
+@media (max-height: 600px) {
+  .test-guide-header {
+    padding: 12px 20px;
+  }
+  .test-guide-progress {
+    margin: 8px 0 12px;
+  }
+  .test-guide h2 {
+    font-size: 24px;
+  }
+  .test-guide-footer {
+    padding: 12px 20px max(12px, env(safe-area-inset-bottom));
+  }
+}

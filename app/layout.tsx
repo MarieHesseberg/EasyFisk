@@ -61,6 +61,8 @@ import "@/styles/visual-refresh-tickets.css";
 import "@/styles/visual-refresh-pages.css";
 import "@/styles/visual-refresh-details.css";
 import "@/styles/home-proposal-states.css";
+import "@/styles/test-guide.css";
+import "@/styles/tester-panel.css";
 
 export const metadata: Metadata = {
   title: "EasyFisk",

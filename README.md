@@ -6,6 +6,11 @@ dokumenter, regler, kart, fiskeøkter og fangster, så du får oversikt før, un
 **[Åpne appen her](https://mariehesseberg.github.io/EasyFisk/)** – prøv gjerne på mobilen.
 Du trenger ikke være fisker for å hjelpe til!
 
+Første gang du åpner denne versjonen, får du en kort testveiledning. Den viser hvor
+statusmotoren ligger og foreslår situasjoner du kan prøve. Bla gjennom delene og
+trykk **Test appen** for å begynne. Du kan åpne den igjen under **Mer → Slik tester du appen**.
+På PC finnes den også i testpanelet ved siden av telefonvisningen.
+
 ## Ting du kan prøve
 
 - Se deg rundt på hjemskjermen, i kartet og i fiskereglene. Finner du det du forventer?
@@ -31,6 +36,9 @@ også i testmodus. Trykk «Avslutt testmodus og bruk mine data» for å gå tilb
 Alt som kan forbedres er nyttig: uklare tekster, knapper som ikke virker, noe som
 er vanskelig å finne, eller funksjoner du savner. Noter gjerne **hva du prøvde å gjøre,
 hva som skjedde, og hva du forventet**. Et skjermbilde hjelper også. Send notatene til meg!
+
+Send tilbakemeldingen utenfor appen, til den som ga deg lenken. «Meld fra til
+elveeigarlaget» er en lokal testfunksjon og sender ikke tilbakemeldingen videre.
 
 Dette er en prototype: kjøp og betaling er simulert, ingen penger trekkes, og rapporter
 sendes ikke til elveeigarlaget. Testkort er ikke gyldige fiskekort. Det du registrerer,

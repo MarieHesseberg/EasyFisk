@@ -20,6 +20,7 @@ import { useLanguage } from "@/components/localization/language-provider";
 type ProfileDestination = DetailDestination | "status-engine";
 
 export function ProfileScreen({
+  openTestGuide,
   demoStatus,
   documentReadiness,
   isStatusTestMode,
@@ -31,6 +32,7 @@ export function ProfileScreen({
   paymentOutcome,
   setPaymentOutcome,
 }: {
+  openTestGuide?: () => void;
   demoStatus: DemoStatus;
   documentReadiness: DocumentReadiness;
   isStatusTestMode: boolean;
@@ -66,6 +68,13 @@ export function ProfileScreen({
         </div>
         <Icon name="chevron" />
       </button>
+      {mode === "demo" && openTestGuide && (
+        <button className="test-guide-reopen" onClick={openTestGuide}>
+          <Icon name="book" />
+          <span>{t("testGuide.open")}</span>
+          <Icon name="chevron" size={18} />
+        </button>
+      )}
       <div className="menu-list">
         <button onClick={() => setDetail("control-card")}>
           <span>
@@ -141,7 +150,7 @@ export function ProfileScreen({
           <Icon name="chevron" size={18} />
         </button>
         {mode === "demo" && (
-          <button onClick={() => setDetail("status-engine")}>
+          <button data-status-engine-entry onClick={() => setDetail("status-engine")}>
             <span>
               <Icon name="stats" />
             </span>

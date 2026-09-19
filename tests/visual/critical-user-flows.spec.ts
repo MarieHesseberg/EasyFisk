@@ -3,7 +3,9 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 async function resetApp(page: Page) {
   await page.goto("/");
   await page.evaluate(async () => {
+    const guideCompleted = localStorage.getItem("easyfisk-test-guide-completed");
     window.localStorage.clear();
+    if (guideCompleted) localStorage.setItem("easyfisk-test-guide-completed", guideCompleted);
     await new Promise<void>((resolve) => {
       const request = indexedDB.deleteDatabase("easyfisk-documents");
       request.onsuccess = request.onerror = request.onblocked = () => resolve();

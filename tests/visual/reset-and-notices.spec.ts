@@ -100,6 +100,16 @@ test("full reset clears every user store, drafts and active session, preserves u
   );
   await dialog.getByRole("button", { name: "Slett og tilbakestill", exact: true }).click();
   await dialog.getByRole("button", { name: "Ja, slett og tilbakestill" }).click();
+  const guide = page.getByRole("dialog");
+  await expect(guide).toContainText("Hjelp meg å gjøre EasyFisk bedre");
+  expect(
+    await page.evaluate(() => localStorage.getItem("easyfisk-test-guide-completed")),
+  ).toBeNull();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Vis meg hvor" }).click();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Test appen", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
   await expect(page.locator(".prototype-shell")).toHaveAttribute("data-ready", "true");
   const data = await page.evaluate(async () => {
@@ -220,6 +230,16 @@ test("failed reset reports failure and can be retried without claiming success",
     (window as unknown as { restoreResetStorage: () => void }).restoreResetStorage(),
   );
   await page.getByRole("button", { name: "Prøv igjen", exact: true }).click();
+  const guide = page.getByRole("dialog");
+  await expect(guide).toContainText("Hjelp meg å gjøre EasyFisk bedre");
+  expect(
+    await page.evaluate(() => localStorage.getItem("easyfisk-test-guide-completed")),
+  ).toBeNull();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Vis meg hvor" }).click();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Neste", exact: true }).click();
+  await guide.getByRole("button", { name: "Test appen", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Din fiskeoversikt" })).toBeVisible();
   await expect(page.locator(".prototype-shell")).toHaveAttribute("data-ready", "true");
   expect(await page.evaluate(() => localStorage.getItem("easyfisk-profile-v1"))).toBeNull();

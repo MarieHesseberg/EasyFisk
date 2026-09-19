@@ -5,7 +5,9 @@ test.setTimeout(60_000);
 async function openEnglishApp(page: Page) {
   await page.goto("/");
   await page.evaluate(async () => {
+    const guideCompleted = localStorage.getItem("easyfisk-test-guide-completed");
     localStorage.clear();
+    if (guideCompleted) localStorage.setItem("easyfisk-test-guide-completed", guideCompleted);
     localStorage.setItem("easyfisk-language", "en");
     await Promise.all(
       ["easyfisk-documents", "easyfisk-catch-images"].map(

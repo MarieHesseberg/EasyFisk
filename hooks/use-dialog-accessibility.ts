@@ -9,6 +9,7 @@ export function useDialogAccessibility(
   onClose?: () => void,
   active = true,
   returnFocusRef?: RefObject<HTMLElement | null>,
+  includeNavigation = true,
 ) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
@@ -39,7 +40,7 @@ export function useDialogAccessibility(
       }
 
       if (event.key !== "Tab") return;
-      const navigation = document.querySelector(".bottom-nav");
+      const navigation = includeNavigation ? document.querySelector(".bottom-nav") : null;
       const elements = [
         ...dialog.querySelectorAll<HTMLElement>(focusableSelector),
         ...(navigation?.querySelectorAll<HTMLElement>(focusableSelector) ?? []),
@@ -61,7 +62,7 @@ export function useDialogAccessibility(
       }
     };
 
-    const navigation = document.querySelector(".bottom-nav");
+    const navigation = includeNavigation ? document.querySelector(".bottom-nav") : null;
     dialog.addEventListener("keydown", handleKeyDown);
     navigation?.addEventListener("keydown", handleKeyDown as EventListener);
     return () => {
@@ -70,7 +71,7 @@ export function useDialogAccessibility(
       document.body.style.overflow = previousOverflow;
       if (returnFocus?.isConnected) returnFocus.focus();
     };
-  }, [active, returnFocusRef]);
+  }, [active, returnFocusRef, includeNavigation]);
 
   return dialogRef;
 }

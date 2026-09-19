@@ -78,6 +78,10 @@ Turer og fangster fikk tydeligere ID-er og koblinger, og lagringsformatene ble v
 
 Jeg samlet historikken i denne loggen og ba om korte notater etter større endringer. Appen har nå et bedre teknisk grunnlag, men er fortsatt en lokal prototype. Ekte innlogging, betaling, serverlagring og levering av rapporter gjenstår, sammen med videre testing på fysiske iPhone- og Android-telefoner. Dette arbeidet endrer dokumentasjonen, ikke appens utseende eller funksjoner.
 
+## 19. september – Veiledning for dem som tester alene
+
+Jeg ville at folk som bare får lenken, skulle forstå hvordan de kan teste uten at jeg forklarer ved siden av. Vi laget en introduksjon i fire deler, med «Vis meg hvor» som åpner Mer og markerer statusmotoren, eksempler på testsituasjoner og spørsmål til tilbakemelding. Den må fullføres med «Test appen», huskes i nettleseren og kan åpnes igjen. PC-panelet fikk samme lyse stil, skrift og roligere kort som appen, med oppdaterte testtips. Tilbakemeldinger må sendes utenfor appen siden innmeldinger fortsatt bare lagres lokalt. 198 enhetstester, 106 nettlesertester og produksjonsbygg er kontrollert. Jeg godkjente deretter at endringene skulle pushes til GitHub.
+
 ---
 
 Grunnlaget er de 111 commitene som fantes i `main` før arbeidspakke 1–5, øvrige tilgjengelige Git-grener, de sju relevante EasyFisk-samtalene i Codex og prosjektets dokumentasjon. Lenker ved notatene peker til utvalgte holdepunkter, ikke hver smårettelse. Hele [commit-historikken](https://github.com/MarieHesseberg/EasyFisk/commits/main/) er bevart. Jeg tar med bekreftede feilårsaker og markerer usikkerhet der årsaken ikke er fastslått.

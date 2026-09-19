@@ -1,4 +1,72 @@
 export const no = {
+  "testGuide.progress": "Testveiledning · {step} av 4",
+  "testGuide.welcome": "Hjelp meg å gjøre EasyFisk bedre",
+  "testGuide.intro":
+    "Takk for at du vil prøve appen! EasyFisk samler fiskekort, regler og fangstrapportering for Mandalselva. Prøv den som om du skulle på fisketur.",
+  "testGuide.prototype":
+    "Dette er en prototype. Ingen penger trekkes, testkort er ikke gyldige fiskekort, og rapporter sendes ikke inn. Det du registrerer, lagres i denne nettleseren. Bruk gjerne oppdiktede testopplysninger.",
+  "testGuide.noExperience":
+    "Du trenger ikke kunne noe om fiske. Hvis noe er vanskelig å forstå, er det nettopp det jeg ønsker å finne ut.",
+  "testGuide.find": "Prøv ulike situasjoner",
+  "testGuide.engine":
+    "Statusmotoren er en testkontroll. Den lar deg prøve hvordan appen reagerer når alt er klart, når noe mangler, eller når fisket må stoppe.",
+  "testGuide.route": "Mer → Statusmotor",
+  "testGuide.findHelp":
+    "På mobil: trykk Mer i menyen nederst og bla ned til Statusmotor. Jeg viser deg hvor den ligger før du fortsetter.",
+  "testGuide.showLocation": "Vis meg hvor",
+  "testGuide.desktopHint": "På PC finner du de samme testvalgene i panelet ved siden av appen.",
+  "testGuide.here": "Her ligger statusmotoren",
+  "testGuide.locationCaption":
+    "Du ser nå Mer-siden. Statusmotor er markert nedenfor. Her kan du komme tilbake og bytte testsituasjon senere.",
+  "testGuide.panelTitle": "Prøv en fisketur",
+  "testGuide.panelIntro":
+    "Utforsk EasyFisk i telefonvisningen. Bruk testvalgene her for å se hvordan appen reagerer i forskjellige situasjoner.",
+  "testGuide.panelBadge": "EasyFisk · testversjon",
+  "testGuide.panelTasks": "Ting du kan prøve",
+  "testGuide.panelTaskBuy": "Kjøp et testkort og finn det igjen under Mine fiskekort.",
+  "testGuide.panelTaskTrip": "Start en tur, registrer fangst eller nullfangst, og se historikken.",
+  "testGuide.panelTaskExplore": "Utforsk kart, regler og dokumenter. Bytt gjerne til engelsk.",
+  "testGuide.panelFeedback":
+    "Hva var lett? Hvor ble du usikker? Noter det og send til den som ga deg lenken.",
+  "testGuide.panelLimits":
+    "Ingen ekte betaling eller innsending. Testdata lagres lokalt i nettleseren.",
+  "testGuide.open": "Slik tester du appen",
+  "testGuide.back": "Forrige",
+  "testGuide.next": "Neste",
+  "testGuide.start": "Test appen",
+  "testGuide.try": "Dette kan du teste",
+  "testGuide.activate":
+    "Velg en situasjon og trykk «Bruk valgt situasjon». Appen går tilbake til hjem med den valgte teststatusen. Prøv deretter handlingene der.",
+  "testGuide.ready": "Alt er i orden",
+  "testGuide.readyHelp":
+    "Start fiske, velg sone og registrer en fangst. Avslutt turen. Prøv også en tur uten fangst.",
+  "testGuide.missing": "Noe mangler",
+  "testGuide.missingHelp":
+    "Prøv manglende fiskekort, fiskeravgift eller utløpt desinfisering. Forstår du hva du må gjøre videre?",
+  "testGuide.limits": "Kvoter og stengt fiske",
+  "testGuide.limitsHelp":
+    "Velg nådd kvote, høy vanntemperatur eller stengt sone. Er forklaringen og neste handling forståelig?",
+  "testGuide.payment": "Kjøp og betaling",
+  "testGuide.paymentHelp":
+    "Velg om neste testbetaling skal godkjennes, avbrytes eller feile. Kjøp et testkort og se hva som skjer. Ingen penger trekkes.",
+  "testGuide.actualData":
+    "Testvalgene sletter ikke turer eller dokumenter. Gyldige dokumenter kan løse en simulert mangel. «Avslutt testmodus og bruk mine data» lar appen bruke dine registrerte opplysninger igjen. Avslutt en aktiv tur før du bytter testsituasjon.",
+  "testGuide.reset":
+    "Vil du begynne på nytt? Under Mer → Slett og tilbakestill kan du slette testdata. Full tilbakestilling viser også denne veiledningen på nytt.",
+  "testGuide.feedback": "Alle tilbakemeldinger hjelper",
+  "testGuide.feedbackIntro":
+    "Det er appen som testes, ikke deg. Jeg vil gjerne høre både hva som fungerer og hva som føles vanskelig, rart eller unødvendig.",
+  "testGuide.questionTask": "Hva prøvde du å gjøre, og hva forventet du skulle skje?",
+  "testGuide.questionConfused":
+    "Hvor ble du forvirret eller satt fast? Hvilken knapp eller tekst var uklar?",
+  "testGuide.questionDesign": "Var noe vanskelig å lese, finne eller trykke på? Hva likte du?",
+  "testGuide.sendFeedback":
+    "Ta gjerne et skjermbilde og noter hvilken telefon og nettleser du brukte. Send notatene til den som ga deg lenken til appen.",
+  "testGuide.localFeedback":
+    "«Meld fra til elveeigarlaget» inne i appen er også en test. Det du skriver der blir bare lagret lokalt, så testtilbakemeldinger må sendes utenfor appen.",
+  "testGuide.reopenHint":
+    "Du finner veiledningen igjen under Mer → Slik tester du appen. Nå er det din tur!",
+
   "reset.title": "Slett og tilbakestill",
   "reset.description": "Rydd i dataene dine eller start helt på nytt",
 
