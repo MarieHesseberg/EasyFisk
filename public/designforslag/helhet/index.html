@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EasyFisk – hele appen i din valgte stil</title>
+    <link rel="stylesheet" href="design.css" />
+    <script src="design.js" defer></script>
+  </head>
+  <body>
+    <div class="preview-bar">
+      <span><strong>Designforslag</strong> · Eksempeldata. Ingen kjøp eller rapporter sendes.</span
+      ><a href="galleri.html">Se alle skjermbildene</a
+      ><a href="../index.html?v=6">Tidligere forslag A–L</a>
+    </div>
+    <div class="workspace">
+      <aside class="catalog" aria-label="Alle sider i designforslaget">
+        <h1>Én stil.<br />Hele EasyFisk.</h1>
+        <p>Velg en side, eller prøv knappene i appen.</p>
+        <label for="page-picker">Gå direkte til en side</label
+        ><select id="page-picker"></select>
+        <nav id="page-list" aria-label="Sideoversikt"></nav>
+        <p class="small">
+          Alle personnavn, kjøp, kart, kvoter og rapporter er illustrerende. Forslaget endrer ikke
+          appen.
+        </p>
+      </aside>
+      <main class="phone" aria-label="Forhåndsvisning av EasyFisk">
+        <header class="app-header">
+          <a class="brand" href="#home" aria-label="EasyFisk hjem"
+            ><img src="assets/logo.png" alt="" width="44" height="44" /><span>easyfisk</span></a
+          ><a class="language" href="#language" aria-label="Velg språk"
+            >NO <span aria-hidden="true">⌄</span></a
+          ><a class="bell" href="#notices" aria-label="Varsler" id="bell"></a>
+        </header>
+        <div id="screen" tabindex="-1"></div>
+        <nav class="bottom-nav" aria-label="Hovedmeny" id="bottom-nav"></nav>
+      </main>
+      <aside class="design-note">
+        <p class="eyebrow">Valgene dine, videreført</p>
+        <h2 id="screen-name"></h2>
+        <p>
+          Petrol, elveblått og salviegrønt. Samme billettform, avrundede knapper, lyse ikonsirkler
+          og rolige typografi på tvers av appen.
+        </p>
+        <p>Logoen er forenklet fra bildet ditt: laksen og bølgen beholdes, små detaljer fjernes.</p>
+        <a class="outline" href="galleri.html">Bla gjennom alle bildene</a>
+        <p class="small">
+          Tastatur, kontrast og smal skjerm kontrolleres i denne forhåndsvisningen. Endelig
+          universell utforming må også testes i selve appen.
+        </p>
+      </aside>
+    </div>
+    <div id="toast" role="status"></div>
+  </body>
+</html>

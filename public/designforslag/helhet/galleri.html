@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EasyFisk – alle sider i valgt stil</title>
+    <link rel="stylesheet" href="design.css" />
+    <style>
+      .gallery-main {
+        max-width: 1180px;
+        margin: auto;
+        padding: 32px 20px 70px;
+      }
+      .gallery-main > header {
+        max-width: 720px;
+      }
+      .gallery-main h1 {
+        font-size: clamp(30px, 5vw, 44px);
+      }
+      .gallery-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 24px 0;
+      }
+      .gallery-nav a {
+        min-height: 48px;
+        padding: 10px 14px;
+        display: inline-flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #829da9;
+        border-radius: 12px;
+        text-decoration: none;
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        align-items: start;
+      }
+      .gallery-card {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        overflow: hidden;
+      }
+      .gallery-card h3 {
+        font-size: 18px;
+        margin: 14px 0 6px;
+      }
+      .gallery-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+      .gallery-card .outline {
+        font-size: 15px;
+      }
+      .gallery-section {
+        margin: 52px 0;
+        scroll-margin-top: 24px;
+      }
+      .gallery-section > h2 {
+        font-size: 27px;
+      }
+      .gallery-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .gallery-brand img {
+        width: 76px;
+        height: 76px;
+      }
+      .gallery-brand p {
+        margin: 0;
+      }
+      .gallery-main .lead-button {
+        max-width: 350px;
+      }
+      .gallery-top {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        margin-top: 18px;
+      }
+      @media (max-width: 850px) {
+        .gallery-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 540px) {
+        .gallery-main {
+          padding: 24px 16px;
+        }
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+        .gallery-card {
+          max-width: 430px;
+          margin: auto;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="gallery-main" id="top">
+      <header>
+        <p class="eyebrow">EasyFisk · Ditt samlede designforslag</p>
+        <h1>Hele appen, i stilen du valgte</h1>
+        <p>
+          Samme farger, knapper, billettform og rolige skrift gjennom hele appen. Her ser du 87
+          skjermvisninger: hovedsider, trinn i flytene og viktige tilstander.
+        </p>
+        <div class="gallery-brand">
+          <img src="assets/logo.png" alt="Forenklet logo med laks og sirkelformet bølge" />
+          <p>Logoen fra bildet ditt, forenklet for små størrelser. Laksen og bølgen er beholdt.</p>
+        </div>
+        <a class="primary lead-button" href="index.html#home"
+          >Prøv den klikkbare forhåndsvisningen</a
+        >
+        <p class="small">
+          Dette er et designforslag med eksempeldata. Ingenting kjøpes, sendes eller endres i appen.
+          Enkelte valg viser ferdige eksempeltilstander.
+        </p>
+      </header>
+      <nav class="gallery-nav" aria-label="Velg sidegruppe">
+        <a href="#gruppe-0">Hjem</a><a href="#gruppe-1">Kart og soner</a
+        ><a href="#gruppe-2">Kjøp og egne kort</a><a href="#gruppe-3">Dokumenter</a
+        ><a href="#gruppe-4">Gjestekort og oppsyn</a><a href="#gruppe-5">Regler</a
+        ><a href="#gruppe-6">Fisketur</a><a href="#gruppe-7">Fangstrapportering</a
+        ><a href="#gruppe-8">Historikk og statistikk</a><a href="#gruppe-9">Innmeldinger</a
+        ><a href="#gruppe-10">Profil og innstillinger</a
+        ><a href="#gruppe-11">Tomme sider og andre tilstander</a>
+      </nav>
+      <section class="gallery-section" id="gruppe-0">
+        <h2>Hjem</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/home.png"
+              ><img
+                src="bilder/home.png"
+                width="430"
+                height="847"
+                loading="lazy"
+                alt="Designforslag: Hjem · uten fiskekort"
+            /></a>
+            <h3>Hjem · uten fiskekort</h3>
+            <a class="outline" href="index.html#home">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/home.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/home-permit.png"
+              ><img
+                src="bilder/home-permit.png"
+                width="430"
+                height="926"
+                loading="lazy"
+                alt="Designforslag: Hjem · med fiskekort"
+            /></a>
+            <h3>Hjem · med fiskekort</h3>
+            <a class="outline" href="index.html#home-permit">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/home-permit.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/home-ready.png"
+              ><img
+                src="bilder/home-ready.png"
+                width="430"
+                height="859"
+                loading="lazy"
+                alt="Designforslag: Hjem · klar til å starte"
+            /></a>
+            <h3>Hjem · klar til å starte</h3>
+            <a class="outline" href="index.html#home-ready">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/home-ready.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/home-active.png"
+              ><img
+                src="bilder/home-active.png"
+                width="430"
+                height="879"
+                loading="lazy"
+                alt="Designforslag: Hjem · fiske pågår"
+            /></a>
+            <h3>Hjem · fiske pågår</h3>
+            <a class="outline" href="index.html#home-active">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/home-active.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-1">
+        <h2>Kart og soner</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/map.png"
+              ><img
+                src="bilder/map.png"
+                width="430"
+                height="955"
+                loading="lazy"
+                alt="Designforslag: Kart"
+            /></a>
+            <h3>Kart</h3>
+            <a class="outline" href="index.html#map">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/map.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/zone-list.png"
+              ><img
+                src="bilder/zone-list.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Velg sone"
+            /></a>
+            <h3>Velg sone</h3>
+            <a class="outline" href="index.html#zone-list">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/zone-list.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/zone.png"
+              ><img
+                src="bilder/zone.png"
+                width="430"
+                height="933"
+                loading="lazy"
+                alt="Designforslag: Sonedetaljer"
+            /></a>
+            <h3>Sonedetaljer</h3>
+            <a class="outline" href="index.html#zone">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/zone.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-2">
+        <h2>Kjøp og egne kort</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/shop.png"
+              ><img
+                src="bilder/shop.png"
+                width="430"
+                height="990"
+                loading="lazy"
+                alt="Designforslag: Kjøp fiskekort"
+            /></a>
+            <h3>Kjøp fiskekort</h3>
+            <a class="outline" href="index.html#shop">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/shop.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/product.png"
+              ><img
+                src="bilder/product.png"
+                width="430"
+                height="910"
+                loading="lazy"
+                alt="Designforslag: Døgnkort · detaljer"
+            /></a>
+            <h3>Døgnkort · detaljer</h3>
+            <a class="outline" href="index.html#product">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/product.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/season.png"
+              ><img
+                src="bilder/season.png"
+                width="430"
+                height="1044"
+                loading="lazy"
+                alt="Designforslag: Sesongkort"
+            /></a>
+            <h3>Sesongkort</h3>
+            <a class="outline" href="index.html#season">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/season.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/dates.png"
+              ><img
+                src="bilder/dates.png"
+                width="430"
+                height="1005"
+                loading="lazy"
+                alt="Designforslag: Velg flere fiskedager"
+            /></a>
+            <h3>Velg flere fiskedager</h3>
+            <a class="outline" href="index.html#dates">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/dates.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/buyer.png"
+              ><img
+                src="bilder/buyer.png"
+                width="430"
+                height="972"
+                loading="lazy"
+                alt="Designforslag: Kjøper og fisker"
+            /></a>
+            <h3>Kjøper og fisker</h3>
+            <a class="outline" href="index.html#buyer">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/buyer.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/recipient.png"
+              ><img
+                src="bilder/recipient.png"
+                width="430"
+                height="1052"
+                loading="lazy"
+                alt="Designforslag: Kjøp til noen andre"
+            /></a>
+            <h3>Kjøp til noen andre</h3>
+            <a class="outline" href="index.html#recipient">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/recipient.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/order.png"
+              ><img
+                src="bilder/order.png"
+                width="430"
+                height="998"
+                loading="lazy"
+                alt="Designforslag: Kontroller bestilling"
+            /></a>
+            <h3>Kontroller bestilling</h3>
+            <a class="outline" href="index.html#order">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/order.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/payment.png"
+              ><img
+                src="bilder/payment.png"
+                width="430"
+                height="771"
+                loading="lazy"
+                alt="Designforslag: Betaling"
+            /></a>
+            <h3>Betaling</h3>
+            <a class="outline" href="index.html#payment">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/payment.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/receipt.png"
+              ><img
+                src="bilder/receipt.png"
+                width="430"
+                height="928"
+                loading="lazy"
+                alt="Designforslag: Kvittering"
+            /></a>
+            <h3>Kvittering</h3>
+            <a class="outline" href="index.html#receipt">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/receipt.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/payment-error.png"
+              ><img
+                src="bilder/payment-error.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Betaling avbrutt"
+            /></a>
+            <h3>Betaling avbrutt</h3>
+            <a class="outline" href="index.html#payment-error">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/payment-error.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/permits.png"
+              ><img
+                src="bilder/permits.png"
+                width="430"
+                height="1042"
+                loading="lazy"
+                alt="Designforslag: Mine fiskekort"
+            /></a>
+            <h3>Mine fiskekort</h3>
+            <a class="outline" href="index.html#permits">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/permits.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/permit.png"
+              ><img
+                src="bilder/permit.png"
+                width="430"
+                height="1032"
+                loading="lazy"
+                alt="Designforslag: Fiskekort · detaljer"
+            /></a>
+            <h3>Fiskekort · detaljer</h3>
+            <a class="outline" href="index.html#permit">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/permit.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/permit-past.png"
+              ><img
+                src="bilder/permit-past.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Tidligere fiskekort"
+            /></a>
+            <h3>Tidligere fiskekort</h3>
+            <a class="outline" href="index.html#permit-past">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/permit-past.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/reporting.png"
+              ><img
+                src="bilder/reporting.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Rapporteringsdøgn"
+            /></a>
+            <h3>Rapporteringsdøgn</h3>
+            <a class="outline" href="index.html#reporting">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/reporting.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/reporting-done.png"
+              ><img
+                src="bilder/reporting-done.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Fiskedøgn registrert"
+            /></a>
+            <h3>Fiskedøgn registrert</h3>
+            <a class="outline" href="index.html#reporting-done">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/reporting-done.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/seller.png"
+              ><img
+                src="bilder/seller.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Kontakt kortselger"
+            /></a>
+            <h3>Kontakt kortselger</h3>
+            <a class="outline" href="index.html#seller">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/seller.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-3">
+        <h2>Dokumenter</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/manual-permit.png"
+              ><img
+                src="bilder/manual-permit.png"
+                width="430"
+                height="1173"
+                loading="lazy"
+                alt="Designforslag: Registrer eksisterende kort"
+            /></a>
+            <h3>Registrer eksisterende kort</h3>
+            <a class="outline" href="index.html#manual-permit">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/manual-permit.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/documents.png"
+              ><img
+                src="bilder/documents.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Mine dokumenter"
+            /></a>
+            <h3>Mine dokumenter</h3>
+            <a class="outline" href="index.html#documents">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/documents.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/disinfection.png"
+              ><img
+                src="bilder/disinfection.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Desinfisering"
+            /></a>
+            <h3>Desinfisering</h3>
+            <a class="outline" href="index.html#disinfection">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/disinfection.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/disinfection-form.png"
+              ><img
+                src="bilder/disinfection-form.png"
+                width="430"
+                height="975"
+                loading="lazy"
+                alt="Designforslag: Registrer desinfisering"
+            /></a>
+            <h3>Registrer desinfisering</h3>
+            <a class="outline" href="index.html#disinfection-form">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/disinfection-form.png"
+              >Se bildet i full størrelse</a
+            >
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/fee.png"
+              ><img
+                src="bilder/fee.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Statlig fiskeravgift"
+            /></a>
+            <h3>Statlig fiskeravgift</h3>
+            <a class="outline" href="index.html#fee">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/fee.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/fee-form.png"
+              ><img
+                src="bilder/fee-form.png"
+                width="430"
+                height="876"
+                loading="lazy"
+                alt="Designforslag: Registrer fiskeravgift"
+            /></a>
+            <h3>Registrer fiskeravgift</h3>
+            <a class="outline" href="index.html#fee-form">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/fee-form.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/document-detail.png"
+              ><img
+                src="bilder/document-detail.png"
+                width="430"
+                height="880"
+                loading="lazy"
+                alt="Designforslag: Dokument · detaljer"
+            /></a>
+            <h3>Dokument · detaljer</h3>
+            <a class="outline" href="index.html#document-detail">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/document-detail.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/document-info.png"
+              ><img
+                src="bilder/document-info.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Praktisk dokumentinformasjon"
+            /></a>
+            <h3>Praktisk dokumentinformasjon</h3>
+            <a class="outline" href="index.html#document-info">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/document-info.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/control.png"
+              ><img
+                src="bilder/control.png"
+                width="430"
+                height="905"
+                loading="lazy"
+                alt="Designforslag: Vis ved kontroll"
+            /></a>
+            <h3>Vis ved kontroll</h3>
+            <a class="outline" href="index.html#control">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/control.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-4">
+        <h2>Gjestekort og oppsyn</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/access.png"
+              ><img
+                src="bilder/access.png"
+                width="430"
+                height="798"
+                loading="lazy"
+                alt="Designforslag: Grunneierkort og tilganger"
+            /></a>
+            <h3>Grunneierkort og tilganger</h3>
+            <a class="outline" href="index.html#access">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/access.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/grant.png"
+              ><img
+                src="bilder/grant.png"
+                width="430"
+                height="1097"
+                loading="lazy"
+                alt="Designforslag: Tildel gjestekort eller oppsyn"
+            /></a>
+            <h3>Tildel gjestekort eller oppsyn</h3>
+            <a class="outline" href="index.html#grant">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/grant.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/grant-detail.png"
+              ><img
+                src="bilder/grant-detail.png"
+                width="430"
+                height="762"
+                loading="lazy"
+                alt="Designforslag: Tilgang · detaljer"
+            /></a>
+            <h3>Tilgang · detaljer</h3>
+            <a class="outline" href="index.html#grant-detail">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/grant-detail.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/received.png"
+              ><img
+                src="bilder/received.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Mottatt oppsynstilgang"
+            /></a>
+            <h3>Mottatt oppsynstilgang</h3>
+            <a class="outline" href="index.html#received">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/received.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-5">
+        <h2>Regler</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/rules.png"
+              ><img
+                src="bilder/rules.png"
+                width="430"
+                height="784"
+                loading="lazy"
+                alt="Designforslag: Regler"
+            /></a>
+            <h3>Regler</h3>
+            <a class="outline" href="index.html#rules">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/rules.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/rule-zone.png"
+              ><img
+                src="bilder/rule-zone.png"
+                width="430"
+                height="1011"
+                loading="lazy"
+                alt="Designforslag: Lokale soneregler"
+            /></a>
+            <h3>Lokale soneregler</h3>
+            <a class="outline" href="index.html#rule-zone">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/rule-zone.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/permit-rules.png"
+              ><img
+                src="bilder/permit-rules.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Regler for mine kort"
+            /></a>
+            <h3>Regler for mine kort</h3>
+            <a class="outline" href="index.html#permit-rules">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/permit-rules.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/rule-history.png"
+              ><img
+                src="bilder/rule-history.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Regelhistorikk"
+            /></a>
+            <h3>Regelhistorikk</h3>
+            <a class="outline" href="index.html#rule-history">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/rule-history.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/rule-version.png"
+              ><img
+                src="bilder/rule-version.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Tidligere regelversjon"
+            /></a>
+            <h3>Tidligere regelversjon</h3>
+            <a class="outline" href="index.html#rule-version">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/rule-version.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/rule-change.png"
+              ><img
+                src="bilder/rule-change.png"
+                width="430"
+                height="773"
+                loading="lazy"
+                alt="Designforslag: Ny bekreftelse ved regelendring"
+            /></a>
+            <h3>Ny bekreftelse ved regelendring</h3>
+            <a class="outline" href="index.html#rule-change">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/rule-change.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-6">
+        <h2>Fisketur</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/start-zone.png"
+              ><img
+                src="bilder/start-zone.png"
+                width="430"
+                height="1000"
+                loading="lazy"
+                alt="Designforslag: Start fiske · velg sted"
+            /></a>
+            <h3>Start fiske · velg sted</h3>
+            <a class="outline" href="index.html#start-zone">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/start-zone.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/location-fallback.png"
+              ><img
+                src="bilder/location-fallback.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Posisjon · manuelt alternativ"
+            /></a>
+            <h3>Posisjon · manuelt alternativ</h3>
+            <a class="outline" href="index.html#location-fallback">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/location-fallback.png"
+              >Se bildet i full størrelse</a
+            >
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/start-check.png"
+              ><img
+                src="bilder/start-check.png"
+                width="430"
+                height="871"
+                loading="lazy"
+                alt="Designforslag: Start fiske · dokumentkontroll"
+            /></a>
+            <h3>Start fiske · dokumentkontroll</h3>
+            <a class="outline" href="index.html#start-check">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/start-check.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/start-blocked.png"
+              ><img
+                src="bilder/start-blocked.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Start fiske · manglende dokument"
+            /></a>
+            <h3>Start fiske · manglende dokument</h3>
+            <a class="outline" href="index.html#start-blocked">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/start-blocked.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/start-confirm.png"
+              ><img
+                src="bilder/start-confirm.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Start fiske · bekreft"
+            /></a>
+            <h3>Start fiske · bekreft</h3>
+            <a class="outline" href="index.html#start-confirm">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/start-confirm.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/stop.png"
+              ><img
+                src="bilder/stop.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Avslutt fisketur"
+            /></a>
+            <h3>Avslutt fisketur</h3>
+            <a class="outline" href="index.html#stop">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/stop.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/trip-summary.png"
+              ><img
+                src="bilder/trip-summary.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Fisketur fullført"
+            /></a>
+            <h3>Fisketur fullført</h3>
+            <a class="outline" href="index.html#trip-summary">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/trip-summary.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-7">
+        <h2>Fangstrapportering</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/catch.png"
+              ><img
+                src="bilder/catch.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Registrer fangst · art"
+            /></a>
+            <h3>Registrer fangst · art</h3>
+            <a class="outline" href="index.html#catch">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-size.png"
+              ><img
+                src="bilder/catch-size.png"
+                width="430"
+                height="986"
+                loading="lazy"
+                alt="Designforslag: Fangst · størrelse og bilde"
+            /></a>
+            <h3>Fangst · størrelse og bilde</h3>
+            <a class="outline" href="index.html#catch-size">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-size.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-deviation.png"
+              ><img
+                src="bilder/catch-deviation.png"
+                width="430"
+                height="915"
+                loading="lazy"
+                alt="Designforslag: Avlivet fisk · størrelsesavvik"
+            /></a>
+            <h3>Avlivet fisk · størrelsesavvik</h3>
+            <a class="outline" href="index.html#catch-deviation">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-deviation.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-review.png"
+              ><img
+                src="bilder/catch-review.png"
+                width="430"
+                height="784"
+                loading="lazy"
+                alt="Designforslag: Fangst · se over"
+            /></a>
+            <h3>Fangst · se over</h3>
+            <a class="outline" href="index.html#catch-review">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-review.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-done.png"
+              ><img
+                src="bilder/catch-done.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Fangst · bekreftelse"
+            /></a>
+            <h3>Fangst · bekreftelse</h3>
+            <a class="outline" href="index.html#catch-done">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-done.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-detail.png"
+              ><img
+                src="bilder/catch-detail.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Fangstrapport · detaljer"
+            /></a>
+            <h3>Fangstrapport · detaljer</h3>
+            <a class="outline" href="index.html#catch-detail">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-detail.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catch-correct.png"
+              ><img
+                src="bilder/catch-correct.png"
+                width="430"
+                height="1201"
+                loading="lazy"
+                alt="Designforslag: Rett opp fangstrapport"
+            /></a>
+            <h3>Rett opp fangstrapport</h3>
+            <a class="outline" href="index.html#catch-correct">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catch-correct.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-8">
+        <h2>Historikk og statistikk</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/history.png"
+              ><img
+                src="bilder/history.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Mine fisketurer"
+            /></a>
+            <h3>Mine fisketurer</h3>
+            <a class="outline" href="index.html#history">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/history.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/catches.png"
+              ><img
+                src="bilder/catches.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Mine fangster"
+            /></a>
+            <h3>Mine fangster</h3>
+            <a class="outline" href="index.html#catches">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/catches.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/trip.png"
+              ><img
+                src="bilder/trip.png"
+                width="430"
+                height="776"
+                loading="lazy"
+                alt="Designforslag: Fisketur · detaljer"
+            /></a>
+            <h3>Fisketur · detaljer</h3>
+            <a class="outline" href="index.html#trip">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/trip.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/past-trip.png"
+              ><img
+                src="bilder/past-trip.png"
+                width="430"
+                height="754"
+                loading="lazy"
+                alt="Designforslag: Tidligere tur · tidspunkt"
+            /></a>
+            <h3>Tidligere tur · tidspunkt</h3>
+            <a class="outline" href="index.html#past-trip">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/past-trip.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/past-catch.png"
+              ><img
+                src="bilder/past-catch.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Tidligere tur · fangst"
+            /></a>
+            <h3>Tidligere tur · fangst</h3>
+            <a class="outline" href="index.html#past-catch">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/past-catch.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/past-review.png"
+              ><img
+                src="bilder/past-review.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Tidligere tur · se over"
+            /></a>
+            <h3>Tidligere tur · se over</h3>
+            <a class="outline" href="index.html#past-review">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/past-review.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/past-done.png"
+              ><img
+                src="bilder/past-done.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Tidligere tur · bekreftelse"
+            /></a>
+            <h3>Tidligere tur · bekreftelse</h3>
+            <a class="outline" href="index.html#past-done">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/past-done.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/my-stats.png"
+              ><img
+                src="bilder/my-stats.png"
+                width="430"
+                height="797"
+                loading="lazy"
+                alt="Designforslag: Min statistikk"
+            /></a>
+            <h3>Min statistikk</h3>
+            <a class="outline" href="index.html#my-stats">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/my-stats.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/river-stats.png"
+              ><img
+                src="bilder/river-stats.png"
+                width="430"
+                height="941"
+                loading="lazy"
+                alt="Designforslag: Statistikk for vassdraget"
+            /></a>
+            <h3>Statistikk for vassdraget</h3>
+            <a class="outline" href="index.html#river-stats">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/river-stats.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-9">
+        <h2>Innmeldinger</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/feedback.png"
+              ><img
+                src="bilder/feedback.png"
+                width="430"
+                height="985"
+                loading="lazy"
+                alt="Designforslag: Meld fra · beskrivelse"
+            /></a>
+            <h3>Meld fra · beskrivelse</h3>
+            <a class="outline" href="index.html#feedback">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/feedback.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/feedback-review.png"
+              ><img
+                src="bilder/feedback-review.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Meld fra · se over"
+            /></a>
+            <h3>Meld fra · se over</h3>
+            <a class="outline" href="index.html#feedback-review">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/feedback-review.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/feedback-done.png"
+              ><img
+                src="bilder/feedback-done.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Meld fra · bekreftelse"
+            /></a>
+            <h3>Meld fra · bekreftelse</h3>
+            <a class="outline" href="index.html#feedback-done">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/feedback-done.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/reports.png"
+              ><img
+                src="bilder/reports.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Mine innmeldinger"
+            /></a>
+            <h3>Mine innmeldinger</h3>
+            <a class="outline" href="index.html#reports">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/reports.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/report-detail.png"
+              ><img
+                src="bilder/report-detail.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Innmelding · detaljer"
+            /></a>
+            <h3>Innmelding · detaljer</h3>
+            <a class="outline" href="index.html#report-detail">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/report-detail.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-10">
+        <h2>Profil og innstillinger</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/notices.png"
+              ><img
+                src="bilder/notices.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Varsler"
+            /></a>
+            <h3>Varsler</h3>
+            <a class="outline" href="index.html#notices">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/notices.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/notice-detail.png"
+              ><img
+                src="bilder/notice-detail.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Varsel · les mer"
+            /></a>
+            <h3>Varsel · les mer</h3>
+            <a class="outline" href="index.html#notice-detail">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/notice-detail.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/more.png"
+              ><img
+                src="bilder/more.png"
+                width="430"
+                height="996"
+                loading="lazy"
+                alt="Designforslag: Mer"
+            /></a>
+            <h3>Mer</h3>
+            <a class="outline" href="index.html#more">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/more.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/profile.png"
+              ><img
+                src="bilder/profile.png"
+                width="430"
+                height="936"
+                loading="lazy"
+                alt="Designforslag: Profil og personvern"
+            /></a>
+            <h3>Profil og personvern</h3>
+            <a class="outline" href="index.html#profile">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/profile.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/profile-saved.png"
+              ><img
+                src="bilder/profile-saved.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Profil · lagret"
+            /></a>
+            <h3>Profil · lagret</h3>
+            <a class="outline" href="index.html#profile-saved">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/profile-saved.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/privacy.png"
+              ><img
+                src="bilder/privacy.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Personvern og dine data"
+            /></a>
+            <h3>Personvern og dine data</h3>
+            <a class="outline" href="index.html#privacy">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/privacy.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/preferences.png"
+              ><img
+                src="bilder/preferences.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Varsler og innstillinger"
+            /></a>
+            <h3>Varsler og innstillinger</h3>
+            <a class="outline" href="index.html#preferences">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/preferences.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/language.png"
+              ><img
+                src="bilder/language.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Velg språk"
+            /></a>
+            <h3>Velg språk</h3>
+            <a class="outline" href="index.html#language">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/language.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/reset.png"
+              ><img
+                src="bilder/reset.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Slett og tilbakestill"
+            /></a>
+            <h3>Slett og tilbakestill</h3>
+            <a class="outline" href="index.html#reset">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/reset.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/reset-confirm.png"
+              ><img
+                src="bilder/reset-confirm.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Bekreft tilbakestilling"
+            /></a>
+            <h3>Bekreft tilbakestilling</h3>
+            <a class="outline" href="index.html#reset-confirm">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/reset-confirm.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section" id="gruppe-11">
+        <h2>Tomme sider og andre tilstander</h2>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <a href="bilder/delete-item.png"
+              ><img
+                src="bilder/delete-item.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Bekreft sletting"
+            /></a>
+            <h3>Bekreft sletting</h3>
+            <a class="outline" href="index.html#delete-item">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/delete-item.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/empty-permits.png"
+              ><img
+                src="bilder/empty-permits.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Ingen fiskekort"
+            /></a>
+            <h3>Ingen fiskekort</h3>
+            <a class="outline" href="index.html#empty-permits">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/empty-permits.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/empty-history.png"
+              ><img
+                src="bilder/empty-history.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Ingen fisketurer"
+            /></a>
+            <h3>Ingen fisketurer</h3>
+            <a class="outline" href="index.html#empty-history">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/empty-history.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/empty-reports.png"
+              ><img
+                src="bilder/empty-reports.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Ingen innmeldinger"
+            /></a>
+            <h3>Ingen innmeldinger</h3>
+            <a class="outline" href="index.html#empty-reports">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/empty-reports.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/load-error.png"
+              ><img
+                src="bilder/load-error.png"
+                width="430"
+                height="751"
+                loading="lazy"
+                alt="Designforslag: Kunne ikke laste inn"
+            /></a>
+            <h3>Kunne ikke laste inn</h3>
+            <a class="outline" href="index.html#load-error">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/load-error.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/form-error.png"
+              ><img
+                src="bilder/form-error.png"
+                width="430"
+                height="803"
+                loading="lazy"
+                alt="Designforslag: Skjema · manglende opplysning"
+            /></a>
+            <h3>Skjema · manglende opplysning</h3>
+            <a class="outline" href="index.html#form-error">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/form-error.png">Se bildet i full størrelse</a>
+          </article>
+          <article class="gallery-card">
+            <a href="bilder/status-demo.png"
+              ><img
+                src="bilder/status-demo.png"
+                width="430"
+                height="922"
+                loading="lazy"
+                alt="Designforslag: Test av statusmotor"
+            /></a>
+            <h3>Test av statusmotor</h3>
+            <a class="outline" href="index.html#status-demo">Åpne denne siden</a
+            ><a class="gallery-top" href="bilder/status-demo.png">Se bildet i full størrelse</a>
+          </article>
+        </div>
+        <a class="gallery-top" href="#top">Til sideoversikten</a>
+      </section>
+      <section class="gallery-section">
+        <h2>Hva forslaget dekker</h2>
+        <p>
+          Visningene bygger på appens hovednavigasjon og eksisterende funksjoner i features-mappene:
+          kortkjøp, dokumenter, gjestetilgang, fisketur, fangst, historikk, innmeldinger, regler,
+          statistikk og profil. Trinn og tilstander er vist hver for seg for å gjøre designet lett å
+          vurdere. Det er ikke 87 nye funksjoner.
+        </p>
+        <p>
+          Regeltekst, priser, datoer, kart og statistikk er illustrerende. Endelig innhold må følge
+          appens faktiske og godkjente datagrunnlag. Skjermbildene er visuelle forslag; tastatur,
+          tekstforstørrelse og skjermleser må også ivaretas når løsningen implementeres.
+        </p>
+        <p>
+          <a href="bildeprompter.txt">Instruksjonene for logo og illustrasjoner</a> ·
+          <a href="assets/FONT-LICENSE.txt">Skriftlisens: Nunito Sans</a>
+        </p>
+        <p>
+          <a class="outline" href="../index.html?v=6">Alle tidligere forslag A–L</a
+          ><a class="outline" href="../samlet-hjem.html?v=1"
+            >Det godkjente utgangspunktet for hjemskjermen</a
+          >
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

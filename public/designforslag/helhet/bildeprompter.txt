@@ -1,0 +1,16 @@
+Built-in imagegen used only for logo and illustration assets. Screens are HTML/CSS designs rendered in a browser.
+
+LOGO
+Reference: C:/Users/Marie/.codex/codex-remote-attachments/01a0b530-d558-7ba2-bfce-eb1715fe92c2/38DF426D-E79E-4158-8E42-9C749320ADFA/1-Bilde-1.jpg
+Use case logo-brand. Simplify THIS PROVIDED SALMON-IN-CIRCULAR-WAVE EMBLEM for use at 44 pixels square in a mobile app header. Preserve its identity: leaping curved salmon pointing right, characteristic open hooked mouth, tail at bottom-left, sweeping nearly circular wave around right and under fish. Remove all small speckle dots and interior scale lines; retain only essential eye, gill cut and fins; reduce wave to two broad clean strokes. Bold clean silhouette, beautiful balanced negative space, recognizable at tiny size, not a generic fish. TWO flat harmonious colors: deep petrol #176079 and light river blue #55ADD1. Pure opaque WHITE background. No text, no letters, no border outside wave, no shadows, no gradient, no texture. Square1024x1024, emblem centered with only 4% white margin, sharp vector-like edges. Faithful simplification of reference, not new branding.
+
+RIVER
+Reference: C:/Users/Marie/Documents/ChatGPT/EasyFisk/public/designforslag/M-hjem-uten-fiskekort.png
+Use case precise-object-edit / asset extraction. The reference is an app screenshot. Create ONLY the wide decorative river illustration from its hero, reconstructed as a standalone clean flat illustration, no UI, no words, no logo, no buttons. Landscape1536x640-ish wide horizontal image. Winding pale blue river sweeps from distant center to broad foreground, sage green banks spanning full width, gray rocks and a few reeds, distant blue-gray low hills. Preserve the reference calm simple vector-like illustration style and colors. On opaque pure WHITE background; river fills width with white gently around foreground contours. No added photo detail, no text, no dark gradient. This asset is used above a purchase button and needs to match the approved reference exactly in feel.
+
+LANDSCAPE
+Reference: C:/Users/Marie/Documents/ChatGPT/EasyFisk/public/designforslag/M-hjem-med-fiskekort.png
+Use case precise-object-edit / asset extraction. Extract/reconstruct ONLY the forest river landscape drawn in the top right of the ticket on the reference screenshot. Output a standalone landscape illustration1536x1024. No UI, no ticket shape, no letters, no logos. Simplified layered forest silhouettes on both sides of winding river, distant gentle mountain ridges. Muted blue-sage palette matching reference. Flat shapes only, no photo, no gradients. Solid pale ice-blue background #E1F3FA that blends cleanly into a light-blue ticket. Balanced airy composition, open river foreground, dark trees mostly on right. This is decorative background on the RIGHT side of a digital ticket, should never contain text.
+
+LANDSCAPE REFINEMENT
+Correct this landscape asset. Replace ALL black/dark blurry gradient regions at top sky and bottom-left with flat opaque pale ice blue #E1F3FA. Preserve forest, mountains and winding river shapes. The entire image must be bright flat vector-like illustration with solid colors; no black anywhere, no vignette, no shading, no transparency, no blur. Forest silhouettes muted blue-sage. Sky solid #E1F3FA. No text or UI. Match decorative landscape for pale blue fishing ticket.

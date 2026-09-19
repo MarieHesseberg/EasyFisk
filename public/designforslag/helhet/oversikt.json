@@ -1,0 +1,437 @@
+[
+  {
+    "id": "home",
+    "title": "Hjem · uten fiskekort",
+    "group": "Hjem"
+  },
+  {
+    "id": "home-permit",
+    "title": "Hjem · med fiskekort",
+    "group": "Hjem"
+  },
+  {
+    "id": "home-ready",
+    "title": "Hjem · klar til å starte",
+    "group": "Hjem"
+  },
+  {
+    "id": "home-active",
+    "title": "Hjem · fiske pågår",
+    "group": "Hjem"
+  },
+  {
+    "id": "map",
+    "title": "Kart",
+    "group": "Kart og soner"
+  },
+  {
+    "id": "zone-list",
+    "title": "Velg sone",
+    "group": "Kart og soner"
+  },
+  {
+    "id": "zone",
+    "title": "Sonedetaljer",
+    "group": "Kart og soner"
+  },
+  {
+    "id": "shop",
+    "title": "Kjøp fiskekort",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "product",
+    "title": "Døgnkort · detaljer",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "season",
+    "title": "Sesongkort",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "dates",
+    "title": "Velg flere fiskedager",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "buyer",
+    "title": "Kjøper og fisker",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "recipient",
+    "title": "Kjøp til noen andre",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "order",
+    "title": "Kontroller bestilling",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "payment",
+    "title": "Betaling",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "receipt",
+    "title": "Kvittering",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "payment-error",
+    "title": "Betaling avbrutt",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "permits",
+    "title": "Mine fiskekort",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "permit",
+    "title": "Fiskekort · detaljer",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "permit-past",
+    "title": "Tidligere fiskekort",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "manual-permit",
+    "title": "Registrer eksisterende kort",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "reporting",
+    "title": "Rapporteringsdøgn",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "reporting-done",
+    "title": "Fiskedøgn registrert",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "seller",
+    "title": "Kontakt kortselger",
+    "group": "Kjøp og egne kort"
+  },
+  {
+    "id": "documents",
+    "title": "Mine dokumenter",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "disinfection",
+    "title": "Desinfisering",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "disinfection-form",
+    "title": "Registrer desinfisering",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "fee",
+    "title": "Statlig fiskeravgift",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "fee-form",
+    "title": "Registrer fiskeravgift",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "document-detail",
+    "title": "Dokument · detaljer",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "document-info",
+    "title": "Praktisk dokumentinformasjon",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "control",
+    "title": "Vis ved kontroll",
+    "group": "Dokumenter"
+  },
+  {
+    "id": "access",
+    "title": "Grunneierkort og tilganger",
+    "group": "Gjestekort og oppsyn"
+  },
+  {
+    "id": "grant",
+    "title": "Tildel gjestekort eller oppsyn",
+    "group": "Gjestekort og oppsyn"
+  },
+  {
+    "id": "grant-detail",
+    "title": "Tilgang · detaljer",
+    "group": "Gjestekort og oppsyn"
+  },
+  {
+    "id": "received",
+    "title": "Mottatt oppsynstilgang",
+    "group": "Gjestekort og oppsyn"
+  },
+  {
+    "id": "rules",
+    "title": "Regler",
+    "group": "Regler"
+  },
+  {
+    "id": "rule-zone",
+    "title": "Lokale soneregler",
+    "group": "Regler"
+  },
+  {
+    "id": "permit-rules",
+    "title": "Regler for mine kort",
+    "group": "Regler"
+  },
+  {
+    "id": "rule-history",
+    "title": "Regelhistorikk",
+    "group": "Regler"
+  },
+  {
+    "id": "rule-version",
+    "title": "Tidligere regelversjon",
+    "group": "Regler"
+  },
+  {
+    "id": "rule-change",
+    "title": "Ny bekreftelse ved regelendring",
+    "group": "Regler"
+  },
+  {
+    "id": "start-zone",
+    "title": "Start fiske · velg sted",
+    "group": "Fisketur"
+  },
+  {
+    "id": "location-fallback",
+    "title": "Posisjon · manuelt alternativ",
+    "group": "Fisketur"
+  },
+  {
+    "id": "start-check",
+    "title": "Start fiske · dokumentkontroll",
+    "group": "Fisketur"
+  },
+  {
+    "id": "start-blocked",
+    "title": "Start fiske · manglende dokument",
+    "group": "Fisketur"
+  },
+  {
+    "id": "start-confirm",
+    "title": "Start fiske · bekreft",
+    "group": "Fisketur"
+  },
+  {
+    "id": "stop",
+    "title": "Avslutt fisketur",
+    "group": "Fisketur"
+  },
+  {
+    "id": "trip-summary",
+    "title": "Fisketur fullført",
+    "group": "Fisketur"
+  },
+  {
+    "id": "catch",
+    "title": "Registrer fangst · art",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-size",
+    "title": "Fangst · størrelse og bilde",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-deviation",
+    "title": "Avlivet fisk · størrelsesavvik",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-review",
+    "title": "Fangst · se over",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-done",
+    "title": "Fangst · bekreftelse",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-detail",
+    "title": "Fangstrapport · detaljer",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "catch-correct",
+    "title": "Rett opp fangstrapport",
+    "group": "Fangstrapportering"
+  },
+  {
+    "id": "history",
+    "title": "Mine fisketurer",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "catches",
+    "title": "Mine fangster",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "trip",
+    "title": "Fisketur · detaljer",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "past-trip",
+    "title": "Tidligere tur · tidspunkt",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "past-catch",
+    "title": "Tidligere tur · fangst",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "past-review",
+    "title": "Tidligere tur · se over",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "past-done",
+    "title": "Tidligere tur · bekreftelse",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "my-stats",
+    "title": "Min statistikk",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "river-stats",
+    "title": "Statistikk for vassdraget",
+    "group": "Historikk og statistikk"
+  },
+  {
+    "id": "feedback",
+    "title": "Meld fra · beskrivelse",
+    "group": "Innmeldinger"
+  },
+  {
+    "id": "feedback-review",
+    "title": "Meld fra · se over",
+    "group": "Innmeldinger"
+  },
+  {
+    "id": "feedback-done",
+    "title": "Meld fra · bekreftelse",
+    "group": "Innmeldinger"
+  },
+  {
+    "id": "reports",
+    "title": "Mine innmeldinger",
+    "group": "Innmeldinger"
+  },
+  {
+    "id": "report-detail",
+    "title": "Innmelding · detaljer",
+    "group": "Innmeldinger"
+  },
+  {
+    "id": "notices",
+    "title": "Varsler",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "notice-detail",
+    "title": "Varsel · les mer",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "more",
+    "title": "Mer",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "profile",
+    "title": "Profil og personvern",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "profile-saved",
+    "title": "Profil · lagret",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "privacy",
+    "title": "Personvern og dine data",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "preferences",
+    "title": "Varsler og innstillinger",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "language",
+    "title": "Velg språk",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "reset",
+    "title": "Slett og tilbakestill",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "reset-confirm",
+    "title": "Bekreft tilbakestilling",
+    "group": "Profil og innstillinger"
+  },
+  {
+    "id": "delete-item",
+    "title": "Bekreft sletting",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "empty-permits",
+    "title": "Ingen fiskekort",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "empty-history",
+    "title": "Ingen fisketurer",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "empty-reports",
+    "title": "Ingen innmeldinger",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "load-error",
+    "title": "Kunne ikke laste inn",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "form-error",
+    "title": "Skjema · manglende opplysning",
+    "group": "Tomme sider og andre tilstander"
+  },
+  {
+    "id": "status-demo",
+    "title": "Test av statusmotor",
+    "group": "Tomme sider og andre tilstander"
+  }
+]
