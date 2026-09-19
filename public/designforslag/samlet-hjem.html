@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EasyFisk – ditt samlede forslag til hjemskjerm</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f7f9fa;
+        color: #153542;
+        font:
+          17px/1.6 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 820px;
+        margin: auto;
+        padding: 24px 18px 60px;
+      }
+      h1 {
+        font-size: clamp(29px, 6vw, 40px);
+        line-height: 1.2;
+        font-weight: 650;
+      }
+      h2 {
+        font-size: 26px;
+        line-height: 1.3;
+        font-weight: 600;
+      }
+      p {
+        max-width: 65ch;
+      }
+      a {
+        color: #155e75;
+        text-underline-offset: 4px;
+      }
+      a:focus-visible {
+        outline: 3px solid #234dc3;
+        outline-offset: 5px;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 24px 0;
+      }
+      nav a,
+      .full {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        padding: 10px 16px;
+        border: 1px solid #52616a;
+        border-radius: 12px;
+        background: #fff;
+      }
+      section {
+        border-top: 1px solid #c8d3d9;
+        padding-top: 24px;
+        margin-top: 36px;
+        scroll-margin-top: 18px;
+      }
+      figure {
+        margin: 20px 0;
+        max-width: 600px;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+      figcaption {
+        color: #52616a;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      li {
+        margin: 8px 0;
+      }
+      .note {
+        color: #52616a;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>EasyFisk · Samlet designforslag</p>
+      <h1>Hjemskjermen, satt sammen fra valgene dine</h1>
+      <p>
+        Én stil, vist før og etter kjøp av fiskekort. Elveblått og petrol knytter illustrasjon,
+        billett og knapper sammen. Lyse salviegrønne ikonsirkler gir en rolig variasjon.
+      </p>
+      <nav aria-label="Velg visning">
+        <a href="#uten">Uten fiskekort</a>
+        <a href="#med">Med fiskekort</a>
+        <a href="index.html?v=5">Alle tidligere forslag A–L</a>
+      </nav>
+      <p>
+        Trykk på bildene for full størrelse. Dette er bilder av et designforslag; knappene inne i
+        bildene er ikke interaktive.
+      </p>
+      <section id="uten">
+        <h2>Før du har kjøpt fiskekort</h2>
+        <p>Elva fyller bredden over kjøpsknappen, uten overskrift eller ekstra tekst.</p>
+        <figure>
+          <a href="M-hjem-uten-fiskekort.png"
+            ><img
+              src="M-hjem-uten-fiskekort.png"
+              width="1024"
+              height="1536"
+              fetchpriority="high"
+              alt="Hjemskjerm uten kjøpt fiskekort: lakselogo, bred elveillustrasjon uten tekst, Kjøp fiskekort, registrering av desinfisering og fiskeravgift, tidligere fisketur med krokikon, melding til elveeigarlaget og bunnmeny med brettet kartikon."
+          /></a>
+          <figcaption>Samlet forslag · Uten kjøpt fiskekort.</figcaption>
+        </figure>
+        <a class="full" href="M-hjem-uten-fiskekort.png">Åpne bildet uten fiskekort</a>
+      </section>
+      <section id="med">
+        <h2>Når du har kjøpt fiskekort</h2>
+        <p>
+          Billetten erstatter elveillustrasjonen. Kjøpsknappen er fortsatt tilgjengelig, og resten
+          av hjemskjermen følger samme stil.
+        </p>
+        <figure>
+          <a href="M-hjem-med-fiskekort.png"
+            ><img
+              src="M-hjem-med-fiskekort.png"
+              width="1024"
+              height="1536"
+              loading="lazy"
+              alt="Samme hjemskjerm med fiskekort: en lyseblå billett med innhakk, landskapsillustrasjon, stiplet linje og Mine fiskekort erstatter den store elveillustrasjonen. Ingen lommebokoverskrift."
+          /></a>
+          <figcaption>
+            Samlet forslag · Med et kommende fiskekort. Kortinnholdet er et eksempel.
+          </figcaption>
+        </figure>
+        <a class="full" href="M-hjem-med-fiskekort.png">Åpne bildet med fiskekort</a>
+      </section>
+      <section aria-labelledby="valgene">
+        <h2 id="valgene">Valgene dine i én helhet</h2>
+        <ul>
+          <li>Billett med innhakk, stiplet linje og landskap, uten «Din lommebok».</li>
+          <li>Elveillustrasjon uten tekst når du ikke har kjøpt kort.</li>
+          <li>
+            Matchende rader med lyse ikonsirkler for registrering og de to nederste handlingene.
+          </li>
+          <li>Fiskekrok ved «Registrer tidligere fisketur».</li>
+          <li>Brettet kartikon på «Kart», og lys markering av valgt side.</li>
+          <li>Lakselogo med karakteristisk kroket kjeve, sammen med språkvalg og varselbjelle.</li>
+        </ul>
+        <p class="note">
+          Dette er en visuell skisse. Lesbarhet, tekstforstørrelse, trykkflater og skjermleser må
+          kontrolleres i det ferdige grensesnittet.
+        </p>
+      </section>
+      <p><a class="full" href="index.html?v=5">Se alle tidligere forslag A–L</a></p>
+      <p class="note">
+        Bildene er laget med innebygd imagegen.
+        <a href="bildeprompter-samlet-hjem.txt">Se bildeinstruksjonene (engelsk)</a>.
+      </p>
+    </main>
+  </body>
+</html>
