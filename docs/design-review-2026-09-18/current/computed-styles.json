@@ -1,0 +1,480 @@
+{
+  "home": [
+    {
+      "text": "Din fiskeoversikt",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Gjør deg klar til å fiske",
+      "font": "600 22px / 26.4px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 26
+    },
+    {
+      "text": "Kjøp fiskekort",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Registrer desinfisering",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Registrer statlig fiskeravgift",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "notifications": [
+    {
+      "text": "Din fiskeoversikt",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Gjør deg klar til å fiske",
+      "font": "600 22px / 26.4px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 26
+    },
+    {
+      "text": "Kjøp fiskekort",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Registrer desinfisering",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Registrer statlig fiskeravgift",
+      "font": "600 16px / 21.6px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(27, 94, 122)",
+      "height": 48
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "shop": [
+    {
+      "text": "Kjøp fiskekort",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Sone 3 døgnkort",
+      "font": "700 18px / 27px Arial, sans-serif",
+      "fontWeight": "700",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 27
+    },
+    {
+      "text": "Sone 3 sesongkort",
+      "font": "700 18px / 27px Arial, sans-serif",
+      "fontWeight": "700",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 27
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "rules": [
+    {
+      "text": "Fiskeregler",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Spesifikke regler for din sone",
+      "font": "600 24px / 30px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 60
+    },
+    {
+      "text": "Generelle regler",
+      "font": "600 24px / 30px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 30
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "profile": [
+    {
+      "text": "Mer",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Fiskerprofil",
+      "font": "600 18px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 21
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "map": [
+    {
+      "text": "Fiskesoner",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    }
+  ],
+  "past-trip": [
+    {
+      "text": "Statistikk",
+      "font": "600 29px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 33
+    },
+    {
+      "text": "Ingen aktiv fiskeøkt",
+      "font": "600 20px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 23
+    },
+    {
+      "text": "Din statistikk",
+      "font": "700 24px Arial, sans-serif",
+      "fontWeight": "700",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 28
+    },
+    {
+      "text": "Hjem",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Kart",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Fiskekort",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Regler",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Mer",
+      "font": "600 9px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(27, 94, 122)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 57
+    },
+    {
+      "text": "Når og hvor fisket du?",
+      "font": "600 24px Arial, sans-serif",
+      "fontWeight": "600",
+      "color": "rgb(18, 59, 93)",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 28
+    }
+  ]
+}

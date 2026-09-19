@@ -1,5 +1,7 @@
 # EasyFisk
 
+Se [prosjektloggen](PROSJEKTLOGG.md) for daterte milepæler, designvalg og større feilrettinger. Oppdater den ved større endringer, sammen med relevante tekniske notater.
+
 EasyFisk er en mobiltilpasset prototype for fiske i Mandalselva. Appen samler statuskontroll, sonevalg, fiskeøkter, fangstrapportering, kvoter, historikk, regler og tilbakemeldinger i én oversiktlig brukeropplevelse.
 
 Researchgrunnlaget for en framtidig fiskekortprototype ligger i

@@ -4,6 +4,8 @@ out/
 coverage/
 playwright-report/
 test-results/
+# Midlertidige testlogger og arbeidsbilder. Varig dokumentasjon legges i docs/.
+output/
 tmp/pdfs/
 *.log
 .env

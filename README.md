@@ -38,6 +38,8 @@ lagres lokalt i nettleseren du bruker.
 
 _For utvikling og teknisk oppsett, se [utviklerveiledningen](DEVELOPMENT.md)._
 
+[Min prosjektlogg](PROSJEKTLOGG.md) viser hvordan EasyFisk har utviklet seg, og hvorfor vi har gjort de større endringene.
+
 ## Slett data og start på nytt
 
 Under **Mer → Slett og tilbakestill** kan du slette fisketurer og fangster, dokumenter og kortkjøp, innmeldinger, profil, innstillinger eller kladder. Velg **Alt – start med en tom app** for full tilbakestilling. Slettingen må bekreftes. Bilder, vedlegg, tildelte tilganger, aktive turer og kladder omfattes også. Kart og regelinformasjon beholdes.

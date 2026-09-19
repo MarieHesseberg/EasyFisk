@@ -7,6 +7,7 @@
 3. Bevar dagens utseende med mindre en designendring er uttrykkelig avtalt.
 4. Kjør `npm run check` før pull request.
 5. Beskriv hva som er endret, hvorfor det er endret og hvordan det er kontrollert.
+6. Oppdater [prosjektloggen](PROSJEKTLOGG.md) etter større endringer. Hold notatene korte, daterte og i Maries jeg-form, med formål, resultat og eventuelle bekreftede feilårsaker. Skill forslag fra gjennomført arbeid.
 
 ## Språk
 

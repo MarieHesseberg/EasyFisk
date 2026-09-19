@@ -1,0 +1,17 @@
+{
+  "A": {
+    "body_on_background": 13.71,
+    "secondary_on_background": 6.07,
+    "white_on_primary": 7.27
+  },
+  "B": {
+    "body_on_background": 13.92,
+    "secondary_on_background": 5.94,
+    "white_on_primary": 7.92
+  },
+  "C": {
+    "body_on_background": 15.55,
+    "secondary_on_background": 6.41,
+    "white_on_primary": 7.19
+  }
+}
