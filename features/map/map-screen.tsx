@@ -31,10 +31,12 @@ export function MapScreen({
   });
   return (
     <div className="screen map-screen">
-      <ScreenHeader
-        title={t("copy.fiskesoner.c11a7d8")}
-        eyebrow={t("copy.mandalselva.veiledende.kart.678481e")}
-      />
+      <div className="visual-refresh map-page-header">
+        <ScreenHeader
+          title={t("copy.fiskesoner.c11a7d8")}
+          eyebrow={t("copy.mandalselva.veiledende.kart.678481e")}
+        />
+      </div>
       <InteractiveMandalselvaMap
         zones={zones}
         selected={selected}

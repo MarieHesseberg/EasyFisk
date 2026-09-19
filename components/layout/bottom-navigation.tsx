@@ -21,28 +21,20 @@ export function BottomNavigation({
   const { t } = useLanguage();
   const selectedScreen = activeScreen === "stats" ? "more" : activeScreen;
   return (
-    <nav className="bottom-nav" aria-label={t("navigation.label")}>
-      {destinations.map(([id, labelKey, icon]) => (
-        <button
-          key={id}
-          onClick={() => navigate(id)}
-          className={selectedScreen === id ? "selected" : ""}
-          aria-current={selectedScreen === id ? "page" : undefined}
-        >
-          <Icon
-            name={
-              activeScreen === "map"
-                ? icon
-                : id === "rules"
-                  ? "document"
-                  : id === "more"
-                    ? "menu"
-                    : icon
-            }
-          />
-          <span>{t(labelKey)}</span>
-        </button>
-      ))}
-    </nav>
+    <div className="visual-refresh">
+      <nav className="bottom-nav" aria-label={t("navigation.label")}>
+        {destinations.map(([id, labelKey, icon]) => (
+          <button
+            key={id}
+            onClick={() => navigate(id)}
+            className={selectedScreen === id ? "selected" : ""}
+            aria-current={selectedScreen === id ? "page" : undefined}
+          >
+            <Icon name={id === "rules" ? "document" : id === "more" ? "menu" : icon} />
+            <span>{t(labelKey)}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
   );
 }

@@ -103,3 +103,10 @@
     gap: 4px !important;
   }
 }
+
+.map-page-header {
+  background: var(--color-surface);
+}
+.map-page-header .app-header-actions {
+  right: 20px;
+}

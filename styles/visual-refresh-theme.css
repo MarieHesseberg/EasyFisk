@@ -6,7 +6,7 @@
   font-display: swap;
 }
 
-/* This theme is deliberately absent from the map screen. */
+/* Map styling is limited to the header and navigation, outside the map itself. */
 .visual-refresh {
   --font-app: "EasyFisk Nunito", Arial, sans-serif;
   --color-text: #153542;
@@ -45,7 +45,8 @@
   color: var(--color-text);
 }
 .phone-app.visual-refresh
-  :is(h1, h2, h3, h4, b, strong, small, button, input, select, textarea, .big-time, .timer) {
+  :is(h1, h2, h3, h4, b, strong, small, button, input, select, textarea, .big-time, .timer),
+.phone-app .visual-refresh :is(h1, h2, h3, h4, button) {
   font-family: var(--font-app);
 }
 .visual-refresh :is(h2, h3, h4, b, strong, legend) {
